@@ -12,19 +12,19 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	unsigned long msb = (Div >> 8) & 0xFF;
 
 	unsigned long helper = 0;
-	helper = helper | Bit(1) | Bit(2) | Bit(3) | Bit(5);
+	helper = helper | BIT(1) | BIT(2) | BIT(3) | BIT(5);
 
 	if (timer == 0) {
 		sys_outb (TIMER_CTRL, helper);
 		sys_outb (TIMER_0, msb);
 	}
 	else if (timer == 1) {
-		helper = helper | Bit(6);
+		helper = helper | BIT(6);
 		sys_outb (TIMER_CTRL, helper);
 		sys_outb (TIMER_1, msb);
 	}
 	else if (timer == 2) {
-		helper = helper | Bit(7);
+		helper = helper | BIT(7);
 		sys_outb (TIMER_CTRL, helper);
 		sys_outb (TIMER_2, msb);
 	}

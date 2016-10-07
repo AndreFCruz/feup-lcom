@@ -4,7 +4,32 @@
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
 
-	return 1;
+	if (timer != 0 && timer != 1 && timer != 2)
+		return 1;
+
+	unsigned long Div = TIMER_FREQ/freq;
+	unsigned long lsb = Div & 0x00FF;
+	unsigned long msb = (Div >> 8) & 0xFF;
+
+	unsigned long helper = 0;
+	helper = helper | Bit(1) | Bit(2) | Bit(3) | Bit(5);
+
+	if (timer == 0) {
+		sys_outb (TIMER_CTRL, helper);
+		sys_outb (TIMER_0, msb);
+	}
+	else if (timer == 1) {
+		helper = helper | Bit(6);
+		sys_outb (TIMER_CTRL, helper);
+		sys_outb (TIMER_1, msb);
+	}
+	else if (timer == 2) {
+		helper = helper | Bit(7);
+		sys_outb (TIMER_CTRL, helper);
+		sys_outb (TIMER_2, msb);
+	}
+
+	return 0;
 }
 
 int timer_subscribe_int(void ) {
@@ -70,7 +95,10 @@ int timer_display_conf(unsigned char conf) {
 
 int timer_test_square(unsigned long freq) {
 	
-	return 1;
+	if(timer_set_square (0,freq) == 0)
+		return 1;
+	else
+		return 0;
 }
 
 int timer_test_int(unsigned long time) {

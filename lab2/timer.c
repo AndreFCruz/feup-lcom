@@ -61,7 +61,8 @@ int timer_display_conf(unsigned char conf) {
 		nullCountFlag = 0;
 	printf("Null Count is: %d.\n", nullCountFlag);
 
-	unsigned int timer_mode = conf & 0x001F;	// Compatible with future intel products
+	unsigned int bit_mask_5lsb = 0x001F;	// bit mask to get 5 least significant bits
+	unsigned int timer_mode = conf & bit_mask_5lsb;
 	printf("Timer in mode %d.\n", timer_mode);
 
 	return 0;

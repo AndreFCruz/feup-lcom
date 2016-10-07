@@ -1,6 +1,6 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
-#include <i8254.h>
+#include "i8254.h"
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
 
@@ -40,7 +40,7 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 		return 1;	// not successful
 
 	sys_outb(TIMER_CTRL, config);
-	sys_inb(port, st);
+	sys_inb(port, (unsigned long int *) st);
 
 	return 0;
 }
@@ -62,7 +62,7 @@ int timer_display_conf(unsigned char conf) {
 	printf("Null Count is: %d.\n", nullCountFlag);
 
 	unsigned int timer_mode = conf & 0x001F;	// Compatible with future intel products
-	printf("Timer in mode %d\n", timer_mode);
+	printf("Timer in mode %d.\n", timer_mode);
 
 	return 0;
 }

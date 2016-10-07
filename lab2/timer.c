@@ -1,5 +1,6 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
+#include <i8254.h>
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
 
@@ -22,11 +23,41 @@ void timer_int_handler() {
 
 int timer_get_conf(unsigned long timer, unsigned char *st) {
 	
-	return 1;
+	port_t port;
+	unsigned long config = TIMER_RB_CMD;
+
+	if (timer == 0) {
+		port = TIMER_0;
+		config |= timer;
+	} else if (timer == 1) {
+		port = TIMER_1;
+		config |= timer;
+	} else if (timer == 2) {
+		port = TIMER_2;
+		config |= timer;
+	}
+	else
+		return 1;	// not successful
+
+	sys_outb(TIMER_CTRL, config);
+	sys_inb(port, st);
+
+	return 0;
 }
 
 int timer_display_conf(unsigned char conf) {
 	
+	unsigned int timer_mode = 0x0;
+	if (! conf & TIMER_SEL0)
+		timer_mode = 0x0;
+	else if (! conf & TIMER_SEL1)
+		timer_mode = 0x1;
+	else if (! conf & TIMER_SEL2)
+		timer_mode = 0x2;
+
+	printf("Timer in mode %x", timer_mode);
+
+
 	return 1;
 }
 

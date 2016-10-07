@@ -24,7 +24,7 @@ void timer_int_handler() {
 int timer_get_conf(unsigned long timer, unsigned char *st) {
 	
 	port_t port;
-	unsigned long config = TIMER_RB_CMD;
+	unsigned long config = TIMER_RB_CMD | TIMER_RB_STATUS_;
 
 	if (timer == 0) {
 		port = TIMER_0;
@@ -47,18 +47,24 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 
 int timer_display_conf(unsigned char conf) {
 	
-	unsigned int timer_mode = 0x0;
-	if (! conf & TIMER_SEL0)
-		timer_mode = 0x0;
-	else if (! conf & TIMER_SEL1)
-		timer_mode = 0x1;
-	else if (! conf & TIMER_SEL2)
-		timer_mode = 0x2;
+	unsigned int outPinFlag;
+	if (conf & BIT(7))	// 7th bit is 1
+		outPinFlag = 1;
+	else	// 7th bit is 0
+		outPinFlag = 0;
+	printf("Out Pin is: %d.\n", outPinFlag);
 
-	printf("Timer in mode %x", timer_mode);
+	unsigned int nullCountFlag;
+	if (conf & BIT(6))	// 6th bit is 1
+		nullCountFlag = 1;
+	else	// 6th bit is 0
+		nullCountFlag = 0;
+	printf("Null Count is: %d.\n", nullCountFlag);
 
+	unsigned int timer_mode = conf & 0x001F;	// Compatible with future intel products
+	printf("Timer in mode %d\n", timer_mode);
 
-	return 1;
+	return 0;
 }
 
 int timer_test_square(unsigned long freq) {

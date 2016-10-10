@@ -47,54 +47,76 @@ void timer_int_handler() {
 }
 
 int timer_get_conf(unsigned long timer, unsigned char *st) {
-	
+
 	port_t port;
-	unsigned long config = TIMER_RB_CMD | TIMER_RB_STATUS_;
+	u8_t config = TIMER_RB_CMD;
+	config |= TIMER_RB_COUNT_;	// 0 value is active!
+	// deactivated COUNT, meaning only STATUS command is active
 
 	if (timer == 0) {
 		port = TIMER_0;
-		config |= timer;
+		config |= TIMER_RB_SEL(0);
 	} else if (timer == 1) {
 		port = TIMER_1;
-		config |= timer;
+		config |= TIMER_RB_SEL(1);
 	} else if (timer == 2) {
 		port = TIMER_2;
-		config |= timer;
-	}
-	else
+		config |= TIMER_RB_SEL(2);
+	}	else {
+		fprintf(stderr, "Error: %s.\n", "timer must be an integer in range [0, 2]");
 		return 1;	// not successful
+	}
 
-	sys_outb(TIMER_CTRL, config);
-	sys_inb(port, (unsigned long int *) st);
+	// Send ReadBack command to the control register
+	if (sys_outb(TIMER_CTRL, config)) {
+		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		return 1;
+	}
+
+	// Read TIMER status register
+	if (sys_inb(port, (unsigned long int *) st)) {
+		fprintf(stderr, "Error: %s\n", "kernel call returned non-zero value");
+		return 1;
+	}
 
 	return 0;
 }
 
-int timer_display_conf(unsigned char conf) {
-	
-	unsigned int outPinFlag;
-	if (conf & BIT(7))	// 7th bit is 1
-		outPinFlag = 1;
-	else	// 7th bit is 0
-		outPinFlag = 0;
-	printf("Out Pin is: %d.\n", outPinFlag);
+int timer_display_conf(unsigned char conf)
+{
+	// OutPin Flag
+	printf("Out Pin is: %d.\n", conf & BIT(7) ? "1" : "0");
 
-	unsigned int nullCountFlag;
-	if (conf & BIT(6))	// 6th bit is 1
-		nullCountFlag = 1;
-	else	// 6th bit is 0
-		nullCountFlag = 0;
-	printf("Null Count is: %d.\n", nullCountFlag);
+	// Null Count Flag
+	if (conf & BIT(6))
+		printf("Null Count.\n");
+	else
+		printf("Count available for reading.\n");
 
-	unsigned int bit_mask_5lsb = 0x001F;	// bit mask to get 5 least significant bits
-	unsigned int timer_mode = conf & bit_mask_5lsb;
-	printf("Timer in mode %d.\n", timer_mode);
+	//Type of Access
+	printf("Timer access type: ");
+	if (conf & (BIT(5) | BIT(4)) == TIMER_LSB_MSB) {
+		printf("LSB and MSB.\n");
+	} else if (conf & (BIT(5) | BIT(4)) == TIMER_LSB) {
+		printf("LSB.\n");
+	} else if (conf & (BIT(5) | BIT(4)) == TIMER_MSB) {
+		printf("MSB.\n");
+	} else {
+		fprintf(stderr, "%s\n", );
+		return 1;	// Unsuccessful
+	}
+
+	// Programmed Mode
+	printf("Timer in mode %d.\n", (conf & (BIT(1) | BIT(2) | BIT(3)) >> 1));
+
+	// BCD Flag
+	printf("BCD status: %d.", conf & BIT(0));
 
 	return 0;
 }
 
 int timer_test_square(unsigned long freq) {
-	
+
 	if(timer_set_square (0,freq) == 0)
 		return 1;
 	else
@@ -102,11 +124,11 @@ int timer_test_square(unsigned long freq) {
 }
 
 int timer_test_int(unsigned long time) {
-	
+
 	return 1;
 }
 
 int timer_test_config(unsigned long timer) {
-	
+
 	return 1;
 }

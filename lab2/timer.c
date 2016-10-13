@@ -159,12 +159,12 @@ int timer_display_conf(unsigned char conf)
 	} else if (conf & (BIT(5) | BIT(4)) == TIMER_MSB) {
 		printf("MSB.\n");
 	} else {
-		fprintf(stderr, "%s\n", );
+		fprintf(stderr, "%s\n", "invalid timer access type");
 		return 1;	// Unsuccessful
 	}
 
 	// Programmed Mode
-	printf("Timer in mode %d.\n", (conf & (BIT(1) | BIT(2) | BIT(3)) >> 1));
+	printf("Timer in mode %d.\n", (conf & (BIT(1) | BIT(2) | BIT(3))) >> 1);
 
 	// BCD Flag
 	printf("BCD status: %d.", conf & BIT(0));
@@ -172,12 +172,9 @@ int timer_display_conf(unsigned char conf)
 	return 0;
 }
 
-int timer_test_square(unsigned long freq) {
-
-	if(timer_set_square (0,freq) == 0)
-		return 1;
-	else
-		return 0;
+int timer_test_square(unsigned long freq)
+{
+	return  timer_set_square (0,freq);
 }
 
 int timer_test_int(unsigned long time) {
@@ -185,7 +182,18 @@ int timer_test_int(unsigned long time) {
 	return 1;
 }
 
-int timer_test_config(unsigned long timer) {
+int timer_test_config(unsigned long timer)
+{
+	char conf;
 
-	return 1;
+	if (timer_get_conf(timer, &conf) != 0) {
+		fprintf(stderr, "%s\n", "error in timer_get_conf()");
+		return 1;
+	}
+	if (timer_display_conf(conf) != 0) {
+		fprintf(stderr, "%s\n", "error in timer_display_conf()");
+		return 1;
+	}
+
+	return 0;
 }

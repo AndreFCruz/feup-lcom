@@ -12,7 +12,7 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	}
 
 	//Frequency can not be 0 nor above the max allowed
-	if (freq == 0 || (freq > TIMER_FREQ){
+	if (freq == 0 || (freq > TIMER_FREQ)) {
 		fprintf(stderr, "Error: %s\n", "frequency can not be 0 nor above the max allowed.");
 		return 1;
 	}

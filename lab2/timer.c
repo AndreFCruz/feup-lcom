@@ -3,30 +3,87 @@
 #include "i8254.h"
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
+	const unsigned long bit_mask = 0xFF;	//Selects the 8 lsb bits
 
-	if (timer != 0 && timer != 1 && timer != 2)
+	//If it's not any of the possible timers
+	if (timer != 0 && timer != 1 && timer != 2) {
+		fprintf(stderr, "Error: %s\n", "non-existent timer selected.");
 		return 1;
+	}
 
+	//Frequency can not be 0 nor above the max allowed
+	if (freq == 0 || (freq > TIMER_FREQ){
+		fprintf(stderr, "Error: %s\n", "frequency can not be 0 nor above the max allowed.");
+		return 1;
+	}
+
+	//Setting the lsb and msb
 	unsigned long Div = TIMER_FREQ/freq;
-	unsigned long lsb = Div & 0x00FF;
-	unsigned long msb = (Div >> 8) & 0xFF;
+	unsigned long lsb = Div & bit_mask;
+	unsigned long msb = (Div >> 8) & bit_mask;
 
-	unsigned long helper = 0;
-	helper = helper | BIT(1) | BIT(2) | BIT(3) | BIT(5);
+	//Initialization of the control word we will use
+	unsigned long CTRL_Word = 0;
+
+	timer_get_conf(timer, & CTRL_Word);
+
+	/* We do not mess with the 4th 1st bits.
+	 * We activate both BIT(5) and BIT(4) because we want to access the LSB followed by the MSB.
+	 * The counter selection will be programmed further ahead. */
+	CTRL_Word = CTRL_Word | BIT(4) | BIT(5);
 
 	if (timer == 0) {
-		sys_outb (TIMER_CTRL, helper);
-		sys_outb (TIMER_0, msb);
+		//Not changing any bit will make it access the Timer 0
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_0, lsb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_0, msb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
 	}
 	else if (timer == 1) {
-		helper = helper | BIT(6);
-		sys_outb (TIMER_CTRL, helper);
-		sys_outb (TIMER_1, msb);
+		CTRL_Word = CTRL_Word | BIT(6); //Setting the 6th Bit to 1 so we will access the Timer 1
+
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_1, lsb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_1, msb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
 	}
 	else if (timer == 2) {
-		helper = helper | BIT(7);
-		sys_outb (TIMER_CTRL, helper);
-		sys_outb (TIMER_2, msb);
+		CTRL_Word = CTRL_Word | BIT(7); //Setting the 7ht Bit to 1 so we will access the Timer2
+
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_2, lsb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
+
+		if (sys_outb (TIMER_2, msb) != 0) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return 1;
+		}
 	}
 
 	return 0;

@@ -36,17 +36,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 
 	if (timer == 0) {
 		//Not changing any bit will make it access the Timer 0
-		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_0, lsb) != 0) {
+		if (sys_outb (TIMER_0, lsb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_0, msb) != 0) {
+		if (sys_outb (TIMER_0, msb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
@@ -54,17 +54,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	else if (timer == 1) {
 		CTRL_Word = CTRL_Word | BIT(6); //Setting the 6th Bit to 1 so we will access the Timer 1
 
-		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_1, lsb) != 0) {
+		if (sys_outb (TIMER_1, lsb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_1, msb) != 0) {
+		if (sys_outb (TIMER_1, msb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
@@ -72,26 +72,26 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	else if (timer == 2) {
 		CTRL_Word = CTRL_Word | BIT(7); //Setting the 7ht Bit to 1 so we will access the Timer2
 
-		if (sys_outb (TIMER_CTRL, CTRL_Word) != 0) {
+		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_2, lsb) != 0) {
+		if (sys_outb (TIMER_2, lsb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 
-		if (sys_outb (TIMER_2, msb) != 0) {
+		if (sys_outb (TIMER_2, msb) != OK) {
 			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
 			return 1;
 		}
 	}
 
-	return 0;
+	return OK;
 }
 
-int timer_subscribe_int(void ) {
+int timer_subscribe_int(void) {
 		int bitMaskHID = hook_id;	// bit in interrupt mask register
 
 		if ( sys_irqsetpolicy (TIMER0_IRQ, IRQ_REENABLE, & hook_id) != OK ) {
@@ -122,7 +122,7 @@ int timer_unsubscribe_int() {
 }
 
 void timer_int_handler() {
-
+	timerCount++;
 }
 
 int timer_get_conf(unsigned long timer, unsigned char *st) {
@@ -158,7 +158,7 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 		return 1;
 	}
 
-	return 0;
+	return OK;
 }
 
 int timer_display_conf(unsigned char conf)
@@ -191,7 +191,7 @@ int timer_display_conf(unsigned char conf)
 	// BCD Flag
 	printf("BCD status: %d.", conf & BIT(0));
 
-	return 0;
+	return OK;
 }
 
 int timer_test_square(unsigned long freq)
@@ -208,14 +208,14 @@ int timer_test_config(unsigned long timer)
 {
 	char conf;
 
-	if (timer_get_conf(timer, &conf) != 0) {
+	if (timer_get_conf(timer, &conf) != OK) {
 		fprintf(stderr, "%s\n", "error in timer_get_conf()");
 		return 1;
 	}
-	if (timer_display_conf(conf) != 0) {
+	if (timer_display_conf(conf) != OK) {
 		fprintf(stderr, "%s\n", "error in timer_display_conf()");
 		return 1;
 	}
 
-	return 0;
+	return OK;
 }

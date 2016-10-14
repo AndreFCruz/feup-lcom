@@ -240,6 +240,7 @@ int timer_test_int(unsigned long time)
 			}
 		} else { /* received a standard message, not a notification */
 			/* no standard messages expected: do nothing */
+			fprintf(stderr, "Error: %s\n", "received unexpected standard message")
 		}
 	}
 

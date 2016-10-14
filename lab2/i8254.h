@@ -13,6 +13,8 @@
 
 #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
 
+#define TIMER0_IRQSET		0	 /**< @brief Timer 0 Policy Bit */
+
 /* I/O port addresses */
 
 #define TIMER_0			0x40 /**< @brief Timer 0 count register */

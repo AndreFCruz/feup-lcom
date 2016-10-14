@@ -177,19 +177,43 @@ int timer_display_conf(unsigned char conf)
 
 	//Type of Access
 	printf("Timer access type: ");
-	if (conf & (BIT(5) | BIT(4)) == TIMER_LSB_MSB) {
+	if ((conf & (BIT(5) | BIT(4))) == TIMER_LSB_MSB) {
 		printf("LSB and MSB.\n");
 	} else if (conf & (BIT(5) | BIT(4)) == TIMER_LSB) {
 		printf("LSB.\n");
 	} else if (conf & (BIT(5) | BIT(4)) == TIMER_MSB) {
 		printf("MSB.\n");
 	} else {
-		fprintf(stderr, "%s\n", "invalid timer access type");
-		return 1;	// Unsuccessful
+		printf("invalid timer access type\n");
+		//return 1;	// Unsuccessful
 	}
 
+
 	// Programmed Mode
-	printf("Timer in mode %d.\n", (conf & (BIT(1) | BIT(2) | BIT(3))) >> 1);
+	printf("Timer Programmed Mode: ");
+	switch ((conf & (BIT(1) | BIT(2) | BIT(3))) >> 1) {	// Timer Operation Mode
+	case 0b000:
+		printf("INTERRUPT ON TERMINAL COUNT\n");
+		break;
+	case 0b001:
+		printf("HARDWARE RETRIGGERABLE ONE-SHOT\n");
+		break;
+	case 0b010:
+		printf("RATE GENERATOR\n");
+		break;
+	case 0b011:
+		printf("SQUARE WAVE MODE\n");
+		break;
+	case 0b100:
+		printf("SOFTWARE TRIGGERED STROBE\n");
+		break;
+	case 0b101:
+		printf("HARDWARE TRIGGERED STROBE (RETRIGGERABLE)\n");
+		break;
+	default:
+		fprintf(stderr, "Error: %s.\n", "Invalid Timer Mode");
+		return 1;	// Unsuccessful
+	}
 
 	// BCD Flag
 	printf("BCD status: %d.", conf & BIT(0));
@@ -240,7 +264,7 @@ int timer_test_int(unsigned long time)
 			}
 		} else { /* received a standard message, not a notification */
 			/* no standard messages expected: do nothing */
-			fprintf(stderr, "Error: %s\n", "received unexpected standard message")
+			fprintf(stderr, "Error: %s\n", "received unexpected standard message");
 		}
 	}
 

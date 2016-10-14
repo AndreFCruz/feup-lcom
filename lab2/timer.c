@@ -229,8 +229,10 @@ int timer_test_int(unsigned long time)
 					if (msg.NOTIFY_ARG & irq_set) { /* subscribed interrupt */
 						timer_int_handler();
 
-						if (timerCount % 60 == 0)
-							printf("Timer Count: %d.\n", timerCount % 60);
+						if (timerCount % 60 == 0) {
+							printf("Timer Count: %d.\n", timerCount / 60);
+							elapsed++;
+						}
 					}
 					break;
 				default:

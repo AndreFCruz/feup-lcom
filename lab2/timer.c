@@ -1,7 +1,11 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
+#include <minix/com.h>
 #include "i8254.h"
 
+const string kernel_call_failure = "kernel call returned non-zero value";
+
+unsigned long timerCount = 0;
 int hook_id = TIMER0_IRQSET;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
@@ -37,17 +41,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	if (timer == 0) {
 		//Not changing any bit will make it access the Timer 0
 		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_0, lsb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_0, msb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 	}
@@ -55,17 +59,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 		CTRL_Word = CTRL_Word | BIT(6); //Setting the 6th Bit to 1 so we will access the Timer 1
 
 		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_1, lsb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_1, msb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 	}
@@ -73,17 +77,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 		CTRL_Word = CTRL_Word | BIT(7); //Setting the 7ht Bit to 1 so we will access the Timer2
 
 		if (sys_outb (TIMER_CTRL, CTRL_Word) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_2, lsb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 
 		if (sys_outb (TIMER_2, msb) != OK) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return 1;
 		}
 	}
@@ -95,12 +99,12 @@ int timer_subscribe_int(void) {
 		int bitMaskHID = hook_id;	// bit in interrupt mask register
 
 		if ( sys_irqsetpolicy (TIMER0_IRQ, IRQ_REENABLE, & hook_id) != OK ) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return -1;
 		}
 
 		if ( sys_irqenable (& hook_id) != OK ) {
-			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 			return -1;
 		}
 
@@ -109,12 +113,12 @@ int timer_subscribe_int(void) {
 
 int timer_unsubscribe_int() {
 	if ( sys_irqdisable (& hook_id) != OK ) {
-		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 		return -1;
 	}
 
 	if ( sys_irqrmpolicy (& hook_id) != OK ) {
-		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 		return -1;
 	}
 
@@ -148,13 +152,13 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 
 	// Send ReadBack command to the control register
 	if (sys_outb(TIMER_CTRL, config)) {
-		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		fprintf(stderr, "Error: %s.\n", kernel_call_failure);
 		return 1;
 	}
 
 	// Read TIMER status register
 	if (sys_inb(port, (unsigned long int *) st)) {
-		fprintf(stderr, "Error: %s\n", "kernel call returned non-zero value");
+		fprintf(stderr, "Error: %s\n", kernel_call_failure);
 		return 1;
 	}
 
@@ -199,9 +203,50 @@ int timer_test_square(unsigned long freq)
 	return  timer_set_square (0,freq);
 }
 
-int timer_test_int(unsigned long time) {
+int timer_test_int(unsigned long time)
+{
+	int ipc_status;
+	message msg;
 
-	return 1;
+	unsigned long elapsed = 0;	// time passed since device hooked
+
+	int irq_set;
+	if ( (irq_set = timer_subscribe_int()) < 0 ) { // hook_id returned for TIMER 0
+		fprintf(stderr, "Error: %s\n", "device subscribe unsuccessful");
+		return 1;
+	}
+
+	while( elapsed < time ) {
+		/* Get a request message. */
+		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
+			fprintf(stderr, "driver_receive failed with: %d", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /* received notification */
+			switch (_ENDPOINT_P(msg.m_source)) {
+				case HARDWARE: /* hardware interrupt notification */
+					if (msg.NOTIFY_ARG & irq_set) { /* subscribed interrupt */
+						timer_int_handler();
+
+						if (timerCount % 60 == 0)
+							printf("Timer Count: %d.\n", timerCount);
+					}
+					break;
+				default:
+					break; /* no other notifications expected: do nothing */
+			}
+		} else { /* received a standard message, not a notification */
+			/* no standard messages expected: do nothing */
+		}
+	}
+
+	if ( timer_unsubscribe_int() < 0 ) {
+		fprintf(stderr, "Error: %s\n", "device UNsubscribe unsuccessful");
+		return 1;
+	}
+
+
+	return 0;
 }
 
 int timer_test_config(unsigned long timer)

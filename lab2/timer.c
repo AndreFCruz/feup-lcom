@@ -3,7 +3,7 @@
 #include <minix/com.h>
 #include "i8254.h"
 
-const string kernel_call_failure = "kernel call returned non-zero value";
+const char kernel_call_failure[] = "kernel call returned non-zero value";
 
 unsigned long timerCount = 0;
 int hook_id = TIMER0_IRQSET;
@@ -96,7 +96,6 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 }
 
 int timer_subscribe_int(void) {
-		int bitMaskHID = hook_id;	// bit in interrupt mask register
 
 		if ( sys_irqsetpolicy (TIMER0_IRQ, IRQ_REENABLE, & hook_id) != OK ) {
 			fprintf(stderr, "Error: %s.\n", kernel_call_failure);
@@ -108,7 +107,7 @@ int timer_subscribe_int(void) {
 			return -1;
 		}
 
-		return bitMaskHID;
+		return TIMER0_IRQSET;
 }
 
 int timer_unsubscribe_int() {
@@ -211,10 +210,12 @@ int timer_test_int(unsigned long time)
 	unsigned long elapsed = 0;	// time passed since device hooked
 
 	int irq_set;
-	if ( (irq_set = timer_subscribe_int()) < 0 ) { // hook_id returned for TIMER 0
+	if ( (irq_set = BIT(timer_subscribe_int())) < 0 ) { // hook_id returned for TIMER 0
 		fprintf(stderr, "Error: %s\n", "device subscribe unsuccessful");
 		return 1;
 	}
+
+	int r;
 
 	while( elapsed < time ) {
 		/* Get a request message. */
@@ -229,7 +230,7 @@ int timer_test_int(unsigned long time)
 						timer_int_handler();
 
 						if (timerCount % 60 == 0)
-							printf("Timer Count: %d.\n", timerCount);
+							printf("Timer Count: %d.\n", timerCount % 60);
 					}
 					break;
 				default:

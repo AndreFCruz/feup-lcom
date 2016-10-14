@@ -2,6 +2,8 @@
 #include <minix/drivers.h>
 #include "i8254.h"
 
+int hook_id = TIMER0_IRQSET;
+
 int timer_set_square(unsigned long timer, unsigned long freq) {
 	const unsigned long bit_mask = 0xFF;	//Selects the 8 lsb bits
 
@@ -90,13 +92,33 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 }
 
 int timer_subscribe_int(void ) {
+		int bitMaskHID = hook_id;	// bit in interrupt mask register
 
-	return 1;
+		if ( sys_irqsetpolicy (TIMER0_IRQ, IRQ_REENABLE, & hook_id) != OK ) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return -1;
+		}
+
+		if ( sys_irqenable (& hook_id) != OK ) {
+			fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+			return -1;
+		}
+
+		return bitMaskHID;
 }
 
 int timer_unsubscribe_int() {
+	if ( sys_irqdisable (& hook_id) != OK ) {
+		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		return -1;
+	}
 
-	return 1;
+	if ( sys_irqrmpolicy (& hook_id) != OK ) {
+		fprintf(stderr, "Error: %s.\n", "kernel call returned non-zero value");
+		return -1;
+	}
+
+	return OK;
 }
 
 void timer_int_handler() {

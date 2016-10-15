@@ -30,7 +30,7 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 	unsigned long msb = (Div >> 8) & bit_mask;
 
 	//Initialization of the control word we will use
-	unsigned long CTRL_Word = 0;
+	unsigned char CTRL_Word = 0;
 
 	timer_get_conf(timer, & CTRL_Word);
 
@@ -218,7 +218,7 @@ int timer_display_conf(unsigned char conf)
 	}
 
 	// BCD Flag
-	printf("BCD status: %d.\n", conf & BIT(0));
+	printf("%23s%d.\n", "BCD status: ", conf & BIT(0));
 
 	return OK;
 }

@@ -2,6 +2,7 @@
 #include <minix/drivers.h>
 #include <minix/com.h>
 #include "i8254.h"
+#include "timer.h"
 
 const char kernel_call_failure[] = "kernel call returned non-zero value";
 
@@ -255,7 +256,7 @@ int timer_test_int(unsigned long time)
 						timer_int_handler();
 
 						if (timerCount % 60 == 0) {
-							printf("Timer Count: %d.\n", timerCount / 60);
+							printf("Timer Count: %3d.\n", timerCount / 60);
 							elapsed++;
 						}
 					}
@@ -274,7 +275,7 @@ int timer_test_int(unsigned long time)
 		return 1;
 	}
 
-
+	printf("_____\n");
 	return 0;
 }
 

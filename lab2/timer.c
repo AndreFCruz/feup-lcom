@@ -167,16 +167,17 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 int timer_display_conf(unsigned char conf)
 {
 	// OutPin Flag
-	printf("Out Pin is: %d.\n", conf & BIT(7) ? "1" : "0");
+	printf("%23s%s.\n", "Out Pin is: ", conf & BIT(7) ? "1" : "0");
 
 	// Null Count Flag
+	printf("%23s", "Null Count ? ");
 	if (conf & BIT(6))
 		printf("Null Count.\n");
 	else
 		printf("Count available for reading.\n");
 
 	//Type of Access
-	printf("Timer access type: ");
+	printf("%23s", "Timer access type: ");
 	if ((conf & (BIT(5) | BIT(4))) == TIMER_LSB_MSB) {
 		printf("LSB and MSB.\n");
 	} else if (conf & (BIT(5) | BIT(4)) == TIMER_LSB) {
@@ -190,7 +191,7 @@ int timer_display_conf(unsigned char conf)
 
 
 	// Programmed Mode
-	printf("Timer Programmed Mode: ");
+	printf("%23s", "Timer Programmed Mode: ");
 	switch ((conf & (BIT(1) | BIT(2) | BIT(3))) >> 1) {	// Timer Operation Mode
 	case 0b000:
 		printf("INTERRUPT ON TERMINAL COUNT\n");
@@ -216,7 +217,7 @@ int timer_display_conf(unsigned char conf)
 	}
 
 	// BCD Flag
-	printf("BCD status: %d.", conf & BIT(0));
+	printf("BCD status: %d.\n", conf & BIT(0));
 
 	return OK;
 }

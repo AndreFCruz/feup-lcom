@@ -7,6 +7,22 @@
  * Functions for testing the kbd code
  */
 
+/**
+ * @brief Subscribes and enables Keyboards interrupts
+ *
+ * @return Returns bit order in interrupt mask; negative value on failure
+ */
+
+int kbd_subscribe_int(int * hook_id);
+
+/**
+ * @brief Unsubscribes Keyboard interrupts
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int kbd_unsubscribe_int(int * hook_id);
+
+
 /** 
  * @brief To test reading of scancode via KBD interrupts 
  * 

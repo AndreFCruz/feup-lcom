@@ -1,8 +1,11 @@
-#include "timer.h"
-#include "i8254.h"
+#include "test3.h"
+#include "i8042.h"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
+
+
+// ALTERAR PARA TER EM CONTA LAB3 !!
 
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
@@ -22,14 +25,16 @@ int main(int argc, char **argv)
 static void print_usage(char **argv)
 {
 	printf("Usage: one of the following:\n"
+			//ALTERAR
 			"\t service run %s -args \"config <decimal no.- timer>\"\n"
 			"\t service run %s -args \"square <decimal no. - frequency>\"\n"
 			"\t service run %s -args \"int <decimal no. - time>\"\n",
+			/// /// ///
 			argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char **argv)
-{
+{	//ALTERAR STRINGS E CHAMADAS DE FUNCOES
 	unsigned long timer, freq, time;
 	if (strncmp(argv[1], "config", strlen("config")) == 0) {
 		if (argc != 3) {

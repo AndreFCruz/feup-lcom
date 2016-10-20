@@ -1,3 +1,10 @@
+#include <minix/syslib.h>
+#include <minix/drivers.h>
+#include <minix/com.h>
+#include "i8042.h"
+#include "test3.h"
+
+
 int kbd_test_scan(unsigned short ass) {
 	/* To be completed */
 }

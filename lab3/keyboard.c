@@ -3,7 +3,7 @@
 #include <minix/com.h>
 #include "keyboard.h"
 
-static int kbd_hook_id = KBD_ORIGINAL_HOOK_ID;
+static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
 
 int kbd_subscribe_int(void)
 {
@@ -16,7 +16,7 @@ int kbd_subscribe_int(void)
 		return -1;
 	}
 
-	return KBD_ORIGINAL_HOOK_ID;
+	return KBD_INITIAL_HOOK_ID;
 }
 
 int kbd_unsubscribe_int(void)
@@ -30,5 +30,10 @@ int kbd_unsubscribe_int(void)
 		return -1;
 	}
 
-	return KBD_ORIGINAL_HOOK_ID;
+	return KBD_INITIAL_HOOK_ID;
+}
+
+unsigned char keyboard_handler()
+{
+	
 }

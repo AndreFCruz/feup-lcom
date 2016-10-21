@@ -9,15 +9,25 @@
 
 #define BIT(n) (0x01<<(n))
 
-#define KBC_IRQ                 1   /**< @brief KBC IRQ line */
-#define KBD_ORIGINAL_HOOK_ID    1   /**< @brief KBD HOOK_ID ORIGINAL */
+#define KBC_IRQ             1   /**< @brief KBC IRQ line */
+#define KBD_INITIAL_HOOK_ID 1   /**< @brief KBD Initial hook_id */
 #define DELAY_TO            20000   /**< @brief KBC respond Time-Out */
 
 #define ESQ_BREAK_CODE      0x81    /**< @brief ESQ key break code */
 
+/* Timer 0 useful macros */
 #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
-
 #define TIMER0_IRQSET		0	 /**< @brief Timer 0 Policy Bit */
+
+/* KBC Status Register BITs' Meaning*/
+#define STAT_PARITY         BIT(7)
+#define STAT_TIMEOUT        BIT(6)
+#define STAT_AUX            BIT(5)
+#define STAT_INH            BIT(4)
+#define STAT_A2             BIT(3)
+#define STAT_SYS            BIT(2)
+#define STAT_IBF            BIT(1)
+#define STAT_OBF            BIT(0)
 
 /* I/O port addresses */
 

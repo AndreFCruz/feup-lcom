@@ -11,7 +11,6 @@
 
 #define KBC_IRQ             1   /**< @brief KBC IRQ line */
 #define KBD_INITIAL_HOOK_ID 1   /**< @brief KBD Initial hook_id */
-#define DELAY_TO            20000   /**< @brief KBC respond Time-Out */
 
 #define ESQ_BREAK_CODE      0x81    /**< @brief ESQ key break code */
 

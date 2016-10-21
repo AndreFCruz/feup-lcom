@@ -35,18 +35,22 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-unsigned char keyboard_handler()	// Called When KBC Interrupt Occurs
+u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 {
-	while( 1 ) {
-	sys_inb(STAT_REG, &stat); /* assuming it returns OK */
-	/* loop while 8042 output buffer is empty */
-	if( stat & OBF ) {
-		sys_inb(OUT_BUF, &data); /* assuming it returns OK */
-		if ( (stat &(PAR_ERR | TO_ERR)) == 0 )
-			return data;
-		else
+	u8_t stat, data;
+	while( true ) {
+		if ( sys_inb(STAT_REG, &stat) != OK ) {
+			printf("keyboard_read() -> FAILED sys_inb()");
 			return -1;
-	}
-	delay(WAIT_KBC);
+		}
+		/* loop while 8042 output buffer is empty */
+		if( stat & STAT_OBF ) {
+			sys_inb(OUT_BUF, &data); /* assuming it returns OK */
+			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Ocurred ?
+				return data;
+			else
+				return -1;
+		}
+	//delay(WAIT_KBC);
 	}
 }

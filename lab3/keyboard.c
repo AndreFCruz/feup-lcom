@@ -3,6 +3,8 @@
 #include <minix/com.h>
 #include "keyboard.h"
 
+#define DELAY_TO            20000   // KBC respond Time-Out
+
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
 
 int kbd_subscribe_int(void)
@@ -33,7 +35,18 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-unsigned char keyboard_handler()
+unsigned char keyboard_handler()	// Called When KBC Interrupt Occurs
 {
-	
+	while( 1 ) {
+	sys_inb(STAT_REG, &stat); /* assuming it returns OK */
+	/* loop while 8042 output buffer is empty */
+	if( stat & OBF ) {
+		sys_inb(OUT_BUF, &data); /* assuming it returns OK */
+		if ( (stat &(PAR_ERR | TO_ERR)) == 0 )
+			return data;
+		else
+			return -1;
+	}
+	delay(WAIT_KBC);
+	}
 }

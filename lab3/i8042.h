@@ -19,16 +19,6 @@
 #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
 #define TIMER0_IRQSET		0	 /**< @brief Timer 0 Policy Bit */
 
-/* KBC Status Register BITs' Meaning*/
-#define STAT_PARITY         BIT(7)
-#define STAT_TIMEOUT        BIT(6)
-#define STAT_AUX            BIT(5)
-#define STAT_INH            BIT(4)
-#define STAT_A2             BIT(3)
-#define STAT_SYS            BIT(2)
-#define STAT_IBF            BIT(1)
-#define STAT_OBF            BIT(0)
-
 /* I/O port addresses */
 
 #define TIMER_0			0x40 /**< @brief Timer 0 count register */
@@ -41,6 +31,17 @@
 
 #define SPEAKER_CTRL	0x61 /**< @brief Register for speaker control  */
 
+/* KBC Status Register BITs' Meaning*/
+
+#define STAT_PARITY     BIT(7)
+#define STAT_TIMEOUT    BIT(6)
+#define STAT_AUX        BIT(5)
+#define STAT_INH        BIT(4)
+#define STAT_A2         BIT(3)
+#define STAT_SYS        BIT(2)
+#define STAT_IBF        BIT(1)
+#define STAT_OBF        BIT(0)
+
 /* KBD Commands for PC-AT */
 
 #define READ_CMD_B      0x20 /**< @brief Read Command Byte */
@@ -49,3 +50,5 @@
 #define CHECK_KBD_IFC   0xAB /**< @brief Check Keyboard Interface */
 #define DISABLE_KBD_IFC 0xAD /**< @brief Disable KBD Interface */
 #define ENABLE_KBD_IFC  0xAE /**< @brief Enable KBD Interface */
+
+/*  */

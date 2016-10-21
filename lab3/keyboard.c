@@ -1,9 +1,11 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <minix/com.h>
+#include <minix/sysutil.h>
+#include "timer.h"
 #include "keyboard.h"
 
-#define DELAY_TO            20000   // KBC respond Time-Out
+#define DELAY_TO		20000   // KBC respond Time-Out in micro seconds
 
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
 
@@ -38,19 +40,34 @@ int kbd_unsubscribe_int(void)
 u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 {
 	u8_t stat, data;
-	while( true ) {
+	unsigned iter;
+	while( iter++ < maxIter ) {
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
 			printf("keyboard_read() -> FAILED sys_inb()");
 			return -1;
 		}
 		/* loop while 8042 output buffer is empty */
 		if( stat & STAT_OBF ) {
-			sys_inb(OUT_BUF, &data); /* assuming it returns OK */
+			if ( sys_inb(OUT_BUF, &data) != OK ) {
+				printf("keyboard_read() -> FAILED sys_inb()");
+				return -1;	// Returns -1 or 0xFF on failure
+			}
 			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Ocurred ?
 				return data;
 			else
-				return -1;
+				return -1;	// Returns -1 or 0xFF on failure
 		}
-	//delay(WAIT_KBC);
+	tickdelay(micros_to_ticks(DELAY_US));
 	}
+}
+
+int keyboard_handler()		// To be called on KBC Interrupt
+{							// Returns non-zero on error
+	u8_t data;
+	if ( (data = keyboard_read()) == -1 ) {
+		printf("keyboard_handler() -> FAILED keyboard_read()");
+		return 1;
+	}
+	// switch ()
+
 }

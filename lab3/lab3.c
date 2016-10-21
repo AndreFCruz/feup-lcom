@@ -27,14 +27,14 @@ static void print_usage(char **argv)
 	printf("Usage: one of the following:\n"
 			//ALTERAR
 			"\t service run %s -args \"scan <decimal no.- mode>\"\n"
-			"\t service run %s -args \"leds <decimal no. - elements>\"\n" //Rever isto
+			"\t service run %s -args \"leds <decimal no. - elements>\"\n" /
 			"\t service run %s -args \"timed scan <decimal no. - time>\"\n",
 			/// /// ///
 			argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char **argv)
-{	//ALTERAR STRINGS E CHAMADAS DE FUNCOES
+{
 	unsigned short mode, elements, time;
 
 	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
@@ -53,12 +53,12 @@ static int proc_args(int argc, char **argv)
 			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
 			return 1;
 		}
-		unsigned nElements = argc - 2;
+		unsigned nElements = argc - 2;							/* Number of arguments in the function*/
 		int toggles[nElements];
 
-		for (int i = 0; i < nElements; i++) {
+		for (int i = 0; i < nElements; i++) {					/* Getting the arguments into an array*/
 			toggles[i] = parse_ulong (argv[i+2], 10);
-			if (toggles[i] < 0 || toggles[i] > 2)
+			if (toggles[i] < 0 || toggles[i] > 2)				/* There are only 3 leds (0, 1, 2)*/
 			{
 				printf("keyboard: arguments for kbd_test_leds() must be 0, 1 or 2\n");
 				return 1;

@@ -3,8 +3,7 @@
 #include <minix/com.h>
 #include "i8042.h"
 #include "test3.h"
-
-
+#include "keyboard.h"
 
 int kbd_test_scan(unsigned short ass) {
 	/* To be completed */

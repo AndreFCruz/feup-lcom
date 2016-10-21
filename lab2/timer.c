@@ -4,10 +4,10 @@
 #include "i8254.h"
 #include "timer.h"
 
-const char kernel_call_failure[] = "kernel call returned non-zero value";
+static const char kernel_call_failure[] = "kernel call returned non-zero value";
 
-unsigned long timerCount = 0;
-int hook_id = TIMER0_IRQSET;
+static unsigned long timerCount = 0;
+static int hook_id = TIMER0_IRQSET;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
 	const unsigned long bit_mask = 0xFF;	//Selects the 8 lsb bits

@@ -23,3 +23,15 @@
   * @return Return 0 upon success and non-zero otherwise
   */
  int kbd_unsubscribe_int(void);
+
+
+ /**
+  * @brief Keyboard Interrupt Handler
+  *
+  * Fetches keyboard output and prints codes in a human friendly way
+  *
+  * @param pointer to previous iteration's status
+  *
+  * @return Return 0 upon success and non-zero otherwise
+  */
+ int keyboard_handler(int * status);

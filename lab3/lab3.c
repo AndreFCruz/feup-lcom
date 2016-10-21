@@ -26,51 +26,60 @@ static void print_usage(char **argv)
 {
 	printf("Usage: one of the following:\n"
 			//ALTERAR
-			"\t service run %s -args \"config <decimal no.- timer>\"\n"
-			"\t service run %s -args \"square <decimal no. - frequency>\"\n"
-			"\t service run %s -args \"int <decimal no. - time>\"\n",
+			"\t service run %s -args \"scan <decimal no.- mode>\"\n"
+			"\t service run %s -args \"leds <decimal no. - elements>\"\n" //Rever isto
+			"\t service run %s -args \"timed scan <decimal no. - time>\"\n",
 			/// /// ///
 			argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char **argv)
 {	//ALTERAR STRINGS E CHAMADAS DE FUNCOES
-	unsigned long timer, freq, time;
-	if (strncmp(argv[1], "config", strlen("config")) == 0) {
+	unsigned short mode, elements, time;
+
+	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
 		if (argc != 3) {
-			printf("timer: wrong no. of arguments for timer_test_config()\n");
+			printf("keyboard: wrong no. of arguments for kbd_test_scan()\n");
 			return 1;
 		}
-		timer = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
-		if (timer == ULONG_MAX)
+		mode = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		if (mode == ULONG_MAX)
 			return 1;
-		printf("timer::timer_test_config(%lu)\n", timer);
-		return timer_test_config(timer);
+		printf("keyboard::kbd_test_scan(%lu)\n", mode);
+		return timer_test_config(mode);
 	}
-	else if (strncmp(argv[1], "square", strlen("square")) == 0) {
-		if (argc != 3) {
-			printf("timer: wrong no. of arguments for timer_test_square()\n");
+	else if (strncmp(argv[1], "leds", strlen("leds")) == 0) {
+		if (argc < 3) {
+			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
 			return 1;
 		}
-		freq = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
-		if (freq == ULONG_MAX)
-			return 1;
-		printf("timer::timer_test_square(%lu)\n", freq);
-		return timer_test_square(freq);
+		unsigned nElements = argc - 2;
+		int toggles[nElements];
+
+		for (int i = 0; i < nElements; i++) {
+			toggles[i] = parse_ulong (argv[i+2], 10);
+			if (toggles[i] < 0 || toggles[i] > 2)
+			{
+				printf("keyboard: arguments for kbd_test_leds() must be 0, 1 or 2\n");
+				return 1;
+			}
+		}
+		printf("keyboard::kbd_test_leds(%lu)\n", nElements, & toggles);
+		return kbd_test_leds(nElems, & toggles);
 	}
-	else if (strncmp(argv[1], "int", strlen("int")) == 0) {
+	else if (strncmp(argv[1], "time", strlen("time")) == 0) {
 		if (argc != 3) {
-			printf("timer: wrong no of arguments for timer_test_int()\n");
+			printf("keyboard: wrong no of arguments for kbd_test_timed_scan()\n");
 			return 1;
 		}
 		time = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
 		if (time == ULONG_MAX)
 			return 1;
-		printf("timer::timer_test_int(%lu)\n", time);
-		return timer_test_int(time);
+		printf("keyboard::kbd_test_timed_scan(%lu)\n", time);
+		return kbd_test_timed_scan(time);
 	}
 	else {
-		printf("timer: %s - no valid function!\n", argv[1]);
+		printf("keyboard: %s - no valid function!\n", argv[1]);
 		return 1;
 	}
 }
@@ -90,7 +99,7 @@ static unsigned long parse_ulong(char *str, int base)
 	}
 
 	if (endptr == str) {
-		printf("timer: parse_ulong: no digits were found in %s\n", str);
+		printf("keyboard: parse_ulong: no digits were found in %s\n", str);
 		return ULONG_MAX;
 	}
 

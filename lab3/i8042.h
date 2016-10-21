@@ -9,11 +9,11 @@
 
 #define BIT(n) (0x01<<(n))
 
-#define KBC_IRQ         1    /**< @brief KBC IRQ line */
+#define KBC_IRQ                 1   /**< @brief KBC IRQ line */
+#define KBD_ORIGINAL_HOOK_ID    1   /**< @brief KBD HOOK_ID ORIGINAL */
+#define DELAY_TO            20000   /**< @brief KBC respond Time-Out */
 
-#define DELAY_TO        20000   /**< @brief KBC respond Time-Out */
-
-#define ESQ_BREAK_CODE  0x81    /**< @brief ESQ key break code */
+#define ESQ_BREAK_CODE      0x81    /**< @brief ESQ key break code */
 
 #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
 

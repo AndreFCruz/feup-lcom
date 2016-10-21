@@ -3,31 +3,32 @@
 #include <minix/com.h>
 #include "keyboard.h"
 
-int kbd_subscribe_int(int * hook_id)
-{
-	if ( sys_irqsetpolicy (KBC_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, hook_id) != OK ) {
-			printf("kbd_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
-			return -1;
-		}
+static int kbd_hook_id = KBD_ORIGINAL_HOOK_ID;
 
-	if ( sys_irqenable (hook_id) != OK ) {
+int kbd_subscribe_int(void)
+{
+	if ( sys_irqsetpolicy (KBC_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &kbd_hook_id) != OK ) {
+		printf("kbd_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
+		return -1;
+	}
+	if ( sys_irqenable (&kbd_hook_id) != OK ) {
 		printf("kbd_subscribe_int() -> FAILED sys_irqenable()\n");
 		return -1;
 	}
 
-	return *hook_id;
+	return KBD_ORIGINAL_HOOK_ID;
 }
 
-int kbd_unsubscribe_int(int * hook_id) {
-	if ( sys_irqdisable (hook_id) != OK ) {
+int kbd_unsubscribe_int(void)
+{
+	if ( sys_irqdisable (&kbd_hook_id) != OK ) {
 		printf("kbd_unsubscribe_int() -> FAILED sys_irqdisable()\n");
 		return -1;
 	}
-
-	if ( sys_irqrmpolicy (hook_id) != OK ) {
+	if ( sys_irqrmpolicy (&kbd_hook_id) != OK ) {
 		printf("kbd_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
 		return -1;
 	}
 
-	return OK;
+	return KBD_ORIGINAL_HOOK_ID;
 }

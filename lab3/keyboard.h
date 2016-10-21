@@ -11,15 +11,15 @@
 
 
  /**
-  * @brief Subscribes and enables Keyboards interrupts
+  * @brief Subscribes and enables Keyboard interrupts
   *
   * @return Returns bit order in interrupt mask; negative value on failure
   */
- int kbd_subscribe_int(int * hook_id);
+ int kbd_subscribe_int(void);
 
  /**
   * @brief Unsubscribes Keyboard interrupts
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int kbd_unsubscribe_int(int * hook_id);
+ int kbd_unsubscribe_int(void);

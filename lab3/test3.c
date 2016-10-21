@@ -4,6 +4,7 @@
 #include "i8042.h"
 #include "test3.h"
 #include "keyboard.h"
+#include "timer.h"
 
 int kbd_test_scan(unsigned short ass) {
 	/* To be completed */

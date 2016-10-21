@@ -61,13 +61,33 @@ u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 	}
 }
 
-int keyboard_handler()		// To be called on KBC Interrupt
-{							// Returns non-zero on error
+int keyboard_handler(int status)	// To be called on KBC Interrupt
+{									// Returns -1 on error
 	u8_t data;
 	if ( (data = keyboard_read()) == -1 ) {
 		printf("keyboard_handler() -> FAILED keyboard_read()");
-		return 1;
+		return -1;
 	}
-	// switch ()
 
+	if ( data == 0xE0 ) {
+		return 1;	// Return status 1 (awaiting next byte)
+	}
+
+	// MakeCode or BreakCode ?
+	bool isBreak = data & 0xF0;
+	if ( isBreak )
+		printf("Breakcode: ");
+	else
+		printf("Makecode:  ");
+
+	if ( status ) {
+		printf("0xE0 %x\n", data);
+		return 0;
+	} else if ( data & 0x81 ) {	// ESC BreakCode - Return Status 2
+		printf("%x - ESC BreakCode\n", data);
+		return 2;
+	} else {
+		printf("%x\n", data);
+		return 0;
+	}
 }

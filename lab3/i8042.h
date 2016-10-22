@@ -7,7 +7,7 @@
  * Constants for programming the i8042 Keyboard Controller.
  */
 
-//#define BIT(n) (0x01<<(n))
+#define BIT(n) (0x01<<(n))
 
 #define KBC_IRQ             1   /**< @brief KBC IRQ line */
 #define KBD_INITIAL_HOOK_ID 1   /**< @brief KBD Initial hook_id */

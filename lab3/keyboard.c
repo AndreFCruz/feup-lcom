@@ -3,8 +3,11 @@
 #include <minix/com.h>
 #include <minix/sysutil.h>
 #include "keyboard.h"
+#include "i8042.h"
 
-#define DELAY_TO		20000   // KBC respond Time-Out in micro seconds
+#define DELAY_US		20000   // KBC respond Time-Out in micro seconds
+
+typedef int bool;
 
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
 static const unsigned maxIter = 15; 	// Maximum Iterations when retrieving data from KBC
@@ -37,9 +40,9 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
+unsigned char keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 {
-	u8_t stat, data;
+	unsigned long stat, data;
 	unsigned iter;
 	while( iter++ < maxIter ) {
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
@@ -62,7 +65,7 @@ u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 }
 
 int keyboard_write(char command, char arg) {
-    u8_t kbcResponse;
+    unsigned long kbcResponse;
     unsigned iter;
 
     while ( iter++ < maxIter ) {
@@ -74,7 +77,7 @@ int keyboard_write(char command, char arg) {
             return 1;
         }
 
-        if (sys_inb (OUT_BUF, * kbcResponse) != OK) {
+        if (sys_inb (OUT_BUF, & kbcResponse) != OK) {
             printf ("keyboard_write() -> FAILED sys_inb()\n");
             return 1;
         }
@@ -93,7 +96,7 @@ int keyboard_write(char command, char arg) {
                     return 1;
                 }
 
-                if (sys_inb (OUT_BUF, * kbcResponse) != OK) {
+                if (sys_inb (OUT_BUF, & kbcResponse) != OK) {
                     printf ("keyboard_write() -> FAILED sys_inb()\n");
                     return 1;
                 }
@@ -114,7 +117,7 @@ int keyboard_write(char command, char arg) {
     }
 }
 
-int print_scan_code(u8_t data, int * status)
+int print_scan_code(unsigned char data, int * status)
 {
 	if ( data == 0xE0 ) {
 		*status = 1;	// Set status to 1 (awaiting next byte)
@@ -145,7 +148,7 @@ int print_scan_code(u8_t data, int * status)
 
 int keyboard_handler(int * status)	// To be called on KBC Interrupt
 {
-	u8_t data;
+	unsigned char data;
 	if ( (data = keyboard_read()) == -1 ) {
 		printf("keyboard_handler() -> FAILED keyboard_read()");
 		return 1;

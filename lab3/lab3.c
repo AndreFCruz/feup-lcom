@@ -39,10 +39,10 @@ static int proc_args(int argc, char **argv)
 			return 1;
 		}
 		mode = parse_ulong(argv[2], 10);
-		if (mode == ULONG_MAX)
+		if (mode == ULONG_MAX || mode > 1)
 			return 1;
 		printf("keyboard::kbd_test_scan(%lu)\n", mode);
-		return timer_test_config(mode);
+		kbd_test_scan(mode);
 	}
 	else if (strncmp(argv[1], "leds", strlen("leds")) == 0) {
 		if (argc < 3) {

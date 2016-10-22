@@ -26,7 +26,7 @@ int kbd_test_scan(unsigned short ass)
 	int status = 0;	// keyboard status flag
 
 	int r;
-	while( status != 2 ) { // TODO: check condition
+	while( status != 2 ) { // While ESC BreakCode not detected
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -36,6 +36,9 @@ int kbd_test_scan(unsigned short ass)
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
+
+						// TODO: Choose ASM or C implementation according to argument
+
 						if ( keyboard_handler(&status) != OK ) {
 							printf("kbd_test_scan() -> FAILED keyboard_handler()\n");
 							// return 1;

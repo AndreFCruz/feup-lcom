@@ -95,27 +95,19 @@ int keyboard_write(char command, char arg) {
                     return OK;
 
                 if (kbcResponse == IN_ERROR)
-                    brake;
+                    break;
                 }
         }
     }
 }
 
-// TODO: passar prints para outra função
-int keyboard_handler(int * status)	// To be called on KBC Interrupt
+int print_scan_code(u8_t data, int * status)
 {
-	u8_t data;
-	if ( (data = keyboard_read()) == -1 ) {
-		printf("keyboard_handler() -> FAILED keyboard_read()");
-		return 1;
-	}
-
 	if ( data == 0xE0 ) {
 		*status = 1;	// Set status to 1 (awaiting next byte)
 		return OK;
 	}
 
-	// TODO: mudar para outra funcao, talvez o if acim tb
 	// MakeCode or BreakCode ?
 	bool isBreak = data & 0xF0;
 	if ( isBreak )
@@ -126,14 +118,29 @@ int keyboard_handler(int * status)	// To be called on KBC Interrupt
 	if ( status ) {
 		printf("0xE0 %x\n", data);
 		*status = 0;	// Set status to 0
-		return 0;
+		return OK;
 	} else if ( data & 0x81 ) {	// ESC BreakCode
 		printf("%x - ESC BreakCode\n", data);
 		*status = 2;	// Set status to 2 (ESC BreakCode Detected)
-		return 0;
+		return OK;
 	} else {
 		printf("%x\n", data);
 		*status = 0;	// Set status to 0
-		return 0;
+		return OK;
 	}
+}
+
+int keyboard_handler(int * status)	// To be called on KBC Interrupt
+{
+	u8_t data;
+	if ( (data = keyboard_read()) == -1 ) {
+		printf("keyboard_handler() -> FAILED keyboard_read()");
+		return 1;
+	}
+	if ( print_scan_code(data, status) != OK ) {
+		printf("keyboard_handler() -> FAILED print_scan_code()");
+		return 1;
+	}
+
+	return OK;
 }

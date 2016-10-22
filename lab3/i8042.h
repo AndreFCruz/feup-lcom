@@ -27,6 +27,7 @@
 #define OUT_BUF         0x60 /**< @brief KBC Output buffer register */
 #define STAT_REG        0x64 /**< @brief KBC Status register */
 #define KBC_CMD_REG     0x64 /**< @brief KBC Command register */
+#define KBD_IN_BUF      0x60 /**< @brief KBD Input buffer register */
 
 /* KBC Status Register BITs' Meaning*/
 
@@ -47,5 +48,9 @@
 #define CHECK_KBD_IFC   0xAB /**< @brief Check Keyboard Interface */
 #define DISABLE_KBD_IFC 0xAD /**< @brief Disable KBD Interface */
 #define ENABLE_KBD_IFC  0xAE /**< @brief Enable KBD Interface */
+
+/* KBD Responses to Inputs*/
+#define IN_RESEND       0XFE /**< @brief Error: Resend latest byte  */
+#define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
 
 /*  */

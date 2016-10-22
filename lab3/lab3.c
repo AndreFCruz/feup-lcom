@@ -1,11 +1,9 @@
-#include "test3.h"
-#include "i8042.h"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
+#include "test3.h"
 
 
-// ALTERAR PARA TER EM CONTA LAB3 !!
 
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
@@ -15,7 +13,7 @@ int main(int argc, char **argv)
 {
 	sef_startup();	// synchronize with RS
 
-	if (argc == 1) {					/* Prints usage of the program if no arguments are passed */
+	if (argc == 1) {				/* Prints usage of the program if no arguments are passed */
 		print_usage(argv);
 		return 0;
 	}
@@ -25,11 +23,9 @@ int main(int argc, char **argv)
 static void print_usage(char **argv)
 {
 	printf("Usage: one of the following:\n"
-			//ALTERAR
 			"\t service run %s -args \"scan <decimal no.- mode>\"\n"
-			"\t service run %s -args \"leds <decimal no. - elements>\"\n" /
+			"\t service run %s -args \"leds <decimal no. - elements>\"\n"
 			"\t service run %s -args \"timed scan <decimal no. - time>\"\n",
-			/// /// ///
 			argv[0], argv[0], argv[0]);
 }
 
@@ -42,7 +38,7 @@ static int proc_args(int argc, char **argv)
 			printf("keyboard: wrong no. of arguments for kbd_test_scan()\n");
 			return 1;
 		}
-		mode = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		mode = parse_ulong(argv[2], 10);
 		if (mode == ULONG_MAX)
 			return 1;
 		printf("keyboard::kbd_test_scan(%lu)\n", mode);
@@ -53,26 +49,27 @@ static int proc_args(int argc, char **argv)
 			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
 			return 1;
 		}
-		unsigned nElements = argc - 2;							/* Number of arguments in the function*/
-		int toggles[nElements];
+		unsigned short nElements = argc - 2;
+		short unsigned int toggles[nElements];
 
-		for (int i = 0; i < nElements; i++) {					/* Getting the arguments into an array*/
+		unsigned short i;
+		for (i = 0; i < nElements; i++) {			/* Getting command line arguments into an int array */
 			toggles[i] = parse_ulong (argv[i+2], 10);
-			if (toggles[i] < 0 || toggles[i] > 2)				/* There are only 3 leds (0, 1, 2)*/
+			if (toggles[i] < 0 || toggles[i] > 2)		/* There are only 3 leds (0, 1, 2)*/
 			{
 				printf("keyboard: arguments for kbd_test_leds() must be 0, 1 or 2\n");
 				return 1;
 			}
 		}
-		printf("keyboard::kbd_test_leds(%lu)\n", nElements, & toggles);
-		return kbd_test_leds(nElems, & toggles);
+		printf("keyboard::kbd_test_leds(%su)\n", nElements);
+		return kbd_test_leds(nElements, toggles);
 	}
 	else if (strncmp(argv[1], "time", strlen("time")) == 0) {
 		if (argc != 3) {
 			printf("keyboard: wrong no of arguments for kbd_test_timed_scan()\n");
 			return 1;
 		}
-		time = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		time = parse_ulong(argv[2], 10);
 		if (time == ULONG_MAX)
 			return 1;
 		printf("keyboard::kbd_test_timed_scan(%lu)\n", time);

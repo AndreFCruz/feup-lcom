@@ -7,6 +7,7 @@ CC= gcc
 PROG= lab3
 SRCS= lab3.c test3.c keyboard.c timer.c
 
+#CFLAGS= -std=c99
 CCFLAGS= -Wall
 
 DPADD+= ${LIBDRIVER} ${LIBSYS}

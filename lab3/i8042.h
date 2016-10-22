@@ -54,4 +54,6 @@
 #define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
 #define IN_ACK			0xFA /**< @brief Success*/
 
-/*  */
+/**@}*/
+
+#endif /* _LCOM_I8042_H */

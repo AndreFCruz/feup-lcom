@@ -64,7 +64,7 @@ int kbd_test_scan(unsigned short ass)
 	// 	return 1;
 	// }
 
-	printf("_____\n");
+	printf("* keyboard_test_scan() Finished *\n");
 	return 0;
 }
 

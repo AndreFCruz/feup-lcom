@@ -125,24 +125,30 @@ int print_scan_code(unsigned char data, int * status)
 	}
 
 	// MakeCode or BreakCode ?
-	bool isBreak = data & 0xF0;
+	bool isBreak = data & BIT(7);
 	if ( isBreak )
 		printf("Breakcode: ");
 	else
 		printf("Makecode:  ");
 
-	if ( status ) {
-		printf("0xE0 %x\n", data);
-		*status = 0;	// Set status to 0
-		return OK;
-	} else if ( data & 0x81 ) {	// ESC BreakCode
-		printf("%x - ESC BreakCode\n", data);
+//	printf("DATA: %x\n", data);
+//	return OK;
+
+	if ( data == 0x81 ) {	// ESC BreakCode
+		printf("%02x - ESC BreakCode\n", data);
 		*status = 2;	// Set status to 2 (ESC BreakCode Detected)
 		return OK;
-	} else {
-		printf("%x\n", data);
+	} else if ( *status == 1) {
+		printf("0xE0 %02X\n", data);
 		*status = 0;	// Set status to 0
 		return OK;
+	} else if ( *status == 0 ) {
+		printf("%02X\n", data);
+		*status = 0;	// Set status to 0
+		return OK;
+	} else {
+		printf("print_scan_code::status is not in range [0, 2]\n");
+		return 1;
 	}
 }
 

@@ -61,6 +61,46 @@ u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 	}
 }
 
+int keyboard_write(char command, char arg) {
+    unsigned char kbcResponse;
+
+    while ( 1 ) {
+        if (STAT_REG & STAT_IBF)
+            return 1; //Input buffer is full
+
+        if (sys_outb (KB_IN_BUF, command)) {
+            printf ("keyboard_write() -> FAILED sys_outb()\n");
+            return 1;
+        }
+
+        if (sys_inb (KBD_IN_BUF, * kbcResponse)) {
+            printf ("keyboard_write() -> FAILED sys_outb()\n");
+            return 1;
+        }
+
+        if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR)
+        {
+            while (1) {
+                if (sys_outb (KBD_IN_BUF, arg)) {
+                    printf ("keyboard_write() -> FAILED sys_outb()\n");
+                    return 1;
+                }
+
+                if (sys_inb (KBD_IN_BUF, * kbcResponse)) {
+                    printf ("keyboard_write() -> FAILED sys_outb()\n");
+                    return 1;
+                }
+
+                if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR)
+                    return OK;
+
+                if (kbcResponse == IN_ERROR)
+                    brake;
+                }
+        }
+    }
+}
+
 // TODO: passar prints para outra função
 int keyboard_handler(int * status)	// To be called on KBC Interrupt
 {

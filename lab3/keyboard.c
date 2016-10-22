@@ -2,13 +2,12 @@
 #include <minix/drivers.h>
 #include <minix/com.h>
 #include <minix/sysutil.h>
-#include "timer.h"
 #include "keyboard.h"
 
 #define DELAY_TO		20000   // KBC respond Time-Out in micro seconds
 
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
-unsigned maxIter = 15; 	//Maximum Iterations for tests
+static const unsigned maxIter = 15; 	// Maximum Iterations when retrieving data from KBC
 
 int kbd_subscribe_int(void)
 {
@@ -70,7 +69,7 @@ int keyboard_write(char command, char arg) {
         if (STAT_REG & STAT_IBF)
             return 1; //Input buffer is full
 
-        if (sys_outb (KB_IN_BUF, command) != OK) {
+        if (sys_outb (KBD_IN_BUF, command) != OK) {
             printf ("keyboard_write() -> FAILED sys_outb()\n");
             return 1;
         }

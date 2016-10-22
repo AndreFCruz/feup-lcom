@@ -52,5 +52,6 @@
 /* KBD Responses to Inputs*/
 #define IN_RESEND       0XFE /**< @brief Error: Resend latest byte  */
 #define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
+#define IN_ACK			0xFA /**< @brief Success*/
 
 /*  */

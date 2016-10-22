@@ -63,7 +63,7 @@ u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 }
 
 int keyboard_write(char command, char arg) {
-    unsigned char kbcResponse;
+    u8_t kbcResponse;
     unsigned iter;
 
     while ( iter++ < maxIter ) {
@@ -75,7 +75,7 @@ int keyboard_write(char command, char arg) {
             return 1;
         }
 
-        if (sys_inb (KBD_IN_BUF, * kbcResponse) != OK) {
+        if (sys_inb (OUT_BUF, * kbcResponse) != OK) {
             printf ("keyboard_write() -> FAILED sys_inb()\n");
             return 1;
         }
@@ -94,7 +94,7 @@ int keyboard_write(char command, char arg) {
                     return 1;
                 }
 
-                if (sys_inb (KBD_IN_BUF, * kbcResponse) != OK) {
+                if (sys_inb (OUT_BUF, * kbcResponse) != OK) {
                     printf ("keyboard_write() -> FAILED sys_inb()\n");
                     return 1;
                 }

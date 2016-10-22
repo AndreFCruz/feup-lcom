@@ -8,6 +8,7 @@
 #define DELAY_TO		20000   // KBC respond Time-Out in micro seconds
 
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
+unsigned maxIter = 15; 	//Maximum Iterations for tests
 
 int kbd_subscribe_int(void)
 {
@@ -63,41 +64,54 @@ u8_t keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 
 int keyboard_write(char command, char arg) {
     unsigned char kbcResponse;
+    unsigned iter;
 
-    while ( 1 ) {
+    while ( iter++ < maxIter ) {
         if (STAT_REG & STAT_IBF)
             return 1; //Input buffer is full
 
-        if (sys_outb (KB_IN_BUF, command)) {
+        if (sys_outb (KB_IN_BUF, command) != OK) {
             printf ("keyboard_write() -> FAILED sys_outb()\n");
             return 1;
         }
 
-        if (sys_inb (KBD_IN_BUF, * kbcResponse)) {
-            printf ("keyboard_write() -> FAILED sys_outb()\n");
+        if (sys_inb (KBD_IN_BUF, * kbcResponse) != OK) {
+            printf ("keyboard_write() -> FAILED sys_inb()\n");
             return 1;
         }
 
-        if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR)
+        //A byte different from the 3 expected was received
+        if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR && kbcResponse != IN_ACK) {
+            printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
+            return 1;
+        }
+
+        if (kbcResponse == IN_ACK) //Success upon 1st cycle
         {
             while (1) {
-                if (sys_outb (KBD_IN_BUF, arg)) {
+                if (sys_outb (KBD_IN_BUF, arg) != OK) {
                     printf ("keyboard_write() -> FAILED sys_outb()\n");
                     return 1;
                 }
 
-                if (sys_inb (KBD_IN_BUF, * kbcResponse)) {
-                    printf ("keyboard_write() -> FAILED sys_outb()\n");
+                if (sys_inb (KBD_IN_BUF, * kbcResponse) != OK) {
+                    printf ("keyboard_write() -> FAILED sys_inb()\n");
                     return 1;
                 }
 
-                if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR)
+                if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR && kbcResponse != IN_ACK) {
+                    printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
+                    return 1;
+                }
+
+                if (kbcResponse == IN_ACK) //Success on both cycles
                     return OK;
 
-                if (kbcResponse == IN_ERROR)
+                if (kbcResponse == IN_ERROR) //Restart evverything
                     break;
                 }
         }
+	tickdelay(micros_to_ticks(DELAY_US));
     }
 }
 

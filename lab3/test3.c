@@ -53,16 +53,8 @@ int kbd_test_scan(unsigned short ass)
 		return 1;
 	}
 
-<<<<<<< .mine
-	printf("* keyboard_test_scan() Finished *\n");
-=======
-	// if ( timer_unsubscribe_int() < 0 ) {
-	// 	printf("kbd_test_scan() -> FAILED timer_unsubscribe_int()\n");
-	// 	return 1;
-	// }
+	printf("\n* keyboard_test_scan() Finished *\n");
 
-	printf("* keyboard_test_scan() Finished *\n");
->>>>>>> .r50
 	return 0;
 }
 

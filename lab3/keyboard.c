@@ -64,6 +64,78 @@ unsigned char keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 	}
 }
 
+unsigned char keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
+{
+	unsigned long stat;
+	unsigned iter,
+	while ( iter++ < maxIter ) {
+		if ( sys_inb (STAT_REG, &stat) != OK ) {
+			print("keyboard-write() -> FAILED sys_inb()");
+			return -1;
+		}
+		/* loop while 8042 input buffer is full */
+		if ( stat & STAT_IBF ) {
+			if ( sys_outb (KBD_IN_BUF, data) != OK) {
+				printf ("keyboard_write() -> FAILED sys_outb()\n");
+           			return -1; 	//Failure
+		}
+		if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )
+			return OK;
+		else
+			return -1;		//Failure
+		}
+	tickdelay(micros_to_ticks(DELAY_US));
+	}
+}
+
+int keyboard_write_command(char command, char arg) {
+    unsigned long kbdResponse;
+    unsigned iter;
+
+    while ( iter++ < maxIter ) {
+		if (keyboard_write (command) != OK)
+			return -1;		//Print of error is done in keyboard_write()
+
+		if ( (kbdResponse = keyboard_read ()) == -1) {	//Long = char, corrigir
+			printf ("keyboard_write() -> FAILED sys_inb()\n");
+			return 1;
+		}
+
+        //A byte different from the 3 expected was received
+        if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
+            printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
+            return 1;
+        }
+
+        if (kbdResponse == IN_ACK) //Success upon 1st cycle
+        {
+            while (1) {
+        		if (keyboard_write (arg) != OK)
+        			return -1;		//Print of error is done in keyboard_write()
+
+        		if ( (kbdResponse = keyboard_read ()) == -1) {	//Long = char, corrigir
+        			printf ("keyboard_write() -> FAILED sys_inb()\n");
+        			return 1;
+        		}
+
+                if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
+                    printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
+                    return 1;
+                }
+
+                if (kbdResponse == IN_ACK) //Success on both cycles
+                    return OK;
+
+                if (kbdResponse == IN_ERROR) //Restart evverything
+                    break;
+                }
+        }
+	tickdelay(micros_to_ticks(DELAY_US));
+    }
+}
+
+
+/*		//ANTES DE APAGAR CONFIRMAR A FUNCIONALIDADE DA SUBSTITUTA
 int keyboard_write(char command, char arg) {
     unsigned long kbcResponse;
     unsigned iter;
@@ -115,7 +187,7 @@ int keyboard_write(char command, char arg) {
         }
 	tickdelay(micros_to_ticks(DELAY_US));
     }
-}
+} */
 
 int print_scan_code(unsigned char data, int * status)
 {

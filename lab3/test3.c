@@ -82,7 +82,7 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 		printf("Iteration %d completed\n", iter);
 
 		//Missing the delay of 1 sec
-		sleep();
+		//sleep();
 	}
 
 	if ( kbd_unsubscribe_int() < 0 ) {

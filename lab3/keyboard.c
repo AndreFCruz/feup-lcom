@@ -67,10 +67,10 @@ unsigned char keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 unsigned char keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
 {
 	unsigned long stat;
-	unsigned iter,
+	unsigned iter;
 	while ( iter++ < maxIter ) {
 		if ( sys_inb (STAT_REG, &stat) != OK ) {
-			print("keyboard-write() -> FAILED sys_inb()");
+			printf("keyboard-write() -> FAILED sys_inb()");
 			return -1;
 		}
 		/* loop while 8042 input buffer is full */
@@ -195,7 +195,7 @@ int keyboard_toggle_led (char bit)
 		return -1;
 	}
 
-	if ( keyboard_write_command (LED_TOOGLE_CMD, bit) != OK)
+	if ( keyboard_write_command (LED_TOGGLE_CMD, bit) != OK)
 		return -1;	//Print Error done in keyboard_write_command()
 	return OK;
 }

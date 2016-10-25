@@ -24,6 +24,14 @@
   */
  int kbd_unsubscribe_int(void);
 
+ /**
+  * @brief Writes data to the keyboard input buffer
+  *
+  * @param parameter that is written in the input buffer
+  *
+  * @return Return 0 upon success and non-zero otherwise
+  */
+ unsigned char keyboard_write(char data)
 
  /**
   * @brief Keyboard Interrupt Handler

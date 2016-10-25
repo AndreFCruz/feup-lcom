@@ -88,7 +88,8 @@ unsigned char keyboard_write(char data)		//Writes Data to the Keyboard Input Buf
 	}
 }
 
-int keyboard_write_command(char command, char arg) {
+int keyboard_write_command(char command, char arg)
+{
     unsigned long kbdResponse;
     unsigned iter;
 
@@ -109,7 +110,7 @@ int keyboard_write_command(char command, char arg) {
 
         if (kbdResponse == IN_ACK) //Success upon 1st cycle
         {
-            while (1) {
+            while (iter++ < maxIter) {
         		if (keyboard_write (arg) != OK)
         			return -1;		//Print of error is done in keyboard_write()
 
@@ -130,10 +131,8 @@ int keyboard_write_command(char command, char arg) {
                     break;
                 }
         }
-	tickdelay(micros_to_ticks(DELAY_US));
-    }
+    } // tick_delay is called in both write and read functions
 }
-
 
 /*		//ANTES DE APAGAR CONFIRMAR A FUNCIONALIDADE DA SUBSTITUTA
 int keyboard_write(char command, char arg) {
@@ -188,6 +187,18 @@ int keyboard_write(char command, char arg) {
 	tickdelay(micros_to_ticks(DELAY_US));
     }
 } */
+
+int Keyboard_toggle_led (char bit)
+{
+	if (bit != 0 || bit != 1 || bit != 2) {
+		printf("kbd_toggle_led argument must be 0, 1 or 2\n");
+		return -1;
+	}
+
+	if ( keyboard_write_command (LED_TOOGLE_CMD, bit) != OK)
+		return -1;	//Print Error done in keyboard_write_command()
+	return OK;
+}
 
 int print_scan_code(unsigned char data, int * status)
 {

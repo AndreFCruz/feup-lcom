@@ -54,6 +54,12 @@
 #define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
 #define IN_ACK			0xFA /**< @brief Success*/
 
+/* LED's useful macros*/
+#define LED_TOGGLE_CMD	0xED /**< @brief Toggle Led Command */
+#define CAPS_LOCK		0x02
+#define NUM_LOCK		0X01
+#define SCROLL_LOCK		0x00
+
 /**@}*/
 
 #endif /* _LCOM_I8042_H */

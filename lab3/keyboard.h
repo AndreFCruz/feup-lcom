@@ -25,13 +25,22 @@
  int kbd_unsubscribe_int(void);
 
  /**
-  * @brief Writes data to the keyboard input buffer
+  * @brief Toggles the led associated to the received bit
   *
-  * @param parameter that is written in the input buffer
+  * @param bit that contains information about which bit will be toggled
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- unsigned char keyboard_write(char data)
+ int keyboard_toggle_led (char bit);
+
+ // /**
+//  * @brief Writes data to the keyboard input buffer
+//  *
+//  * @param parameter that is written in the input buffer
+//  *
+//  * @return Return 0 upon success and non-zero otherwise
+//  */
+// unsigned char keyboard_write(char data)
 
  /**
   * @brief Keyboard Interrupt Handler

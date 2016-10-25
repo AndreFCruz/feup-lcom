@@ -55,11 +55,6 @@ static int proc_args(int argc, char **argv)
 		unsigned short i;
 		for (i = 0; i < nElements; i++) {			/* Getting command line arguments into an int array */
 			toggles[i] = parse_ulong (argv[i+2], 10);
-			if (toggles[i] < 0 || toggles[i] > 2)		/* There are only 3 leds (0, 1, 2)*/
-			{
-				printf("keyboard: arguments for kbd_test_leds() must be 0, 1 or 2\n");
-				return 1;
-			}
 		}
 		printf("keyboard::kbd_test_leds(%su)\n", nElements);
 		return kbd_test_leds(nElements, toggles);

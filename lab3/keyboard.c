@@ -188,7 +188,7 @@ int keyboard_write(char command, char arg) {
     }
 } */
 
-int Keyboard_toggle_led (char bit)
+int keyboard_toggle_led (char bit)
 {
 	if (bit != 0 || bit != 1 || bit != 2) {
 		printf("kbd_toggle_led argument must be 0, 1 or 2\n");

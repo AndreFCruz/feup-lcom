@@ -60,8 +60,38 @@ int kbd_test_scan(unsigned short ass)
 
 
 
-int kbd_test_leds(unsigned short n, unsigned short *leds) {
-    /* To be completed */
+int kbd_test_leds(unsigned short n, unsigned short *leds)
+{
+	if ( BIT(kbd_subscribe_int()) < 0 ) { // hook_id returned for keyboard
+		printf("kbd_test_leds() -> FAILED kbd_subscribe_int()\n");
+		return 1;						//VERIFICAR ISTO
+	}
+
+	char cl_previousvalue, sl_previousvalue, nl_previousvalue;		//keep previous Led values
+	//TODO: save the initial values
+
+	unsigned int iter;
+	for (iter = 0; iter < n; iter++)
+	{
+		if (keyboard_toggle_led (leds[iter]) != OK)
+			{
+				printf("kdt_test_leds() -> FAILED keyboard_toggle_led()\n");
+				return 1;
+			}
+		//To test if everything is working
+		printf("Iteration %d completed\n", iter);
+
+		//Missing the delay of 1 sec
+		sleep();
+	}
+
+	if ( kbd_unsubscribe_int() < 0 ) {
+		printf("kbd_test_leds() -> FAILED kbd_unsubscribe_int()\n");
+		return 1;
+	}
+
+	printf ("\nkeyboard_test_leds() Finished\n");
+	return OK;
 }
 
 

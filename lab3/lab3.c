@@ -50,30 +50,31 @@ static int proc_args(int argc, char **argv)
 			return 1;
 		}
 		unsigned short nElements = argc - 2;
-		short unsigned int toggles[nElements];
+		unsigned short toggles[nElements];
 
 		unsigned short i;
-		for (i = 0; i < nElements; i++) {			/* Getting command line arguments into an int array */
+		for (i = 0; i < nElements; i++) {			/* Getting command line arguments into an array */
 			toggles[i] = parse_ulong (argv[i+2], 10);
 		}
-		printf("keyboard::kbd_test_leds(%su)\n", nElements);
-		return kbd_test_leds(nElements, toggles);
+		printf("keyboard::kbd_test_leds(%d, toggles)\n", nElements);
+		kbd_test_leds(nElements, toggles);
 	}
 	else if (strncmp(argv[1], "time", strlen("time")) == 0) {
-		if (argc != 3) {
+		if (argc != 4) {
 			printf("keyboard: wrong no of arguments for kbd_test_timed_scan()\n");
 			return 1;
 		}
-		time = parse_ulong(argv[2], 10);
+		time = parse_ulong(argv[3], 10);
 		if (time == ULONG_MAX)
 			return 1;
 		printf("keyboard::kbd_test_timed_scan(%lu)\n", time);
-		return kbd_test_timed_scan(time);
+		kbd_test_timed_scan(time);
 	}
 	else {
 		printf("keyboard: %s - no valid function!\n", argv[1]);
 		return 1;
 	}
+	return 0;	//OK
 }
 
 static unsigned long parse_ulong(char *str, int base)

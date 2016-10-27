@@ -40,10 +40,10 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-unsigned char keyboard_read()	// Reads Keyboard Data from OutPut Buffer
+long keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 {
 	unsigned long stat, data;
-	unsigned iter;
+	unsigned iter = 0;
 	while( iter++ < maxIter ) {
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
 			printf("keyboard_read() -> FAILED sys_inb()");
@@ -55,147 +55,103 @@ unsigned char keyboard_read()	// Reads Keyboard Data from OutPut Buffer
 				printf("keyboard_read() -> FAILED sys_inb()");
 				return -1;	// Returns -1 or 0xFF on failure
 			}
-			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Ocurred ?
+			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Occurred ?
 				return data;
 			else
 				return -1;	// Returns -1 or 0xFF on failure
 		}
 	tickdelay(micros_to_ticks(DELAY_US));
 	}
+
+	printf("keyboard_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
+	return -1;
 }
 
-unsigned char keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
+int keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
 {
 	unsigned long stat;
-	unsigned iter;
+	unsigned iter = 0;
 	while ( iter++ < maxIter ) {
 		if ( sys_inb (STAT_REG, &stat) != OK ) {
 			printf("keyboard-write() -> FAILED sys_inb()");
-			return -1;
+			return 1;
 		}
 		/* loop while 8042 input buffer is full */
-		if ( stat & STAT_IBF ) {
-			if ( sys_outb (KBD_IN_BUF, data) != OK) {
+		if ( (stat & STAT_IBF) == 0 ) {
+			if ( sys_outb (KBD_IN_BUF, data) != OK ) {
 				printf ("keyboard_write() -> FAILED sys_outb()\n");
-           			return -1; 	//Failure
+           		return 1; 	//Failure
 		}
 		if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )
 			return OK;
 		else
-			return -1;		//Failure
+			return 1;		//Failure
 		}
 	tickdelay(micros_to_ticks(DELAY_US));
 	}
+
+	printf("keyboard_write() -> Max Iterations Reached. Was %d.\n", iter);
+	return 1;
 }
 
 int keyboard_write_command(char command, char arg)
 {
-    unsigned long kbdResponse;
-    unsigned iter;
+    long kbdResponse;
+    unsigned inner = 0, outter = 0;
 
-    while ( iter++ < maxIter ) {
+    while ( outter++ < maxIter ) {
+
 		if (keyboard_write (command) != OK)
-			return -1;		//Print of error is done in keyboard_write()
+			return 1;		//Print of error is done in keyboard_write()
 
-		if ( (kbdResponse = keyboard_read ()) == -1) {	//Long = char, corrigir
-			printf ("keyboard_write() -> FAILED sys_inb()\n");
+		if ( (kbdResponse = keyboard_read ()) == -1 ) {
+			printf ("keyboard_write_command() -> FAILED sys_inb()\n");
 			return 1;
 		}
 
         //A byte different from the 3 expected was received
         if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
-            printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
-            return 1;
+            printf ("keyboard_write_command() Outer Loop -> ERROR: unknown response from the KBD. Was %x.\n", kbdResponse);
+            continue;
         }
 
-        if (kbdResponse == IN_ACK) //Success upon 1st cycle
+        if (kbdResponse == IN_ACK) // Success
         {
-            while (iter++ < maxIter) {
+            while (inner++ < maxIter) {
         		if (keyboard_write (arg) != OK)
-        			return -1;		//Print of error is done in keyboard_write()
+        			return 1;		//Print of error is done in keyboard_write()
 
-        		if ( (kbdResponse = keyboard_read ()) == -1) {	//Long = char, corrigir
-        			printf ("keyboard_write() -> FAILED sys_inb()\n");
+        		if ( (kbdResponse = keyboard_read ()) == -1) {
+        			printf ("keyboard_write_command() -> FAILED sys_inb()\n");
         			return 1;
         		}
 
                 if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
-                    printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
+                    printf ("keyboard_write_command() Inner Loop -> ERROR: unknown response from the KBD. Was %x.\n", kbdResponse);
                     return 1;
                 }
 
                 if (kbdResponse == IN_ACK) //Success on both cycles
                     return OK;
 
-                if (kbdResponse == IN_ERROR) //Restart evverything
+                if (kbdResponse == IN_ERROR) //Restart everything
                     break;
                 }
         }
     } // tick_delay is called in both write and read functions
+
+    printf("keyboard_write_command() -> ERROR: Maximum iterations/tries reached. Outter: %d; Inner: %x.\n", outter, inner);
+    return 1;
 }
 
-/*		//ANTES DE APAGAR CONFIRMAR A FUNCIONALIDADE DA SUBSTITUTA
-int keyboard_write(char command, char arg) {
-    unsigned long kbcResponse;
-    unsigned iter;
-
-    while ( iter++ < maxIter ) {
-        if (STAT_REG & STAT_IBF)
-            return 1; //Input buffer is full
-
-        if (sys_outb (KBD_IN_BUF, command) != OK) {
-            printf ("keyboard_write() -> FAILED sys_outb()\n");
-            return 1;
-        }
-
-        if (sys_inb (OUT_BUF, & kbcResponse) != OK) {
-            printf ("keyboard_write() -> FAILED sys_inb()\n");
-            return 1;
-        }
-
-        //A byte different from the 3 expected was received
-        if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR && kbcResponse != IN_ACK) {
-            printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
-            return 1;
-        }
-
-        if (kbcResponse == IN_ACK) //Success upon 1st cycle
-        {
-            while (1) {
-                if (sys_outb (KBD_IN_BUF, arg) != OK) {
-                    printf ("keyboard_write() -> FAILED sys_outb()\n");
-                    return 1;
-                }
-
-                if (sys_inb (OUT_BUF, & kbcResponse) != OK) {
-                    printf ("keyboard_write() -> FAILED sys_inb()\n");
-                    return 1;
-                }
-
-                if (kbcResponse != IN_RESEND && kbcResponse != IN_ERROR && kbcResponse != IN_ACK) {
-                    printf ("keyboard_write() -> ERROR: unknown response from the KBD\n");
-                    return 1;
-                }
-
-                if (kbcResponse == IN_ACK) //Success on both cycles
-                    return OK;
-
-                if (kbcResponse == IN_ERROR) //Restart evverything
-                    break;
-                }
-        }
-	tickdelay(micros_to_ticks(DELAY_US));
-    }
-} */
-
-int keyboard_toggle_led (char bit)
+int keyboard_toggle_led (int id)
 {
-	if (bit != 0 || bit != 1 || bit != 2) {
-		printf("kbd_toggle_led argument must be 0, 1 or 2\n");
+	if (id != 0 && id != 1 && id != 2) {
+		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
 		return -1;
 	}
 
-	if ( keyboard_write_command (LED_TOGGLE_CMD, bit) != OK)
+	if ( keyboard_write_command (LED_TOGGLE_CMD, BIT(id)) != OK )
 		return -1;	//Print Error done in keyboard_write_command()
 	return OK;
 }
@@ -213,9 +169,6 @@ int print_scan_code(unsigned char data, int * status)
 		printf("Breakcode: ");
 	else
 		printf("Makecode:  ");
-
-//	printf("DATA: %x\n", data);
-//	return OK;
 
 	if ( data == 0x81 ) {	// ESC BreakCode
 		printf("%02x - ESC BreakCode\n", data);

@@ -27,11 +27,11 @@
  /**
   * @brief Toggles the led associated to the received bit
   *
-  * @param bit that contains information about which bit will be toggled
+  * @param id that contains information about which bit will be toggled
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int keyboard_toggle_led (char bit);
+ int keyboard_toggle_led (int id);
 
  // /**
 //  * @brief Writes data to the keyboard input buffer

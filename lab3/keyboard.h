@@ -25,22 +25,38 @@
  int kbd_unsubscribe_int(void);
 
  /**
+  * @brief Reads data from the keyboard output buffer
+  *
+  * @return Return value read upon sucess and -1 otherwise
+ */
+ //long keyboard_read(void)
+
+ /**
+  * @brief Writes data to the keyboard input buffer
+  *
+  * @param parameter that is written in the input buffer
+  *
+  * @return Return 0 upon success and non-zero otherwise
+  */
+ //int keyboard_write(char data)
+
+ /**
+  * @brief
+  *
+  * @param  command of the action we want to execute and the argument that will be used in that action
+  *
+  * @return Return 0 upon success and non-zero otherwise
+  */
+ //int keyboard_write_command(char command, char arg)
+
+ /**
   * @brief Toggles the led associated to the received bit
   *
   * @param id that contains information about which bit will be toggled
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int keyboard_toggle_led (int id);
-
- // /**
-//  * @brief Writes data to the keyboard input buffer
-//  *
-//  * @param parameter that is written in the input buffer
-//  *
-//  * @return Return 0 upon success and non-zero otherwise
-//  */
-// unsigned char keyboard_write(char data)
+ int keyboard_toggle_led (int id,unsigned long *led_status);
 
  /**
   * @brief Keyboard Interrupt Handler

@@ -40,7 +40,7 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-long keyboard_read()	// Reads Keyboard Data from OutPut Buffer
+long keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
 {
 	unsigned long stat, data;
 	unsigned iter = 0;
@@ -144,7 +144,7 @@ int keyboard_write_command(char command, char arg)
     return 1;
 }
 
-int keyboard_toggle_led (int id)
+/*int keyboard_toggle_led (int id)
 {
 	if (id != 0 && id != 1 && id != 2) {
 		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
@@ -152,6 +152,23 @@ int keyboard_toggle_led (int id)
 	}
 
 	if ( keyboard_write_command (LED_TOGGLE_CMD, BIT(id)) != OK )
+		return -1;	//Print Error done in keyboard_write_command()
+	return OK;
+}*/
+
+int keyboard_toggle_led (int id,unsigned long *led_status)
+{
+	if (id != 0 && id != 1 && id != 2) {
+		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
+		return -1;
+	}
+
+	if ( (*led_status & BIT(id)) == 0 ) //Activate the LED
+		*led_status = (*led_status | BIT(id));
+	else							//Deactivate the LED
+		*led_status = (*led_status & (~(*led_status & BIT(id))));
+
+	if ( keyboard_write_command (LED_TOGGLE_CMD, *led_status) != OK )
 		return -1;	//Print Error done in keyboard_write_command()
 	return OK;
 }

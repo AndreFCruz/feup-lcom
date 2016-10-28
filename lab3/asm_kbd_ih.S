@@ -3,9 +3,8 @@
 
 .data
 maxIter:
-	.int 15
+	.short 15
 
-#.global _kbd_read_return
 .global _keyboard_read_asm
 
 .text
@@ -13,17 +12,26 @@ _keyboard_read_asm:
 		xor %ecx, %ecx
 		xor %eax, %eax
 start:
-		cmp %ecx, maxIter
-		je	final
-		inl	$STAT_REG, %eax		# eax := kbd status
+		cmp %cl, maxIter		# cl := iterations count
+		je	unsuccess
+		in	$STAT_REG, %eax		# eax := kbd status
 		test $STAT_OBF, %eax
 		jz	next
 		in	$OUT_BUF, %eax		# eax := data
-		jmp final
+		mov 1, %ch				# ch := flag de data
+		jmp success
 next:
-		#tick_delay
-		addl $1, %ecx
-		jmp start
-final:
+		#invoke _micros_to_ticks, $KBD_DELAY_US
+		push $KBD_DELAY_US
+		call _micros_to_ticks
+		push %eax
+		call _tickdelay
+		addb $1, %cl
+		jmp	start
+unsuccess:
+		cmp $1, %ch
+		je	success
+		mov -1, %eax
+success:
 		leave
 		ret

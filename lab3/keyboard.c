@@ -5,8 +5,6 @@
 #include "keyboard.h"
 #include "i8042.h"
 
-#define DELAY_US		20000   // KBC respond Time-Out in micro seconds
-
 typedef int bool;
 
 static int kbd_hook_id = KBD_INITIAL_HOOK_ID;
@@ -60,7 +58,7 @@ int keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
 			else
 				return -1;	// Returns -1 or 0xFF on failure
 		}
-	tickdelay(micros_to_ticks(DELAY_US));
+	tickdelay(micros_to_ticks(KBD_DELAY_US));
 	}
 
 	printf("keyboard_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
@@ -87,7 +85,7 @@ int keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
 		else
 			return 1;		//Failure
 		}
-	tickdelay(micros_to_ticks(DELAY_US));
+	tickdelay(micros_to_ticks(KBD_DELAY_US));
 	}
 
 	printf("keyboard_write() -> Max Iterations Reached. Was %d.\n", iter);
@@ -203,7 +201,7 @@ int keyboard_handler(int * status, unsigned short ass)	// To be called on KBC In
 		data = keyboard_read();
 		break;
 	case 1:
-		sys_enable_iop(SELF);	// TODO: check call position
+		sys_enable_iop(SELF);
 		data = keyboard_read_asm();
 		break;
 	default:

@@ -32,7 +32,8 @@ int kbd_test_scan(unsigned short ass)
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
 						if ( keyboard_handler(&status, ass) != OK ) {
 							printf("kbd_test_scan() -> FAILED keyboard_handler()\n");
-							return 1;
+							status = 2;	// rude way of exiting loop and proceding to unsubscribe interrupts
+							break;
 						}
 					}
 					break;
@@ -93,7 +94,8 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 						if ( timerCount++ % 60 == 0 )	//Assuring 1 sec between led toggles
 							if ( keyboard_toggle_led(leds[idx++], & led_status) != OK ) {
 								printf("kdt_test_leds() -> FAILED keyboard_toggle_led()\n");
-								return 1;
+								idx = n;	// rude way of exiting loop and proceding to unsubscribe interrupts
+								break;
 							}
 					}
 					break;
@@ -153,7 +155,8 @@ int kbd_test_timed_scan(unsigned short n)
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
 						if ( keyboard_handler(&status, 0) != OK ) {
 							printf("kbd_test_timed_scan() -> FAILED keyboard_handler()\n");
-							return 1;
+							status = 2;	// rude way of exiting loop and proceding to unsubscribe interrupts
+							break;
 						}
 						// Restart time count on key pressed
 						timerCount = 0;

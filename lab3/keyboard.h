@@ -9,6 +9,11 @@
  * Functions for using the i8042 KBC/KBD
  */
 
+ /**
+  * @brief (Extern) keyboard read function in assembly
+  *
+  * @return Returns data (positive) on success, -1 on failure
+  */
 extern int _keyboard_read_asm(void);
 
 
@@ -31,7 +36,7 @@ extern int _keyboard_read_asm(void);
   *
   * @return Return value read upon sucess and -1 otherwise
  */
- //long keyboard_read(void)
+ int keyboard_read(void);
 
  /**
   * @brief Writes data to the keyboard input buffer
@@ -40,16 +45,17 @@ extern int _keyboard_read_asm(void);
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- //int keyboard_write(char data)
+ int keyboard_write(char data);
 
  /**
-  * @brief
+  * @brief	Writes command to kbd, followed by arg
   *
   * @param  command of the action we want to execute and the argument that will be used in that action
+  * @param  arg argument of the command
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- //int keyboard_write_command(char command, char arg)
+ int keyboard_write_command(char command, unsigned char arg);
 
  /**
   * @brief Toggles the led associated to the received bit

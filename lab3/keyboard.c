@@ -40,7 +40,7 @@ int kbd_unsubscribe_int(void)
 	return KBD_INITIAL_HOOK_ID;
 }
 
-long keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
+int keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
 {
 	unsigned long stat, data;
 	unsigned iter = 0;
@@ -144,18 +144,6 @@ int keyboard_write_command(char command, unsigned char arg)
     return 1;
 }
 
-/*int keyboard_toggle_led (int id)
-{
-	if (id != 0 && id != 1 && id != 2) {
-		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
-		return -1;
-	}
-
-	if ( keyboard_write_command (LED_TOGGLE_CMD, BIT(id)) != OK )
-		return -1;	//Print Error done in keyboard_write_command()
-	return OK;
-}*/
-
 int keyboard_toggle_led (int id,unsigned char *led_status)
 {
 	if (id != 0 && id != 1 && id != 2) {
@@ -206,10 +194,24 @@ int print_scan_code(unsigned char data, int * status)
 	}
 }
 
-int keyboard_handler(int * status)	// To be called on KBC Interrupt
+int keyboard_handler(int * status, unsigned short ass)	// To be called on KBC Interrupt
 {
 	unsigned char data;
-	if ( (data = keyboard_read()) == -1 ) {
+
+	switch (ass) {
+	case 0:
+		data = keyboard_read();
+		break;
+	case 1:
+		sys_enable_iop(SELF);	// TODO: check call position
+		data = keyboard_read_asm();
+		break;
+	default:
+		printf("keyboard_handler() -> \"ass\" argument must be 0 or 1.\n");
+		return 1;
+	}
+
+	if ( data == -1 ) {
 		printf("keyboard_handler() -> FAILED keyboard_read()");
 		return 1;
 	}

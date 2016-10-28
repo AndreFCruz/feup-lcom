@@ -113,7 +113,7 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 	int status = 0;	// keyboard status flag
 	unsigned short idx = 0;	// Index in leds array
 	unsigned timerCount = 0;
-	unsigned long led_status = 0; //Initialize all LEDs as 0
+	unsigned char led_status = 0; //Initialize all LEDs as 0
 
 	int r;
 	while( idx < n ) { // While Index not equal to array number of elements
@@ -125,9 +125,9 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 		if (is_ipc_notify(ipc_status)) { /* received notification */
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
-					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-						// Do nothing TODO: check
-					}
+//					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+//						// Do nothing
+//					}
 					if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
 						if ( timerCount++ % 60 == 0 )	//Assuring 1 sec between led toggles
 							if ( keyboard_toggle_led(leds[idx++], & led_status) != OK ) {
@@ -159,7 +159,6 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 }
 
 
-// ONLY A DRAFT . TODO: Finish interrupt logic
 int kbd_test_timed_scan(unsigned short n)
 {
 	int ipc_status;
@@ -195,7 +194,7 @@ int kbd_test_timed_scan(unsigned short n)
 							printf("kbd_test_timed_scan() -> FAILED keyboard_handler()\n");
 							return 1;
 						}
-						//Restarting the seconds counting
+						// Restart time count on key pressed
 						timerCount = 0;
 						seconds = 0;
 					}

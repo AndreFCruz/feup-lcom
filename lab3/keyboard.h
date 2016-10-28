@@ -9,6 +9,8 @@
  * Functions for using the i8042 KBC/KBD
  */
 
+extern int _keyboard_read_asm(void);
+
 
  /**
   * @brief Subscribes and enables Keyboard interrupts
@@ -67,7 +69,7 @@
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int keyboard_handler(int * status);
+ int keyboard_handler(int * status, unsigned short ass);
 
 
 #endif

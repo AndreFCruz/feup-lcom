@@ -60,6 +60,8 @@
 #define NUM_LOCK		0X01
 #define SCROLL_LOCK		0x00
 
+#define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
+
 /**@}*/
 
 #endif /* _LCOM_I8042_H */

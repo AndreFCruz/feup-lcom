@@ -39,8 +39,10 @@ static int proc_args(int argc, char **argv)
 			return 1;
 		}
 		mode = parse_ulong(argv[2], 10);
-		if (mode == ULONG_MAX || mode > 1)
+		if (mode == ULONG_MAX || mode > 1) {
+			printf("Function arg was %d, should be in range (0, 1).\n", mode);
 			return 1;
+		}
 		printf("keyboard::kbd_test_scan(%lu)\n", mode);
 		kbd_test_scan(mode);
 	}

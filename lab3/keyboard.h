@@ -56,7 +56,7 @@
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int keyboard_toggle_led (int id,unsigned long *led_status);
+ int keyboard_toggle_led (int id,unsigned char *led_status);
 
  /**
   * @brief Keyboard Interrupt Handler

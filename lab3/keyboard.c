@@ -94,7 +94,7 @@ int keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
 	return 1;
 }
 
-int keyboard_write_command(char command, char arg)
+int keyboard_write_command(char command, unsigned char arg)
 {
     long kbdResponse;
     unsigned inner = 0, outter = 0;
@@ -156,20 +156,21 @@ int keyboard_write_command(char command, char arg)
 	return OK;
 }*/
 
-int keyboard_toggle_led (int id,unsigned long *led_status)
+int keyboard_toggle_led (int id,unsigned char *led_status)
 {
 	if (id != 0 && id != 1 && id != 2) {
 		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
-		return -1;
+		return 1;
 	}
 
 	if ( (*led_status & BIT(id)) == 0 ) //Activate the LED
 		*led_status = (*led_status | BIT(id));
-	else							//Deactivate the LED
-		*led_status = (*led_status & (~(*led_status & BIT(id))));
+	else								//Deactivate the LED
+		*led_status = *led_status & ~BIT(id);
+//		*led_status = (*led_status & (~(*led_status & BIT(id))));
 
 	if ( keyboard_write_command (LED_TOGGLE_CMD, *led_status) != OK )
-		return -1;	//Print Error done in keyboard_write_command()
+		return 1;	//Print Error done in keyboard_write_command()
 	return OK;
 }
 

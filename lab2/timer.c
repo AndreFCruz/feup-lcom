@@ -246,7 +246,7 @@ int timer_test_int(unsigned long time)
 	while( elapsed < time ) {
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
-			fprintf(stderr, "driver_receive failed with: %d", r);
+			fprintf(stderr, "driver_receive failed with: %d\n", r);
 			continue;
 		}
 		if (is_ipc_notify(ipc_status)) { /* received notification */

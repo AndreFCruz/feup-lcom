@@ -19,7 +19,7 @@
 /* KBC Status Register BITs' Meaning*/
 
 #define STAT_PARITY		BIT(7)
-#define STAT_TIMEOUT		BIT(6)
+#define STAT_TIMEOUT	BIT(6)
 #define STAT_AUX		BIT(5)
 #define STAT_INH		BIT(4)
 #define STAT_A2			BIT(3)
@@ -29,8 +29,8 @@
 
 /* PS/2 Mouse-Related KBC Commands*/
 
-#define READ_CMD_B		0x20	/**< @brief Read Command Byte */
-#define WRITE_CMD_B		0x60	/**< @brief Write Command Byte */
+#define READ_CMD_B			0x20	/**< @brief Read Command Byte */
+#define WRITE_CMD_B			0x60	/**< @brief Write Command Byte */
 #define DISABLE_MOUSE		0xA7
 #define ENABLE_MOUSE		0xA8
 #define CHECK_MOUSE_ITF		0XA9	/**< @brief Check Mouse Interface */
@@ -38,14 +38,14 @@
 
 /* PS/2 Mouse Commands passed as arguments of 0xD4*/
 
-#define MOUSE_RESET		0XFF	/**< @brief Mouse reset */
+#define MOUSE_RESET			0XFF	/**< @brief Mouse reset */
 #define MOUSE_RESEND		0XFE	/**< @brief For serial communications errors */
 #define SET_DEFAULTS		0xF6	/**< @brief Set default values */
 #define DISABLE_DATA_R		0xF5	/**< @brief Disable Data Reporting (In stream mode, should be sent before any other command) */
 #define ENABLE_DATA_R		0xF4	/**< @brief Enable Data Reporting (In stream mode) */
 #define SET_SAMPLE_RATE		0xF3	/**< @brief Sets state sampling rate */
 #define SET_REMOTE_MODE		0XF0	/**< @brief Send data on request only */
-#define READ_DATA		0xEB	/**< @brief Send data packet request */
+#define READ_DATA			0xEB	/**< @brief Send data packet request */
 #define SET_STREAM_MODE		0xEA	/**< @brief Send data on events */
 #define STATUS_REQUEST		0xE9	/**< @brief Get mouse configuration (3 bytes) */
 #define SET_RESOLUTION		0XE8

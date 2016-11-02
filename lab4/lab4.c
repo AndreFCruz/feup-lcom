@@ -3,17 +3,15 @@
 #include <errno.h>
 #include "test4.h"
 
-// TODO: change to lab4 functions
-
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
 static void print_usage(char **argv);
 
 int main(int argc, char **argv)
 {
-	sef_startup();	// synchronize with RS
+	sef_startup();
 
-	if (argc == 1) {				/* Prints usage of the program if no arguments are passed */
+	if (argc == 1) {					/* Prints usage of the program if no arguments are passed */
 		print_usage(argv);
 		return 0;
 	}
@@ -23,60 +21,62 @@ int main(int argc, char **argv)
 static void print_usage(char **argv)
 {
 	printf("Usage: one of the following:\n"
-			"\t service run %s -args \"scan <decimal no.- mode>\"\n"
-			"\t service run %s -args \"leds <decimal no. - elements>\"\n"
-			"\t service run %s -args \"timed scan <decimal no. - time>\"\n",
-			argv[0], argv[0], argv[0]);
+			"\t service run %s -args \"packet <decimal no.- number of packets>\"\n"
+			"\t service run %s -args \"async <decimal no. - time>\"\n"
+			"\t service run %s -args \"config\"\n"
+			"\t service run %s -args \"gesture <decimal no. - length>\"\n",
+			argv[0], argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char **argv)
 {
-	unsigned short mode, elements, time;
+	unsigned long nPackets, time, length;
 
-	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
+	if (strncmp(argv[1], "packet", strlen("packet")) == 0) {
 		if (argc != 3) {
-			printf("keyboard: wrong no. of arguments for kbd_test_scan()\n");
+			printf("mouse: wrong no. of arguments for test_packet()\n");
 			return 1;
 		}
-		mode = parse_ulong(argv[2], 10);
-		if (mode == ULONG_MAX || mode > 1) {
-			printf("Function arg was %d, should be in range (0, 1).\n", mode);
+		nPackets = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		if (nPackets == ULONG_MAX)
 			return 1;
-		}
-		printf("keyboard::kbd_test_scan(%lu)\n", mode);
-		kbd_test_scan(mode);
+		printf("mouse::test_packet(%lu)\n", nPackets);
+		return test_packet(nPackets);
 	}
-	else if (strncmp(argv[1], "leds", strlen("leds")) == 0) {
-		if (argc < 3) {
-			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
+	else if (strncmp(argv[1], "async", strlen("async")) == 0) {
+		if (argc != 3) {
+			printf("mouse: wrong no. of arguments for test_async()\n");
 			return 1;
 		}
-		unsigned short nElements = argc - 2;
-		unsigned short toggles[nElements];
-
-		unsigned short i;
-		for (i = 0; i < nElements; i++) {			/* Getting command line arguments into an array */
-			toggles[i] = parse_ulong (argv[i+2], 10);
-		}
-		printf("keyboard::kbd_test_leds(%d, toggles)\n", nElements);
-		kbd_test_leds(nElements, toggles);
-	}
-	else if (strncmp(argv[1], "time", strlen("time")) == 0) {
-		if (argc != 4) {
-			printf("keyboard: wrong no of arguments for kbd_test_timed_scan()\n");
-			return 1;
-		}
-		time = parse_ulong(argv[3], 10);
+		time = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
 		if (time == ULONG_MAX)
 			return 1;
-		printf("keyboard::kbd_test_timed_scan(%lu)\n", time);
-		kbd_test_timed_scan(time);
+		printf("mouse::test_async(%lu)\n", time);
+		return test_async(time);
+	}
+	else if (strncmp(argv[1], "config", strlen("config")) == 0) {
+		if (argc != 2) {
+			printf("mouse: wrong no of arguments for test_config()\n");
+			return 1;
+		}
+		printf("mouse::test_config()\n");
+		return test_config(time);
+	}
+	else if (strncmp(argv[1], "gesture", strlen("gesture")) == 0) {
+		if (argc != 3) {
+			printf("mouse: wrong no of arguments for test_gesture()\n");
+			return 1;
+		}
+		length = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		if (length == ULONG_MAX)
+			return 1;
+		printf("mouse::test_geture(%lu)\n", length);
+		return test_gesture(length);
 	}
 	else {
-		printf("keyboard: %s - no valid function!\n", argv[1]);
+		printf("mouse: %s - no valid function!\n", argv[1]);
 		return 1;
 	}
-	return 0;	//OK
 }
 
 static unsigned long parse_ulong(char *str, int base)
@@ -94,7 +94,7 @@ static unsigned long parse_ulong(char *str, int base)
 	}
 
 	if (endptr == str) {
-		printf("keyboard: parse_ulong: no digits were found in %s\n", str);
+		printf("timer: parse_ulong: no digits were found in %s\n", str);
 		return ULONG_MAX;
 	}
 

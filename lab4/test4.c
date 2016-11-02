@@ -1,3 +1,12 @@
+#include <minix/syslib.h>
+#include <minix/drivers.h>
+#include <minix/com.h>
+#include "i8042.h"
+#include "test4.h"
+#include "mouse.h"
+#include "keyboard.h"
+#include "timer.h"
+
 int test_packet(unsigned short cnt){
     /* To be completed ... */
 }	

@@ -9,11 +9,14 @@
 
 #define BIT(n) (0x01<<(n))
 
-#define MOUSE_IRQ		12	/**< @brief KBC IRQ line */
-#define MOUSE_INITIAL_HOOK_ID	12	/**< @brief KBD Initial hook_id */ //??????
+#define MOUSE_IRQ				12	/**< @brief KBC IRQ line */
+#define MOUSE_INITIAL_HOOK_ID	12	/**< @brief KBD Initial hook_id */
 
-#define KBC_IN_BUF		0x64	/**< @brief KBC Input buffer register */
-#define KBC_OUT_BUF		0x60	/**< @brief KBC Output buffer register */
+#define PACKET_N_ELEMENTS		3	/**< @brief Number of Elements in every mouse packet */
+
+#define KBD_IN_BUF		0x64	/**< @brief KBC Input buffer register */
+#define OUT_BUF			0x60	/**< @brief KBC Output buffer register */
+#define MOUSE_IN_BUF	0x60	/**< @brief MOUSE Input buffer register */
 #define STAT_REG		0x64	/**< @brief KBC Status register */
 
 /* KBC Status Register BITs' Meaning*/

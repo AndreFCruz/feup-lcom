@@ -44,14 +44,87 @@ int mouse_unsubscribe_int(void)
 //Draft
 int mouse_write_command()
 {
+	int kbdResponse;
 
+	//meter isto num ciclo while com maxItere c as respotas como no write command anterior, que devem ser iguais
 	if (keyboard_write (WRITE_B_MOUSE) != OK)
 		return 1;		//Print of error is done in keyboard_write()
 
 	if ( (kbdResponse = keyboard_read ()) == -1 ) {
-		printf ("keyboard_write_command() -> FAILED sys_inb()\n");
+		printf ("mouse_write_command() -> FAILED sys_inb()\n");
 		return 1;
 	}
 
-	//Talvez nao de para usar as kbd_write e kbd_read. Pela necessidade de verificar o bit 5.... VER isto
+	if //se for ACK, passar para os mouse_write e mouse_read
+
+}
+
+//TODO: uma funcao que garanta a sincronizacao.
+
+int mouse_write(char data)		//Writes Data to the Keyboard Input Buffer
+{
+	unsigned long stat;
+	unsigned iter = 0;
+	while ( iter++ < maxIter ) {
+		if ( sys_inb (STAT_REG, &stat) != OK ) {
+			printf("mouse_write() -> FAILED sys_inb()");
+			return 1;
+		}
+		/* loop while 8042 input buffer is full */
+		if ( (stat & STAT_IBF) == 0 ) {
+			if ( sys_outb (MOUSE_IN_BUF, data) != OK ) {
+				printf ("mouse_write() -> FAILED sys_outb()\n");
+           		return 1; 	//Failure
+		}
+		if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )
+			return OK;
+		else
+			return 1;		//Failure
+		}
+	tickdelay(micros_to_ticks(KBD_DELAY_US));
+	}
+
+	printf("mouse_write() -> Max Iterations Reached. Was %d.\n", iter);
+	return 1;
+}
+
+int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
+{
+	unsigned long stat, data;
+	unsigned iter = 0;
+	while( iter++ < maxIter ) {
+		if ( sys_inb(STAT_REG, &stat) != OK ) {
+			printf("mouse_read() -> FAILED sys_inb()");
+			return -1;
+		}
+		/* loop while 8042 output buffer is empty */
+		if( (stat & STAT_OBF) && (stat & STAT_AUX) ) {
+			if ( sys_inb(OUT_BUF, &data) != OK ) {
+				printf("mouse_read() -> FAILED sys_inb()");
+				return -1;	// Returns -1 or 0xFF on failure
+			}
+			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Occurred ?
+				return data;
+			else
+				return -1;	// Returns -1 or 0xFF on failure
+		}
+	tickdelay(micros_to_ticks(KBD_DELAY_US));
+	}
+
+	printf("mouse_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
+	return -1;
+}
+
+int mouse_handler()
+{
+	if ( print_packet(packet, PACKET_N_ELEMENTS) != OK ) {
+		printf("mouse_handler() -> FAILED print_packet()");
+		return 1;
+	}
+}
+
+
+int print_packet (unsigned char * packet, int nElements)
+{
+	//Imprimir como mostrado no guiao do lab o packet
 }

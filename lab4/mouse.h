@@ -32,13 +32,6 @@
  int mouse_synchronize(void);
 
  /**
-  * @brief Reads data from the mouse output buffer
-  *
-  * @return Return value read upon sucess and -1 otherwise
- */
- int mouse_read(void);
-
- /**
   * @brief Writes data to the mouse input buffer
   *
   * @param parameter that is written in the input buffer
@@ -46,6 +39,13 @@
   * @return Return 0 upon success and non-zero otherwise
   */
  int mouse_write(char data);
+
+ /**
+  * @brief Reads data from the mouse output buffer
+  *
+  * @return Return value read upon sucess and -1 otherwise
+ */
+ int mouse_read(void);
 
  /**
   * @brief Prints the packet in a human friendly way

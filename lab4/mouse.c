@@ -12,6 +12,8 @@ static const unsigned maxIter = 15;         // Maximum Iterations when retrievin
 
 int mouse_subscribe_int(void)
 {
+	//kbd_write(WRITE_B_MOUSE);			//DAR DISABLE E ENABLE AO STREAM E LER SP O OUTBUF
+
         if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
                 printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
                 return -1;
@@ -38,10 +40,6 @@ int mouse_unsubscribe_int(void)
         return MOUSE_INITIAL_HOOK_ID;
 }
 
-//Ve isto Andre, eu nao usei no meu codigo, mas acabei por faze-la ao fazer tb o mouse write. Antes desta e ncesseario a
-//chamada do bcd_write c o comando WRITE_B_MOUSE . Confirma se esta certa.. Eu n a testei, mas deve tar quase certa, se n certa!!
-//Podes sp apaga la caso seja inutil ou mal feita xD
-
 int mouse_synchronize(void)
 {
 	int data = mouse_read();
@@ -58,6 +56,8 @@ int mouse_synchronize(void)
 	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
 	return -1;
 }
+
+//CONFIGURAR NO SUBSCRIBE A CENA DO STREAM. VOU TER DE REFORMULAR ISTO
 
 int mouse_write (char data)		//Writes Data to the Keyboard Input Buffer
 {

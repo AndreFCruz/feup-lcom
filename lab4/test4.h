@@ -60,4 +60,4 @@ int test_config(void);
 
 int test_gesture(short length);
 
-#endif /* __TEST_4.H */
+#endif /* __TEST4_H */

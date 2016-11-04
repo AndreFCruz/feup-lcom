@@ -52,8 +52,8 @@
 #define SET_STREAM_MODE		0xEA	/**< @brief Send data on events */
 #define STATUS_REQUEST		0xE9	/**< @brief Get mouse configuration (3 bytes) */
 #define SET_RESOLUTION		0XE8
-#define SET_SCALING_2:1		0xE7	/**< @brief Aceleration mode */
-#define SET_SCALING 1:1		0xE6	/**< @brief Linear mode */
+#define SET_SCALING_2_1		0xE7	/**< @brief Aceleration mode */
+#define SET_SCALING_1_1		0xE6	/**< @brief Linear mode */
 
 /* PS/2 Mouse Packet Meanings */
 

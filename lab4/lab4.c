@@ -60,7 +60,7 @@ static int proc_args(int argc, char **argv)
 			return 1;
 		}
 		printf("mouse::test_config()\n");
-		return test_config(time);
+		return test_config();
 	}
 	else if (strncmp(argv[1], "gesture", strlen("gesture")) == 0) {
 		if (argc != 3) {

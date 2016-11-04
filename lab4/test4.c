@@ -22,7 +22,7 @@ int test_packet(unsigned short cnt) {
 	unsigned short counter = 0; //Keeps the number of bytes ready in the packet
 
 	int r;
-	while( iter < count ) { // Do this cnt times
+	while( iter < cnt ) { // Do this cnt times
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -34,10 +34,10 @@ int test_packet(unsigned short cnt) {
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
 						if ( mouse_handler(packet, & counter) != OK ) {
 							printf("test_packet() -> FAILED mouse_handler()\n");
-							iter = count;	// rude way of exiting loop and proceding to unsubscribe interrupts
+							iter = cnt;	// rude way of exiting loop and proceding to unsubscribe interrupts
 							break;
 						}
-						if (conter == PACKET_NELEMENTS)
+						if (counter == PACKET_NELEMENTS)
 							iter++;
 					}
 					break;

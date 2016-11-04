@@ -51,11 +51,10 @@
   * @brief Prints the packet in a human friendly way
   *
   * @param pointer to the array that contains the bytes from the packet
-  * @param number of elements of the packet
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int print_packet (unsigned char * packet, int nElements);
+ int print_packet (unsigned char * packet);
 
  //TODO: REVIEW THE DOCUMENTATION
  /**
@@ -68,3 +67,5 @@
   * @return Return 0 upon success and non-zero otherwise
   */
  int mouse_handler();
+
+#endif

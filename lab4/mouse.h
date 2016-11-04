@@ -25,6 +25,13 @@
  int mouse_unsubscribe_int(void);
 
  /**
+  * @brief Synchronizes the mouse
+  *
+  * @return Return byte1 upon sucess and -1 otherwise
+ */
+ int mouse_synchronize(void);
+
+ /**
   * @brief Reads data from the mouse output buffer
   *
   * @return Return value read upon sucess and -1 otherwise

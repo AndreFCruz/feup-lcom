@@ -12,7 +12,7 @@
 #define MOUSE_IRQ				12	/**< @brief KBC IRQ line */
 #define MOUSE_INITIAL_HOOK_ID	12	/**< @brief KBD Initial hook_id */
 
-#define PACKET_N_ELEMENTS		3	/**< @brief Number of Elements in every mouse packet */
+#define PACKET_NELEMENTS		3	/**< @brief Number of Elements in every mouse packet */
 
 #define KBD_IN_BUF		0x64	/**< @brief KBC Input buffer register */
 #define OUT_BUF			0x60	/**< @brief KBC Output buffer register */
@@ -54,6 +54,20 @@
 #define SET_RESOLUTION		0XE8
 #define SET_SCALING_2:1		0xE7	/**< @brief Aceleration mode */
 #define SET_SCALING 1:1		0xE6	/**< @brief Linear mode */
+
+/* PS/2 Mouse Packet Meanings */
+
+#define PACKET_BYTE1		0		/** <@brief 1st Byte of packet */
+#define PACKET_BYTE2		1		/** <@brief 2st Byte of packet */
+#define PACKET_BYTE3		2		/** <@brief 3st Byte of packet */
+#define BYTE1_Y_OVF			BIT(7)
+#define BYTE1_X_OVF			BIT(6)
+#define BYTE1_Y_SIGN		BIT(5)
+#define BYTE1_X_SIGN		BIT(4)
+#define BYTE1_SYNC_BIT		BIT(3)	/** <@brief Bit that helps to synchronize the packet */
+#define BYTE1_MB			BIT(2)
+#define BYTE1_RB			BIT(1)
+#define BYTE1_LB			BIT(0)
 
 /* Mouse Controller Responses to Commands on 0xD4 */
 

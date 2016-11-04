@@ -38,36 +38,34 @@ int mouse_unsubscribe_int(void)
         return MOUSE_INITIAL_HOOK_ID;
 }
 
+//Ve isto Andre, eu nao usei no meu codigo, mas acabei por faze-la ao fazer tb o mouse write. Antes desta e ncesseario a
+//chamada do bcd_write c o comando WRITE_B_MOUSE . Confirma se esta certa.. Eu n a testei, mas deve tar quase certa, se n certa!!
+//Podes sp apaga la caso seja inutil ou mal feita xD
 
-//TODO: funcao generica mouse_write_command que escreve um comando no mouse. Serve para funcoes 1,2 e 3! Usa kbd_read e kbd_write!
-
-//Draft
-int mouse_write_command()
+int mouse_synchronize(void)
 {
-	int kbdResponse;
+	int data = mouse_read();
+	unsigned iter = 0;
 
-	//meter isto num ciclo while com maxItere c as respotas como no write command anterior, que devem ser iguais
-	if (keyboard_write (WRITE_B_MOUSE) != OK)
-		return 1;		//Print of error is done in keyboard_write()
-
-	if ( (kbdResponse = keyboard_read ()) == -1 ) {
-		printf ("mouse_write_command() -> FAILED sys_inb()\n");
-		return 1;
+	while (iter++ < maxIter)
+	{
+		if (data & BYTE1_SYNC_BIT)		//Bit 3 of BYTE1 is always set to 1
+			return data;
+		else
+			data = mouse_read();
 	}
 
-	if //se for ACK, passar para os mouse_write e mouse_read
-
+	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
+	return -1;
 }
 
-//TODO: uma funcao que garanta a sincronizacao.
-
-int mouse_write(char data)		//Writes Data to the Keyboard Input Buffer
+int mouse_write (char data)		//Writes Data to the Keyboard Input Buffer
 {
 	unsigned long stat;
 	unsigned iter = 0;
 	while ( iter++ < maxIter ) {
 		if ( sys_inb (STAT_REG, &stat) != OK ) {
-			printf("mouse_write() -> FAILED sys_inb()");
+			printf("mouse_write() -> FAILED sys_inb()\n");
 			return 1;
 		}
 		/* loop while 8042 input buffer is full */
@@ -94,13 +92,13 @@ int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
 	unsigned iter = 0;
 	while( iter++ < maxIter ) {
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
-			printf("mouse_read() -> FAILED sys_inb()");
+			printf("mouse_read() -> FAILED sys_inb()\n");
 			return -1;
 		}
 		/* loop while 8042 output buffer is empty */
 		if( (stat & STAT_OBF) && (stat & STAT_AUX) ) {
 			if ( sys_inb(OUT_BUF, &data) != OK ) {
-				printf("mouse_read() -> FAILED sys_inb()");
+				printf("mouse_read() -> FAILED sys_inb()\n");
 				return -1;	// Returns -1 or 0xFF on failure
 			}
 			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Occurred ?
@@ -115,16 +113,50 @@ int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
 	return -1;
 }
 
-int mouse_handler()
+int mouse_handler (unsigned char * packet, unsigned short * counter)
 {
-	if ( print_packet(packet, PACKET_N_ELEMENTS) != OK ) {
-		printf("mouse_handler() -> FAILED print_packet()");
-		return 1;
+	if (*counter == PACKET_BYTE1) { //Every time we start a new packet, re-check synchronization
+		int sync_result = mouse_synchronize();
+
+		if (sync_result == -1)
+		{
+			printf("mouse_handler() -> FAILED mouse_synchronize()\n");
+			return 1;
+		}
+		packet[*counter] = sync_result;	//Saving the last value tried on mouse_synchronize() into the packet
+		*counter++;
+		return 0;
 	}
+
+		if (*counter == PACKET_NELEMENTS)
+		{
+			*counter = PACKET_BYTE1;
+			if (print_packet(packet) != OK) {
+				printf("mouse_handler() -> FAILED print_packet()\n");
+				return 1;
+			}
+			return 0;
+		}
+
+		//Only when *counter == PACKET_BYTE2
+		packet[*counter] = mouse_read();
+		*counter++;
+		return 0;
 }
 
 
-int print_packet (unsigned char * packet, int nElements)
+int print_packet (unsigned char * packet)
 {
-	//Imprimir como mostrado no guiao do lab o packet
+	printf("B1=0x%02x\t", packet[PACKET_BYTE1]);
+	printf("B2=0x%02x\t", packet[PACKET_BYTE2]);
+	printf("B3=0x%02x\t", packet[PACKET_BYTE3]);
+	printf("LB=%d ", packet[PACKET_BYTE1] & BYTE1_LB);
+	printf("MB=%d ", packet[PACKET_BYTE1] & BYTE1_MB);
+	printf("RB=%d ", packet[PACKET_BYTE1] & BYTE1_RB);
+	printf("XOV=%d ", packet[PACKET_BYTE1] & BYTE1_X_OVF);
+	printf("YOV=%d ", packet[PACKET_BYTE1] & BYTE1_Y_OVF);
+	printf("X=%d\t", packet[PACKET_BYTE2]);
+	printf("Y=%d\n", packet[PACKET_BYTE3]);
+
+	return 0;	//Provavlemte posso meter como sendo um return void. Ver se me lembro de possiveis erros...
 }

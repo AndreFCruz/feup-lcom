@@ -51,10 +51,8 @@
   * @brief Prints the packet in a human friendly way
   *
   * @param pointer to the array that contains the bytes from the packet
-  *
-  * @return Return 0 upon success and non-zero otherwise
   */
- int print_packet (unsigned char * packet);
+ void print_packet (unsigned char * packet);
 
  //TODO: REVIEW THE DOCUMENTATION
  /**

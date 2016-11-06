@@ -57,9 +57,6 @@
 
 /* PS/2 Mouse Packet Meanings */
 
-#define PACKET_BYTE0		0		/** <@brief 1st Byte of packet */
-#define PACKET_BYTE1		1		/** <@brief 2nd Byte of packet */
-#define PACKET_BYTE2		2		/** <@brief 3rd Byte of packet */
 #define BYTE0_Y_OVF			BIT(7)
 #define BYTE0_X_OVF			BIT(6)
 #define BYTE0_Y_SIGN		BIT(5)

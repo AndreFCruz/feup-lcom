@@ -66,11 +66,11 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 		printf("kbd_test_scan() -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
-	 int timer_irq_set;
-	 if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, 60) != OK ) { // hook_id returned for Timer 0
-	 	printf("kbd_test_scan() -> FAILED timer_subscribe_int()\n");
-	 	return 1;
-	 }
+	int timer_irq_set;
+	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, 60) != OK ) { // hook_id returned for Timer 0
+	printf("kbd_test_scan() -> FAILED timer_subscribe_int()\n");
+	return 1;
+	}
 
 	int status = 0;	// keyboard status flag
 	unsigned short idx = 0;	// Index in leds array
@@ -87,9 +87,6 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 		if (is_ipc_notify(ipc_status)) { /* received notification */
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
-//					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-//						// Do nothing
-//					}
 					if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
 						if ( timerCount++ % 60 == 0 )	//Assuring 1 sec between led toggles
 							if ( keyboard_toggle_led(leds[idx++], & led_status) != OK ) {
@@ -112,10 +109,10 @@ int kbd_test_leds(unsigned short n, unsigned short *leds)
 		printf("kbd_test_leds() -> FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
-	 if ( timer_unsubscribe_int() < 0 ) {
-	 	printf("kbd_test_leds() -> FAILED timer_unsubscribe_int()\n");
-	 	return 1;
-	 }
+	if ( timer_unsubscribe_int() < 0 ) {
+	printf("kbd_test_leds() -> FAILED timer_unsubscribe_int()\n");
+	return 1;
+	}
 
 	printf("\n* keyboard_test_leds() Finished *\n\n");
 	return 0;

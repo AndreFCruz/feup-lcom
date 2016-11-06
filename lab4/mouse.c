@@ -8,36 +8,36 @@
 typedef int bool;
 
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
-static const unsigned maxIter = 15;         // Maximum Iterations when retrieving data
+static const unsigned maxIter = 15;         // Maximum iterations/tries when retrieving data
 
 int mouse_subscribe_int(void)
 {
-	//kbd_write(WRITE_B_MOUSE);			//DAR DISABLE E ENABLE AO STREAM E LER SP O OUTBUF
+	//kbd_write(WRITE_B_MOUSE);			//TODO DAR DISABLE E ENABLE AO STREAM E LER SP O OUTBUF
 
-        if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
-                printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
-                return -1;
-        }
-        if ( sys_irqenable (&mouse_hook_id) != OK ) {
-                printf("mouse_subscribe_int() -> FAILED sys_irqenable()\n");
-                return -1;
-        }
+	if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
+			printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
+			return -1;
+	}
+	if ( sys_irqenable (&mouse_hook_id) != OK ) {
+			printf("mouse_subscribe_int() -> FAILED sys_irqenable()\n");
+			return -1;
+	}
 
-        return MOUSE_INITIAL_HOOK_ID;
+	return MOUSE_INITIAL_HOOK_ID;
 }
 
 int mouse_unsubscribe_int(void)
 {
-        if ( sys_irqdisable (&mouse_hook_id) != OK ) {
-                printf("mouse_unsubscribe_int() -> FAILED sys_irqdisable()\n");
-                return -1;
-        }
-        if ( sys_irqrmpolicy (&mouse_hook_id) != OK ) {
-                printf("mouse_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
-                return -1;
-        }
+	if ( sys_irqdisable (&mouse_hook_id) != OK ) {
+			printf("mouse_unsubscribe_int() -> FAILED sys_irqdisable()\n");
+			return -1;
+	}
+	if ( sys_irqrmpolicy (&mouse_hook_id) != OK ) {
+			printf("mouse_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
+			return -1;
+	}
 
-        return MOUSE_INITIAL_HOOK_ID;
+	return MOUSE_INITIAL_HOOK_ID;
 }
 
 int mouse_synchronize(void)
@@ -61,6 +61,7 @@ int mouse_synchronize(void)
 
 int mouse_write (char data)		//Writes Data to the Keyboard Input Buffer
 {
+	// TODO: check if in default/stream mode, and disable etc (?)
 	unsigned long stat;
 	unsigned iter = 0;
 	while ( iter++ < maxIter ) {
@@ -128,20 +129,20 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 		return 0;
 	}
 
-		if (*counter == PACKET_NELEMENTS)
-		{
-			*counter = PACKET_BYTE1;
-			if (print_packet(packet) != OK) {
-				printf("mouse_handler() -> FAILED print_packet()\n");
-				return 1;
-			}
-			return 0;
+	if (*counter == PACKET_NELEMENTS)
+	{
+		*counter = PACKET_BYTE1;
+		if (print_packet(packet) != OK) {
+			printf("mouse_handler() -> FAILED print_packet()\n");
+			return 1;
 		}
-
-		//Only when *counter == PACKET_BYTE2
-		packet[*counter] = mouse_read();
-		*counter++;
 		return 0;
+	}
+
+	//Only when *counter == PACKET_BYTE2
+	packet[*counter] = mouse_read();
+	*counter++;
+	return 0;
 }
 
 
@@ -158,5 +159,5 @@ int print_packet (unsigned char * packet)
 	printf("X=%d\t", packet[PACKET_BYTE2]);
 	printf("Y=%d\n", packet[PACKET_BYTE3]);
 
-	return 0;	//Provavlemte posso meter como sendo um return void. Ver se me lembro de possiveis erros...
+	return 0;	//TODO Provavlemte posso meter como sendo um return void. Ver se me lembro de possiveis erros...
 }

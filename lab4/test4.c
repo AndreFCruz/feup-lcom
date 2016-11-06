@@ -129,7 +129,7 @@ int test_async(unsigned short idle_time) {
 	}
 	/* */
 
-	printf("\n* test_packet() Finished *\n\n");
+	printf("\n* test_async() Finished *\n\n");
 
 	return 0;
 }

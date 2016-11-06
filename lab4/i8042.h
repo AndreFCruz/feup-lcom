@@ -57,17 +57,17 @@
 
 /* PS/2 Mouse Packet Meanings */
 
-#define PACKET_BYTE1		0		/** <@brief 1st Byte of packet */
-#define PACKET_BYTE2		1		/** <@brief 2st Byte of packet */
-#define PACKET_BYTE3		2		/** <@brief 3st Byte of packet */
-#define BYTE1_Y_OVF			BIT(7)
-#define BYTE1_X_OVF			BIT(6)
-#define BYTE1_Y_SIGN		BIT(5)
-#define BYTE1_X_SIGN		BIT(4)
-#define BYTE1_SYNC_BIT		BIT(3)	/** <@brief Bit that helps to synchronize the packet */
-#define BYTE1_MB			BIT(2)
-#define BYTE1_RB			BIT(1)
-#define BYTE1_LB			BIT(0)
+#define PACKET_BYTE0		0		/** <@brief 1st Byte of packet */
+#define PACKET_BYTE1		1		/** <@brief 2nd Byte of packet */
+#define PACKET_BYTE2		2		/** <@brief 3rd Byte of packet */
+#define BYTE0_Y_OVF			BIT(7)
+#define BYTE0_X_OVF			BIT(6)
+#define BYTE0_Y_SIGN		BIT(5)
+#define BYTE0_X_SIGN		BIT(4)
+#define BYTE0_SYNC_BIT		BIT(3)	/** <@brief Bit that helps to synchronize the packet */
+#define BYTE0_MB			BIT(2)
+#define BYTE0_RB			BIT(1)
+#define BYTE0_LB			BIT(0)
 
 /* Mouse Controller Responses to Commands on 0xD4 */
 

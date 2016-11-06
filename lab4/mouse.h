@@ -66,4 +66,13 @@
   */
  int mouse_handler();
 
+ /**
+  * @brief Fetches mouse configuration
+  *
+  * @param pointer to 3 element array
+  *
+  * @return Return 0 upon success and non-zero otherwise
+  */
+ int fetch_mouse_config(unsigned char *);
+
 #endif

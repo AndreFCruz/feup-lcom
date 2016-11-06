@@ -58,7 +58,7 @@ int test_packet(unsigned short cnt) {
 		return 1;
 	}
 
-	printf("\n* test_packet() Finished *\n\n");
+	printf("\n* test_packet() Finished *\n");
 
 	return 0;
 }	
@@ -129,13 +129,21 @@ int test_async(unsigned short idle_time) {
 	}
 	/* */
 
-	printf("\n* test_async() Finished *\n\n");
+	printf("\n* test_async() Finished *\n");
 
 	return 0;
 }
 	
 int test_config(void) {
-    /* To be completed ... */
+	unsigned char config[3];
+	if ( fetch_mouse_config(config) != OK ) {
+		printf("test_config failed\n");
+		return 1;
+	}
+
+	print_packet(config);
+
+	return OK;
 }	
 	
 int test_gesture(short length) {

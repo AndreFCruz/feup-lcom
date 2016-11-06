@@ -118,19 +118,11 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 			printf("mouse_handler() -> FAILED mouse_synchronize()\n");
 			return 1;
 		}
-		packet[*counter++] = sync_result;	//Saving the last value tried on mouse_synchronize() into the packet
+		packet[*counter++] = sync_result;
 		return OK;
 	}
-
-	if (*counter == PACKET_NELEMENTS)
-	{
-		*counter = 0;
-		print_packet(packet);
-		return OK;
-	}
-
-	//Only when *counter == 1
-	packet[*counter++] = mouse_read();
+	else
+		packet[*counter++] = mouse_read();
 
 	return OK;
 }
@@ -138,17 +130,21 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 
 void print_packet (unsigned char * packet)
 {
-	printf("B1=0x%02x\t", packet[0]);
-	printf("B2=0x%02x\t", packet[1]);
-	printf("B3=0x%02x\t", packet[2]);
-	printf("LB=%d ", packet[0] & BYTE0_LB);
-	printf("MB=%d ", packet[0] & BYTE0_MB);
-	printf("RB=%d ", packet[0] & BYTE0_RB);
-	printf("XOV=%d ", packet[0] & BYTE0_X_OVF);
-	printf("YOV=%d ", packet[0] & BYTE0_Y_OVF);
+	printf("B1=0x%02X\t", packet[0]);
+	printf("B2=0x%02X\t", packet[1]);
+	printf("B3=0x%02X\t", packet[2]);
+	printf("LB=%d ", packet[0] & BYTE0_LB ? 1 : 0);
+	printf("MB=%d ", packet[0] & BYTE0_MB ? 1 : 0);
+	printf("RB=%d ", packet[0] & BYTE0_RB ? 1 : 0);
+	printf("XOV=%d ", packet[0] & BYTE0_X_OVF ? 1 : 0);
+	printf("YOV=%d ", packet[0] & BYTE0_Y_OVF ? 1 : 0);
+
+	// check sign of X and Y before printing
 	printf("X=%d\t", packet[1]);
 	printf("Y=%d\n", packet[2]);
-
-	return;
-	//TODO Ver se me lembro de possiveis erros... para passar para return int;
 }
+
+
+
+
+

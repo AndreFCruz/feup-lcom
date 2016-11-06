@@ -11,17 +11,17 @@ int test_packet(unsigned short cnt) {
 	message msg;
 
 	int mouse_irq_set;
-	if ( (mouse_irq_set = BIT(mouse_subscribe_int())) < 0 ) { // hook_id returned for keyboard
+	if ( (mouse_irq_set = BIT(mouse_subscribe_int())) < 0 ) {
 		printf("test_packet() -> FAILED mouse_subscribe_int()\n");
 		return 1;
 	}
 
-	int iter = 0;
+	unsigned short nReceived = 0;
 	unsigned char packet[PACKET_NELEMENTS];
-	unsigned short counter = 0; //Keeps the number of bytes ready in the packet
+	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 
 	int r;
-	while( iter < cnt ) { // Do this cnt times
+	while( (nReceived % 3) < cnt ) {	// Exits when cnt reaches 0
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -31,13 +31,17 @@ int test_packet(unsigned short cnt) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
+						printf("test_packet mouse interrupt. nReceived: %d.\n", nReceived);
 						if ( mouse_handler(packet, & counter) != OK ) {
 							printf("test_packet() -> FAILED mouse_handler()\n");
-							iter = cnt;	// rude way of exiting loop and proceding to unsubscribe interrupts
+							cnt = 0;
 							break;
 						}
-						if (counter == PACKET_NELEMENTS)
-							iter++;
+						if (counter == PACKET_NELEMENTS) {
+							print_packet(packet);
+							counter = 0;
+							++nReceived;
+						}
 					}
 					break;
 				default:

@@ -1,4 +1,4 @@
-# Makefile for lab3
+# Makefile for lab4
 
 COMPILER_TYPE= gnu
 
@@ -7,7 +7,6 @@ CC= gcc
 PROG= lab4
 SRCS= lab4.c test4.c mouse.c timer.c
 
-#CFLAGS= -std=c99
 CCFLAGS= -Wall
 
 DPADD+= ${LIBDRIVER} ${LIBSYS}

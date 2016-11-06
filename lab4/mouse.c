@@ -10,9 +10,9 @@ typedef int bool;
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
 static const unsigned maxIter = 15;         // Maximum iterations/tries when retrieving data
 
-int mouse_subscribe_int(void)
+int mouse_subscribe_int()
 {
-	//kbd_write(WRITE_B_MOUSE);			//TODO DAR DISABLE E ENABLE AO STREAM E LER SP O OUTBUF
+	//kbd_write(WRITE_B_MOUSE);			//TODO DAR DISABLE E ENABLE AO STREAM E LER SP O OUTBUF (?)
 
 	if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
 			printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
@@ -26,7 +26,7 @@ int mouse_subscribe_int(void)
 	return MOUSE_INITIAL_HOOK_ID;
 }
 
-int mouse_unsubscribe_int(void)
+int mouse_unsubscribe_int()
 {
 	if ( sys_irqdisable (&mouse_hook_id) != OK ) {
 			printf("mouse_unsubscribe_int() -> FAILED sys_irqdisable()\n");
@@ -40,26 +40,24 @@ int mouse_unsubscribe_int(void)
 	return MOUSE_INITIAL_HOOK_ID;
 }
 
-int mouse_synchronize(void)
+int mouse_synchronize()	// Syncrhonizes with FIRST byte, returns data read
 {
-	int data = mouse_read();
+	int data;
 	unsigned iter = 0;
 
-	while (iter++ < maxIter)
-	{
-		if (data & BYTE1_SYNC_BIT)		//Bit 3 of BYTE1 is always set to 1
+	while (iter++ < maxIter) {
+		if ( (data = mouse_read()) & BYTE0_SYNC_BIT )
 			return data;
-		else
-			data = mouse_read();
 	}
 
 	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
 	return -1;
 }
 
+
 //CONFIGURAR NO SUBSCRIBE A CENA DO STREAM. VOU TER DE REFORMULAR ISTO
 
-int mouse_write (char data)		//Writes Data to the Keyboard Input Buffer
+int mouse_write (char data)		// Writes Data to the Keyboard Input Buffer
 {
 	// TODO: check if in default/stream mode, and disable etc (?)
 	unsigned long stat;
@@ -87,7 +85,7 @@ int mouse_write (char data)		//Writes Data to the Keyboard Input Buffer
 	return 1;
 }
 
-int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
+int mouse_read()	// Reads Mouse Data from OutPut Buffer
 {
 	unsigned long stat, data;
 	unsigned iter = 0;
@@ -102,10 +100,7 @@ int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
 				printf("mouse_read() -> FAILED sys_inb()\n");
 				return -1;	// Returns -1 or 0xFF on failure
 			}
-			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Occurred ?
-				return data;
-			else
-				return -1;	// Returns -1 or 0xFF on failure
+			return data;
 		}
 	tickdelay(micros_to_ticks(KBD_DELAY_US));
 	}
@@ -116,48 +111,47 @@ int mouse_read(void)	// Reads Mouse Data from OutPut Buffer
 
 int mouse_handler (unsigned char * packet, unsigned short * counter)
 {
-	if (*counter == PACKET_BYTE1) { //Every time we start a new packet, re-check synchronization
-		int sync_result = mouse_synchronize();
+	if (*counter == PACKET_BYTE0) {
+		int sync_result = mouse_synchronize();	// Sync packet if expecting first byte
 
-		if (sync_result == -1)
-		{
+		if (sync_result == -1) {
 			printf("mouse_handler() -> FAILED mouse_synchronize()\n");
 			return 1;
 		}
 		packet[*counter] = sync_result;	//Saving the last value tried on mouse_synchronize() into the packet
 		*counter++;
-		return 0;
+		return OK;
 	}
 
 	if (*counter == PACKET_NELEMENTS)
 	{
-		*counter = PACKET_BYTE1;
+		*counter = PACKET_BYTE0;
 		if (print_packet(packet) != OK) {
 			printf("mouse_handler() -> FAILED print_packet()\n");
 			return 1;
 		}
-		return 0;
+		return OK;
 	}
 
-	//Only when *counter == PACKET_BYTE2
+	//Only when *counter == PACKET_BYTE1
 	packet[*counter] = mouse_read();
 	*counter++;
-	return 0;
+	return OK;
 }
 
 
-int print_packet (unsigned char * packet)
+void print_packet (unsigned char * packet)
 {
-	printf("B1=0x%02x\t", packet[PACKET_BYTE1]);
-	printf("B2=0x%02x\t", packet[PACKET_BYTE2]);
-	printf("B3=0x%02x\t", packet[PACKET_BYTE3]);
-	printf("LB=%d ", packet[PACKET_BYTE1] & BYTE1_LB);
-	printf("MB=%d ", packet[PACKET_BYTE1] & BYTE1_MB);
-	printf("RB=%d ", packet[PACKET_BYTE1] & BYTE1_RB);
-	printf("XOV=%d ", packet[PACKET_BYTE1] & BYTE1_X_OVF);
-	printf("YOV=%d ", packet[PACKET_BYTE1] & BYTE1_Y_OVF);
-	printf("X=%d\t", packet[PACKET_BYTE2]);
-	printf("Y=%d\n", packet[PACKET_BYTE3]);
+	printf("B1=0x%02x\t", packet[PACKET_BYTE0]);
+	printf("B2=0x%02x\t", packet[PACKET_BYTE1]);
+	printf("B3=0x%02x\t", packet[PACKET_BYTE2]);
+	printf("LB=%d ", packet[PACKET_BYTE0] & BYTE0_LB);
+	printf("MB=%d ", packet[PACKET_BYTE0] & BYTE0_MB);
+	printf("RB=%d ", packet[PACKET_BYTE0] & BYTE0_RB);
+	printf("XOV=%d ", packet[PACKET_BYTE0] & BYTE0_X_OVF);
+	printf("YOV=%d ", packet[PACKET_BYTE0] & BYTE0_Y_OVF);
+	printf("X=%d\t", packet[PACKET_BYTE1]);
+	printf("Y=%d\n", packet[PACKET_BYTE2]);
 
-	return 0;	//TODO Provavlemte posso meter como sendo um return void. Ver se me lembro de possiveis erros...
+	//TODO Ver se me lembro de possiveis erros... para passar para return int;
 }

@@ -102,7 +102,7 @@
 #define BYTE0_LB			BIT(0)
 
 
-#define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
+#define DELAY_US		20000   // KBC respond Time-Out in micro seconds
 
 /**@}*/
 

@@ -61,8 +61,8 @@ int test_packet(unsigned short cnt) {
 	printf("\n* test_packet() Finished *\n");
 
 	return 0;
-}	
-	
+}
+
 int test_async(unsigned short idle_time) {
 	int ipc_status;
 	message msg;
@@ -133,7 +133,7 @@ int test_async(unsigned short idle_time) {
 
 	return 0;
 }
-	
+
 int test_config(void) {
 	unsigned char config[3];
 	if ( fetch_mouse_config(config) != OK ) {
@@ -144,8 +144,8 @@ int test_config(void) {
 	print_packet(config);
 
 	return OK;
-}	
-	
+}
+
 int test_gesture(short length) {
     /* To be completed ... */
 }

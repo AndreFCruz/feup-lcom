@@ -56,8 +56,8 @@ int mouse_subscribe_int()
 	}
 
 	// Enable stream mode
-//	mouse_write_cmd(SET_STREAM_MODE);
-//	mouse_write_cmd(ENABLE_DATA_R);
+	mouse_write_cmd(SET_STREAM_MODE);
+	mouse_write_cmd(ENABLE_DATA_R);
 
 	return MOUSE_INITIAL_HOOK_ID;
 }

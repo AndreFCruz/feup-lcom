@@ -18,9 +18,10 @@ int test_packet(unsigned short cnt) {
 
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
+	unsigned short nReceived = 0;
 
 	int r;
-	while( (counter / 3) < cnt ) {	// Exits when cnt reaches 0
+	while( nReceived < cnt ) {	// Exits when cnt reaches 0
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -30,16 +31,23 @@ int test_packet(unsigned short cnt) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
-						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
-						if ( mouse_handler(packet, & counter) != OK ) {
-							printf("test_packet() -> FAILED mouse_handler()\n");
-							cnt = 0;
-							break;
-						}
+//						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
+//						if ( mouse_handler(packet, & counter) != OK ) {
+//							printf("test_packet() -> FAILED mouse_handler()\n");
+//							cnt = 0;
+//							break;
+//						}
+						mouse_handler(packet, & counter);
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
-						if (counter == PACKET_NELEMENTS)
+						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
-						tickdelay(micros_to_ticks(DELAY_US));
+							++nReceived;
+
+							// TODO NECESSARY; BUT WHY ??
+							unsigned char dummy;
+							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
+						}
+						// DO NOT DELAY HERE!! Demasiados tick_delay des-sincronizam o reto, for some reason...
 					}
 					break;
 				default:
@@ -55,7 +63,9 @@ int test_packet(unsigned short cnt) {
 		printf("test_packet() -> FAILED mouse_unsubscribe_int()\n");
 		return 1;
 	}
-//	mouse_read();	// Clear output buffer, so keyboard can be used after service call
+
+	unsigned char dummy;
+	sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer, so keyboard can be used after service call
 
 	printf("\n* test_packet() Finished *\n");
 
@@ -127,6 +137,9 @@ int test_async(unsigned short idle_time) {
 	return 1;
 	}
 	/* */
+
+	unsigned char dummy;
+	sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer, so keyboard can be used after service call
 
 	printf("\n* test_async() Finished *\n");
 

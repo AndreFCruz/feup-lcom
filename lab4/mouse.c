@@ -8,38 +8,53 @@
 typedef int bool;
 
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
-static const unsigned maxIter = 10;         // Maximum iterations/tries when retrieving data
+static const unsigned maxIter = 50;         // Maximum iterations/tries when retrieving data
 
 
 int mouse_write_cmd (char cmd)
 {
-	unsigned long stat;
-	unsigned iter = 0;
-	while ( iter++ < maxIter ) {
-		if ( sys_inb (STAT_REG, &stat) != OK ) {
-			printf("mouse_write_cmd() -> FAILED sys_inb()");
+	unsigned char status = 0;
+	sys_inb(STAT_REG, (unsigned long *) &status);
+	if ((status & STAT_IBF) == 0) {
+		if (sys_outb(KBC_CMD_REG, WRITE_B_MOUSE) != OK) {
 			return 1;
 		}
-		/* loop while 8042 input buffer is full */
-		if ( (stat & STAT_IBF) == 0 ) {
-			if ( sys_outb (KBC_CMD_REG, WRITE_B_MOUSE) != OK ) {
-				printf("mouse_write_cmd() -> FAILED 1st sys_outb()\n");
-           		return 1; 	//Failure
-           		}
-			if ( sys_outb(KBC_IN_BUF, cmd) != OK ) {
-				printf("mouse_write_cmd() -> FAILED 2nd sys_outb()\n");
-				return 1;
-				}
-			stat = mouse_read();
-			if ( stat == IN_ACK ) {
-				return OK;
-			}
+		if (sys_outb(KBC_IN_BUF, cmd) != OK) {
+			return 1;
 		}
-	tickdelay(micros_to_ticks(DELAY_US));
+		tickdelay(micros_to_ticks(DELAY_US));
+		status = mouse_read();
+		return status;
 	}
+	/* */
 
-	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
-	return 1;
+//	unsigned long stat;
+//	unsigned iter = 0;
+//	while ( iter++ < maxIter ) {
+//		if ( sys_inb (STAT_REG, &stat) != OK ) {
+//			printf("mouse_write_cmd() -> FAILED sys_inb()");
+//			return 1;
+//		}
+//		/* loop while 8042 input buffer is full */
+//		if ( (stat & STAT_IBF) == 0 ) {
+//			if ( sys_outb (KBC_CMD_REG, WRITE_B_MOUSE) != OK ) {
+//				printf("mouse_write_cmd() -> FAILED 1st sys_outb()\n");
+//           		return 1; 	//Failure
+//           		}
+//			if ( sys_outb(KBC_IN_BUF, cmd) != OK ) {
+//				printf("mouse_write_cmd() -> FAILED 2nd sys_outb()\n");
+//				return 1;
+//				}
+//			stat = mouse_read();
+//			if ( stat == IN_ACK ) {
+//				return OK;
+//			}
+//		}
+//	tickdelay(micros_to_ticks(DELAY_US));
+//	}
+//
+//	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
+//	return 1;
 }
 
 int mouse_subscribe_int()
@@ -85,7 +100,7 @@ int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 	while (iter++ < maxIter) {
 		if ( ((data = mouse_read()) & BYTE0_SYNC_BIT) != 0 )
 			return data;
-		printf("Data: %X\n", data);
+		printf("SyncData: %X\n", data);
 	}
 
 	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
@@ -97,7 +112,7 @@ int mouse_read()	// Reads Mouse Data from OutPut Buffer
 {
 	unsigned long stat, data;
 	unsigned iter = 0;
-	while( ++iter < maxIter ) {
+	while( ++iter < (maxIter * 10) ) {	// sometimes requires hundreds of iterations...
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
 			printf("mouse_read() -> FAILED sys_inb()\n");
 			return -1;
@@ -149,8 +164,8 @@ void print_packet (unsigned char * packet)
 	printf("YOV=%d ", packet[0] & BYTE0_Y_OVF ? 1 : 0);
 
 	// check sign of X and Y before printing
-	printf("X=%d\t", packet[1]);
-	printf("Y=%d\n", packet[2]);
+	printf("X=%3d ", packet[1]);
+	printf("Y=%3d\n", packet[2]);
 }
 
 

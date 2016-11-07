@@ -31,15 +31,15 @@ int test_packet(unsigned short cnt) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
 						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
-//						if ( mouse_handler(packet, & counter) != OK ) {
-//							printf("test_packet() -> FAILED mouse_handler()\n");
-//							cnt = 0;
-//							break;
-//						}
-						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
+						if ( mouse_handler(packet, & counter) != OK ) {
+							printf("test_packet() -> FAILED mouse_handler()\n");
+							cnt = 0;
+							break;
+						}
+//						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS)
 							print_packet(packet);
-						tickdelay(micros_to_ticks(KBD_DELAY_US));
+						tickdelay(micros_to_ticks(DELAY_US));
 					}
 					break;
 				default:
@@ -55,6 +55,7 @@ int test_packet(unsigned short cnt) {
 		printf("test_packet() -> FAILED mouse_unsubscribe_int()\n");
 		return 1;
 	}
+//	mouse_read();	// Clear output buffer, so keyboard can be used after service call
 
 	printf("\n* test_packet() Finished *\n");
 
@@ -145,18 +146,18 @@ int test_config(void) {
 	}
 
 	printf("\n-> BYTE 0: 0x%02X\n", config[0]);
-	printf("%15s : %s\n", "Operating Mode", config[0] & BIT(6) ? "Remote mode" : "Stream mode");
-	printf("%15s : %s\n", "Data Reporting", config[0] & BIT(5) ? "Enabled" : "Disabled");
-	printf("%15s : %s\n", "Scaling Mode", config[0] & BIT(4) ? "2:1" : "1:1");
-	printf("%15s : %s\n", "Middle Button", config[0] & BIT(2) ? "Pressed" : "Released");
-	printf("%15s : %s\n", "Right Button", config[0] & BIT(1) ? "Pressed" : "Released");
-	printf("%15s : %s\n", "Left Button", config[0] & BIT(0) ? "Pressed" : "Released");
+	printf("%-15s: %s\n", "Operating Mode", config[0] & BIT(6) ? "Remote mode" : "Stream mode");
+	printf("%-15s: %s\n", "Data Reporting", config[0] & BIT(5) ? "Enabled" : "Disabled");
+	printf("%-15s: %s\n", "Scaling Mode", config[0] & BIT(4) ? "2:1" : "1:1");
+	printf("%-15s: %s\n", "Middle Button", config[0] & BIT(2) ? "Pressed" : "Released");
+	printf("%-15s: %s\n", "Right Button", config[0] & BIT(1) ? "Pressed" : "Released");
+	printf("%-15s: %s\n", "Left Button", config[0] & BIT(0) ? "Pressed" : "Released");
 
 	printf("\n-> BYTE 1: 0x%02X\n", config[1]);
-	printf("%15s : %d\n", "Resolution", BIT(config[1]));
+	printf("%-15s: %d\n", "Resolution", BIT(config[1]));
 
 	printf("\n-> BYTE 3: 0x%02X\n", config[2]);
-	printf("%15s : %d\n", "Sample Rate", config[1]);
+	printf("%-15s: %d\n", "Sample Rate", config[1]);
 	if (mouse_write_cmd(ENABLE_DATA_R) != OK) {
 		printf("test_config() -> FAILED mouse_write_cmd(ENABLE_DATA_R)\n");
 		return 1;

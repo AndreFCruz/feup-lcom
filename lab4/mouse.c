@@ -35,7 +35,7 @@ int mouse_write_cmd (char cmd)
 				return OK;
 			}
 		}
-	tickdelay(micros_to_ticks(KBD_DELAY_US));
+	tickdelay(micros_to_ticks(DELAY_US));
 	}
 
 	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
@@ -83,42 +83,15 @@ int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 	unsigned iter = 0;
 
 	while (iter++ < maxIter) {
-		if ( (data = mouse_read()) & BYTE0_SYNC_BIT )
+		if ( ((data = mouse_read()) & BYTE0_SYNC_BIT) != 0 )
 			return data;
+		printf("Data: %X\n", data);
 	}
 
 	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
 	return -1;
 }
 
-//CONFIGURAR NO SUBSCRIBE A CENA DO STREAM. VOU TER DE REFORMULAR ISTO
-
-int keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
-{
-	unsigned long stat, data;
-	unsigned iter = 0;
-	while( iter++ < maxIter ) {
-		if ( sys_inb(STAT_REG, &stat) != OK ) {
-			printf("keyboard_read() -> FAILED sys_inb()");
-			return -1;
-		}
-		/* loop while 8042 output buffer is empty */
-		if( stat & STAT_OBF ) {
-			if ( sys_inb(OUT_BUF, &data) != OK ) {
-				printf("keyboard_read() -> FAILED sys_inb()");
-				return -1;	// Returns -1 or 0xFF on failure
-			}
-			if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )	// Error Occurred ?
-				return data;
-			else
-				return -1;	// Returns -1 or 0xFF on failure
-		}
-	tickdelay(micros_to_ticks(KBD_DELAY_US));
-	}
-
-	printf("keyboard_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
-	return -1;
-}
 
 int mouse_read()	// Reads Mouse Data from OutPut Buffer
 {
@@ -138,7 +111,7 @@ int mouse_read()	// Reads Mouse Data from OutPut Buffer
 			}
 			return data;
 		}
-	tickdelay(micros_to_ticks(KBD_DELAY_US));
+	tickdelay(micros_to_ticks(DELAY_US));
 	}
 
 	printf("mouse_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
@@ -154,11 +127,11 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 			printf("mouse_handler() -> FAILED mouse_synchronize()\n");
 			return 1;
 		}
-		packet[*counter++] = sync_result;
+		packet[(*counter)++] = sync_result;
 		return OK;
 	}
 	else
-		packet[*counter++] = mouse_read();
+		packet[(*counter)++] = mouse_read();
 
 	return OK;
 }

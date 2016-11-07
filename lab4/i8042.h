@@ -18,14 +18,6 @@
 
 #define ESQ_BREAK_CODE      0x81    /**< @brief ESQ key break code */
 
-// /* Timer 0 useful macros */
-// #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
-// #define TIMER0_IRQSET		0	 /**< @brief Timer 0 Policy Bit */
-
-// /* I/O port addresses */
-//
-// #define TIMER_0			0x40 /**< @brief Timer 0 count register */
-// #define TIMER_CTRL		0x43 /**< @brief Control register */
 
 // INPUT_BUFFER is accessed by ports 0x60 or 0x64, depending on context
 #define OUT_BUF         0x60 /**< @brief KBC Output buffer register */

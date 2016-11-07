@@ -46,6 +46,7 @@ int test_packet(unsigned short cnt) {
 							// TODO NECESSARY; BUT WHY ??
 							unsigned char dummy;
 							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
+							// TODO ASK
 						}
 						// DO NOT DELAY HERE!! Demasiados tick_delay des-sincronizam o reto, for some reason...
 					}

@@ -13,48 +13,33 @@ static const unsigned maxIter = 50;         // Maximum iterations/tries when ret
 
 int mouse_write_cmd (char cmd)
 {
-	unsigned char status = 0;
-	sys_inb(STAT_REG, (unsigned long *) &status);
-	if ((status & STAT_IBF) == 0) {
-		if (sys_outb(KBC_CMD_REG, WRITE_B_MOUSE) != OK) {
+	unsigned long stat;
+	unsigned iter = 0;
+	while ( iter++ < maxIter ) {
+		if ( sys_inb (STAT_REG, &stat) != OK ) {
+			printf("mouse_write_cmd() -> FAILED sys_inb()");
 			return 1;
 		}
-		if (sys_outb(KBC_IN_BUF, cmd) != OK) {
-			return 1;
+		/* loop while 8042 input buffer is full */
+		if ( (stat & STAT_IBF) == 0 ) {
+			if ( sys_outb (KBC_CMD_REG, WRITE_B_MOUSE) != OK ) {
+				printf("mouse_write_cmd() -> FAILED 1st sys_outb()\n");
+           		return 1; 	//Failure
+           		}
+			if ( sys_outb(KBC_IN_BUF, cmd) != OK ) {
+				printf("mouse_write_cmd() -> FAILED 2nd sys_outb()\n");
+				return 1;
+				}
+			stat = mouse_read();
+			if ( stat == IN_ACK ) {
+				return OK;
+			}
 		}
-		tickdelay(micros_to_ticks(DELAY_US));
-		status = mouse_read();
-		return status;
+	tickdelay(micros_to_ticks(DELAY_US));
 	}
-	/* */
 
-//	unsigned long stat;
-//	unsigned iter = 0;
-//	while ( iter++ < maxIter ) {
-//		if ( sys_inb (STAT_REG, &stat) != OK ) {
-//			printf("mouse_write_cmd() -> FAILED sys_inb()");
-//			return 1;
-//		}
-//		/* loop while 8042 input buffer is full */
-//		if ( (stat & STAT_IBF) == 0 ) {
-//			if ( sys_outb (KBC_CMD_REG, WRITE_B_MOUSE) != OK ) {
-//				printf("mouse_write_cmd() -> FAILED 1st sys_outb()\n");
-//           		return 1; 	//Failure
-//           		}
-//			if ( sys_outb(KBC_IN_BUF, cmd) != OK ) {
-//				printf("mouse_write_cmd() -> FAILED 2nd sys_outb()\n");
-//				return 1;
-//				}
-//			stat = mouse_read();
-//			if ( stat == IN_ACK ) {
-//				return OK;
-//			}
-//		}
-//	tickdelay(micros_to_ticks(DELAY_US));
-//	}
-//
-//	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
-//	return 1;
+	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
+	return 1;
 }
 
 int mouse_subscribe_int()
@@ -87,11 +72,12 @@ int mouse_unsubscribe_int()
 			printf("mouse_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
 			return -1;
 	}
-//	mouse_write_cmd(DISABLE_DATA_R);
+//	mouse_write_cmd(DISABLE_DATA_R);	// Just don't
 
 	return MOUSE_INITIAL_HOOK_ID;
 }
 
+// NOTA: Movimentos bruscos do rato des-sincronizam o rato
 int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 {
 	int data;
@@ -171,8 +157,12 @@ void print_packet (unsigned char * packet)
 
 int mouse_fetch_config(unsigned char * config)
 {
+	// TODO NECESSARY; BUT WHY ??
+	unsigned char dummy;
+	sys_inb(KBC_CMD_REG, (unsigned long *) &dummy);	// Clear input buffer
+
 	if ( mouse_write_cmd(STATUS_REQUEST) != OK ) {
-		printf("fetch_mouse_config::kbc_write_command FAILED\n");
+		printf("fetch_mouse_config::mouse_write_cmd FAILED\n");
 		return 1;
 	}
 

@@ -44,7 +44,7 @@ int mouse_write_cmd (char cmd)
 
 int mouse_subscribe_int()
 {
-	mouse_write_cmd(DISABLE_DATA_R);
+//	mouse_write_cmd(DISABLE_DATA_R);
 
 	if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
 			printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
@@ -56,8 +56,8 @@ int mouse_subscribe_int()
 	}
 
 	// Enable stream mode
-	mouse_write_cmd(SET_STREAM_MODE);
-	mouse_write_cmd(ENABLE_DATA_R);
+//	mouse_write_cmd(SET_STREAM_MODE);
+//	mouse_write_cmd(ENABLE_DATA_R);
 
 	return MOUSE_INITIAL_HOOK_ID;
 }
@@ -181,7 +181,7 @@ void print_packet (unsigned char * packet)
 }
 
 
-int fetch_mouse_config(unsigned char * config)
+int mouse_fetch_config(unsigned char * config)
 {
 	if ( mouse_write_cmd(STATUS_REQUEST) != OK ) {
 		printf("fetch_mouse_config::kbc_write_command FAILED\n");
@@ -195,3 +195,29 @@ int fetch_mouse_config(unsigned char * config)
 
 	return OK;
 }
+
+//typedef enum {INIT, DRAW, COMP} state_t;
+//typedef enum {RDOW, RUP, MOVE} ev_type_t;
+//
+//typedef struct event_t {
+//	ev_type_t type;
+//	// TODO Complete
+//};
+//
+//void check_hor_line(event_t * evt) {
+//	static state_t st = INIT; // initial state; keep state
+//	switch (st) {
+//	case INIT:
+//		if( evt->type == RDOWN )
+//		state = DRAW;
+//		break;
+//	case DRAW:
+//		if( evt->type == MOVE ) {
+//			//TODO need to check if events VERT_LINE or HOR_TOLERANCE
+//		} else if ( evt->type == RUP )
+//			state = INIT;
+//		break;
+//	default:
+//		break;
+//	}
+//}

@@ -73,6 +73,6 @@
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int fetch_mouse_config(unsigned char *);
+ int mouse_fetch_config(unsigned char *);
 
 #endif

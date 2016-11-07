@@ -16,12 +16,11 @@ int test_packet(unsigned short cnt) {
 		return 1;
 	}
 
-	unsigned short nReceived = 0;
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 
 	int r;
-	while( nReceived < cnt ) {	// Exits when cnt reaches 0
+	while( (counter / 3) < cnt ) {	// Exits when cnt reaches 0
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -31,24 +30,16 @@ int test_packet(unsigned short cnt) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
-//						printf("test_packet mouse interrupt. nReceived: %d.\n", nReceived);
+						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
 //						if ( mouse_handler(packet, & counter) != OK ) {
 //							printf("test_packet() -> FAILED mouse_handler()\n");
 //							cnt = 0;
 //							break;
 //						}
-//						if (counter == PACKET_NELEMENTS) {
-//							print_packet(packet);
-//							counter = 0;
-//							++nReceived;
-//						}
-//					}
-
 						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
-						tickdelay(micros_to_ticks(KBD_DELAY_US));
 						if (counter == PACKET_NELEMENTS)
 							print_packet(packet);
-
+						tickdelay(micros_to_ticks(KBD_DELAY_US));
 					}
 					break;
 				default:
@@ -142,7 +133,6 @@ int test_async(unsigned short idle_time) {
 }
 
 int test_config(void) {
-	// TODO Check
 	if ( mouse_subscribe_int() < 0 ) {
 		printf("test_config() -> FAILED mouse_subscribe_int()\n");
 		return 1;
@@ -155,24 +145,23 @@ int test_config(void) {
 	}
 
 	printf("\n-> BYTE 0: 0x%02X\n", config[0]);
-	printf("%18s : %s\n", "Operating Mode", config[0] & BIT(6) ? "Remote mode" : "Stream mode");
-	printf("%18s : %s\n", "Data Reporting", config[0] & BIT(5) ? "Enabled" : "Disabled");
-	printf("%18s : %s\n", "Scaling Mode", config[0] & BIT(4) ? "2:1" : "1:1");
-	printf("%18s : %s\n", "Middle Button", config[0] & BIT(2) ? "Pressed" : "Released");
-	printf("%18s : %s\n", "Right Button", config[0] & BIT(1) ? "Pressed" : "Released");
-	printf("%18s : %s\n", "Left Button", config[0] & BIT(0) ? "Pressed" : "Released");
+	printf("%15s : %s\n", "Operating Mode", config[0] & BIT(6) ? "Remote mode" : "Stream mode");
+	printf("%15s : %s\n", "Data Reporting", config[0] & BIT(5) ? "Enabled" : "Disabled");
+	printf("%15s : %s\n", "Scaling Mode", config[0] & BIT(4) ? "2:1" : "1:1");
+	printf("%15s : %s\n", "Middle Button", config[0] & BIT(2) ? "Pressed" : "Released");
+	printf("%15s : %s\n", "Right Button", config[0] & BIT(1) ? "Pressed" : "Released");
+	printf("%15s : %s\n", "Left Button", config[0] & BIT(0) ? "Pressed" : "Released");
 
 	printf("\n-> BYTE 1: 0x%02X\n", config[1]);
-	printf("%18s : %d\n", "Resolution", BIT(config[1]));
+	printf("%15s : %d\n", "Resolution", BIT(config[1]));
 
 	printf("\n-> BYTE 3: 0x%02X\n", config[2]);
-	printf("%18s : %d\n", "Sample Rate", config[1]);
+	printf("%15s : %d\n", "Sample Rate", config[1]);
 	if (mouse_write_cmd(ENABLE_DATA_R) != OK) {
 		printf("test_config() -> FAILED mouse_write_cmd(ENABLE_DATA_R)\n");
 		return 1;
 	}
 
-	// TODO Check
 	if ( mouse_unsubscribe_int() < 0 ) {
 		printf("test_config() -> FAILED mouse_unsubscribe_int()\n");
 		return 1;

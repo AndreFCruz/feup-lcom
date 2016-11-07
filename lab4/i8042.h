@@ -31,7 +31,7 @@
 #define OUT_BUF         0x60 /**< @brief KBC Output buffer register */
 #define STAT_REG        0x64 /**< @brief KBC Status register */
 #define KBC_CMD_REG     0x64 /**< @brief KBC Command register */
-#define KBD_IN_BUF      0x60 /**< @brief KBD Input buffer register */
+#define KBC_IN_BUF      0x60 /**< @brief KBD Input buffer register */
 
 /* KBC Status Register BITs' Meaning*/
 
@@ -109,11 +109,6 @@
 #define BYTE0_RB			BIT(1)
 #define BYTE0_LB			BIT(0)
 
-/* Mouse Controller Responses to Commands on 0xD4 */
-
-#define RESPONSE_ACK		0xFA	/**< @brief Everything OK */
-#define RESPONSE_NACK		0xFE	/**< @brief  invalid byte (may be because of a serial communication error) */
-#define REPONSE_ERROR		0XFC	/**< @brief second consecutive invalid byte */
 
 #define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
 

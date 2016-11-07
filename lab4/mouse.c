@@ -8,11 +8,43 @@
 typedef int bool;
 
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
-static const unsigned maxIter = 15;         // Maximum iterations/tries when retrieving data
+static const unsigned maxIter = 10;         // Maximum iterations/tries when retrieving data
+
+
+int mouse_write_cmd (char cmd)
+{
+	unsigned long stat;
+	unsigned iter = 0;
+	while ( iter++ < maxIter ) {
+		if ( sys_inb (STAT_REG, &stat) != OK ) {
+			printf("mouse_write_cmd() -> FAILED sys_inb()");
+			return 1;
+		}
+		/* loop while 8042 input buffer is full */
+		if ( (stat & STAT_IBF) == 0 ) {
+			if ( sys_outb (KBC_CMD_REG, WRITE_B_MOUSE) != OK ) {
+				printf("mouse_write_cmd() -> FAILED 1st sys_outb()\n");
+           		return 1; 	//Failure
+           		}
+			if ( sys_outb(KBC_IN_BUF, cmd) != OK ) {
+				printf("mouse_write_cmd() -> FAILED 2nd sys_outb()\n");
+				return 1;
+				}
+			stat = mouse_read();
+			if ( stat == IN_ACK ) {
+				return OK;
+			}
+		}
+	tickdelay(micros_to_ticks(KBD_DELAY_US));
+	}
+
+	printf("mous_write_cmd() -> Max Iterations Reached. Was %d.\n", iter);
+	return 1;
+}
 
 int mouse_subscribe_int()
 {
-	//kbd_write(WRITE_B_MOUSE);			//TODO DAR DISABLE E ENABLE STREAM CONFIG E LER SP O OUTBUF (?)
+	mouse_write_cmd(DISABLE_DATA_R);
 
 	if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
 			printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
@@ -22,6 +54,10 @@ int mouse_subscribe_int()
 			printf("mouse_subscribe_int() -> FAILED sys_irqenable()\n");
 			return -1;
 	}
+
+	// Enable stream mode
+	mouse_write_cmd(SET_STREAM_MODE);
+	mouse_write_cmd(ENABLE_DATA_R);
 
 	return MOUSE_INITIAL_HOOK_ID;
 }
@@ -36,11 +72,12 @@ int mouse_unsubscribe_int()
 			printf("mouse_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
 			return -1;
 	}
+//	mouse_write_cmd(DISABLE_DATA_R);
 
 	return MOUSE_INITIAL_HOOK_ID;
 }
 
-int mouse_synchronize()	// Syncrhonizes with FIRST byte, returns data read
+int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 {
 	int data;
 	unsigned iter = 0;
@@ -83,95 +120,18 @@ int keyboard_read(void)	// Reads Keyboard Data from OutPut Buffer
 	return -1;
 }
 
-int kbc_write(char data)		//Writes Data to the Keyboard Input Buffer
-{
-	unsigned long stat;
-	unsigned iter = 0;
-	while ( iter++ < maxIter ) {
-		if ( sys_inb (STAT_REG, &stat) != OK ) {
-			printf("keyboard-write() -> FAILED sys_inb()");
-			return 1;
-		}
-		/* loop while 8042 input buffer is full */
-		if ( (stat & STAT_IBF) == 0 ) {
-			if ( sys_outb (KBD_IN_BUF, data) != OK ) {
-				printf ("kbc_write() -> FAILED sys_outb()\n");
-           		return 1; 	//Failure
-		}
-		if ( (stat & (STAT_PARITY | STAT_TIMEOUT)) == 0 )
-			return OK;
-		else
-			return 1;		//Failure
-		}
-	tickdelay(micros_to_ticks(KBD_DELAY_US));
-	}
-
-	printf("kbc_write() -> Max Iterations Reached. Was %d.\n", iter);
-	return 1;
-}
-
-int kbc_write_command(char command, unsigned char arg)
-{
-    long kbdResponse;
-    unsigned inner = 0, outter = 0;
-
-    while ( outter++ < maxIter ) {
-
-		if (kbc_write (command) != OK)
-			return 1;		//Print of error is done in kbc_write()
-
-		if ( (kbdResponse = mouse_read()) == -1 ) {
-			printf ("kbc_write_command() -> FAILED sys_inb()\n");
-			return 1;
-		}
-
-        //A byte different from the 3 expected was received
-        if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
-            printf ("kbc_write_command() Outer Loop -> ERROR: unknown response from the KBD. Was %x.\n", kbdResponse);
-            continue;
-        }
-
-        if (kbdResponse == IN_ACK) // Success
-        {
-            while (inner++ < maxIter) {
-        		if (kbc_write (arg) != OK)
-        			return 1;		//Print of error is done in kbc_write()
-
-        		if ( (kbdResponse = mouse_read ()) == -1) {
-        			printf ("kbc_write_command() -> FAILED sys_inb()\n");
-        			return 1;
-        		}
-
-                if (kbdResponse != IN_RESEND && kbdResponse != IN_ERROR && kbdResponse != IN_ACK) {
-                    printf ("kbc_write_command() Inner Loop -> ERROR: unknown response from the KBD. Was %x.\n", kbdResponse);
-                    return 1;
-                }
-
-                if (kbdResponse == IN_ACK) //Success on both cycles
-                    return OK;
-
-                if (kbdResponse == IN_ERROR) //Restart everything
-                    break;
-                }
-        }
-    } // tick_delay is called in both write and read functions
-
-    printf("kbc_write_command() -> ERROR: Maximum iterations/tries reached. Outter: %d; Inner: %x.\n", outter, inner);
-    return 1;
-}
-
-
 int mouse_read()	// Reads Mouse Data from OutPut Buffer
 {
 	unsigned long stat, data;
 	unsigned iter = 0;
-	while( iter++ < maxIter ) {
+	while( ++iter < maxIter ) {
 		if ( sys_inb(STAT_REG, &stat) != OK ) {
 			printf("mouse_read() -> FAILED sys_inb()\n");
 			return -1;
 		}
 		/* loop while 8042 output buffer is empty */
-		if( (stat & STAT_OBF) && (stat & STAT_AUX) ) {
+		if( (stat & (STAT_OBF | STAT_AUX )) != 0 ) {
+//		if ( ((stat & STAT_OBF) != 0) && ((stat & STAT_AUX) != 0) ) {
 			if ( sys_inb(OUT_BUF, &data) != OK ) {
 				printf("mouse_read() -> FAILED sys_inb()\n");
 				return -1;	// Returns -1 or 0xFF on failure
@@ -183,12 +143,6 @@ int mouse_read()	// Reads Mouse Data from OutPut Buffer
 
 	printf("mouse_read() -> Error: Max Iterations Reached. Was %d.\n", iter);
 	return -1;
-}
-
-int mouse_write (char data)
-{
-	// TODO: check if in default/stream mode, and disable etc (?)
-	return kbc_write(data);
 }
 
 int mouse_handler (unsigned char * packet, unsigned short * counter)
@@ -229,7 +183,7 @@ void print_packet (unsigned char * packet)
 
 int fetch_mouse_config(unsigned char * config)
 {
-	if ( kbc_write_command(WRITE_B_MOUSE, STATUS_REQUEST) != OK ) {
+	if ( mouse_write_cmd(STATUS_REQUEST) != OK ) {
 		printf("fetch_mouse_config::kbc_write_command FAILED\n");
 		return 1;
 	}

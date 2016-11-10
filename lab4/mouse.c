@@ -5,7 +5,7 @@
 #include "mouse.h"
 #include "i8042.h"
 
-typedef int bool;
+#define HORIZONTAL_TOLERANCE 30
 
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
 static const unsigned maxIter = 50;         // Maximum iterations/tries when retrieving data
@@ -42,10 +42,9 @@ int mouse_write_cmd (char cmd)
 	return 1;
 }
 
+
 int mouse_subscribe_int()
 {
-//	mouse_write_cmd(DISABLE_DATA_R);
-
 	if ( sys_irqsetpolicy (MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK ) {
 			printf("mouse_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
 			return -1;
@@ -137,7 +136,7 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 	return OK;
 }
 
-
+// TODO Perguntas se se imprime o valor raw de X,Y ou se tem em conta o sinal
 void print_packet (unsigned char * packet)
 {
 	printf("B1=0x%02X\t", packet[0]);
@@ -174,28 +173,120 @@ int mouse_fetch_config(unsigned char * config)
 	return OK;
 }
 
-//typedef enum {INIT, DRAW, COMP} state_t;
-//typedef enum {RDOW, RUP, MOVE} ev_type_t;
-//
-//typedef struct event_t {
-//	ev_type_t type;
-//	// TODO Complete
-//};
-//
-//void check_hor_line(event_t * evt) {
-//	static state_t st = INIT; // initial state; keep state
-//	switch (st) {
-//	case INIT:
-//		if( evt->type == RDOWN )
-//		state = DRAW;
-//		break;
-//	case DRAW:
-//		if( evt->type == MOVE ) {
-//			//TODO need to check if events VERT_LINE or HOR_TOLERANCE
-//		} else if ( evt->type == RUP )
-//			state = INIT;
-//		break;
-//	default:
-//		break;
-//	}
-//}
+/*
+typedef enum {INIT, DRAW, COMP} state_t;
+typedef enum {RDOW, RUP, MOVE} ev_type_t;	// MOVE indicates the vertical line was registered
+
+typedef struct event_t {
+	ev_type_t type;
+
+	int y_delta, x_delta;
+};
+
+//Make function that updates the type correctly?
+void event_update (event_t * evt, unsigned char *packet, short length)
+{
+	if (evt->type == RDOWN && packet[0] & BYTE0_RB != 0) {
+		// RMB is still pressed, account for x,y deltas
+
+	}
+	else if (evt->type == RDOWN && packet[0] & BYTE0_RB == 0) {
+		evt->type = RUP;
+		evt->y_delta = evt->x_delta = 0;
+		return;
+	}
+	else if (evt->type == RUP)
+	if (packet[0] & BYTE0_RB)
+		evt->type = RDOWN;
+	if (!(packet[0] & BYTE0_RB))
+		evt->type = RUP;
+	else if ((x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) )
+		evt->type = HOR_TOLERANCE;
+	else if (y_delta > length)
+		evt->type = VERTLINE;
+
+}
+
+
+
+void check_ver_line(event_t * evt) {
+	static state_t st = INIT; // initial state; keep state
+
+	// maybe call function to update type in here
+
+	evt->y_delta += y_delta;
+	evt->
+
+	switch (st) {
+	case INIT:
+		if( evt->type == RDOWN )
+		state = DRAW;
+		break;
+	case DRAW:
+		if( evt->type == MOVE ) {
+			//TODO need to check if events VERT_LINE or HOR_TOLERANCE
+		} else if ( evt->type == RUP )
+			state = INIT;
+		break;
+	default:
+		break;
+	}
+}
+*/
+
+#define HELPER_NEG 0xFFFFFF00
+int int_value (unsigned char delta_var, int sign)
+{
+	if (sign != 0)
+		return HELPER_NEG | delta_var;
+	else
+		return (unsigned int) delta_var;
+}
+
+//Make function that updates the type correctly?
+void event_update (event_t * evt, const unsigned char *packet, short length)
+{
+	evt->x_delta += int_value(packet[1], packet[0] & BYTE0_X_SIGN);
+	evt->y_delta += int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
+
+	if (!(packet[0] & BYTE0_RB)) {		//Ordem dos IF's e t importante! Se n for esta ordem julgo n dar
+		evt->type = RUP;
+		printf("***:::***");
+	}
+	else if ((evt->x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) )
+		evt->type = HORZ_TOL_BREACHED;
+	else if (evt->y_delta > length)
+		evt->type = VERTLINE;
+	else if (packet[0] & BYTE0_RB)
+		evt->type = RDOWN;
+
+}
+
+void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
+	static state_t st = INIT; // initial state; keep state
+
+	event_update (evt, packet, length);
+
+	switch (st) {
+	case INIT:
+		if( evt->type == RDOWN )
+		st = DRAW;
+		evt->y_delta = 0;
+		evt->x_delta = 0;
+		printf("unubub\n");
+		break;
+	case DRAW:
+		if( evt->type == HORZ_TOL_BREACHED ) {
+			evt->y_delta = 0;
+			evt->x_delta = 0;
+		} else if (evt->type == VERTLINE) {
+			evt->complete = 1;	// Useless, == vertline
+		} else if ( evt->type == RUP )
+			st = INIT;
+			evt->y_delta = 0;
+			evt->x_delta = 0;
+		break;
+	default:
+		break;
+	}
+}

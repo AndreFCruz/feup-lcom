@@ -207,7 +207,7 @@ int test_gesture(short length) {
 	evt.type = RUP; //for the sake of initialization
 	evt.y_delta = 0;
 	evt.x_delta = 0;
-	evt.complete = 0;
+	evt.complete_flag = 0;
 
 
 	int r;
@@ -231,6 +231,7 @@ int test_gesture(short length) {
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
+							counter = 0;
 
 							// TODO NECESSARY; BUT WHY ??
 							unsigned char dummy;
@@ -239,10 +240,9 @@ int test_gesture(short length) {
 
 							//TODO Add the call to the function with the events stuff
 							check_ver_line(&evt,packet,length);
-							if (evt.complete == 1)
+							if (evt.complete_flag == 1)
 								gesture_flag = TRUE;
-							sys_inb(OUT_BUF, (unsigned long *) &dummy);	//Who knows
-							printf("Why?");
+							//sys_inb(OUT_BUF, (unsigned long *) &dummy);	//Who knows
 						}
 					}
 					break;

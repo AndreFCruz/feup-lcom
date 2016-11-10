@@ -251,15 +251,20 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 
 	if (!(packet[0] & BYTE0_RB)) {		//Ordem dos IF's e t importante! Se n for esta ordem julgo n dar
 		evt->type = RUP;
-		printf("***:::***");
+		printf("RUB\t");
 	}
-	else if ((evt->x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) )
+	else if ((evt->x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) ) {
 		evt->type = HORZ_TOL_BREACHED;
-	else if (evt->y_delta > length)
+		printf("HORIZONTAL_TOL\t");
+	}
+	else if (evt->y_delta > length) {
 		evt->type = VERTLINE;
-	else if (packet[0] & BYTE0_RB)
+		printf("VERTICAL_LINE\t");
+	}
+	else if (packet[0] & BYTE0_RB) {
 		evt->type = RDOWN;
-
+		printf("RDOWN\t");
+	}
 }
 
 void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
@@ -273,20 +278,21 @@ void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
 		st = DRAW;
 		evt->y_delta = 0;
 		evt->x_delta = 0;
-		printf("unubub\n");
 		break;
 	case DRAW:
 		if( evt->type == HORZ_TOL_BREACHED ) {
 			evt->y_delta = 0;
 			evt->x_delta = 0;
 		} else if (evt->type == VERTLINE) {
-			evt->complete = 1;	// Useless, == vertline
-		} else if ( evt->type == RUP )
+			evt->complete_flag = 1;	// Useless, == vertline
+		} else if ( evt->type == RUP ) {
 			st = INIT;
 			evt->y_delta = 0;
 			evt->x_delta = 0;
+		}
 		break;
 	default:
+		printf("* ");
 		break;
 	}
 }

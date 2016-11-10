@@ -17,7 +17,7 @@ typedef enum {RDOWN, RUP, HORZ_TOL_BREACHED, VERTLINE} ev_type_t;
 typedef struct {
 	ev_type_t type;
 	int y_delta, x_delta;
-	int complete;	//When VERTLINE  is achieved its 1, else its 0
+	int complete_flag;	//When VERTLINE  is achieved its 1, else its 0
 } event_t;
 
  /**

@@ -31,7 +31,8 @@ static void print_usage(char **argv)
 
 static int proc_args(int argc, char **argv)
 {
-	unsigned long nPackets, time, length;
+	unsigned long nPackets, time;
+	long length;
 
 	if (strncmp(argv[1], "packet", strlen("packet")) == 0) {
 		if (argc != 3) {
@@ -71,7 +72,10 @@ static int proc_args(int argc, char **argv)
 		length = parse_long(argv[2], 10);					/* Parses string to signed long */
 		if (length == LONG_MAX || length == LONG_MIN)
 			return 1;
-		// TODO Check if fits in short int
+		if (length < SHRT_MIN || length > SHRT_MAX) {
+			printf("Invalid length. Must be within short int range [-32768, +32767]. Was %d.\n", length);
+			return 1;
+		}
 		printf("mouse::test_geture(%d)\n", length);
 		return test_gesture(length);
 	}

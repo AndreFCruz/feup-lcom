@@ -155,8 +155,8 @@ void print_packet (unsigned char * packet)
 	printf("YOV=%d ", packet[0] & BYTE0_Y_OVF ? 1 : 0);
 
 	// check sign of X and Y before printing
-	printf("X=%3d ", int_value(packet[1], packet[0] & BYTE0_X_SIGN));
-	printf("Y=%3d\n", int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
+	printf("X=%4d ", int_value(packet[1], packet[0] & BYTE0_X_SIGN));
+	printf("Y=%4d\n", int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
 }
 
 
@@ -196,13 +196,13 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 	// Update Direction
 	switch ( evt->dir ) {
 	case UPWARDS:
-		if (y_value < -M_TOLERANCE) {
+		if (y_value < -M_TOLERANCE || evt->y_delta < 0) {
 			evt->x_delta = evt->y_delta = 0;
 			evt->dir = DOWNWARDS;
 		}
 		break;
 	case DOWNWARDS:
-		if (y_value > M_TOLERANCE) {
+		if (y_value > M_TOLERANCE || evt->y_delta > 0) {
 			evt->x_delta = evt->y_delta = 0;
 			evt->dir = UPWARDS;
 		}

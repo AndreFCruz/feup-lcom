@@ -11,6 +11,16 @@ static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
 static const unsigned maxIter = 50;         // Maximum iterations/tries when retrieving data
 
 
+#define HELPER_NEG 0xFFFFFF00
+int int_value (unsigned char delta_var, int sign)
+{
+	if (sign != 0)
+		return HELPER_NEG | delta_var;
+	else
+		return (unsigned int) delta_var;
+}
+
+
 int mouse_write_cmd (char cmd)
 {
 	unsigned long stat;
@@ -136,7 +146,7 @@ int mouse_handler (unsigned char * packet, unsigned short * counter)
 	return OK;
 }
 
-// TODO Perguntas se se imprime o valor raw de X,Y ou se tem em conta o sinal
+
 void print_packet (unsigned char * packet)
 {
 	printf("B1=0x%02X\t", packet[0]);
@@ -149,8 +159,8 @@ void print_packet (unsigned char * packet)
 	printf("YOV=%d ", packet[0] & BYTE0_Y_OVF ? 1 : 0);
 
 	// check sign of X and Y before printing
-	printf("X=%3d ", packet[1]);
-	printf("Y=%3d\n", packet[2]);
+	printf("X=%3d ", int_value(packet[1], packet[0] & BYTE0_X_SIGN));
+	printf("Y=%3d\n", int_value(packet[2], packet[0] & BYTE0_Y_SIGN));	// TODO Perguntar se se imprime o valor raw de X,Y ou se tem em conta o sinal
 }
 
 
@@ -173,97 +183,30 @@ int mouse_fetch_config(unsigned char * config)
 	return OK;
 }
 
-/*
-typedef enum {INIT, DRAW, COMP} state_t;
-typedef enum {RDOW, RUP, MOVE} ev_type_t;	// MOVE indicates the vertical line was registered
-
-typedef struct event_t {
-	ev_type_t type;
-
-	int y_delta, x_delta;
-};
-
-//Make function that updates the type correctly?
-void event_update (event_t * evt, unsigned char *packet, short length)
-{
-	if (evt->type == RDOWN && packet[0] & BYTE0_RB != 0) {
-		// RMB is still pressed, account for x,y deltas
-
-	}
-	else if (evt->type == RDOWN && packet[0] & BYTE0_RB == 0) {
-		evt->type = RUP;
-		evt->y_delta = evt->x_delta = 0;
-		return;
-	}
-	else if (evt->type == RUP)
-	if (packet[0] & BYTE0_RB)
-		evt->type = RDOWN;
-	if (!(packet[0] & BYTE0_RB))
-		evt->type = RUP;
-	else if ((x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) )
-		evt->type = HOR_TOLERANCE;
-	else if (y_delta > length)
-		evt->type = VERTLINE;
-
-}
-
-
-
-void check_ver_line(event_t * evt) {
-	static state_t st = INIT; // initial state; keep state
-
-	// maybe call function to update type in here
-
-	evt->y_delta += y_delta;
-	evt->
-
-	switch (st) {
-	case INIT:
-		if( evt->type == RDOWN )
-		state = DRAW;
-		break;
-	case DRAW:
-		if( evt->type == MOVE ) {
-			//TODO need to check if events VERT_LINE or HOR_TOLERANCE
-		} else if ( evt->type == RUP )
-			state = INIT;
-		break;
-	default:
-		break;
-	}
-}
-*/
-
-#define HELPER_NEG 0xFFFFFF00
-int int_value (unsigned char delta_var, int sign)
-{
-	if (sign != 0)
-		return HELPER_NEG | delta_var;
-	else
-		return (unsigned int) delta_var;
-}
 
 //Make function that updates the type correctly?
 void event_update (event_t * evt, const unsigned char *packet, short length)
 {
+	printf ("X Sign: %d. Y Sign: %d. ", packet[0] & BYTE0_X_SIGN ? 1 : 0, packet[0] & BYTE0_Y_SIGN ? 1 : 0);
+
 	evt->x_delta += int_value(packet[1], packet[0] & BYTE0_X_SIGN);
 	evt->y_delta += int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
 
-	if (!(packet[0] & BYTE0_RB)) {		//Ordem dos IF's e t importante! Se n for esta ordem julgo n dar
+	if ((packet[0] & BYTE0_RB) == 0) {		//Ordem dos IF's e t importante! Se n for esta ordem julgo n dar
 		evt->type = RUP;
-		printf("RUB\t");
+		printf("RUB              ");
 	}
-	else if ((evt->x_delta > HORIZONTAL_TOLERANCE) || (packet[0] & BYTE0_Y_SIGN) ) {
+	else if (evt->x_delta > HORIZONTAL_TOLERANCE || evt->x_delta < -HORIZONTAL_TOLERANCE) {
 		evt->type = HORZ_TOL_BREACHED;
-		printf("HORIZONTAL_TOL\t");
+		printf("HOR_TOL_BREACHED ");
 	}
-	else if (evt->y_delta > length) {
+	else if (evt->y_delta > length || evt->y_delta < -length) {
 		evt->type = VERTLINE;
-		printf("VERTICAL_LINE\t");
+		printf("VERTICAL_LINE    ");
 	}
 	else if (packet[0] & BYTE0_RB) {
 		evt->type = RDOWN;
-		printf("RDOWN\t");
+		printf("RDOWN            ");
 	}
 }
 

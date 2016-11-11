@@ -31,17 +31,13 @@ int test_packet(unsigned short cnt) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
+
 						mouse_handler(packet, & counter);
-//						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
 							--cnt;
 							counter = 0;
-
-//							unsigned char dummy;
-//							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
 						}
-						// DO NOT DELAY HERE!! Demasiados tick_delay des-sincronizam o rato...
 					}
 					break;
 				default:
@@ -86,7 +82,7 @@ int test_async(unsigned short idle_time) {
 	unsigned int timerCount = 0;	// Number of timer interrupts
 	unsigned short elapsed = 0;		// Time inactive in seconds
 	unsigned char packet[PACKET_NELEMENTS];
-	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
+	unsigned short counter = 0;		// Keeps the number of bytes ready in the packet
 
 	int r;
 	while( elapsed < idle_time ) {	// Exits when cnt reaches 0
@@ -195,7 +191,6 @@ int test_gesture(short length) {
 
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
-	//Verificar isto e a sua posicao
 
 	event_t evt;
 	evt.type = RUP;
@@ -204,7 +199,7 @@ int test_gesture(short length) {
 	evt.dir = UPWARDS;	// Will be reset on first call of event_handler
 
 	int r;
-	while( evt.type != VERTLINE ) {	// When true this bool gets to true and therefore the cycle stops
+	while( evt.type != VERTLINE ) {
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -214,14 +209,13 @@ int test_gesture(short length) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
+
 						mouse_handler(packet, & counter);
-//						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
 							counter = 0;
 
 							check_ver_line(&evt,packet,length);
-
 						}
 					}
 					break;

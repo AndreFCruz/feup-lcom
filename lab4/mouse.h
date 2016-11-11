@@ -55,7 +55,6 @@ typedef struct {
  */
  int mouse_read(void);
 
- //TODO: REVIEW THE DOCUMENTATION
  /**
   * @brief Mouse Interrupt Handler
   *

@@ -6,7 +6,7 @@
 #include "mouse.h"
 #include "timer.h"
 
-#define TRUE	1
+#define TRUE	1	// Not Necessary TODO
 #define FALSE	0
 
 int test_packet(unsigned short cnt) {
@@ -21,10 +21,9 @@ int test_packet(unsigned short cnt) {
 
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
-	unsigned short nReceived = 0;
 
 	int r;
-	while( nReceived < cnt ) {	// Exits when cnt reaches 0
+	while( cnt > 0 ) {	// Exits when cnt reaches 0
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -42,9 +41,10 @@ int test_packet(unsigned short cnt) {
 //						}
 						mouse_handler(packet, & counter);
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
+						printf("Counter: %d.\n", counter);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
-							++nReceived;
+							--cnt;
 
 							// TODO NECESSARY; BUT WHY ??
 							unsigned char dummy;
@@ -202,16 +202,14 @@ int test_gesture(short length) {
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 	//Verificar isto e a sua posicao
 
-	int gesture_flag = FALSE;
 	event_t evt;
-	evt.type = RUP; //for the sake of initialization
+	evt.type = RUP;
 	evt.y_delta = 0;
 	evt.x_delta = 0;
-	evt.complete_flag = 0;
-
+	evt.dir = UPWARDS;	// Will be reset on first call of event_handler
 
 	int r;
-	while( gesture_flag == FALSE ) {	// When true this bool gets to true and therefore the cycle stops
+	while( evt.type != VERTLINE ) {	// When true this bool gets to true and therefore the cycle stops
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -238,11 +236,8 @@ int test_gesture(short length) {
 							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
 							// TODO ASK
 
-							//TODO Add the call to the function with the events stuff
 							check_ver_line(&evt,packet,length);
-							if (evt.complete_flag == 1)
-								gesture_flag = TRUE;
-							//sys_inb(OUT_BUF, (unsigned long *) &dummy);	//Who knows
+
 						}
 					}
 					break;

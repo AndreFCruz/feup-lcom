@@ -187,6 +187,7 @@ int mouse_fetch_config(unsigned char * config)
 //Make function that updates the type correctly?
 void event_update (event_t * evt, const unsigned char *packet, short length)
 {
+	// TODO HANDLE OVERFLOW!!
 	printf ("X Sign: %d. Y Sign: %d. ", packet[0] & BYTE0_X_SIGN ? 1 : 0, packet[0] & BYTE0_Y_SIGN ? 1 : 0);
 
 	evt->x_delta += int_value(packet[1], packet[0] & BYTE0_X_SIGN);
@@ -200,7 +201,7 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		evt->type = HORZ_TOL_BREACHED;
 		printf("HOR_TOL_BREACHED ");
 	}
-	else if (evt->y_delta > length || evt->y_delta < -length) {
+	else if (evt->y_delta > length) {
 		evt->type = VERTLINE;
 		printf("VERTICAL_LINE    ");
 	}
@@ -226,8 +227,6 @@ void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
 		if( evt->type == HORZ_TOL_BREACHED ) {
 			evt->y_delta = 0;
 			evt->x_delta = 0;
-		} else if (evt->type == VERTLINE) {
-			evt->complete_flag = 1;	// Useless, == vertline
 		} else if ( evt->type == RUP ) {
 			st = INIT;
 			evt->y_delta = 0;

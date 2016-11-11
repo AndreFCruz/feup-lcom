@@ -156,7 +156,7 @@ void print_packet (unsigned char * packet)
 
 	// check sign of X and Y before printing
 	printf("X=%3d ", int_value(packet[1], packet[0] & BYTE0_X_SIGN));
-	printf("Y=%3d\n", int_value(packet[2], packet[0] & BYTE0_Y_SIGN));	// TODO Perguntar se se imprime o valor raw de X,Y ou se tem em conta o sinal
+	printf("Y=%3d\n", int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
 }
 
 
@@ -192,21 +192,6 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 	if ( (packet[0] & BYTE0_Y_OVF) != 0 )
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
-//	switch ( evt->dir ) {
-//	case 1:
-//		if ( x_value < M_TOLERANCE || y_value < M_TOLERANCE )
-//			evt->x_delta = evt->y_delta = 0;
-//		break;
-//	case 2:
-//		evt->x_delta = evt->y_delta = 0;
-//		break;
-//	case 3:
-//		if ()
-//		break;
-//	case 4:
-//		evt->x_delta = evt->y_delta = 0;
-//		break;
-//	}
 
 	// Update Direction
 	switch ( evt->dir ) {

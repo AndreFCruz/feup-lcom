@@ -32,18 +32,16 @@ int test_packet(unsigned short cnt) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
 						mouse_handler(packet, & counter);
-
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
 							--cnt;
+							counter = 0;
 
-							// TODO NECESSARY; BUT WHY ??
-							unsigned char dummy;
-							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
-							// TODO ASK
+//							unsigned char dummy;
+//							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
 						}
-						// DO NOT DELAY HERE!! Demasiados tick_delay des-sincronizam o reto, for some reason...
+						// DO NOT DELAY HERE!! Demasiados tick_delay des-sincronizam o rato...
 					}
 					break;
 				default:
@@ -216,22 +214,11 @@ int test_gesture(short length) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
-//						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
-//						if ( mouse_handler(packet, & counter) != OK ) {
-//							printf("test_packet() -> FAILED mouse_handler()\n");
-//							cnt = 0;
-//							break;
-//						}
 						mouse_handler(packet, & counter);
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
 							counter = 0;
-
-							// TODO NECESSARY; BUT WHY ??
-							unsigned char dummy;
-							sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer
-							// TODO ASK
 
 							check_ver_line(&evt,packet,length);
 

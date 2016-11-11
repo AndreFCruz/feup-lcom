@@ -190,22 +190,37 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 	// TODO HANDLE OVERFLOW!!
 	printf ("X Sign: %d. Y Sign: %d. ", packet[0] & BYTE0_X_SIGN ? 1 : 0, packet[0] & BYTE0_Y_SIGN ? 1 : 0);
 
-	evt->x_delta += int_value(packet[1], packet[0] & BYTE0_X_SIGN);
-	evt->y_delta += int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
+	// Ignore Packets with Overflow
+	if ( (packet[0] & BYTE0_X_OVF) != 0 || (packet[0] & BYTE0_Y_OVF) != 0 )
+		return;
 
-	if ((packet[0] & BYTE0_RB) == 0) {		//Ordem dos IF's e t importante! Se n for esta ordem julgo n dar
+	int x_value = int_value(packet[1], packet[0] & BYTE0_X_SIGN);
+	int y_value = int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
+
+	if ( (evt->dir == UPWARDS && y_value < 0) || (evt->dir == DOWNWARDS && y_value > 0) ) {
+		evt->x_delta = evt->y_delta = 0;
+	} else {
+		evt->x_delta += x_value;
+		evt->y_delta += y_value;
+	}
+
+	if ( (packet[0] & BYTE0_RB) == 0 ) {
 		evt->type = RUP;
+		evt->y_delta = 0;
+		evt->x_delta = 0;
 		printf("RUB              ");
 	}
-	else if (evt->x_delta > HORIZONTAL_TOLERANCE || evt->x_delta < -HORIZONTAL_TOLERANCE) {
-		evt->type = HORZ_TOL_BREACHED;
-		printf("HOR_TOL_BREACHED ");
-	}
-	else if (evt->y_delta > length) {
+//	else if (evt->x_delta > HORIZONTAL_TOLERANCE || evt->x_delta < -HORIZONTAL_TOLERANCE) {
+//		evt->type = HORZ_TOL_BREACHED;
+//		printf("HOR_TOL_BREACHED ");
+//	}
+
+	// Check Line Slope
+	else if ( length > 0 ? (evt->y_delta > length) && (evt->x_delta > 0) : (evt->y_delta < length) && (evt->x_delta < 0) ) {
 		evt->type = VERTLINE;
 		printf("VERTICAL_LINE    ");
 	}
-	else if (packet[0] & BYTE0_RB) {
+	else if ( packet[0] & BYTE0_RB ) {
 		evt->type = RDOWN;
 		printf("RDOWN            ");
 	}
@@ -224,17 +239,16 @@ void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
 		evt->x_delta = 0;
 		break;
 	case DRAW:
-		if( evt->type == HORZ_TOL_BREACHED ) {
-			evt->y_delta = 0;
-			evt->x_delta = 0;
-		} else if ( evt->type == RUP ) {
+//		if( evt->type == HORZ_TOL_BREACHED ) {
+//			evt->y_delta = 0;
+//			evt->x_delta = 0;
+//		}
+		if ( evt->type == RUP ) {
 			st = INIT;
-			evt->y_delta = 0;
-			evt->x_delta = 0;
 		}
 		break;
-	default:
-		printf("* ");
+	case COMP:
+		printf(" * ");
 		break;
 	}
 }

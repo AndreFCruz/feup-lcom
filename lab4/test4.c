@@ -189,6 +189,11 @@ int test_config(void) {
 }
 
 int test_gesture(short length) {
+	if (length == 0) {
+		printf("Invalid argument for test_gestute, length must be non-zero.\n");
+		return 1;
+	}
+
 	int ipc_status;
 	message msg;
 

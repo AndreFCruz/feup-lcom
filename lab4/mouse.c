@@ -5,7 +5,7 @@
 #include "mouse.h"
 #include "i8042.h"
 
-#define MOUSE_TOLERANCE 10
+#define M_TOLERANCE 2	// Mouse Tolerance for small direction changes
 
 static int mouse_hook_id = MOUSE_INITIAL_HOOK_ID;
 static const unsigned maxIter = 50;         // Maximum iterations/tries when retrieving data
@@ -93,7 +93,6 @@ int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 	while (iter++ < maxIter) {
 		if ( ((data = mouse_read()) & BYTE0_SYNC_BIT) != 0 )
 			return data;
-		printf("SyncData: %X\n", data);
 	}
 
 	printf("mouse_synchronize() -> Max Iterations Reached. Was %d.\n", iter);
@@ -194,10 +193,26 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
 	// Update Direction
+//	switch ( evt->dir ) {
+//	case 1:
+//		if ( x_value < M_TOLERANCE || y_value < M_TOLERANCE )
+//			evt->x_delta = evt->y_delta = 0;
+//		break;
+//	case 2:
+//		evt->x_delta = evt->y_delta = 0;
+//		break;
+//	case 3:
+//		if ()
+//		break;
+//	case 4:
+//		evt->x_delta = evt->y_delta = 0;
+//		break;
+//	}
+
 	evt->dir = (y_value > 0 ? UPWARDS : DOWNWARDS);
 
 	// Check if movement is in the 1st or 3rd Quadrants, account for mouse tolerance
-	if ( evt->dir == UPWARDS ? evt->x_delta < -MOUSE_TOLERANCE : evt->x_delta > MOUSE_TOLERANCE )
+	if ( evt->dir == UPWARDS ? x_value < -M_TOLERANCE : x_value > M_TOLERANCE )
 		evt->x_delta = evt->y_delta = 0;
 	else {
 		evt->x_delta += x_value;

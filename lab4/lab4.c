@@ -71,6 +71,7 @@ static int proc_args(int argc, char **argv)
 		length = parse_long(argv[2], 10);					/* Parses string to signed long */
 		if (length == LONG_MAX || length == LONG_MIN)
 			return 1;
+		// TODO Check if fits in short int
 		printf("mouse::test_geture(%d)\n", length);
 		return test_gesture(length);
 	}

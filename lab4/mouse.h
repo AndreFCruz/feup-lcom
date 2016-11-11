@@ -12,7 +12,7 @@
 
 
 typedef enum {INIT, DRAW, COMP} state_t;
-typedef enum {RDOWN, RUP, HORZ_TOL_BREACHED, VERTLINE} ev_type_t;
+typedef enum {RDOWN, RUP, VERTLINE} ev_type_t;
 typedef enum {UPWARDS, DOWNWARDS} direction_t;
 
 typedef struct {

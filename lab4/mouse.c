@@ -192,7 +192,6 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 	if ( (packet[0] & BYTE0_Y_OVF) != 0 )
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
-	// Update Direction
 //	switch ( evt->dir ) {
 //	case 1:
 //		if ( x_value < M_TOLERANCE || y_value < M_TOLERANCE )
@@ -209,7 +208,21 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 //		break;
 //	}
 
-	evt->dir = (y_value > 0 ? UPWARDS : DOWNWARDS);
+	// Update Direction
+	switch ( evt->dir ) {
+	case UPWARDS:
+		if (y_value < -M_TOLERANCE) {
+			evt->x_delta = evt->y_delta = 0;
+			evt->dir = DOWNWARDS;
+		}
+		break;
+	case DOWNWARDS:
+		if (y_value > M_TOLERANCE) {
+			evt->x_delta = evt->y_delta = 0;
+			evt->dir = UPWARDS;
+		}
+		break;
+	}
 
 	// Check if movement is in the 1st or 3rd Quadrants, account for mouse tolerance
 	if ( evt->dir == UPWARDS ? x_value < -M_TOLERANCE : x_value > M_TOLERANCE )
@@ -219,7 +232,6 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		evt->y_delta += y_value;
 	}
 
-
 	// Update Event Type
 	if ( (packet[0] & BYTE0_RB) == 0 )
 		evt->type = RUP;
@@ -228,6 +240,8 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		evt->type = VERTLINE;
 	else if ( packet[0] & BYTE0_RB )
 		evt->type = RDOWN;
+
+	printf("X_Delta: %d. Y_Delta: %d.\n", evt->x_delta, evt->y_delta);
 }
 
 void check_ver_line(event_t * evt, const unsigned char *packet, short length) {

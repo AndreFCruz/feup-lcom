@@ -34,7 +34,6 @@ int test_packet(unsigned short cnt) {
 						mouse_handler(packet, & counter);
 
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
-						printf("Counter: %d.\n", counter);
 						if (counter == PACKET_NELEMENTS) {
 							print_packet(packet);
 							--cnt;

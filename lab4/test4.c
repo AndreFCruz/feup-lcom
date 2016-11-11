@@ -6,8 +6,6 @@
 #include "mouse.h"
 #include "timer.h"
 
-#define TRUE	1	// Not Necessary TODO
-#define FALSE	0
 
 int test_packet(unsigned short cnt) {
 	int ipc_status;
@@ -33,13 +31,8 @@ int test_packet(unsigned short cnt) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & mouse_irq_set) { /* subscribed interrupt */
-//						printf("test_packet mouse interrupt. Counter: %d.\n", counter);
-//						if ( mouse_handler(packet, & counter) != OK ) {
-//							printf("test_packet() -> FAILED mouse_handler()\n");
-//							cnt = 0;
-//							break;
-//						}
 						mouse_handler(packet, & counter);
+
 //						sys_inb(0x60, (unsigned long *) &packet[counter++ % 3]);
 						printf("Counter: %d.\n", counter);
 						if (counter == PACKET_NELEMENTS) {

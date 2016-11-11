@@ -81,12 +81,10 @@ int mouse_unsubscribe_int()
 			printf("mouse_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
 			return -1;
 	}
-//	mouse_write_cmd(DISABLE_DATA_R);	// Just don't
 
 	return MOUSE_INITIAL_HOOK_ID;
 }
 
-// NOTA: Movimentos bruscos do rato des-sincronizam o rato
 int mouse_synchronize()	// Synchronizes with FIRST byte, returns data read
 {
 	int data;
@@ -114,7 +112,6 @@ int mouse_read()	// Reads Mouse Data from OutPut Buffer
 		}
 		/* loop while 8042 output buffer is empty */
 		if( (stat & (STAT_OBF | STAT_AUX )) != 0 ) {
-//		if ( ((stat & STAT_OBF) != 0) && ((stat & STAT_AUX) != 0) ) {
 			if ( sys_inb(OUT_BUF, &data) != OK ) {
 				printf("mouse_read() -> FAILED sys_inb()\n");
 				return -1;	// Returns -1 or 0xFF on failure
@@ -166,9 +163,9 @@ void print_packet (unsigned char * packet)
 
 int mouse_fetch_config(unsigned char * config)
 {
-	// TODO NECESSARY; BUT WHY ??
+	// Clear input buffer
 	unsigned char dummy;
-	sys_inb(KBC_CMD_REG, (unsigned long *) &dummy);	// Clear input buffer
+	sys_inb(KBC_CMD_REG, (unsigned long *) &dummy);
 
 	if ( mouse_write_cmd(STATUS_REQUEST) != OK ) {
 		printf("fetch_mouse_config::mouse_write_cmd FAILED\n");
@@ -196,11 +193,6 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 	if ( (packet[0] & BYTE0_Y_OVF) != 0 )
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
-//	// Check change in direction
-//	if ( (evt->dir == UPWARDS && y_value < 0) || (evt->dir == DOWNWARDS && y_value > 0) ) {
-//		evt->x_delta = evt->y_delta = 0;
-//		printf("CHANGED DIRECTION\n");
-//	}
 	// Update Direction
 	evt->dir = (y_value > 0 ? UPWARDS : DOWNWARDS);
 
@@ -212,18 +204,15 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		evt->y_delta += y_value;
 	}
 
-	if ( (packet[0] & BYTE0_RB) == 0 ) {
-		evt->type = RUP;
-		evt->y_delta = evt->x_delta = 0;
-	}
 
+	// Update Event Type
+	if ( (packet[0] & BYTE0_RB) == 0 )
+		evt->type = RUP;
 	// Check Line Slope
 	else if ( length > 0 ? (evt->y_delta > length) && (evt->x_delta > 0) : (evt->y_delta < length) && (evt->x_delta < 0) )
 		evt->type = VERTLINE;
 	else if ( packet[0] & BYTE0_RB )
 		evt->type = RDOWN;
-
-	printf("X_Delta: %d. Y_Delta: %d.\n", evt->x_delta, evt->y_delta);
 }
 
 void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
@@ -240,10 +229,11 @@ void check_ver_line(event_t * evt, const unsigned char *packet, short length) {
 	case DRAW:
 		if ( evt->type == RUP ) {
 			st = INIT;
+			evt->y_delta = evt->x_delta = 0;
 		}
 		break;
 	case COMP:
-		printf(" * ");
+		printf(" * Reached Accept State * \n");
 		break;
 	}
 }

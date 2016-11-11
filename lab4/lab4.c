@@ -5,6 +5,7 @@
 
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
+static signed long parse_long(char *str, int base);
 static void print_usage(char **argv);
 
 int main(int argc, char **argv)
@@ -67,8 +68,8 @@ static int proc_args(int argc, char **argv)
 			printf("mouse: wrong no of arguments for test_gesture()\n");
 			return 1;
 		}
-		length = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
-		if (length == ULONG_MAX)
+		length = parse_long(argv[2], 10);						/* Parses string to signed long */
+		if (length == LONG_MAX || length == LONG_MIN)
 			return 1;
 		printf("mouse::test_geture(%lu)\n", length);
 		return test_gesture(length);
@@ -94,8 +95,35 @@ static unsigned long parse_ulong(char *str, int base)
 	}
 
 	if (endptr == str) {
-		printf("timer: parse_ulong: no digits were found in %s\n", str);
+		printf("mouse: parse_ulong: no digits were found in %s\n", str);
 		return ULONG_MAX;
+	}
+
+	/* Successful conversion */
+	return val;
+}
+
+static signed long parse_long(char *str, int base)
+{
+	char *endptr;
+	unsigned long val;
+
+	/*Convert string to signed long*/
+	val = strtol(str, &endptr, base);
+
+	/* Check for conversion errors */
+	if ((errno == ERANGE && val == LONG_MAX) || (errno != 0 && val == 0)) {
+		perror("strtol");
+		return LONG_MAX;
+	}
+	if ((errno == ERANGE && val == LONG_MIN) || (errno != 0 && val == 0)) {
+		perror("strtol");
+		return LONG_MIN;
+	}
+
+	if (endptr == str) {
+		printf("mouse: parse_long: no digits were found in %s\n", str);
+		return LONG_MAX;	//Could also be LONG_MIN
 	}
 
 	/* Successful conversion */

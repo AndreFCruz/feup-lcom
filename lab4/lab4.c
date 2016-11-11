@@ -68,10 +68,10 @@ static int proc_args(int argc, char **argv)
 			printf("mouse: wrong no of arguments for test_gesture()\n");
 			return 1;
 		}
-		length = parse_long(argv[2], 10);						/* Parses string to signed long */
+		length = parse_long(argv[2], 10);					/* Parses string to signed long */
 		if (length == LONG_MAX || length == LONG_MIN)
 			return 1;
-		printf("mouse::test_geture(%lu)\n", length);
+		printf("mouse::test_geture(%d)\n", length);
 		return test_gesture(length);
 	}
 	else {

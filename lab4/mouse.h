@@ -19,6 +19,17 @@ typedef struct {
 } event_t;
 
  /**
+  * @brief Function to get the signed value of a unsigned value
+  *
+  * @param Unsigned value tha will be processed
+  *
+  * Sign of the unsigned value
+  *
+  * @return Return the signed value
+  */
+ int int_value (unsigned char delta_var, int sign);
+
+ /**
   * @brief Writes a command in the mouse input buffer
   *
   * @param Command that is written in the input buffer
@@ -60,11 +71,13 @@ typedef struct {
   *
   * Fetches Mouse output and prints packets in a human friendly way
   *
-  * @param pointer to previous iteration's status
+  * @param pointer to packet that shall be processed
+  *
+  * pointer to counter that controls the packet count of bytes
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int mouse_handler();
+ int mouse_handler(unsigned char * packet, unsigned short * counter);
 
  /**
   * @brief Prints the packet in a human friendly way

@@ -225,8 +225,6 @@ void event_update (event_t * evt, const unsigned char *packet, short length)
 		evt->type = VERTLINE;
 	else if ( packet[0] & BYTE0_RB )
 		evt->type = RDOWN;
-
-	printf("X_Delta: %d. Y_Delta: %d.\n", evt->x_delta, evt->y_delta);
 }
 
 void check_ver_line(event_t * evt, const unsigned char *packet, short length) {

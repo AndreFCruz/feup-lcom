@@ -11,7 +11,7 @@ void *test_init(unsigned short mode, unsigned short delay) {
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
-	vg_init();
+	vg_init(MODE_5);
 
 	while (kbd_esc_pressed() != OK)
 	{

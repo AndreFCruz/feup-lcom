@@ -168,7 +168,7 @@ int kbd_esc_pressed(void)
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
 						data = keyboard_read();
 
-						if ( data == 0x81 ) {	// ESC BreakCode
+						if ( data == ESQ_BREAK_CODE ) {	// ESC BreakCode
 							*status = 2;	// Set status to 2 (ESC BreakCode Detected)
 							return OK;
 						}

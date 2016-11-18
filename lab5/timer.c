@@ -9,6 +9,52 @@ static const char kernel_call_failure[] = "kernel call returned non-zero value";
 static unsigned long timerCount = 0;
 static int hook_id = TIMER0_IRQSET;
 
+// TODO Reduce Code Size!!
+int timer_delay(unsigned int time) {
+	int ipc_status;
+	message msg;
+
+	unsigned long elapsed = 0;	// interrupts handled since device hooked
+
+	int irq_set;
+	if ( (irq_set = BIT(timer_subscribe_int())) < 0 ) { // hook_id returned for TIMER 0
+		fprintf(stderr, "Error: %s\n", "device subscribe unsuccessful");
+		return 1;
+	}
+	unsigned int freq = 60;		// Set timer frequence to 60 TODO: fetch frequence and wait accordingly?
+	timer_set_square(0, freq);
+	int r;
+
+	while( elapsed < (time * freq) ) {
+		/* Get a request message. */
+		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
+			fprintf(stderr, "driver_receive failed with: %d\n", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /* received notification */
+			switch (_ENDPOINT_P(msg.m_source)) {
+				case HARDWARE: /* hardware interrupt notification */
+					if (msg.NOTIFY_ARG & irq_set) { /* subscribed interrupt */
+						++elapsed;
+					}
+					break;
+				default:
+					break; /* no other notifications expected: do nothing */
+			}
+		} else { /* received a standard message, not a notification */
+			/* no standard messages expected: do nothing */
+			fprintf(stderr, "Error: %s\n", "received unexpected standard message");
+		}
+	}
+
+	if ( timer_unsubscribe_int() < 0 ) {
+		fprintf(stderr, "Error: %s\n", "device UNsubscribe unsuccessful");
+		return 1;
+	}
+
+	return OK;
+}
+
 int timer_set_square(unsigned long timer, unsigned long freq) {
 	const unsigned long bit_mask = 0xFF;	//Selects the 8 lsb bits
 

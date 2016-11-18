@@ -1,8 +1,11 @@
 #include "video_gr.h"
+#include "timer.h"
 
 
 void *test_init(unsigned short mode, unsigned short delay) {
-	/*CENAS*/
+	vg_init(mode);
+	timer_delay(delay);
+	vg_exit();
 }
 
 

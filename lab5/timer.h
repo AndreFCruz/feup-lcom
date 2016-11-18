@@ -8,6 +8,15 @@
  */
 
 /**
+ * @brief Sleeps for t seconds
+ *
+ * Uses Timer0
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int timer_delay(unsigned int t);
+
+/**
  * @brief Configures a timer to generate a square wave
  * 
  * Does not change the LSB (BCD/binary) of the timer's control word.

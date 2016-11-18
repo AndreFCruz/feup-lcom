@@ -7,9 +7,6 @@
  * Functions for outputing data to screen in graphics mode
  */
 
-#define NULL (void *) 0
-
-
 /**
  * @brief Initializes the video module in graphics mode
  * 

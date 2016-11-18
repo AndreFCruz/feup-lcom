@@ -1,27 +1,32 @@
 #include "video_gr.h"
 #include "timer.h"
-
+#include "defs.h"
 
 void *test_init(unsigned short mode, unsigned short delay) {
+	if (mode > 0x10C || mode < 0x100) {
+		printf("test_init-> invalid mode, was %X.\n", mode);
+		return NULL;
+	}
 	vg_init(mode);
 	timer_delay(delay);
 	vg_exit();
+
+	return NULL;
 }
 
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
 	vg_init(MODE_5);
-
-	while (kbd_esc_pressed() != OK)
-	{
-
-	}
+//
+//	while (kbd_esc_pressed() != OK)
+//	{
+//		/**/
+//	}
 
 	vg_exit();
 }
 	
-}
 
 int test_line(unsigned short xi, unsigned short yi, 
 		           unsigned short xf, unsigned short yf, unsigned long color) {

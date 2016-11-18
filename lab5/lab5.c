@@ -49,9 +49,9 @@ static int proc_args(int argc, char **argv)
 		if (time > SHRT_MAX)
 			return 1;
 
-		printf("video card::test_packet(%lu, %lu)\n", mode, time);
-		if ( test_init(mode, time) == (void*) 0 )
-			printf("TestInit Failed.\n");
+		printf("video card::test_init(%X, %lu)\n", mode, time);
+		if ( test_init(mode, time) == NULL )
+			printf("TestInit Returned NULL.\n");
 	}
 	else if (strncmp(argv[1], "square", strlen("square")) == 0) {
 		if (argc != 6) {

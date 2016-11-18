@@ -1,7 +1,8 @@
+#include "video_gr.h"
+
+
 void *test_init(unsigned short mode, unsigned short delay) {
-	
-	/* To be completed */
-	
+	/*CENAS*/
 }
 
 

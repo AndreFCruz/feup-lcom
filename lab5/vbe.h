@@ -90,6 +90,15 @@ typedef struct {
  */
 int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p);
 
+/**
+ * @brief Asserts whether the VBE byte response indicates an error, and prints accordingly
+ *
+ * @param Byte returned in the AH
+ *
+ * @return 0 on success, non-zero otherwise
+ */
+int vbe_assert_error(unsigned char e);
+
  /** @} end of vbe */
 
 #endif /* __VBE_H */

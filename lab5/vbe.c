@@ -10,6 +10,23 @@
 #define PB2BASE(x) (((x) >> 4) & 0x0F000)
 #define PB2OFF(x) ((x) & 0x0FFFF)
 
+int vbe_assert_error(unsigned char e) {
+	switch (e) {
+	case 0x01:
+		printf("Function call failed\n");
+		break;
+	case 0x02:
+		printf("Function is not supported in current HW configuration\n");
+		break;
+	case 0x03:
+		printf("Function is invalid in current video mode\n");
+		break;
+	default:
+		printf("Success\n");
+		break;
+	}
+}
+
 int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
   
   /* To be completed */

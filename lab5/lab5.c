@@ -50,7 +50,8 @@ static int proc_args(int argc, char **argv)
 			return 1;
 
 		printf("video card::test_packet(%lu, %lu)\n", mode, time);
-		return test_packet(mode, time);
+		if ( test_init(mode, time) == (void*) 0 )
+			printf("TestInit Failed.\n");
 	}
 	else if (strncmp(argv[1], "square", strlen("square")) == 0) {
 		if (argc != 6) {
@@ -74,7 +75,7 @@ static int proc_args(int argc, char **argv)
 			return 1;
 
 		printf("video card::test_async(%lu, %lu, %lu, %lu)\n", xbegin, ybegin, size, color);
-		return test_async(xbegin, ybegin, size, color);
+		return test_square(xbegin, ybegin, size, color);
 	}
 	else if (strncmp(argv[1], "line", strlen("line")) == 0) {
 		if (argc != 7) {
@@ -102,7 +103,7 @@ static int proc_args(int argc, char **argv)
 			return 1;
 
 		printf("video card::test_config(%lu, %lu, %lu, %lu, %lu)\n", xbegin, ybegin, xend, yend, color);
-		return test_config(xbegin, ybegin, xend, yend, color);
+		return test_line(xbegin, ybegin, xend, yend, color);
 	}
 	else if (strncmp(argv[1], "xpm", strlen("xpm")) == 0) {
 		if (argc != 5) {
@@ -118,9 +119,8 @@ static int proc_args(int argc, char **argv)
 			return 1;
 
 		//TODO:Falta aqui o controlo do pointer, perguntar amanha ao prof
-
-		printf("video card::test_xpm(%lu, %lu)\n", xbegin, ybegin ,...);
-		return test_gesture(xbegin, ybegin, ...);
+		printf("video card::test_xpm(%lu, %lu)\n", xbegin, ybegin ,"char*"); //PLACEHOLDER CHAR*
+//		return test_xpm(xbegin, ybegin, ...); // TODO CRAPPY PROGRAMMING
 	}
 	else if (strncmp(argv[1], "move", strlen("move")) == 0) {
 		if (argc != 8) {
@@ -149,8 +149,8 @@ static int proc_args(int argc, char **argv)
 		if (time > SHRT_MAX)
 			return 1;
 
-		printf("video card::test_move(%d)\n", xbegin, ybegin, ..., hor, delta, time);
-		return test_move(xbegin, ybegin, ..., hor, delta, time);
+		printf("video card::test_move(%d)\n", xbegin, ybegin, "char* PlaceHolder", hor, delta, time); //PLACEHOLDER CHAR*
+//		return test_move(xbegin, ybegin, ..., hor, delta, time);	// TODO
 	}
 	else if (strncmp(argv[1], "controller", strlen("controller")) == 0) {
 		if (argc != 2) {

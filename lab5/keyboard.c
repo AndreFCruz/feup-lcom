@@ -142,81 +142,49 @@ int keyboard_write_command(char command, unsigned char arg)
     return 1;
 }
 
-int keyboard_toggle_led (int id,unsigned char *led_status)
+int kbd_esc_pressed(void)
 {
-	if (id != 0 && id != 1 && id != 2) {
-		printf("kbd_toggle_led argument must be 0, 1 or 2. Was %d.\n", id);
+	int ipc_status;
+	message msg;
+
+	int keyboard_irq_set;
+	if ( (keyboard_irq_set = BIT(kbd_subscribe_int())) < 0 ) { // hook_id returned for keyboard
+		printf("kbd_esc_pressed() -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
 
-	if ( (*led_status & BIT(id)) == 0 ) //Activate the LED
-		*led_status = (*led_status | BIT(id));
-	else								//Deactivate the LED
-		*led_status = *led_status & ~BIT(id);
-//		*led_status = (*led_status & (~(*led_status & BIT(id))));
+	int status = 0;	// keyboard status flag
 
-	if ( keyboard_write_command (LED_TOGGLE_CMD, *led_status) != OK )
-		return 1;	//Print Error done in keyboard_write_command()
-	return OK;
-}
+	int r;
+	while( status != 2 ) { // While ESC BreakCode not detected
+		/* Get a request message. */
+		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
+			printf("driver_receive failed with: %d\n", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /* received notification */
+			switch (_ENDPOINT_P(msg.m_source)) {
+				case HARDWARE: /* hardware interrupt notification */
+					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
+						data = keyboard_read();
 
-int print_scan_code(unsigned char data, int * status)
-{
-	if ( data == 0xE0 ) {
-		*status = 1;	// Set status to 1 (awaiting next byte)
-		return OK;
+						if ( data == 0x81 ) {	// ESC BreakCode
+							*status = 2;	// Set status to 2 (ESC BreakCode Detected)
+							return OK;
+						}
+					}
+					break;
+			}
+		} else { /* received a standard message, not a notification */
+			/* no standard messages expected: do nothing */
+			printf("Error: received unexpected standard message.\n");
+		}
 	}
 
-	// MakeCode or BreakCode ?
-	bool isBreak = data & BIT(7);
-	if ( isBreak )
-		printf("Breakcode: ");
-	else
-		printf("Makecode:  ");
-
-	if ( data == 0x81 ) {	// ESC BreakCode
-		printf("%02x - ESC BreakCode\n", data);
-		*status = 2;	// Set status to 2 (ESC BreakCode Detected)
-		return OK;
-	} else if ( *status == 1) {
-		printf("0xE0 %02X\n", data);
-		*status = 0;	// Set status to 0
-		return OK;
-	} else if ( *status == 0 ) {
-		printf("%02X\n", data);
-		*status = 0;	// Set status to 0
-		return OK;
-	} else {
-		printf("print_scan_code::status is not in range [0, 2]\n");
-		return 1;
-	}
-}
-
-int keyboard_handler(int * status, unsigned short ass)	// To be called on KBC Interrupt
-{
-	unsigned char data;
-
-	switch (ass) {
-	case 0:
-		data = keyboard_read();
-		break;
-	case 1:
-		sys_enable_iop(SELF);
-		data = keyboard_read_asm();
-		break;
-	default:
-		printf("keyboard_handler() -> \"ass\" argument must be 0 or 1.\n");
+	if ( kbd_unsubscribe_int() < 0 ) {
+		printf("kbd_esc_pressed() -> FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
 
-	if ( data == -1 ) {
-		printf("keyboard_handler() -> FAILED keyboard_read()");
-		return 1;
-	}
-	if ( print_scan_code(data, status) != OK ) {
-		printf("keyboard_handler() -> FAILED print_scan_code()");
-		return 1;
-	}
-
-	return OK;
+	return 0;
 }

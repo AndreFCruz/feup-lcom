@@ -9,13 +9,6 @@
  * Functions for using the i8042 KBC/KBD
  */
 
- /**
-  * @brief (Extern) keyboard read function in assembly
-  *
-  * @return Returns data (positive) on success, -1 on failure
-  */
-extern int _keyboard_read_asm(void);
-
 
  /**
   * @brief Subscribes and enables Keyboard interrupts
@@ -58,24 +51,11 @@ extern int _keyboard_read_asm(void);
  int keyboard_write_command(char command, unsigned char arg);
 
  /**
-  * @brief Toggles the led associated to the received bit
+  * @brief	Function that finishes when ESC key is pressed
   *
-  * @param id that contains information about which bit will be toggled
-  *
-  * @return Return 0 upon success and non-zero otherwise
+  * @return	Return 0 upon success and non-zero otherwise
   */
- int keyboard_toggle_led (int id,unsigned char *led_status);
-
- /**
-  * @brief Keyboard Interrupt Handler
-  *
-  * Fetches keyboard output and prints codes in a human friendly way
-  *
-  * @param pointer to previous iteration's status
-  *
-  * @return Return 0 upon success and non-zero otherwise
-  */
- int keyboard_handler(int * status, unsigned short ass);
+ int kbd_esc_pressed(void);
 
 
 #endif

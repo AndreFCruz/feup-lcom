@@ -10,6 +10,15 @@
 #define PB2BASE(x) (((x) >> 4) & 0x0F000)
 #define PB2OFF(x) ((x) & 0x0FFFF)
 
+
+// Codigo baseado no pdf VESA
+void paintPixel(int x,int y,int color)
+{
+    long addr = (long)y * bytesperline + x;
+    setBank((int)(addr >> 16));
+    *(screenPtr + (addr & 0xFFFF)) = (char)color;
+}
+
 int vbe_assert_error(unsigned char e) {
 	switch (e) {
 	case 0x01:

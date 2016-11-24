@@ -43,20 +43,22 @@ int test_line(unsigned short xi, unsigned short yi,
 
 int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	
-	/* To be completed */
+	int width, height;
+
+	// Iterar pelo xpm, usar read_xpm, paintPixel com respetiva cor
 	
 }	
 
 int test_move(unsigned short xi, unsigned short yi, char *xpm[], 
 				unsigned short hor, short delta, unsigned short time) {
 	
-	/* To be completed */
+	// Desenhar xpm, esperar 1/60 segundos, desenhar novamente na posição updated
 	
 }					
 
 int test_controller() {
 	
-	/* To be completed */
+	// Funcao GET_CONTROLLER_INFO
 	
 }					
 	

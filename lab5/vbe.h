@@ -9,6 +9,55 @@
  * Functions related to the VBE standard
  */
 
+/** @name VBE Functions */
+/**@{
+ *
+ * VBE Functions from Chapter 4
+ */
+
+// VBE functions are called using the INT 10h interrupt vector, passing arguments in the 80X86 registers.
+#define VBE_INTERRUPT			0x10
+
+// All VBE functions are called with the AH register set to 4Fh to distinguish them from the standard VGA
+#define VBE_CALL				0x4F
+
+// 4.3 Function 00h - Return VBE Controller Information
+#define GET_VBE_CONTROLLER_INFO 0x00
+
+// 4.4 Function 01h - Return VBE Mode Information
+#define GET_VBE_MODE_INFO		0x01
+
+// 4.5 Function 02h - Set VBE Mode
+#define VBE_SET_MODE			0x02
+
+// 4.6 Function 03h - Return Current VBE Mode
+#define GET_CURRENT_VBE_MODE	0x03
+
+// 4.7 Function 04h - Save/Restore State
+#define SAVE_RESTORE_STATE		0x04
+
+// 4.8 Function 05h - Display Window Control
+#define DISPLAY_WINDOW_CONTROL	0x05
+
+// 4.9 Function 06h - Set/Get Logical Scan Line Length
+#define SET_GET_SCAN_LENGTH		0x06
+
+// 4.10 Function 07h - Set/Get Display Start
+#define SET_GET_DISPLAY_START	0x07
+
+// 4.11 Function 08h - Set/Get DAC Palette Format
+#define SET_GET_PALETTE_FORMAT		0x08
+
+// 4.12 Function 09h - Set/Get Palette Data
+#define SET_GET_PALETTE_DATA		0x09
+
+// 4.13 Function 0Ah - Return VBE Protected Mode Interface
+#define GET_PTR_PROTECTED
+
+/** @} end of VBE preprocessor directives */
+
+
+
 /** @name VBE Mode Info Block */
 /**@{
  *
@@ -75,6 +124,7 @@ typedef struct {
 } __attribute__((packed)) vbe_mode_info_t;
 
 /** @} end of vbe_mode_info_t*/
+
 
 /**
  * @brief Returns information on the input VBE mode, including screen dimensions, color depth and VRAM physical address

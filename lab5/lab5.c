@@ -114,7 +114,7 @@ static int proc_args(int argc, char **argv)
 		if ( (ybegin = parse_ulong(argv[3], 10)) > USHRT_MAX)
 			return 1;
 
-		char * image[];
+		char ** image;
 		// Comparar argc[4] com o nome das varias imagens
 		if ( strncmp(argv[4], "pic1", strlen("pic1")) == 0 ) {
 			image = pic1;
@@ -151,7 +151,7 @@ static int proc_args(int argc, char **argv)
 		if ( (time = parse_ulong(argv[7], 10)) > USHRT_MAX)
 			return 1;
 
-		char * image[];
+		char ** image;
 		// Comparar argc[4] com o nome das varias imagens
 		if ( strncmp(argv[4], "pic1", strlen("pic1")) == 0 ) {
 			image = pic1;

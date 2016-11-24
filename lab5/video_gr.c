@@ -29,8 +29,19 @@ static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 
+
+// Codigo baseado no pdf VESA
+void paintPixel(int x,int y,int color)
+{
+    long addr = (long)y * bytesperline + x;
+    setBank((int)(addr >> 16));
+    *(screenPtr + (addr & 0xFFFF)) = (char)color;
+}
+
+
+// TODO CHECK
 void *vg_init(unsigned short mode) {
-	// Snippet provided in the PDF
+	// Snippet based on the PDF
 	struct reg86u r;
 	r.u.w.ax = 0x4F02; // VBE call, function 02 -- set VBE mode
 	r.u.w.bx = 1<<14 | mode; // set bit 14: linear framebuffer
@@ -39,7 +50,37 @@ void *vg_init(unsigned short mode) {
 		printf("set_vbe_mode: sys_int86() failed \n");
 		return NULL;
 	}
-	// TODO Return valid pointer?
+	if (sys_int86(&r) != OK) {
+		printf("vg_init()::bios call didn't return 0\n");
+		return NULL;
+	}
+	if (vbe_get_mode_info(mode, vmi_p) != OK) {
+		printf("vg_init():get_mode_info failed, couldn't get video mode information.\n");
+		return NULL;
+	}
+
+	h_res = vmi_p->XResolution;
+	v_res = vmi_p->YResolution;
+	bits_per_pixel = vmi_p->BitsPerPixel;
+	vram_size = h_res * v_res * (bits_per_pixel >> 3);
+
+	// Map VRAM
+	mr.mr_base = vmi_p->PhysBasePtr;
+	mr.mr_limit = mr.mr_base + vram_size;
+
+	if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr) != OK) {
+		printf("vg_init()::sys_privctl didn't return 0.\n");
+		return NULL;
+	}
+
+	video_mem = vm_map_phys(SELF, (void*) mr.mr_base, vram_size);
+
+	if (video_mem == MAP_FAILED) {
+		printf("vg_init()::vm_map_phys failed, coudln't allocate virtual memory.\n");
+		return NULL;
+	}
+
+	return video_mem;
 }
 
 int vg_exit() {

@@ -1,6 +1,7 @@
 #include "video_gr.h"
 #include "timer.h"
 #include "defs.h"
+#include "keyboard.h"
 
 void *test_init(unsigned short mode, unsigned short delay) {
 	if (mode > 0x10C || mode < 0x100) {

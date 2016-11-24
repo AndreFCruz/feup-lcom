@@ -164,9 +164,8 @@ int wait_esc_release(void)
 			switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
-						data = keyboard_read();
 
-						if ( data == ESQ_BREAK_CODE ) {	// ESC BreakCode
+						if ( keyboard_read() == ESQ_BREAK_CODE ) {
 							return OK;
 						}
 					}

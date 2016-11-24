@@ -31,14 +31,30 @@ static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned vram_size;
 static unsigned vram_base;
 
+
+static unsigned bytesperline = 1024;
+
 // Codigo baseado no pdf VESA
 void paintPixel(int x,int y,int color)
 {
     long addr = (long)y * bytesperline + x;
     setBank((int)(addr >> 16));
-    *(screenPtr + (addr & 0xFFFF)) = (char)color;
+    *(video_mem + (addr & 0xFFFF)) = (char)color;
 }
 
+
+// baseado no pdf VESA
+//void paintPixelP(int x, int y, int color)
+//{
+//	char dummy_read;
+//	long addr = (long)y * bytesperline + (x/8);
+//	setBank((int)(addr >> 16));
+//
+//	outp(0x3CE,8);
+//	outp(0x3CF,0x80 >> (x & 7));
+//	dummy_read = *(screenPtr + (addr & 0xFFFF));
+//	*(screenPtr + (addr & 0xFFFF)) = (char)color;
+//}
 
 // TODO CHECK
 void *vg_init(unsigned short mode) {

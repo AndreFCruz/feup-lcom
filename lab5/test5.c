@@ -58,8 +58,8 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 }					
 
 int test_controller() {
+	//Getting info from the MODEINFOBLOCK provided by the application (VESA data)
 	
-	// Funcao GET_CONTROLLER_INFO
 	
 }					
 	

@@ -47,11 +47,11 @@ int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
 	phys_bytes buf = mem.phys;
 
 	r.u.b.ah = VBE_CALL;
-	r.u.b.al = VBE_GET_MODE_INFO;
+	r.u.b.al = GET_VBE_MODE_INFO;
 	r.u.w.es = PB2BASE(buf);
 	r.u.w.di = PB2OFF(buf);
 	r.u.w.cx = mode;
-	r.u.b.intno = VIDEO_INTERRUPT;
+	r.u.b.intno = VBE_INTERRUPT;
 
 	if (sys_int86(&r) != OK) {
 		printf("vbe_get_mode_info() -> sys call returned non-zero\n");

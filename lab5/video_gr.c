@@ -35,12 +35,12 @@ static unsigned vram_base;
 static unsigned bytesperline = 1024;
 
 // Codigo baseado no pdf VESA
-void paintPixel(int x,int y,int color)
-{
-    long addr = (long)y * bytesperline + x;
-    setBank((int)(addr >> 16));
-    *(video_mem + (addr & 0xFFFF)) = (char)color;
-}
+//void paintPixel(int x,int y,int color)
+//{
+//    long addr = (long)y * bytesperline + x;
+//    setBank((int)(addr >> 16));
+//    *(video_mem + (addr & 0xFFFF)) = (char)color;
+//}
 
 
 // baseado no pdf VESA
@@ -63,9 +63,13 @@ void *vg_init(unsigned short mode) {
 
 	vbe_mode_info_t* vmi_p = malloc(sizeof(vbe_mode_info_t));
 
-	r.u.w.ax = 0x4F02; // VBE call, function 02 -- set VBE mode
+	//TODO: Eliminate all the magic numbers
+	r.u.b.intno = VBE_INTERRUPT;
+	r.u.b.ah = VBE_CALL;
+	r.u.b.al = VBE_SET_MODE;
 	r.u.w.bx = 1<<14 | mode; // set bit 14: linear framebuffer
-	r.u.b.intno = 0x10;
+
+
 	if( sys_int86(&r) != OK ) {
 		printf("set_vbe_mode: sys_int86() failed \n");
 		return NULL;
@@ -76,6 +80,7 @@ void *vg_init(unsigned short mode) {
 
 	mr.mr_base = (phys_bytes) vram_base;
 	mr.mr_limit = mr.mr_base + vram_size;
+
 	if( OK != (n = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)))
 		panic("sys_privctl (ADD_MEM) failed: %d\n", n);
 

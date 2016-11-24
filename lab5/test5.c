@@ -4,12 +4,13 @@
 #include "keyboard.h"
 
 void *test_init(unsigned short mode, unsigned short delay) {
-	if (mode > 0x10C || mode < 0x100) {
+	if (mode > 0x10C || mode < 0x100) {		//TODO: Retirar magic numbers?
 		printf("test_init-> invalid mode, was %X.\n", mode);
 		return NULL;
 	}
+
 	void * tmp = vg_init(mode);
-	timer_delay(delay);
+	timer_delay(delay);						//TODO: Mudar para o Timer 0
 	vg_exit();
 
 	return tmp;
@@ -24,7 +25,7 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 	unsigned i, j;
 	for (i = x; i < size + x; i++) {
 		for (j = y; j < size + y; j++) {
-			paintPixel(x, y, color);
+			//paintPixel(x, y, color);
 		}
 	}
 

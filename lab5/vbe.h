@@ -125,6 +125,22 @@ typedef struct {
 
 /** @} end of vbe_mode_info_t*/
 
+//Based on VESA pdf, chapter 4.3
+typedef struct {
+    char    VESASignature[4];       /* 'VESA' 4 byte signature */
+    short   VESAVersion;            /* VBE version number */
+    phys_bytes OEMStringPtr;      /* Pointer to OEM string */
+    long    Capabilities;           /* Capabilities of video card */
+    phys_bytes *VideoModePtr;     /* Pointer to supported modes */
+    short   TotalMemory;            /* Number of 64kb memory blocks */
+    short	OemSoftwareRev;		/* VBE implementation Software revision */
+	char	*OemVendorNamePtr;	/* Pointer to Vendor Name String */
+	char	*OemProductNamePtr;	/* Pointer to Product Name String */
+	char	*OemProductRevPtr;	/* Pointer to Product Revision sTring */
+	char	reserved[222];			/* Reserved for VBE implementation scratch area */
+    char    OemData[256];			/* Data Area for OEM Strings  */
+} __attribute__((packed)) vbe_info_block;
+
 
 /**
  * @brief Returns information on the input VBE mode, including screen dimensions, color depth and VRAM physical address

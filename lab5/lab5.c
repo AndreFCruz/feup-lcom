@@ -73,7 +73,7 @@ static int proc_args(int argc, char **argv)
 		if ( (size = parse_ulong(argv[4], 10)) > USHRT_MAX )
 			return 1;
 
-		if ( (color = parse_ulong(argv[5], 10)) == ULONG_MAX )
+		if ( (color = parse_ulong(argv[5], 16)) == ULONG_MAX )
 			return 1;
 
 		printf("lab5::test_async(%lu, %lu, %lu, %lu)\n", xbegin, ybegin, size, color);

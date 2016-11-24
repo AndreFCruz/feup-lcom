@@ -142,7 +142,7 @@ int keyboard_write_command(char command, unsigned char arg)
     return 1;
 }
 
-int kbd_esc_pressed(void)
+int wait_esc_release(void)
 {
 	int ipc_status;
 	message msg;
@@ -153,10 +153,8 @@ int kbd_esc_pressed(void)
 		return 1;
 	}
 
-	int status = 0;	// keyboard status flag
-
 	int r;
-	while( status != 2 ) { // While ESC BreakCode not detected
+	while( 1 ) { // While ESC BreakCode not detected
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -169,7 +167,6 @@ int kbd_esc_pressed(void)
 						data = keyboard_read();
 
 						if ( data == ESQ_BREAK_CODE ) {	// ESC BreakCode
-							*status = 2;	// Set status to 2 (ESC BreakCode Detected)
 							return OK;
 						}
 					}

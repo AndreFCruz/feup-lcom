@@ -55,7 +55,7 @@
   *
   * @return	Return 0 upon success and non-zero otherwise
   */
- int kbd_esc_pressed(void);
+ int wait_esc_release(void);
 
 
 #endif

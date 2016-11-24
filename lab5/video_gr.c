@@ -28,23 +28,22 @@ static char *video_mem;		/* Process address to which VRAM is mapped */
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
-static unsigned vram_bits;	/* VRAM Available in bits */
-
+static unsigned vram_size;
+static unsigned vram_base;
 
 // Codigo baseado no pdf VESA
-//void paintPixel(int x,int y,int color)
-//{
-//    long addr = (long)y * bytesperline + x;
-//    setBank((int)(addr >> 16));
-//    *(screenPtr + (addr & 0xFFFF)) = (char)color;
-//}
+void paintPixel(int x,int y,int color)
+{
+    long addr = (long)y * bytesperline + x;
+    setBank((int)(addr >> 16));
+    *(screenPtr + (addr & 0xFFFF)) = (char)color;
+}
 
 
 // TODO CHECK
 void *vg_init(unsigned short mode) {
 	// Snippet based on the PDF
 	struct reg86u r;
-	struct mem_range mr;
 
 	vbe_mode_info_t* vmi_p = malloc(sizeof(vbe_mode_info_t));
 
@@ -55,37 +54,53 @@ void *vg_init(unsigned short mode) {
 		printf("set_vbe_mode: sys_int86() failed \n");
 		return NULL;
 	}
-	if (sys_int86(&r) != OK) {
-		printf("vg_init()::bios call didn't return 0\n");
-		return NULL;
-	}
-	if (vbe_get_mode_info(mode, vmi_p) != OK) {
-		printf("vg_init():get_mode_info failed, couldn't get video mode information.\n");
-		return NULL;
-	}
 
-	h_res = vmi_p->XResolution;
-	v_res = vmi_p->YResolution;
-	bits_per_pixel = vmi_p->BitsPerPixel;
-	vram_bits = h_res * v_res * bits_per_pixel;
+	int n;
+	struct mem_range mr;
 
-	// Map VRAM
-	mr.mr_base = vmi_p->PhysBasePtr;
-	mr.mr_limit = mr.mr_base + (vram_bits * 8);	// Bits to Bytes
+	mr.mr_base = (phys_bytes) vram_base;
+	mr.mr_limit = mr.mr_base + vram_size;
+	if( OK != (n = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)))
+		panic("sys_privctl (ADD_MEM) failed: %d\n", n);
 
-	if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr) != OK) {
-		printf("vg_init()::sys_privctl didn't return 0.\n");
-		return NULL;
-	}
-
-	video_mem = vm_map_phys(SELF, (void*) mr.mr_base, (vram_bits * 8));
-
-	if (video_mem == MAP_FAILED) {
-		printf("vg_init()::vm_map_phys failed, coudln't allocate virtual memory.\n");
-		return NULL;
-	}
+	/* Map memory */
+	video_mem = vm_map_phys(SELF, (void *)mr.mr_base, vram_size);
+	if(video_mem == MAP_FAILED)
+		panic("couldn’t map video memory");
 
 	return video_mem;
+
+//	if (sys_int86(&r) != OK) {
+//		printf("vg_init()::bios call didn't return 0\n");
+//		return NULL;
+//	}
+//	if (vbe_get_mode_info(mode, vmi_p) != OK) {
+//		printf("vg_init():get_mode_info failed, couldn't get video mode information.\n");
+//		return NULL;
+//	}
+//
+//	h_res = vmi_p->XResolution;
+//	v_res = vmi_p->YResolution;
+//	bits_per_pixel = vmi_p->BitsPerPixel;
+//	vram_bits = h_res * v_res * bits_per_pixel;
+//
+//	// Map VRAM
+//	mr.mr_base = vmi_p->PhysBasePtr;
+//	mr.mr_limit = mr.mr_base + (vram_bits * 8);	// Bits to Bytes
+//
+//	if (sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr) != OK) {
+//		printf("vg_init()::sys_privctl didn't return 0.\n");
+//		return NULL;
+//	}
+//
+//	video_mem = vm_map_phys(SELF, (void*) mr.mr_base, (vram_bits * 8));
+//
+//	if (video_mem == MAP_FAILED) {
+//		printf("vg_init()::vm_map_phys failed, coudln't allocate virtual memory.\n");
+//		return NULL;
+//	}
+//
+//	return video_mem;
 }
 
 int vg_exit() {

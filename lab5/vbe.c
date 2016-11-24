@@ -34,34 +34,34 @@ int vbe_assert_error(unsigned char e) {
 
 
 // TODO CHECK
-int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
-	struct reg86u r;
-	mmap_t mem;
-
-	if (lm_init() == NULL) {
-		printf("vbe_get_mode_info() -> initialization failed.\n");
-		return 1;
-	}
-
-	lm_alloc(sizeof(vbe_mode_info_t), &mem);
-	phys_bytes buf = mem.phys;
-
-	r.u.b.ah = VBE_CALL;
-	r.u.b.al = GET_VBE_MODE_INFO;
-	r.u.w.es = PB2BASE(buf);
-	r.u.w.di = PB2OFF(buf);
-	r.u.w.cx = mode;
-	r.u.b.intno = VBE_INTERRUPT;
-
-	if (sys_int86(&r) != OK) {
-		printf("vbe_get_mode_info() -> sys call returned non-zero\n");
-		return 1;
-	}
-
-    *vmi_p = *(vbe_mode_info_t*) mem.virtual;
-	lm_free(&mem);
-	return OK;
-
-}
+//int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
+//	struct reg86u r;
+//	mmap_t mem;
+//
+//	if (lm_init() == NULL) {
+//		printf("vbe_get_mode_info() -> initialization failed.\n");
+//		return 1;
+//	}
+//
+//	lm_alloc(sizeof(vbe_mode_info_t), &mem);
+//	phys_bytes buf = mem.phys;
+//
+//	r.u.b.ah = VBE_CALL;
+//	r.u.b.al = GET_VBE_MODE_INFO;
+//	r.u.w.es = PB2BASE(buf);
+//	r.u.w.di = PB2OFF(buf);
+//	r.u.w.cx = mode;
+//	r.u.b.intno = VBE_INTERRUPT;
+//
+//	if (sys_int86(&r) != OK) {
+//		printf("vbe_get_mode_info() -> sys call returned non-zero\n");
+//		return 1;
+//	}
+//
+//    *vmi_p = *(vbe_mode_info_t*) mem.virtual;
+//	lm_free(&mem);
+//	return OK;
+//
+//}
 
 

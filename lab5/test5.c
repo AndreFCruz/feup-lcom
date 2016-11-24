@@ -7,22 +7,27 @@ void *test_init(unsigned short mode, unsigned short delay) {
 		printf("test_init-> invalid mode, was %X.\n", mode);
 		return NULL;
 	}
-	vg_init(mode);
+	void * tmp = vg_init(mode);
 	timer_delay(delay);
 	vg_exit();
 
-	return NULL;
+	return tmp;
 }
 
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
 	vg_init(MODE_5);
-//
-//	while (kbd_esc_pressed() != OK)
-//	{
-//		/**/
-//	}
+
+	// Draw Square
+	unsigned i, j;
+	for (i = x; i < size + x; i++) {
+		for (j = y; j < size + y; j++) {
+			paintPixel(x, y, color);
+		}
+	}
+
+	wait_esc_release();
 
 	vg_exit();
 }

@@ -64,11 +64,10 @@ void *vg_init(unsigned short mode) {
 	vbe_mode_info_t* vmi_p = malloc(sizeof(vbe_mode_info_t));
 
 	//TODO: Eliminate all the magic numbers
-	r.u.b.intno = VBE_INTERRUPT;
 	r.u.b.ah = VBE_CALL;
 	r.u.b.al = VBE_SET_MODE;
 	r.u.w.bx = 1<<14 | mode; // set bit 14: linear framebuffer
-
+	r.u.b.intno = VBE_INTERRUPT;
 
 	if( sys_int86(&r) != OK ) {
 		printf("set_vbe_mode: sys_int86() failed \n");

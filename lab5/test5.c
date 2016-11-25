@@ -63,7 +63,7 @@ int test_line(unsigned short xi, unsigned short yi,
 	int x_variation = xf-xi;
 	int y_variation = yf-yi;
 
-	//Ned this for functions whose slope is != 1
+	//Need this for functions whose slopes are != 1
 	float x = (float) xi;
 	float y = (float) yi;
 	int n;	//number of steps
@@ -97,9 +97,9 @@ int test_line(unsigned short xi, unsigned short yi,
 	unsigned i;
 	for (i = 0; i <= n; ++i) {
 		paint_pixel(x, y, color, ptr);
-		x += (x_variation / (float) n);	//Since x it is a int, it will round himself
+		x += (x_variation / (float) n);
 		y += (y_variation / (float) n);
-		printf("xi: %ul \n yi: %ul", x, y);
+		printf("xi: %d \n yi: %ul", x, y);
 	}
 
 	wait_esc_release();

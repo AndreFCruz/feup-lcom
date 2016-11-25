@@ -49,25 +49,25 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 	}
 
 	lm_alloc(sizeof(vbe_info_block), &mem_map);
-	if ( & mem = NULL) {	//check this condition
+	if ( & mem_map = NULL) {	//check this condition
 		printf("vbe_get_controller_info: Failed to allocate a memory block.");
 		return1;
 	}
 
-	//Para não alterarmos a original
-	physbytes mem_copy = mem.phys;
+	//can't change him directly, otherwise lm_free doesnt work
+	phys_bytes mem_copy = mem_map.phys;
 
 	r.u.b.ah = VBE_CALL;
 	r.u.b.al = GET_VBE_CONTROLLER_INFO;
 	reg86.u.w.es = PB2BASE(mem_copy);
-	reg86.u.w.di = PB2OFF(mem.copy);
+	reg86.u.w.di = PB2OFF(mem_copy);
 	reg86.u.b.intno = VIDEO_INTERRUPT;
 
 	sys_int86(&reg86);
 	if ( !(OK == vbe_assert_error(reg86.u.b.ah)))
 		return 1;
 
-	*vbe_info_p = *(vbe_info_block*) mem.virtual;	//Saving on the allocated memory pointer
+	*vbe_info_p = *(vbe_info_block*) mem_map.virtual;	//Saving on the allocated memory pointer
 	lm_free(&mem_map);
 
 //	if (lma_p == NULL)

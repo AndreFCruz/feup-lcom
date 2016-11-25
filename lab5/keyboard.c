@@ -149,7 +149,7 @@ int wait_esc_release(void)
 
 	int keyboard_irq_set;
 	if ( (keyboard_irq_set = BIT(kbd_subscribe_int())) < 0 ) { // hook_id returned for keyboard
-		printf("kbd_esc_pressed() -> FAILED kbd_subscribe_int()\n");
+		printf("wait_esc_release() -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
 
@@ -179,7 +179,7 @@ int wait_esc_release(void)
 	}
 
 	if ( kbd_unsubscribe_int() < 0 ) {
-		printf("kbd_esc_pressed() -> FAILED kbd_unsubscribe_int()\n");
+		printf("wait_esc_release() -> FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
 

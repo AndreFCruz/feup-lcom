@@ -111,9 +111,9 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	/* Calculate Update Increments */
 	unsigned short update[2] = {0, 0};	// Update Vector
 	if (hor) {
-		update[0] = delta / (time * 60);
+		update[0] = 1; //delta / (time * 60);
 	} else {
-		update[1] = delta / (time * 60);
+		update[1] = 1; //delta / (time * 60);
 	}
 
 	// Debug TODO

@@ -11,6 +11,8 @@
 #include "math.h"
 //#include "vbe.h"
 
+#define BLACK	0
+
 // TODO argument checks and error messages
 // TODO remove hard coded constants
 
@@ -21,7 +23,7 @@ void *test_init(unsigned short mode, unsigned short delay) {
 	}
 
 	void * tmp = vg_init(mode);
-	timer_delay(delay);						//TODO: Mudar para o Timer 0
+	timer_delay(delay);
 	vg_exit();
 
 	return tmp;
@@ -131,14 +133,12 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	return vg_exit();
 }
 
+// Rounds float to nearest integer
 int round_float(float f) {
-	int n;
-	n = n * 10.0f;
-	n = (n > (floor(n)+0.5f)) ? ceil(n) : floor(n);
-	n = n / 10.0f;
-	return n;
+	return (f > (floor(f) + 0.5)) ? ceil(f) : floor(f);
 }
 
+// To Operate only in mode 0x105 - According to Handout
 int test_move(unsigned short xi, unsigned short yi, char *xpm[], 
 				unsigned short hor, short delta, unsigned short time) {
 	
@@ -171,9 +171,10 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		update[1] = delta / (float) (time * 60);
 	}
 	float cumulative_update[2] = {0, 0};
+	unsigned pos[2] = {xi, yi};	// Image position
 
 	// Debug TODO
-	printf("update vector: %f \n", update[0]);
+	printf("update vector: %d, %d \n", (int)update[0], (int)update[1]);
 
 	//Initiate Graphics Mode
 	char *ptr;
@@ -181,7 +182,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_xpm: Failed vg_init.\n");
 		return 1;
 	}
-
+	printf("Started test_move loop\n");
 	int r;
 	while( ! esc_flag ) { // While ESC BreakCode not detected
 		/* Get a request message. */
@@ -200,12 +201,25 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 						}
 
 						if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
-							//DRaw XPM
 							unsigned i,j;
+
+//							// Refresh Screen - Fill with Black
+//							for (i = 0; i < H_RES_0X105; i++) {
+//								for (j = 0; j < V_RES_0X105; j++) {
+//									paint_pixel(i, j, BLACK, ptr);
+//								}
+//							}
+
+							//Draw XPM
 							for (i = 0; i < width; i++) {
 								for (j = 0; j < height; j++) {
-									paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+									paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
 								}
+							}
+
+							// Check if delta was reached
+							if ( (hor ? cumulative_update[0] : cumulative_update[1]) > delta ) {
+								continue;
 							}
 
 							//Update Cumullative_Update
@@ -213,14 +227,12 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							cumulative_update[1] += update[1];
 
 							//Update Position
-							if (cumulative_update[0] > 1) {
-								int tmp = round_float(cumulative_update[0]);
-								yi += tmp;
-								cumulative_update[0] -= tmp;
-							} else if (cumulative_update[1] > 1) {
-								int tmp = round_float(cumulative_update[1]);
-								yi += tmp;
-								cumulative_update[1] -= tmp;
+							int tmp;
+							if ( (tmp = round_float(cumulative_update[0] + xi - pos[0])) > 1 ) {
+								pos[0] += tmp;
+							}
+							else if ( (tmp = round_float(cumulative_update[1] + yi - pos[1])) > 1 ) {
+								pos[1] += tmp;
 							}
 						}
 

@@ -1,28 +1,18 @@
-#include <minix/syslib.h>
-#include <minix/drivers.h>
-#include <minix/com.h>
-#include <minix/sysutil.h>
-
 #include "video_gr.h"
 #include "timer.h"
 #include "defs.h"
 #include "keyboard.h"
-#include "i8042.h"
-#include "read_xpm.h"
 #include "math.h"
 //#include "vbe.h"
 
-// TODO argument checks and error messages
-// TODO remove hard coded constants
-
 void *test_init(unsigned short mode, unsigned short delay) {
-	if (mode > 0x10C || mode < 0x100) {
+	if (mode > 0x10C || mode < 0x100) {		//TODO: Retirar magic numbers?
 		printf("test_init-> invalid mode, was %X.\n", mode);
 		return NULL;
 	}
 
 	void * tmp = vg_init(mode);
-	timer_delay(delay);
+	timer_delay(delay);						//TODO: Mudar para o Timer 0
 	vg_exit();
 
 	return tmp;
@@ -31,11 +21,7 @@ void *test_init(unsigned short mode, unsigned short delay) {
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
-	char * ptr;
-	if ( (ptr = vg_init(MODE_5)) == NULL) {
-		printf("test_square failed VRAM map in vg_init\n");
-		return 1;
-	}
+	char * ptr = vg_init(MODE_5);
 
 	// Draw Square
 	unsigned i, j;
@@ -46,43 +32,64 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 		}
 	}
 
-	// Wait for Esc BreakCode
+	// TODO Exit Contition -> ESC BreakCode
 	wait_esc_release();
 
-	return vg_exit();
+	vg_exit();
 }
 	
-
+//Based on DDA Algorithm
 int test_line(unsigned short xi, unsigned short yi, 
 		           unsigned short xf, unsigned short yf, unsigned long color) {
-	
-	/* To be completed */
-	
-}
 
-int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+	//Check limis of Res?
+
+	char * ptr = vg_init(MODE_5);
 	
-	int width, height;
+	// x and y variation
+	int x_variation = xf-xi;
+	int y_variation = yf-yi;
+	int n;	//number of steps
 
-	// xpm to pix_map, update width and height
-	char * pix_map = read_xpm(xpm, &width, &height);
-
-	char * ptr;
-	if ( (ptr = vg_init(MODE_5)) == NULL) {
-		return 1;
+	//Getting the number of steps value
+	if (x_variation < 0 && y_variation < 0 ) {
+		if (-x_variation > -y_variation)
+			n = -x_variation;
+		else
+			n = -y_variation;
+	}
+	else if (x_variation < 0) {
+		if (-x_variation > y_variation)
+			n = -x_variation;
+		else
+			n = y_variation;
+	}
+	else if (y_variation < 0) {
+		if (x_variation > -y_variation)
+			n = x_variation;
+		else
+			n = -y_variation;
+	}
+	else {
+		if (x_variation > y_variation)
+			n = x_variation;
+		else
+			n = y_variation;
 	}
 
-	unsigned i, j;
-	for (i = 0; i < width; i++) {
-		for (j = 0; j < height; j++) {
-			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
-		}
+	unsigned i;
+	for (i = 0; i <= n; ++i) {
+		paint_pixel(xi, yi, color, ptr);
+		xi += (x_variation / (float) n);	//Since x it is a int, it will round himself
+		yi += (y_variation / (float) n);
+		printf("xi: %ul \n yi: %ul", xi, yi);
 	}
-	
-	// Wait for Esc BreakCode
+
 	wait_esc_release();
 
-	return vg_exit();
+	vg_exit();
+
+}
 }	
 
 int round_float(float f) {
@@ -109,10 +116,11 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_move() -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
-	int timer_irq_set; unsigned timer_freq = 60;
-	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
-	printf("test_move() -> FAILED timer_subscribe_int()\n");
-	return 1;
+	else {
+		if (x_variation > y_variation)
+			n = x_variation;
+		else
+			n = y_variation;
 	}
 
 	int esc_flag = 0;	// Flag for Esc BreakCode
@@ -129,37 +137,13 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	// Debug TODO
 	printf("update vector: %f, %f\n", update[0], update[1]);
 
-	// Initiate Graphics Mode
-	char * ptr;
-	if ( (ptr = vg_init(MODE_5)) == NULL) {
-		return 1;
-	}
+	vg_exit();
 
-	int r;
-	while( ! esc_flag ) { // While ESC BreakCode not detected
-		/* Get a request message. */
-		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
-			printf("driver_receive failed with: %d\n", r);
-			continue;
-		}
-		if (is_ipc_notify(ipc_status)) { /* received notification */
-			switch (_ENDPOINT_P(msg.m_source)) {
-				case HARDWARE: /* hardware interrupt notification */
-					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-						if ( keyboard_read() == ESQ_BREAK_CODE ) {
-							esc_flag = 1;
-							break;
-						}
-					}
+}
 
-					if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
-						// Draw XPM
-						unsigned i, j;
-						for (i = 0; i < width; i++) {
-							for (j = 0; j < height; j++) {
-								paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
-							}
-						}
+int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+	
+	int width, height;
 
 						// Update Cumullative Update
 						cumulative_update[0] += update[0];
@@ -177,15 +161,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 						}
 					}
 
-					break;
-				default:
-					break; /* no other notifications expected: do nothing */
-			}
-		} else { /* received a standard message, not a notification */
-			/* no standard messages expected: do nothing */
-			printf("Error: received unexpected standard message.\n");
-		}
-	}
+}	
 
 	if ( kbd_unsubscribe_int() < 0 ) {
 		printf("test_move() -> FAILED kbd_unsubscribe_int()\n");

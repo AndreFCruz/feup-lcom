@@ -154,7 +154,8 @@ int wait_esc_release(void)
 	}
 
 	int r;
-	while( 1 ) { // While ESC BreakCode not detected
+	bool esc_flag = 1;
+	while( !esc_flag ) { // While ESC BreakCode not detected
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			printf("driver_receive failed with: %d\n", r);
@@ -166,7 +167,7 @@ int wait_esc_release(void)
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
 
 						if ( keyboard_read() == ESQ_BREAK_CODE ) {
-							return OK;
+							esc_flag = !esc_flag;
 						}
 					}
 					break;

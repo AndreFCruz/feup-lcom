@@ -5,6 +5,7 @@
 #include <sys/types.h>
 
 #include "vbe.h"
+#include "defs.h"
 
 /* Constants for VBE 0x105 mode */
 
@@ -17,8 +18,6 @@
  */
 //#define VRAM_PHYS_ADDR	0xF0000000	// Standard
 #define VRAM_PHYS_ADDR		0xE0000000	// PC Andre
-#define H_RES_0X105			1024
-#define V_RES_0X105			768
 #define BITS_PER_PIXEL		8
 
 /* Private global variables */

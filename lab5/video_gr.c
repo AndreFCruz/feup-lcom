@@ -37,6 +37,7 @@ void paint_pixel(int x, int y, int color, char * ptr) {
 	*(ptr + x + y * H_RES_0X105) = color;
 }
 
+
 // Codigo baseado no pdf VESA
 //void paintPixel(int x,int y,int color)
 //{

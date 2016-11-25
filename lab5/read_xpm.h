@@ -1,7 +1,13 @@
+#ifndef __READ_XPM_H
+#define __READ_XPM_H
+
 /**
  *  @author Joao Cardoso (jcard@fe.up.pt) ????
  *  Added by pfs@fe.up.pt
  */
+
+#define HRES 1024
+#define VRES 768
 
 /** Reads a xpm-like sprite defined in "map" (look at pixmap.h for
  * examples). Returns the address of the allocated memory where the
@@ -18,3 +24,6 @@
  * </pre>
 */
 char *read_xpm(char *map[], int *width, int *height);
+
+
+#endif

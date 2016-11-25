@@ -2,16 +2,20 @@
 #include "timer.h"
 #include "defs.h"
 #include "keyboard.h"
+#include "read_xpm.h"
 //#include "vbe.h"
 
+// TODO argument checks and error messages
+// TODO remove hard coded constants
+
 void *test_init(unsigned short mode, unsigned short delay) {
-	if (mode > 0x10C || mode < 0x100) {		//TODO: Retirar magic numbers?
+	if (mode > 0x10C || mode < 0x100) {
 		printf("test_init-> invalid mode, was %X.\n", mode);
 		return NULL;
 	}
 
 	void * tmp = vg_init(mode);
-	timer_delay(delay);						//TODO: Mudar para o Timer 0
+	timer_delay(delay);
 	vg_exit();
 
 	return tmp;
@@ -20,7 +24,11 @@ void *test_init(unsigned short mode, unsigned short delay) {
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
-	char * ptr = vg_init(MODE_5);
+	char * ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		printf("test_square failed VRAM map in vg_init\n");
+		return 1;
+	}
 
 	// Draw Square
 	unsigned i, j;
@@ -31,10 +39,10 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 		}
 	}
 
-	// TODO Exit Contition -> ESC BreakCode
+	// Wait for Esc BreakCode
 	wait_esc_release();
 
-	vg_exit();
+	return vg_exit();
 }
 	
 
@@ -49,8 +57,26 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	
 	int width, height;
 
-	// Iterar pelo xpm, usar read_xpm, paintPixel com respetiva cor
+	// xpm to pix_map
+	char * pix_map = read_xpm(xpm, &width, &height);
+
+	char * ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		return 1;
+	}
+
+	// Obter width, height
+	unsigned i, j;
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+		}
+	}
 	
+	// Wait for Esc BreakCode
+	wait_esc_release();
+
+	return vg_exit();
 }	
 
 int test_move(unsigned short xi, unsigned short yi, char *xpm[], 

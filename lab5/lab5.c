@@ -168,7 +168,7 @@ static int proc_args(int argc, char **argv)
 			return 1;
 		}
 
-		printf("lab5::test_move(%lu, %lu, %s, %lu, %lu, %lu)\n", xbegin, ybegin, argv[4], hor, delta, time);
+		printf("lab5::test_move(%lu, %lu, %s, %lu, %d, %lu)\n", xbegin, ybegin, argv[4], hor, delta, time);
 		return test_move(xbegin, ybegin, image, hor, delta, time);
 	}
 	else if (strncmp(argv[1], "controller", strlen("controller")) == 0) {

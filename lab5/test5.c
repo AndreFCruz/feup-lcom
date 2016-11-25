@@ -1,9 +1,18 @@
+#include <minix/syslib.h>
+#include <minix/driver.h>
+#include <minix/com.h>
+#include <minix/sysutil.h>
 #include "video_gr.h"
 #include "timer.h"
 #include "defs.h"
 #include "keyboard.h"
+#include "i8042.h"
+#include "read_xpm.h"
 #include "math.h"
 //#include "vbe.h"
+
+// TODO argument checks and error messages
+// TODO remove hard coded constants
 
 void *test_init(unsigned short mode, unsigned short delay) {
 	if (mode > 0x10C || mode < 0x100) {		//TODO: Retirar magic numbers?
@@ -21,7 +30,11 @@ void *test_init(unsigned short mode, unsigned short delay) {
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
-	char * ptr = vg_init(MODE_5);
+	char * ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		printf("test_square failed VRAM map in vg_init\n");
+		return 1;
+	}
 
 	// Draw Square
 	unsigned i, j;
@@ -32,10 +45,10 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 		}
 	}
 
-	// TODO Exit Contition -> ESC BreakCode
+	// Wait for Esc BreakCode
 	wait_esc_release();
 
-	vg_exit();
+	return vg_exit();
 }
 	
 //Based on DDA Algorithm
@@ -87,10 +100,32 @@ int test_line(unsigned short xi, unsigned short yi,
 
 	wait_esc_release();
 
-	vg_exit();
-
+	return vg_exit();
 }
-}	
+
+int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+
+	int width, height;
+	// xpm to pix_map, update width and height
+	char * pix_map = read_xpm(xpm, &width, &height);
+
+	char * ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		printf("test_xpm: Failed vg_init.\n");
+		return 1;
+	}
+
+	unsigned i, j;
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+		}
+	}
+
+	//Wait for Esc BreakCode
+	wait_esc_release();
+	return vg_exit();
+}
 
 int round_float(float f) {
 	int n;
@@ -116,11 +151,10 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_move() -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
-	else {
-		if (x_variation > y_variation)
-			n = x_variation;
-		else
-			n = y_variation;
+	int timer_irq_set; unsigned timer_freq = 60;
+	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
+		printf("test_move() -> FAILED timer_subscribe_int()\n");
+		return 1;
 	}
 
 	int esc_flag = 0;	// Flag for Esc BreakCode
@@ -137,31 +171,65 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	// Debug TODO
 	printf("update vector: %f \n", update[0]);
 
-	vg_exit();
+	//Initiate Graphics Mode
+	char *ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		printf("test_xpm: Failed vg_init.\n");
+		return 1;
+	}
 
-}
-
-int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
-	
-	int width, height;
-
-						// Update Cumullative Update
-						cumulative_update[0] += update[0];
-						cumulative_update[1] += update[1];
-
-						// Update Position
-						if (cumulative_update[0] > 1) {
-							int tmp = round_float(cumulative_update[0]);
-							yi += tmp;
-							cumulative_update[0] -= tmp;
-						} else if (cumulative_update[1] > 1) {
-							int tmp = round_float(cumulative_update[1]);
-							yi += tmp;
-							cumulative_update[1] -= tmp;
+	int r;
+	while( ! esc_flag ) { // While ESC BreakCode not detected
+		/* Get a request message. */
+		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
+			 printf("driver_receive failed with: %d\n", r);
+			 continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /* received notification */
+			switch (_ENDPOINT_P(msg.m_source)) {
+					case HARDWARE: /* hardware interrupt notification */
+						if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+							if ( keyboard_read() == ESQ_BREAK_CODE ) {
+								esc_flag = 1;
+								break;
+							}
 						}
-					}
 
-}	
+						if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
+							//DRaw XPM
+							unsigned i,j;
+							for (i = 0; i < width; i++) {
+								for (j = 0; j < height; j++) {
+									paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+								}
+							}
+
+							//Update Cumullative_Update
+							cumulative_update[0] += update[0];
+							cumulative_update[1] += update[1];
+
+							//Update Position
+							if (cumulative_update[0] > 1) {
+								int tmp = round_float(cumulative_update[0]);
+								yi += tmp;
+								cumulative_update[0] -= tmp;
+							} else if (cumulative_update[1] > 1) {
+								int tmp = round_float(cumulative_update[1]);
+								yi += tmp;
+								cumulative_update[1] -= tmp;
+							}
+						}
+
+						break;
+				default:
+						break; /* no other notifications expected: do nothing */
+			}
+		} else { /* received a standard message, not a notification */
+				/* no standard messages expected: do nothing */
+			printf("Error: received unexpected standard message.\n");
+			return 1;
+		}
+	}
 
 	if ( kbd_unsubscribe_int() < 0 ) {
 		printf("test_move() -> FAILED kbd_unsubscribe_int()\n");

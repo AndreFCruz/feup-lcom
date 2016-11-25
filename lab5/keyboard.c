@@ -154,7 +154,7 @@ int wait_esc_release(void)
 	}
 
 	int r;
-	bool esc_flag = 1;
+	bool esc_flag = 0;
 	while( !esc_flag ) { // While ESC BreakCode not detected
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {

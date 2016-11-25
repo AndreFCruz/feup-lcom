@@ -23,16 +23,14 @@
 
 /* Private global variables */
 
-static char *video_mem;		/* Process address to which VRAM is mapped */
+static void *video_mem;		/* Process address to which VRAM is mapped */
 
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
 static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
-static unsigned vram_size;
-static unsigned vram_base;
+static unsigned vram_size = H_RES_0X105 * V_RES_0X105 * BITS_PER_PIXEL;
+static unsigned vram_base = VRAM_PHYS_ADDR;
 
-
-static unsigned bytesperline = 1024;
 
 // Codigo baseado no pdf VESA
 //void paintPixel(int x,int y,int color)
@@ -63,7 +61,6 @@ void *vg_init(unsigned short mode) {
 
 	vbe_mode_info_t* vmi_p = malloc(sizeof(vbe_mode_info_t));
 
-	//TODO: Eliminate all the magic numbers
 	r.u.b.ah = VBE_CALL;
 	r.u.b.al = VBE_SET_MODE;
 	r.u.w.bx = 1<<14 | mode; // set bit 14: linear framebuffer

@@ -9,6 +9,7 @@
 #include "keyboard.h"
 #include "i8042.h"
 #include "read_xpm.h"
+#include "math.h"
 //#include "vbe.h"
 
 // TODO argument checks and error messages
@@ -84,6 +85,14 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	return vg_exit();
 }	
 
+int round_float(float f) {
+	int n;
+	n = n * 10.0f;
+	n = (n > (floor(n)+0.5f)) ? ceil(n) : floor(n);
+	n = n / 10.0f;
+	return n;
+}
+
 int test_move(unsigned short xi, unsigned short yi, char *xpm[], 
 				unsigned short hor, short delta, unsigned short time) {
 	
@@ -109,15 +118,16 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	int esc_flag = 0;	// Flag for Esc BreakCode
 
 	/* Calculate Update Increments */
-	unsigned short update[2] = {0, 0};	// Update Vector
+	float update[2] = {0, 0};	// Update Vector
 	if (hor) {
-		update[0] = 1; //delta / (time * 60);
+		update[0] = delta / (float) (time * 60);
 	} else {
-		update[1] = 1; //delta / (time * 60);
+		update[1] = delta / (float) (time * 60);
 	}
+	float cumulative_update[2] = {0, 0};
 
 	// Debug TODO
-	printf("update vector: %d, %d\n", update[0], update[1]);
+	printf("update vector: %f, %f\n", update[0], update[1]);
 
 	// Initiate Graphics Mode
 	char * ptr;
@@ -151,9 +161,20 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							}
 						}
 
+						// Update Cumullative Update
+						cumulative_update[0] += update[0];
+						cumulative_update[1] += update[1];
+
 						// Update Position
-						xi += update[0];
-						yi += update[1];
+						if (cumulative_update[0] > 1) {
+							int tmp = round_float(cumulative_update[0]);
+							yi += tmp;
+							cumulative_update[0] -= tmp;
+						} else if (cumulative_update[1] > 1) {
+							int tmp = round_float(cumulative_update[1]);
+							yi += tmp;
+							cumulative_update[1] -= tmp;
+						}
 					}
 
 					break;
@@ -170,27 +191,18 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_move() -> FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
-	 if ( timer_unsubscribe_int() < 0 ) {
-		printf("test_move() -> FAILED timer_unsubscribe_int()\n");
-		return 1;
-	 }
+	if ( timer_unsubscribe_int() < 0 ) {
+	printf("test_move() -> FAILED timer_unsubscribe_int()\n");
+	return 1;
+	}
 
-	
-//	// Update position, draw xpm, wait 1/60 secs
-//	unsigned i, j;
-//
-//	// Draw XPM
-//
-//		for (i = 0; i < width; i++) {
-//			for (j = 0; j < height; j++) {
-//				paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
-//			}
-//		}
-//
-	// TODO Change break condition -> Esc BreakCode mid movement
-	timer_delay(5);
+	if (vg_exit() == OK) {
+		printf("vg_exit success\n");
+	} else {
+		printf("vg_exit failes\n");
+	}
 
-	return vg_exit();
+	return OK;
 }					
 
 int test_controller() {

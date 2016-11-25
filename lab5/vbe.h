@@ -131,7 +131,7 @@ typedef struct {
     short   VESAVersion;            /* VBE version number */
     phys_bytes OEMStringPtr;      	/* Pointer to OEM string */
     long    Capabilities;           /* Capabilities of video card */
-    phys_bytes *VideoModePtr;     	/* Pointer to supported modes */
+    phys_bytes VideoModePtr;     	/* Pointer to supported modes */
     short   TotalMemory;            /* Number of 64kb memory blocks */
     short	OemSoftwareRev;			/* VBE implementation Software revision */
 	char	*OemVendorNamePtr;		/* Pointer to Vendor Name String */

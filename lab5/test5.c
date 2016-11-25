@@ -62,6 +62,10 @@ int test_line(unsigned short xi, unsigned short yi,
 	// x and y variation
 	int x_variation = xf-xi;
 	int y_variation = yf-yi;
+
+	//Ned this for functions whose slope is != 1
+	float x = (float) xi;
+	float y = (float) yi;
 	int n;	//number of steps
 
 	//Getting the number of steps value
@@ -92,10 +96,10 @@ int test_line(unsigned short xi, unsigned short yi,
 
 	unsigned i;
 	for (i = 0; i <= n; ++i) {
-		paint_pixel(xi, yi, color, ptr);
-		xi += (x_variation / (float) n);	//Since x it is a int, it will round himself
-		yi += (y_variation / (float) n);
-		printf("xi: %ul \n yi: %ul", xi, yi);
+		paint_pixel(x, y, color, ptr);
+		x += (x_variation / (float) n);	//Since x it is a int, it will round himself
+		y += (y_variation / (float) n);
+		printf("xi: %ul \n yi: %ul", x, y);
 	}
 
 	wait_esc_release();

@@ -129,14 +129,14 @@ typedef struct {
 typedef struct {
     char    VESASignature[4];       /* 'VESA' 4 byte signature */
     short   VESAVersion;            /* VBE version number */
-    phys_bytes OEMStringPtr;      /* Pointer to OEM string */
+    phys_bytes OEMStringPtr;      	/* Pointer to OEM string */
     long    Capabilities;           /* Capabilities of video card */
-    phys_bytes *VideoModePtr;     /* Pointer to supported modes */
+    phys_bytes *VideoModePtr;     	/* Pointer to supported modes */
     short   TotalMemory;            /* Number of 64kb memory blocks */
-    short	OemSoftwareRev;		/* VBE implementation Software revision */
-	char	*OemVendorNamePtr;	/* Pointer to Vendor Name String */
-	char	*OemProductNamePtr;	/* Pointer to Product Name String */
-	char	*OemProductRevPtr;	/* Pointer to Product Revision sTring */
+    short	OemSoftwareRev;			/* VBE implementation Software revision */
+	char	*OemVendorNamePtr;		/* Pointer to Vendor Name String */
+	char	*OemProductNamePtr;		/* Pointer to Product Name String */
+	char	*OemProductRevPtr;		/* Pointer to Product Revision sTring */
 	char	reserved[222];			/* Reserved for VBE implementation scratch area */
     char    OemData[256];			/* Data Area for OEM Strings  */
 } __attribute__((packed)) vbe_info_block;
@@ -155,6 +155,19 @@ typedef struct {
  * @return 0 on success, non-zero otherwise
  */
 int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p);
+
+/**
+ * @brief Returns onformation on the VBE controller.
+ *
+ * Initializes unpacked vbe_info_block structure passed as an adress,
+ * by calling VBE function 0x00.
+ * Returns VBE Controller Information.
+ *
+ * @param vbe_info_p adress of vbe_info_block structure to be initalized
+ * @return 0 on succes, non-zero otherwise
+ *
+ */
+int vbe_get_controller_info (vbe_info_block *vbe_info_p);
 
 /**
  * @brief Asserts whether the VBE byte response indicates an error, and prints accordingly

@@ -135,7 +135,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	float cumulative_update[2] = {0, 0};
 
 	// Debug TODO
-	printf("update vector: %f, %f\n", update[0], update[1]);
+	printf("update vector: %f \n", update[0]);
 
 	vg_exit();
 

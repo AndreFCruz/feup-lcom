@@ -57,7 +57,7 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	
 	int width, height;
 
-	// xpm to pix_map
+	// xpm to pix_map, update width and height
 	char * pix_map = read_xpm(xpm, &width, &height);
 
 	char * ptr;
@@ -65,7 +65,6 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 		return 1;
 	}
 
-	// Obter width, height
 	unsigned i, j;
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
@@ -82,8 +81,23 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 int test_move(unsigned short xi, unsigned short yi, char *xpm[], 
 				unsigned short hor, short delta, unsigned short time) {
 	
-	// Desenhar xpm, esperar 1/60 segundos, desenhar novamente na posição updated
+	int width, height;
+
+	// xpm to pix_map
+	char * pix_map = read_xpm(xpm, &width, &height);
+
+	char * ptr;
+	if ( (ptr = vg_init(MODE_5)) == NULL) {
+		return 1;
+	}
+
+	// Update position, draw xpm, wait 1/60 secs
+
 	
+	// Wait for Esc BreakCode
+	wait_esc_release();
+
+	return vg_exit();
 }					
 
 int test_controller() {

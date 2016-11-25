@@ -7,6 +7,9 @@
  * Functions for outputing data to screen in graphics mode
  */
 
+
+void paint_pixel(int x, int y, int color, char * ptr);
+
 /**
  * @brief Initializes the video module in graphics mode
  * 

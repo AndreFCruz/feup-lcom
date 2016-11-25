@@ -76,7 +76,7 @@ static int proc_args(int argc, char **argv)
 		if ( (color = parse_ulong(argv[5], 16)) == ULONG_MAX )
 			return 1;
 
-		printf("lab5::test_async(%lu, %lu, %lu, %lu)\n", xbegin, ybegin, size, color);
+		printf("lab5::test_async(%lu, %lu, %lu, %x)\n", xbegin, ybegin, size, color);
 		return test_square(xbegin, ybegin, size, color);
 	}
 	else if (strncmp(argv[1], "line", strlen("line")) == 0) {

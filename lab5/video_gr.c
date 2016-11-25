@@ -27,10 +27,15 @@ static void *video_mem;		/* Process address to which VRAM is mapped */
 
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
-static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 static unsigned vram_size = H_RES_0X105 * V_RES_0X105 * BITS_PER_PIXEL;
 static unsigned vram_base = VRAM_PHYS_ADDR;
 
+//static unsigned bytesperline = H_RES_0X105;
+
+
+void paint_pixel(int x, int y, int color, char * ptr) {
+	*(ptr + x + y * H_RES_0X105) = color;
+}
 
 // Codigo baseado no pdf VESA
 //void paintPixel(int x,int y,int color)
@@ -54,7 +59,6 @@ static unsigned vram_base = VRAM_PHYS_ADDR;
 //	*(screenPtr + (addr & 0xFFFF)) = (char)color;
 //}
 
-// TODO CHECK
 void *vg_init(unsigned short mode) {
 	// Snippet based on the PDF
 	struct reg86u r;

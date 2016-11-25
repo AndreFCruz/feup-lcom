@@ -32,7 +32,7 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 	}
 
 	// TODO Exit Contition -> ESC BreakCode
-	timer_delay(5);
+	wait_esc_release();
 
 	vg_exit();
 }

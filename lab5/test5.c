@@ -175,6 +175,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 	// Debug TODO
 	printf("update vector: %d, %d \n", (int)update[0], (int)update[1]);
+	printf("update vector: %f, %f \n", update[0], update[1]);
 
 	//Initiate Graphics Mode
 	char *ptr;
@@ -182,7 +183,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_xpm: Failed vg_init.\n");
 		return 1;
 	}
-	printf("Started test_move loop\n");
+
 	int r;
 	while( ! esc_flag ) { // While ESC BreakCode not detected
 		/* Get a request message. */
@@ -210,6 +211,16 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 //								}
 //							}
 
+							// Refresh + Draw ?
+//							for (i = 0; i < H_RES_0X105; i++) {
+//								for (j = 0; j < V_RES_0X105; j++) {
+//									if (i < width && j < height)
+//										paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
+//									else
+//										paint_pixel(i, j, BLACK, ptr);
+//								}
+//							}
+
 							//Draw XPM
 							for (i = 0; i < width; i++) {
 								for (j = 0; j < height; j++) {
@@ -218,7 +229,10 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							}
 
 							// Check if delta was reached
-							if ( (hor ? cumulative_update[0] : cumulative_update[1]) > delta ) {
+							if ( delta > 0 && (hor ? cumulative_update[0] : cumulative_update[1]) > delta ) {
+								continue;
+							}
+							else if ( delta < 0 && (hor ? cumulative_update[0] : cumulative_update[1]) < delta ) {
 								continue;
 							}
 
@@ -226,13 +240,16 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							cumulative_update[0] += update[0];
 							cumulative_update[1] += update[1];
 
+							printf("CUM_VEC: %d, %d \n", (int)update[0], (int)update[1]);
+
 							//Update Position
 							int tmp;
-							if ( (tmp = round_float(cumulative_update[0] + xi - pos[0])) > 1 ) {
-								pos[0] += tmp;
+							if ( (tmp = round_float(cumulative_update[0] + xi - pos[0]) * (delta>0 ? 1:-1)) > 1 ) {
+								pos[0] += tmp * (delta>0 ? 1:-1);
+								printf("updated\n");
 							}
-							else if ( (tmp = round_float(cumulative_update[1] + yi - pos[1])) > 1 ) {
-								pos[1] += tmp;
+							else if ( (tmp = round_float(cumulative_update[1] + yi - pos[1]) * (delta>0 ? 1:-1)) > 1 ) {
+								pos[1] += tmp * (delta>0 ? 1:-1);
 							}
 						}
 

@@ -20,17 +20,19 @@ void *test_init(unsigned short mode, unsigned short delay) {
 
 int test_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	
-	vg_init(MODE_5);
+	char * ptr = vg_init(MODE_5);
 
 	// Draw Square
 	unsigned i, j;
 	for (i = x; i < size + x; i++) {
 		for (j = y; j < size + y; j++) {
-			//paintPixel(x, y, color);
+//			*(ptr + i + j*1024) = color;
+			paint_pixel(i, j, color, ptr);
 		}
 	}
 
-	wait_esc_release();
+	// TODO Exit Contition -> ESC BreakCode
+	timer_delay(5);
 
 	vg_exit();
 }

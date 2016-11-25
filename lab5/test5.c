@@ -1,7 +1,13 @@
+#include <minix/syslib.h>
+#include <minix/drivers.h>
+#include <minix/com.h>
+#include <minix/sysutil.h>
+
 #include "video_gr.h"
 #include "timer.h"
 #include "defs.h"
 #include "keyboard.h"
+#include "i8042.h"
 #include "read_xpm.h"
 //#include "vbe.h"
 
@@ -86,16 +92,103 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	// xpm to pix_map
 	char * pix_map = read_xpm(xpm, &width, &height);
 
+	int ipc_status;
+	message msg;
+
+	int keyboard_irq_set;
+	if ( (keyboard_irq_set = BIT(kbd_subscribe_int())) < 0 ) { // hook_id returned for keyboard
+		printf("test_move() -> FAILED kbd_subscribe_int()\n");
+		return 1;
+	}
+	int timer_irq_set; unsigned timer_freq = 60;
+	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
+	printf("test_move() -> FAILED timer_subscribe_int()\n");
+	return 1;
+	}
+
+	int esc_flag = 0;	// Flag for Esc BreakCode
+
+	/* Calculate Update Increments */
+	unsigned short update[2] = {0, 0};	// Update Vector
+	if (hor) {
+		update[0] = delta / (time * 60);
+	} else {
+		update[1] = delta / (time * 60);
+	}
+
+	// Debug TODO
+	printf("update vector: %d, %d\n", update[0], update[1]);
+
+	// Initiate Graphics Mode
 	char * ptr;
 	if ( (ptr = vg_init(MODE_5)) == NULL) {
 		return 1;
 	}
 
-	// Update position, draw xpm, wait 1/60 secs
+	int r;
+	while( ! esc_flag ) { // While ESC BreakCode not detected
+		/* Get a request message. */
+		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
+			printf("driver_receive failed with: %d\n", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /* received notification */
+			switch (_ENDPOINT_P(msg.m_source)) {
+				case HARDWARE: /* hardware interrupt notification */
+					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+						if ( keyboard_read() == ESQ_BREAK_CODE ) {
+							esc_flag = 1;
+							break;
+						}
+					}
+
+					if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
+						// Draw XPM
+						unsigned i, j;
+						for (i = 0; i < width; i++) {
+							for (j = 0; j < height; j++) {
+								paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+							}
+						}
+
+						// Update Position
+						xi += update[0];
+						yi += update[1];
+					}
+
+					break;
+				default:
+					break; /* no other notifications expected: do nothing */
+			}
+		} else { /* received a standard message, not a notification */
+			/* no standard messages expected: do nothing */
+			printf("Error: received unexpected standard message.\n");
+		}
+	}
+
+	if ( kbd_unsubscribe_int() < 0 ) {
+		printf("test_move() -> FAILED kbd_unsubscribe_int()\n");
+		return 1;
+	}
+	 if ( timer_unsubscribe_int() < 0 ) {
+		printf("test_move() -> FAILED timer_unsubscribe_int()\n");
+		return 1;
+	 }
 
 	
-	// Wait for Esc BreakCode
-	wait_esc_release();
+//	// Update position, draw xpm, wait 1/60 secs
+//	unsigned i, j;
+//
+//	// Draw XPM
+//
+//		for (i = 0; i < width; i++) {
+//			for (j = 0; j < height; j++) {
+//				paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
+//			}
+//		}
+//
+	// TODO Change break condition -> Esc BreakCode mid movement
+	timer_delay(5);
 
 	return vg_exit();
 }					

@@ -175,7 +175,6 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 	// Debug TODO
 	printf("update vector: %d, %d \n", (int)update[0], (int)update[1]);
-	printf("update vector: %f, %f \n", update[0], update[1]);
 
 	//Initiate Graphics Mode
 	char *ptr;
@@ -240,13 +239,10 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							cumulative_update[0] += update[0];
 							cumulative_update[1] += update[1];
 
-							printf("CUM_VEC: %d, %d \n", (int)update[0], (int)update[1]);
-
 							//Update Position
 							int tmp;
 							if ( (tmp = round_float(cumulative_update[0] + xi - pos[0]) * (delta>0 ? 1:-1)) > 1 ) {
 								pos[0] += tmp * (delta>0 ? 1:-1);
-								printf("updated\n");
 							}
 							else if ( (tmp = round_float(cumulative_update[1] + yi - pos[1]) * (delta>0 ? 1:-1)) > 1 ) {
 								pos[1] += tmp * (delta>0 ? 1:-1);
@@ -273,13 +269,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	return 1;
 	}
 
-	if (vg_exit() == OK) {
-		printf("vg_exit success\n");
-	} else {
-		printf("vg_exit failes\n");
-	}
-
-	return OK;
+	return vg_exit();
 }					
 
 int test_controller() {

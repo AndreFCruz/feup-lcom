@@ -7,6 +7,7 @@
  * Functions for outputing data to screen in graphics mode
  */
 
+int is_valid_pos(unsigned short x, unsigned short y);
 
 void paint_pixel(int x, int y, int color, char * ptr);
 

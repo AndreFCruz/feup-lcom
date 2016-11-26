@@ -154,7 +154,7 @@ typedef struct {
  * @param vmi_p address of vbe_mode_info_t structure to be initialized
  * @return 0 on success, non-zero otherwise
  */
-void* vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p);
+int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p);
 
 /**
  * @brief Returns onformation on the VBE controller.

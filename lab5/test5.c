@@ -11,7 +11,12 @@
 #include "math.h"
 #include "vbe.h"
 
+#define NO_MODE 0xFFFF;
 #define BLACK	0
+
+//For use in test_controller
+#define OFFSET(x) (x & 0x0FFFF)
+#define BASE(x) (((x) >> 12) & 0xF0000)
 
 void *test_init(unsigned short mode, unsigned short delay) {
 	if (mode > 0x10C || mode < 0x100) {
@@ -311,18 +316,33 @@ int test_controller() {
 	vbe_info_block* vbe_info_p = (vbe_info_block*) malloc(sizeof(vbe_info_block));
 
 	//Initialization of vbe_info_p
-	if (vbe_get_controller_info(vbe_info_p) != 0) {
+	void * virtual_p = vbe_get_controller_info(vbe_info_p);
+	if ( virtual_p == NULL) {
 		printf ("test_controler: Failed vbe_get_controller_info");
 		return 1;
 	}
 
 	//Now display the info saved on vbe_info_p
-	printf("\n	VBE Controller Information\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
-	printf("VESA Signature: %s \n", (*vbe_info_p).VESASignature );
-	//printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
-	printf("List of mode supported:\n");
-	//Ciclo que imprime os elementos do (*vbe_info_p).VideoModePointer
-	printf("VRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
+	printf("\n	**VBE Controller Information**\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
+	printf("VESA Signature: %s \n\n", (*vbe_info_p).VESASignature );
+
+	printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities); //Em hexadecimal pois queremos analisar os bytes e não o valor decimal
+	printf("Capabilities Details: %s", (*vbe_info_p).Capabilities & BIT(0) ?
+			"DAC width is switchable to 8 bits per primary color.\n" : "DAC is fixed width, with 6 bits per primary color.\n");
+	printf("Capabilities Details: %s", (*vbe_info_p).Capabilities & BIT(1) ? "Controller is not VGA compatible.\n" : "Controller is VGA compatible.\n");
+	printf("Capabilities Details: %s", (*vbe_info_p).Capabilities & BIT(2) ?
+			"When programming large blocks of information to the RAMDAC, use the blank bit in Function 09h.\n\n" : "Normal RAMDAC operation.\n\n");
+
+	printf("List of modes supported:\n\t-> Modes:");
+	//Mapping Mode List
+	//Teacher on Moodle: "obtido fazendo o "shift" da base de 4 bits para a esquerda e somando o offset ao resultado"
+	short* ModeListPtr = (BASE((*vbe_info_p).VideoModePtr) + OFFSET((*vbe_info_p).VideoModePtr) + virtual_p);
+
+	while (*ModeListPtr != NO_MODE) {
+		printf("\t0x%x", *ModeListPtr);
+		ModeListPtr++;
+	}
+	printf("\n\nVRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
 
 	return 0;
 }

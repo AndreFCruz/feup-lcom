@@ -82,7 +82,7 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 }
 
 
-int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vbe_mode_p) {
+void* vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vbe_mode_p) {
 
 	mmap_t mem_map;
 	struct reg86u r;
@@ -96,7 +96,7 @@ int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vbe_mode_p) {
 	lm_alloc(sizeof(vbe_mode_info_t), &mem_map);
 	if (& mem_map == NULL) {	//check this condition
 		printf("vbe_get_controller_info: Failed to allocate a memory block.\n");
-		return 1;
+		return NULL;
 	}
 
 	//can't change him directly, otherwise lm_free doesnt work. mem_map.phys is the real mode adress
@@ -111,18 +111,14 @@ int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vbe_mode_p) {
 
 	sys_int86(&r);
 	if ( !(OK == vbe_assert_error(r.u.b.ah)))
-		return 1;
+		return NULL;
 
 	//== mem.cpy
 	*vbe_mode_p = *(vbe_mode_info_t*) mem_map.virtual;	//Saving on the allocated memory pointer
 	lm_free(&mem_map);
 
-	//If lma_p still points to somewhere but NULL, it means lm_free failed
-	if ( lma_p == NULL) {
-		printf("vbe_get_controller_info: Failed to free the memory block in the low area.\n");
-		return 1;
-	}
-	return OK;
+	// Need to return lma_p (virtual pointer).
+	return lma_p;
 
 }
 

@@ -59,20 +59,20 @@ void *vg_init(unsigned short mode) {
 
 	int n;
 	struct mem_range mr;
-	vbe_mode_info_t* vmi_p = malloc(sizeof(vbe_mode_info_t));
+	vbe_mode_info_t* vbe_mode_p = malloc(sizeof(vbe_mode_info_t));
 
-	if (vbe_get_mode_info(mode, vmi_p) != OK) {
+	if (vbe_get_mode_info(mode, vbe_mode_p) != OK) {
 		printf("vg_init(): vbe_get_mode_info failed\n");
 		return NULL;
 	}
 
-	h_res = vmi_p->XResolution;
-	v_res = vmi_p->YResolution;
-	bits_per_pixel = vmi_p->BitsPerPixel;
+	h_res = vbe_mode_p->XResolution;
+	v_res = vbe_mode_p->YResolution;
+	bits_per_pixel = vbe_mode_p->BitsPerPixel;
 	vram_size = h_res * v_res * bits_per_pixel;
 
 	/* Allow memory mapping */
-	mr.mr_base = (phys_bytes) vmi_p->PhysBasePtr;
+	mr.mr_base = (phys_bytes) vbe_mode_p->PhysBasePtr;
 	mr.mr_limit = mr.mr_base + vram_size;
 
 	if( OK != (n = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)))

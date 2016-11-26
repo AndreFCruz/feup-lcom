@@ -11,7 +11,7 @@
 #include "math.h"
 #include "vbe.h"
 
-#define NO_MODE 0xFFFF;
+#define NO_MODE 0xFFFF
 #define BLACK	0
 
 //For use in test_controller
@@ -317,10 +317,10 @@ int test_controller() {
 
 	//Initialization of vbe_info_p
 	void * virtual_p = vbe_get_controller_info(vbe_info_p);
-	if ( virtual_p == NULL) {
-		printf ("test_controler: Failed vbe_get_controller_info");
-		return 1;
-	}
+//	if ( virtual_p == NULL) {
+//		printf ("test_controler: Failed vbe_get_controller_info");
+//		return 1;
+//	}
 
 	//Now display the info saved on vbe_info_p
 	printf("\n	**VBE Controller Information**\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
@@ -336,6 +336,7 @@ int test_controller() {
 	printf("List of modes supported:\n\t-> Modes:");
 	//Mapping Mode List
 	//Teacher on Moodle: "obtido fazendo o "shift" da base de 4 bits para a esquerda e somando o offset ao resultado"
+	//But since 1st we should do a shitf f 16 bits to the right, that's simply = << 12
 	short* ModeListPtr = (BASE((*vbe_info_p).VideoModePtr) + OFFSET((*vbe_info_p).VideoModePtr) + virtual_p);
 
 	while (*ModeListPtr != NO_MODE) {

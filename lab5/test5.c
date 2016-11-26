@@ -13,11 +13,8 @@
 
 #define BLACK	0
 
-// TODO argument checks and error messages
-// TODO remove hard coded constants
-
 void *test_init(unsigned short mode, unsigned short delay) {
-	if (mode > 0x10C || mode < 0x100) {		//TODO: Retirar magic numbers?
+	if (mode > 0x10C || mode < 0x100) {
 		printf("test_init-> invalid mode, was %X.\n", mode);
 		return NULL;
 	}
@@ -61,6 +58,11 @@ int test_line(unsigned short xi, unsigned short yi,
 
 	char * ptr = vg_init(MODE_5);
 	
+	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {
+		printf("test_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
+		return vg_exit();
+	}
+
 	// x and y variation
 	int x_variation = xf-xi;
 	int y_variation = yf-yi;
@@ -101,7 +103,7 @@ int test_line(unsigned short xi, unsigned short yi,
 		paint_pixel(x, y, color, ptr);
 		x += (x_variation / (float) n);
 		y += (y_variation / (float) n);
-		printf("xi: %d \n yi: %ul", x, y);
+//		printf("xi: %d \n yi: %ul", x, y);
 	}
 
 	wait_esc_release();
@@ -119,6 +121,11 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	if ( (ptr = vg_init(MODE_5)) == NULL) {
 		printf("test_xpm: Failed vg_init.\n");
 		return 1;
+	}
+
+	if ( OK != is_valid_pos(xi, yi) ) {
+		printf("test_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
+		return vg_exit();
 	}
 
 	unsigned i, j;
@@ -152,12 +159,12 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 	int keyboard_irq_set;
 	if ( (keyboard_irq_set = BIT(kbd_subscribe_int())) < 0 ) { // hook_id returned for keyboard
-		printf("test_move() -> FAILED kbd_subscribe_int()\n");
+		printf("test_move -> FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
 	int timer_irq_set; unsigned timer_freq = 60;
 	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
-		printf("test_move() -> FAILED timer_subscribe_int()\n");
+		printf("test_move -> FAILED timer_subscribe_int()\n");
 		return 1;
 	}
 
@@ -178,8 +185,12 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	//Initiate Graphics Mode
 	char *ptr;
 	if ( (ptr = vg_init(MODE_5)) == NULL) {
-		printf("test_xpm: Failed vg_init.\n");
+		printf("test_move: Failed vg_init.\n");
 		return 1;
+	}
+	if ( (OK != is_valid_pos(xi, yi)) || (OK != is_valid_pos(xi + (hor ? delta : 0), yi + (hor ? 0 : delta))) ) {
+		printf("test_move: invalid position for xpm. Was (%d,%d) to (%d,%d).\n", xi, yi, xi + (hor ? delta : 0), yi + (hor ? 0 : delta));
+		return vg_exit();
 	}
 
 	int r;
@@ -264,11 +275,11 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	}
 
 	if ( kbd_unsubscribe_int() < 0 ) {
-		printf("test_move() -> FAILED kbd_unsubscribe_int()\n");
+		printf("test_move -> FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
 	if ( timer_unsubscribe_int() < 0 ) {
-	printf("test_move() -> FAILED timer_unsubscribe_int()\n");
+	printf("test_move -> FAILED timer_unsubscribe_int()\n");
 	return 1;
 	}
 

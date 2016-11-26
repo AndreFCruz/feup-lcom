@@ -37,29 +37,16 @@ void paint_pixel(int x, int y, int color, char * ptr) {
 	*(ptr + x + y * h_res) = color;
 }
 
-
-// Codigo baseado no pdf VESA
-//void paintPixel(int x,int y,int color)
-//{
-//    long addr = (long)y * bytesperline + x;
-//    setBank((int)(addr >> 16));
-//    *(video_mem + (addr & 0xFFFF)) = (char)color;
-//}
-
-
-// baseado no pdf VESA
-//void paintPixelP(int x, int y, int color)
-//{
-//	char dummy_read;
-//	long addr = (long)y * bytesperline + (x/8);
-//	setBank((int)(addr >> 16));
-//
-//	outp(0x3CE,8);
-//	outp(0x3CF,0x80 >> (x & 7));
-//	dummy_read = *(screenPtr + (addr & 0xFFFF));
-//	*(screenPtr + (addr & 0xFFFF)) = (char)color;
-//}
-
+int is_valid_pos(unsigned short x, unsigned short y) {
+	if (x < h_res && y < v_res) {
+		printf("is_valid_pos -> good to go!\n");
+		return OK;
+	}
+	else {
+		printf("is_valid_pos -> ups...\n");
+		return 1;
+	}
+}
 
 // Snippet based on the PDF
 void *vg_init(unsigned short mode) {

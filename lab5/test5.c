@@ -35,6 +35,18 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 		return 1;
 	}
 
+	// Argument Checks
+	if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
+		printf("test_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
+		vg_exit();
+		return 1;
+	}
+	if ( color >= 0x40 ) {
+		printf("test_square: invalid color. Was 0x%X.\n", color);
+		vg_exit();
+		return 1;
+	}
+
 	// Draw Square
 	unsigned i, j;
 	for (i = x; i < size + x; i++) {
@@ -60,7 +72,13 @@ int test_line(unsigned short xi, unsigned short yi,
 	
 	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {
 		printf("test_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
-		return vg_exit();
+		vg_exit();
+		return 1;
+	}
+	if ( color >= 0x40 ) {
+		printf("test_line: invalid color. Was 0x%X.\n", color);
+		vg_exit();
+		return 1;
 	}
 
 	// x and y variation
@@ -125,7 +143,8 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
 	if ( OK != is_valid_pos(xi, yi) ) {
 		printf("test_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
-		return vg_exit();
+		vg_exit();
+		return 1;
 	}
 
 	unsigned i, j;
@@ -190,7 +209,8 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	}
 	if ( (OK != is_valid_pos(xi, yi)) || (OK != is_valid_pos(xi + (hor ? delta : 0), yi + (hor ? 0 : delta))) ) {
 		printf("test_move: invalid position for xpm. Was (%d,%d) to (%d,%d).\n", xi, yi, xi + (hor ? delta : 0), yi + (hor ? 0 : delta));
-		return vg_exit();
+		vg_exit();
+		return 1;
 	}
 
 	int r;

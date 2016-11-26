@@ -38,14 +38,7 @@ void paint_pixel(int x, int y, int color, char * ptr) {
 }
 
 int is_valid_pos(unsigned short x, unsigned short y) {
-	if (x < h_res && y < v_res) {
-		printf("is_valid_pos -> good to go!\n");
-		return OK;
-	}
-	else {
-		printf("is_valid_pos -> ups...\n");
-		return 1;
-	}
+	return (x < h_res && y < v_res) ? OK : 1;
 }
 
 // Snippet based on the PDF
@@ -53,7 +46,7 @@ void *vg_init(unsigned short mode) {
 	struct reg86u r;
 
 	r.u.b.ah = VBE_CALL;
-	r.u.b.al = VBE_SET_MODE;
+	r.u.b.al = SET_VBE_MODE;
 	r.u.w.bx = 1<<14 | mode; // set bit 14: linear framebuffer
 	r.u.b.intno = VBE_INTERRUPT;
 

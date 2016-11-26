@@ -204,8 +204,8 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 							int border[2] = {update[0] * (update[0]>0 ? 1:-1), update[1] * (update[1]>0 ? 1:-1)};
 							// Draw XPM + paint a black box of thickness abs(update) around it
-							for (i = -border[0] - 1; i < width + border[0] + 1; i++) {
-								for (j = -border[1] - 1; j < height + border[1] + 1; j++) {
+							for (i = -border[0] - 2; i < width + border[0] + 2; i++) {
+								for (j = -border[1] - 2; j < height + border[1] + 2; j++) {
 									if (i < 0 || i >= width || j < 0 || j >= height) {
 										paint_pixel(i + pos[0], j + pos[1], BLACK, ptr);
 									} else {

@@ -9,7 +9,7 @@
 #include "i8042.h"
 #include "read_xpm.h"
 #include "math.h"
-//#include "vbe.h"
+#include "vbe.h"
 
 #define BLACK	0
 
@@ -274,6 +274,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 int test_controller() {
 //	//struct mem_range mr;
+//	// Pointer to vbe_info_block struct instance
 //	vbe_info_block* vbe_info_p = malloc(sizeof(vbe_info_block));
 //
 //	//Initialization of vbe_info_p
@@ -284,10 +285,10 @@ int test_controller() {
 //
 //	//Now display the info saved on vbe_info_p
 //	printf("\n	VBE Controller Information\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
-//	printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
+//	//printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
 //	printf("List of mode supported:\n");
 //	//Ciclo que imprime os elementos do (*vbe_info_p).VideoModePointer
-//	pritnf("VRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
+//	printf("VRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
 
 	return 0;
 }

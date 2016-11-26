@@ -42,7 +42,7 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 	mmap_t mem_map;
 	struct reg86u r;
 
-	void * lma_p = lm_init();	//Need to save him only for check's
+	void * lma_p = lm_init();	//Need to save this only for check's
 	if (lma_p == NULL) {
 		printf("vbe_get_controller_info: Failed to initialize low memory area.\n");
 		return 1;
@@ -81,35 +81,49 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 	return 0;
 }
 
-// TODO CHECK
-//int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
-//	mmap_t mem;
-//	struct reg86u r;
-//
-//	if (lm_init() == NULL) {
-//		printf("vbe_get_mode_info() -> initialization failed.\n");
-//		return 1;
-//	}
-//
-//	lm_alloc(sizeof(vbe_mode_info_t), &mem);
-//	phys_bytes buf = mem.phys;
-//
-//	r.u.b.ah = VBE_CALL;
-//	r.u.b.al = GET_VBE_MODE_INFO;
-//	r.u.w.es = PB2BASE(buf);
-//	r.u.w.di = PB2OFF(buf);
-//	r.u.w.cx = mode;
-//	r.u.b.intno = VBE_INTERRUPT;
-//
-//	if (sys_int86(&r) != OK) {
-//		printf("vbe_get_mode_info() -> sys call returned non-zero\n");
-//		return 1;
-//	}
-//
-//  *vmi_p = *(vbe_mode_info_t*) mem.virtual;
-//	lm_free(&mem);
-//	return OK;
-//
-//}
-//
+
+int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vbe_mode_p) {
+
+	mmap_t mem_map;
+	struct reg86u r;
+
+	void * lma_p = lm_init();	//Need to save this only for check's
+	if (lm_init() == NULL) {
+		printf("vbe_get_mode_info: Failed to initialize low memory area.\n");
+		return 1;
+	}
+
+	lm_alloc(sizeof(vbe_mode_info_t), &mem_map);
+	if (& mem_map == NULL) {	//check this condition
+		printf("vbe_get_controller_info: Failed to allocate a memory block.\n");
+		return 1;
+	}
+
+	//can't change him directly, otherwise lm_free doesnt work. mem_map.phys is the real mode adress
+	phys_bytes mem_copy = mem_map.phys;
+
+	r.u.b.ah = VBE_CALL;
+	r.u.b.al = GET_VBE_MODE_INFO;
+	r.u.w.es = PB2BASE(mem_copy);
+	r.u.w.di = PB2OFF(mem_copy);
+	r.u.w.cx = mode;
+	r.u.b.intno = VBE_INTERRUPT;
+
+	sys_int86(&r);
+	if ( !(OK == vbe_assert_error(r.u.b.ah)))
+		return 1;
+
+	//== mem.cpy
+	*vbe_mode_p = *(vbe_mode_info_t*) mem_map.virtual;	//Saving on the allocated memory pointer
+	lm_free(&mem_map);
+
+	//If lma_p still points to somewhere but NULL, it means lm_free failed
+	if ( lma_p == NULL) {
+		printf("vbe_get_controller_info: Failed to free the memory block in the low area.\n");
+		return 1;
+	}
+	return OK;
+
+}
+
 

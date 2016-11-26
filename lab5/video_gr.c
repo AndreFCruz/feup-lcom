@@ -74,6 +74,8 @@ void *vg_init(unsigned short mode) {
 		printf("set_vbe_mode: sys_int86() failed\n");
 		return NULL;
 	}
+	if ( OK != vbe_assert_error(r.u.b.ah) )
+		return NULL;
 
 	int n;
 	struct mem_range mr;

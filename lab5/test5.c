@@ -203,7 +203,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 							int i,j;
 
 							int border[2] = {update[0] * (update[0]>0 ? 1:-1), update[1] * (update[1]>0 ? 1:-1)};
-							// Draw XPM + paint a black box of thickness abs(update) around it
+							// Draw XPM + paint a black box of thickness abs(update) + 2 around it
 							for (i = -border[0] - 2; i < width + border[0] + 2; i++) {
 								for (j = -border[1] - 2; j < height + border[1] + 2; j++) {
 									if (i < 0 || i >= width || j < 0 || j >= height) {
@@ -277,7 +277,7 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 int test_controller() {
 	// Pointer to vbe_info_block struct instance
-	vbe_info_block* vbe_info_p = malloc(sizeof(vbe_info_block));
+	vbe_info_block* vbe_info_p = (vbe_info_block*) malloc(sizeof(vbe_info_block));
 
 	//Initialization of vbe_info_p
 	if (vbe_get_controller_info(vbe_info_p) != 0) {

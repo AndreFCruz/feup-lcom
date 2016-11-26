@@ -1,4 +1,4 @@
-	#include <minix/syslib.h>
+#include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <machine/int86.h>
 
@@ -42,7 +42,7 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 	mmap_t mem_map;
 	struct reg86u r;
 
-	void * lma_p = lm_init();	//Contém apontador para onde o 1º Mib foi mapped - Há necessidade de guardar?
+	void * lma_p = lm_init();	//Need to save him only for check's
 	if (lma_p == NULL) {
 		printf("vbe_get_controller_info: Failed to initialize low memory area.\n");
 		return 1;
@@ -50,13 +50,14 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 
 	lm_alloc(sizeof(vbe_info_block), &mem_map);
 	if ( & mem_map == NULL) {	//check this condition
-		printf("vbe_get_controller_info: Failed to allocate a memory block.");
+		printf("vbe_get_controller_info: Failed to allocate a memory block.\n");
 		return 1;
 	}
 
 	//can't change him directly, otherwise lm_free doesnt work. mem_map.phys is the real mode adress
 	phys_bytes mem_copy = mem_map.phys;
 
+	//Block gotten from VESA pdf
 	r.u.b.ah = VBE_CALL;
 	r.u.b.al = GET_VBE_CONTROLLER_INFO;
 	r.u.w.es = PB2BASE(mem_copy);
@@ -67,12 +68,15 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 	if ( !(OK == vbe_assert_error(r.u.b.ah)))
 		return 1;
 
-	//Semelhante ao uso do memcpy
+	//== mem.cpy
 	*vbe_info_p = *(vbe_info_block*) mem_map.virtual;	//Saving on the allocated memory pointer
 	lm_free(&mem_map);
 
-//	if (lma_p == NULL)
-//		return 1;
+	//If lma_p still points to somewhere but NULL, it means lm_free failed
+	if ( lma_p == NULL) {
+		printf("vbe_get_controller_info: Failed to free the memory block in the low area.\n");
+		return 1;
+	}
 
 	return 0;
 }

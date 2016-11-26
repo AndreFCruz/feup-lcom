@@ -28,7 +28,7 @@
 #define GET_VBE_MODE_INFO		0x01
 
 // 4.5 Function 02h - Set VBE Mode
-#define VBE_SET_MODE			0x02
+#define SET_VBE_MODE			0x02
 
 // 4.6 Function 03h - Return Current VBE Mode
 #define GET_CURRENT_VBE_MODE	0x03

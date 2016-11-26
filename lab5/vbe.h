@@ -167,7 +167,7 @@ void* vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p);
  * @return 0 on succes, non-zero otherwise
  *
  */
-int vbe_get_controller_info (vbe_info_block *vbe_info_p);
+void* vbe_get_controller_info (vbe_info_block *vbe_info_p);
 
 /**
  * @brief Asserts whether the VBE byte response indicates an error, and prints accordingly

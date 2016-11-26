@@ -79,8 +79,8 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 
 // TODO CHECK
 //int vbe_get_mode_info(unsigned short mode, vbe_mode_info_t *vmi_p) {
-//	struct reg86u r;
 //	mmap_t mem;
+//	struct reg86u r;
 //
 //	if (lm_init() == NULL) {
 //		printf("vbe_get_mode_info() -> initialization failed.\n");
@@ -102,10 +102,10 @@ int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 //		return 1;
 //	}
 //
-//    *vmi_p = *(vbe_mode_info_t*) mem.virtual;
+//  *vmi_p = *(vbe_mode_info_t*) mem.virtual;
 //	lm_free(&mem);
 //	return OK;
 //
 //}
-
+//
 

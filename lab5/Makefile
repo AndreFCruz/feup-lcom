@@ -10,7 +10,7 @@ SRCS= lab5.c test5.c vbe.c video_gr.c timer.c keyboard.c read_xpm.c
 CCFLAGS= -Wall
 
 DPADD+= ${LIBDRIVER} ${LIBSYS}
-LDADD+= -ldriver -lsys
+LDADD+= -llm -ldriver -lsys
 
 LDFLAGS+= -L .
 

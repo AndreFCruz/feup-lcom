@@ -337,10 +337,10 @@ int test_controller() {
 	//But since 1st we should do a shitf f 16 bits to the right, that's simply = << 12
 	short* ModeListPtr = (BASE((*vbe_info_p).VideoModePtr) + OFFSET((*vbe_info_p).VideoModePtr) + virtual_p);
 
-	while (*ModeListPtr != NO_MODE) {
-		printf("\t0x%x", *ModeListPtr);
-		ModeListPtr++;
-	}
+//	while (*ModeListPtr != NO_MODE) {
+//		printf("\t0x%x", *ModeListPtr);
+//		ModeListPtr++;
+//	}
 	printf("\n\nVRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
 
 	return 0;

@@ -173,9 +173,6 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	float cumulative_update[2] = {0, 0};
 	unsigned pos[2] = {xi, yi};	// Image position
 
-	// Debug TODO
-	printf("update vector: %d, %d \n", (int)update[0], (int)update[1]);
-
 	//Initiate Graphics Mode
 	char *ptr;
 	if ( (ptr = vg_init(MODE_5)) == NULL) {
@@ -203,24 +200,6 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 						if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
 							int i,j;
 
-							/* DEBUG */
-
-//							// Refresh Screen - Fill with Black
-//							for (i = 0; i < H_RES_0X105; i++) {
-//								for (j = 0; j < V_RES_0X105; j++) {
-//									paint_pixel(i, j, BLACK, ptr);
-//								}
-//							}
-
-							// Refresh + Draw ?
-//							for (i = 0; i < H_RES_0X105; i++) {
-//								for (j = 0; j < V_RES_0X105; j++) {
-//									if (i < width && j < height)
-//										paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
-//									else
-//										paint_pixel(i, j, BLACK, ptr);
-//								}
-//							}
 							for (i = -10; i < width + 10; i++) {
 								for (j = -10; j < height + 10; j++) {
 									if (i < 0 || i >= width || j < 0 || j >= height) {
@@ -231,14 +210,21 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 								}
 							}
 
-							/* DEBUG END */
-
-							//Draw XPM
+							/* Deprecated option, causes image to 'flash' */
+//							// Refresh Screen - Fill with Black
+//							for (i = 0; i < H_RES_0X105; i++) {
+//								for (j = 0; j < V_RES_0X105; j++) {
+//									paint_pixel(i, j, BLACK, ptr);
+//								}
+//							}
+//
+//							// Draw XPM
 //							for (i = 0; i < width; i++) {
 //								for (j = 0; j < height; j++) {
 //									paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
 //								}
 //							}
+							/* * */
 
 							// Check if delta was reached
 							if ( delta > 0 && (hor ? cumulative_update[0] : cumulative_update[1]) > delta ) {

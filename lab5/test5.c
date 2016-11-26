@@ -201,7 +201,9 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 						}
 
 						if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
-							unsigned i,j;
+							int i,j;
+
+							/* DEBUG */
 
 //							// Refresh Screen - Fill with Black
 //							for (i = 0; i < H_RES_0X105; i++) {
@@ -219,13 +221,24 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 //										paint_pixel(i, j, BLACK, ptr);
 //								}
 //							}
-
-							//Draw XPM
-							for (i = 0; i < width; i++) {
-								for (j = 0; j < height; j++) {
-									paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
+							for (i = -10; i < width + 10; i++) {
+								for (j = -10; j < height + 10; j++) {
+									if (i < 0 || i >= width || j < 0 || j >= height) {
+										paint_pixel(i + pos[0], j + pos[1], BLACK, ptr);
+									} else {
+										paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
+									}
 								}
 							}
+
+							/* DEBUG END */
+
+							//Draw XPM
+//							for (i = 0; i < width; i++) {
+//								for (j = 0; j < height; j++) {
+//									paint_pixel(i + pos[0], j + pos[1], *(pix_map + i + j * width), ptr);
+//								}
+//							}
 
 							// Check if delta was reached
 							if ( delta > 0 && (hor ? cumulative_update[0] : cumulative_update[1]) > delta ) {
@@ -273,22 +286,22 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 }					
 
 int test_controller() {
-//	//struct mem_range mr;
-//	// Pointer to vbe_info_block struct instance
-//	vbe_info_block* vbe_info_p = malloc(sizeof(vbe_info_block));
-//
-//	//Initialization of vbe_info_p
-//	if (vbe_get_controller_info(vbe_info_p) != 0) {
-//		printf ("test_controler: Failed vbe_get_controller_info");
-//		return 1;
-//	}
-//
-//	//Now display the info saved on vbe_info_p
-//	printf("\n	VBE Controller Information\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
-//	//printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
-//	printf("List of mode supported:\n");
-//	//Ciclo que imprime os elementos do (*vbe_info_p).VideoModePointer
-//	printf("VRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
+	//struct mem_range mr;
+	// Pointer to vbe_info_block struct instance
+	vbe_info_block* vbe_info_p = malloc(sizeof(vbe_info_block));
+
+	//Initialization of vbe_info_p
+	if (vbe_get_controller_info(vbe_info_p) != 0) {
+		printf ("test_controler: Failed vbe_get_controller_info");
+		return 1;
+	}
+
+	//Now display the info saved on vbe_info_p
+	printf("\n	VBE Controller Information\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
+	//printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
+	printf("List of mode supported:\n");
+	//Ciclo que imprime os elementos do (*vbe_info_p).VideoModePointer
+	printf("VRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
 
 	return 0;
 }

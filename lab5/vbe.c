@@ -39,40 +39,40 @@ int vbe_assert_error(unsigned char e) {
 
 int vbe_get_controller_info (vbe_info_block *vbe_info_p) {
 
-//	mmap_t mem_map;
-//	struct reg86u r;
-//
-//	void * lma_p = lm_init();	//Contém apontador para onde o 1º Mib foi mapped - Há necessidade de guardar?
-//	if (lma_p == NULL) {
-//		printf("vbe_get_controller_info: Failed to initialize low memory area.\n");
+	mmap_t mem_map;
+	struct reg86u r;
+
+	void * lma_p = lm_init();	//Contém apontador para onde o 1º Mib foi mapped - Há necessidade de guardar?
+	if (lma_p == NULL) {
+		printf("vbe_get_controller_info: Failed to initialize low memory area.\n");
+		return 1;
+	}
+
+	lm_alloc(sizeof(vbe_info_block), &mem_map);
+	if ( & mem_map == NULL) {	//check this condition
+		printf("vbe_get_controller_info: Failed to allocate a memory block.");
+		return 1;
+	}
+
+	//can't change him directly, otherwise lm_free doesnt work. mem_map.phys is the real mode adress
+	phys_bytes mem_copy = mem_map.phys;
+
+	r.u.b.ah = VBE_CALL;
+	r.u.b.al = GET_VBE_CONTROLLER_INFO;
+	r.u.w.es = PB2BASE(mem_copy);
+	r.u.w.di = PB2OFF(mem_copy);
+	r.u.b.intno = VBE_INTERRUPT;
+
+	sys_int86(&r);
+	if ( !(OK == vbe_assert_error(r.u.b.ah)))
+		return 1;
+
+	//Semelhante ao uso do memcpy
+	*vbe_info_p = *(vbe_info_block*) mem_map.virtual;	//Saving on the allocated memory pointer
+	lm_free(&mem_map);
+
+//	if (lma_p == NULL)
 //		return 1;
-//	}
-//
-//	lm_alloc(sizeof(vbe_info_block), &mem_map);
-//	if ( & mem_map == NULL) {	//check this condition
-//		printf("vbe_get_controller_info: Failed to allocate a memory block.");
-//		return 1;
-//	}
-//
-//	//can't change him directly, otherwise lm_free doesnt work. mem_map.phys is the real mode adress
-//	phys_bytes mem_copy = mem_map.phys;
-//
-//	r.u.b.ah = VBE_CALL;
-//	r.u.b.al = GET_VBE_CONTROLLER_INFO;
-//	r.u.w.es = PB2BASE(mem_copy);
-//	r.u.w.di = PB2OFF(mem_copy);
-//	r.u.b.intno = VBE_INTERRUPT;
-//
-//	sys_int86(&r);
-//	if ( !(OK == vbe_assert_error(r.u.b.ah)))
-//		return 1;
-//
-//	//Semelhante ao uso do memcpy
-//	*vbe_info_p = *(vbe_info_block*) mem_map.virtual;	//Saving on the allocated memory pointer
-//	lm_free(&mem_map);
-//
-////	if (lma_p == NULL)
-////		return 1;
 
 	return 0;
 }

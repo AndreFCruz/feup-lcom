@@ -71,8 +71,6 @@ int test_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 int test_line(unsigned short xi, unsigned short yi, 
 		           unsigned short xf, unsigned short yf, unsigned long color) {
 
-	//Check limis of Res?
-
 	char * ptr = vg_init(MODE_5);
 	
 	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {

@@ -276,7 +276,6 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 }					
 
 int test_controller() {
-	//struct mem_range mr;
 	// Pointer to vbe_info_block struct instance
 	vbe_info_block* vbe_info_p = malloc(sizeof(vbe_info_block));
 
@@ -288,6 +287,7 @@ int test_controller() {
 
 	//Now display the info saved on vbe_info_p
 	printf("\n	VBE Controller Information\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
+	printf("VESA Signature: %s \n", (*vbe_info_p).VESASignature );
 	//printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities[0]); //Em hexadecimal pois queremos analisar os bytes enão o valor decimal
 	printf("List of mode supported:\n");
 	//Ciclo que imprime os elementos do (*vbe_info_p).VideoModePointer

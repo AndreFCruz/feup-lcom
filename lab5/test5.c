@@ -11,7 +11,7 @@
 #include "math.h"
 #include "vbe.h"
 
-#define NO_MODE 0xFFFFFFFF
+#define NO_MODE -1 // 0xFFFFFFFF
 #define BLACK	0
 
 //For use in test_controller

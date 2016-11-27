@@ -11,7 +11,7 @@
 #include "math.h"
 #include "vbe.h"
 
-#define NO_MODE 0xFFFF
+#define NO_MODE 0xFFFFFFFF
 #define BLACK	0
 
 //For use in test_controller
@@ -321,7 +321,7 @@ int test_controller() {
 //	}
 
 	//Now display the info saved on vbe_info_p
-	printf("\n	**VBE Controller Information**\n\n");		//TODO: Ask teacher the capabilities, not explicit on VESA
+	printf("\n	**VBE Controller Information**\n\n");
 	printf("VESA Signature: %s \n\n", (*vbe_info_p).VESASignature );
 
 	printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities); //Em hexadecimal pois queremos analisar os bytes e não o valor decimal
@@ -337,12 +337,12 @@ int test_controller() {
 	//But since 1st we should do a shitf f 16 bits to the right, that's simply = << 12
 	short* ModeListPtr = (BASE((*vbe_info_p).VideoModePtr) + OFFSET((*vbe_info_p).VideoModePtr) + virtual_p);
 
-//	while (*ModeListPtr != NO_MODE) {
-//		printf("\t0x%x", *ModeListPtr);
-//		ModeListPtr++;
-//	}
+	while (*ModeListPtr != NO_MODE) {
+		printf("\t0x%X", *ModeListPtr);
+		ModeListPtr++;
+	}
 	printf("\n\nVRAM memory size: %d KB.\n\n", (*vbe_info_p).TotalMemory * 64); //Number of 64kb memory blocks * number of blocks = number of KB's
 
-	return 0;
+	return OK;
 }
 

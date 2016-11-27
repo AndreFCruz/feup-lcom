@@ -15,7 +15,7 @@
 int vbe_assert_error(unsigned char e) {
 	switch (e) {
 	case 0x00:
-		printf("Function call succeeded\n");
+//		printf("Function call succeeded\n");
 		return OK;
 		break;
 	case 0x01:

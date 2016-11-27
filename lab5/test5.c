@@ -210,9 +210,9 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		printf("test_move: Failed vg_init.\n");
 		return 1;
 	}
-	if ( (OK != is_valid_pos(xi, yi)) || (OK != is_valid_pos(xi + (hor ? delta : 0), yi + (hor ? 0 : delta))) ) {
+	if ( (OK != is_valid_pos(xi, yi)) || (OK != is_valid_pos(xi + width + (hor ? delta : 0), yi + height + (hor ? 0 : delta))) ) {
 		vg_exit();
-		printf("test_move: invalid position for xpm. Was (%d,%d) to (%d,%d).\n", xi, yi, xi + (hor ? delta : 0), yi + (hor ? 0 : delta));
+		printf("test_move: invalid position for xpm. Was (%d,%d) to (%d,%d).\n", xi, yi, xi + width + (hor ? delta : 0), yi + height + (hor ? 0 : delta));
 		return 1;
 	}
 
@@ -324,7 +324,7 @@ int test_controller() {
 	printf("\n	**VBE Controller Information**\n\n");
 	printf("VESA Signature: %s \n\n", (*vbe_info_p).VESASignature );
 
-	printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities); //Em hexadecimal pois queremos analisar os bytes e não o valor decimal
+	printf("Capabilites of Graphics Controller: 0x%x\n", (*vbe_info_p).Capabilities);
 	printf("Capabilities Details: %s", (*vbe_info_p).Capabilities & BIT(0) ?
 			"DAC width is switchable to 8 bits per primary color.\n" : "DAC is fixed width, with 6 bits per primary color.\n");
 	printf("Capabilities Details: %s", (*vbe_info_p).Capabilities & BIT(1) ? "Controller is not VGA compatible.\n" : "Controller is VGA compatible.\n");

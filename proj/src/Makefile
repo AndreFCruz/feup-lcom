@@ -4,8 +4,8 @@ COMPILER_TYPE= gnu
 
 CC= gcc
 
-PROG= lab5
-SRCS= lab5.c test5.c vbe.c video_gr.c timer.c keyboard.c read_xpm.c
+PROG= planetary
+SRCS= planetary.c vbe.c video_gr.c timer.c keyboard.c read_xpm.c
 
 CCFLAGS= -Wall
 

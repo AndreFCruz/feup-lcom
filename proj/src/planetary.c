@@ -1,10 +1,33 @@
 /* includes */
-
-
+#include <minix/syslib.h>
+#include <minix/driver.h>
+#include <minix/com.h>
+#include <minix/sysutil.h>
+#include "video_gr.h"
+#include "timer.h"
+#include "keyboard.h"
+#include "i8042.h"
+#include "read_xpm.h"
+#include "math.h"
+#include "vbe.h"
+#include "pixmap.h"
+#include "stddef.h"
 /* ** */
 
 int main()
 {
 
-	return OK;
+	// Rudimentary Game Setup
+	char * ptr;
+	if ( (ptr = vg_init(MODE_1024X768_256)) == NULL ) {
+		printf("test_square failed VRAM map in vg_init\n");
+		return 1;
+	}
+
+
+	fill_screen(5);
+
+
+
+	return vg_exit();
 }

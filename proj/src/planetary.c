@@ -27,7 +27,7 @@ int main()
 
 	fill_screen(5);
 
-
+	timer_delay(10);
 
 	return vg_exit();
 }

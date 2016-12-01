@@ -24,10 +24,15 @@ int main()
 		return 1;
 	}
 
-
 	fill_screen(5);
 
-	timer_delay(10);
+	//Testes
+	draw_line(ptr, 100,100,800,300,37);
+	draw_circle(ptr, 300, 300, 200, 18);
+	draw_square(ptr, 50, 300, 100, 23);
+	draw_xpm(ptr, 500, 500, penguin);
+
+	timer_delay(5);
 
 	return vg_exit();
 }

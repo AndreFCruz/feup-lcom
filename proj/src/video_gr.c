@@ -5,32 +5,16 @@
 #include <sys/types.h>
 
 #include "vbe.h"
-#include "defs.h"
+//#include "defs.h"
 
-/* Constants for VBE 0x105 mode */
-
-/* The physical address may vary from VM to VM.
- * At one time it was 0xD0000000
- *  #define VRAM_PHYS_ADDR    0xD0000000 
- * Currently on lab B107 is 0xF0000000
- * Better run my version of lab5 as follows:
- *     service run `pwd`/lab5 -args "mode 0x105"
- */
-//#define VRAM_PHYS_ADDR	0xF0000000	// Standard
-//#define VRAM_PHYS_ADDR		0xE0000000	// PC Andre
-#define BITS_PER_PIXEL		8
-
-/* Private global variables */
-
+/* Static global variables */
 static void *video_mem;		/* Process address to which VRAM is mapped */
 
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
-static unsigned vram_size = H_RES_0X105 * V_RES_0X105 * BITS_PER_PIXEL;
+static unsigned vram_size;
 static unsigned vram_base;
 static unsigned bits_per_pixel;
-
-//static unsigned bytesperline = H_RES_0X105;
 
 
 void paint_pixel(int x, int y, int color, char * ptr) {
@@ -39,6 +23,10 @@ void paint_pixel(int x, int y, int color, char * ptr) {
 
 int is_valid_pos(unsigned short x, unsigned short y) {
 	return (x < h_res && y < v_res) ? OK : 1;
+}
+
+void fill_screen(unsigned char color) {
+	memset(video_mem, color, h_res * v_res);
 }
 
 // Snippet based on the PDF

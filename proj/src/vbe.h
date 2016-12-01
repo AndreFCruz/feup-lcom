@@ -9,6 +9,13 @@
  * Functions related to the VBE standard
  */
 
+#define MODE_800X600_256	0X103
+#define MODE_1024X768_256	0X105
+#define MODE_1280X1024_256	0X107
+
+
+
+
 /** @name VBE Functions */
 /**@{
  *

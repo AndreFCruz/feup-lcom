@@ -9,6 +9,8 @@
 
 int is_valid_pos(unsigned short x, unsigned short y);
 
+void fill_screen(unsigned char color);
+
 void paint_pixel(int x, int y, int color, char * ptr);
 
 /**

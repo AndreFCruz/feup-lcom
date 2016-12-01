@@ -33,6 +33,13 @@ void *vg_init(unsigned short mode);
  */
 int vg_exit(void);
 
+//Added functions - Need to finish documentation
+int draw_line (char * ptr, unsigned short xi, unsigned short yi,
+		           unsigned short xf, unsigned short yf, unsigned long color);
+int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
+int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color);
+int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
+
  /** @} end of video_gr */
  
 #endif /* __VIDEO_GR_H */

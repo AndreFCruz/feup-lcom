@@ -13,10 +13,12 @@
 #include "pixmap.h"
 #include "stddef.h"
 #include "mouse.h"
+#include "Missile.h"
 /* ** */
 
 int main()
 {
+	sef_startup();
 
 	// Rudimentary Game Setup
 	char * ptr;
@@ -32,9 +34,6 @@ int main()
 	draw_square(ptr, 50, 300, 100, 23);
 	draw_xpm(ptr, 500, 500, penguin);
 
-	//Mouses-tests
-	mouse_t * mouse = new_mouse();
-	draw_mouse(ptr,mouse);
 
 	timer_delay(5);
 

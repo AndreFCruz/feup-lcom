@@ -25,7 +25,6 @@ int main()
 		return 1;
 	}
 
-	fill_screen(5);
 
 	//Testes
 	draw_line(ptr, 100,100,800,300,37);

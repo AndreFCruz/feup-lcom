@@ -95,63 +95,63 @@ int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 
 
 	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {
-			printf("draw_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
-			return 1;
-		}
-		if ( color >= 0x40 ) {
-			printf("draw_line: invalid color. Was 0x%X.\n", color);
-			return 1;
-		}
+		printf("draw_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
+		return 1;
+	}
+	if ( color >= 0x40 ) {
+		printf("draw_line: invalid color. Was 0x%X.\n", color);
+		return 1;
+	}
 
-		// x and y variation
-		int x_variation = xf-xi;
-		int y_variation = yf-yi;
+	// x and y variation
+	int x_variation = xf-xi;
+	int y_variation = yf-yi;
 
-		//Need this for functions whose slopes are != 1
-		float x = (float) xi;
-		float y = (float) yi;
-		int n;	//number of steps
+	//Need this for functions whose slopes are != 1
+	float x = (float) xi;
+	float y = (float) yi;
+	int n;	//number of steps
 
-		//Getting the number of steps value
-		if (x_variation < 0 && y_variation < 0 ) {
-			if (-x_variation > -y_variation)
-				n = -x_variation;
-			else
-				n = -y_variation;
-		}
-		else if (x_variation < 0) {
-			if (-x_variation > y_variation)
-				n = -x_variation;
-			else
-				n = y_variation;
-		}
-		else if (y_variation < 0) {
-			if (x_variation > -y_variation)
-				n = x_variation;
-			else
-				n = -y_variation;
-		}
-		else {
-			if (x_variation > y_variation)
-				n = x_variation;
-			else
-				n = y_variation;
-		}
+	//Getting the number of steps value
+	if (x_variation < 0 && y_variation < 0 ) {
+		if (-x_variation > -y_variation)
+			n = -x_variation;
+		else
+			n = -y_variation;
+	}
+	else if (x_variation < 0) {
+		if (-x_variation > y_variation)
+			n = -x_variation;
+		else
+			n = y_variation;
+	}
+	else if (y_variation < 0) {
+		if (x_variation > -y_variation)
+			n = x_variation;
+		else
+			n = -y_variation;
+	}
+	else {
+		if (x_variation > y_variation)
+			n = x_variation;
+		else
+			n = y_variation;
+	}
 
-		unsigned i;
-		for (i = 0; i <= n; ++i) {
-			paint_pixel(x, y, color, ptr);
-			x += (x_variation / (float) n);
-			y += (y_variation / (float) n);
-		}
+	unsigned i;
+	for (i = 0; i <= n; ++i) {
+		paint_pixel(x, y, color, ptr);
+		x += (x_variation / (float) n);
+		y += (y_variation / (float) n);
+	}
 }
 
 int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color) {
 
 	if ( OK != is_valid_pos(center_x+radius, center_y+radius) || OK != is_valid_pos(center_x-radius, center_y-radius) ) {
-			printf("draw_circle: invalid position for circle. Center was: (%d, %d). Radius was %d.\n", center_x, center_y, radius);
-			return 1;
-		}
+		printf("draw_circle: invalid position for circle. Center was: (%d, %d). Radius was %d.\n", center_x, center_y, radius);
+		return 1;
+	}
 
 	unsigned x_var = (center_x-radius);
 	unsigned y_var = (center_y-radius);
@@ -170,38 +170,38 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 
 int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	// Argument Checks
-		if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
-			printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
-			return 1;
-		}
-		if ( color >= 0x40 ) {
-			printf("draw_square: invalid color. Was 0x%X.\n", color);
-			return 1;
-		}
+	if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
+		printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
+		return 1;
+	}
+	if ( color >= 0x40 ) {
+		printf("draw_square: invalid color. Was 0x%X.\n", color);
+		return 1;
+	}
 
-		// Draw Square
-		unsigned i, j;
-		for (i = x; i < size + x; i++) {
-			for (j = y; j < size + y; j++) {
-				paint_pixel(i, j, color, ptr);
-			}
+	// Draw Square
+	unsigned i, j;
+	for (i = x; i < size + x; i++) {
+		for (j = y; j < size + y; j++) {
+			paint_pixel(i, j, color, ptr);
 		}
+	}
 }
 
 int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
 	int width, height;
-		// xpm to pix_map, update width and height
-		char * pix_map = read_xpm(xpm, &width, &height);
+	// xpm to pix_map, update width and height
+	char * pix_map = read_xpm(xpm, &width, &height);
 
-		if ( OK != is_valid_pos(xi, yi) ) {
-			printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
-			return 1;
-		}
+	if ( OK != is_valid_pos(xi, yi) ) {
+		printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
+		return 1;
+	}
 
-		unsigned i, j;
-		for (i = 0; i < width; i++) {
-			for (j = 0; j < height; j++) {
-				paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
-			}
+	unsigned i, j;
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
 		}
+	}
 }

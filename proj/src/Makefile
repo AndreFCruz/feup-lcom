@@ -5,7 +5,7 @@ COMPILER_TYPE= gnu
 CC= gcc
 
 PROG= planetary
-SRCS= planetary.c vbe.c video_gr.c timer.c keyboard.c read_xpm.c Input.c
+SRCS= planetary.c vbe.c video_gr.c timer.c keyboard.c read_xpm.c Input.c mouse.c
 
 CCFLAGS= -Wall
 

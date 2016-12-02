@@ -12,6 +12,7 @@
 #include "vbe.h"
 #include "pixmap.h"
 #include "stddef.h"
+#include "mouse.h"
 /* ** */
 
 int main()
@@ -31,6 +32,10 @@ int main()
 	draw_circle(ptr, 300, 300, 200, 18);
 	draw_square(ptr, 50, 300, 100, 23);
 	draw_xpm(ptr, 500, 500, penguin);
+
+	//Mouses-tests
+	mouse_t * mouse = new_mouse();
+	draw_mouse(ptr,mouse);
 
 	timer_delay(5);
 

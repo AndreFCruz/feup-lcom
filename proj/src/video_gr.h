@@ -34,6 +34,8 @@ void *vg_init(unsigned short mode);
 int vg_exit(void);
 
 //Added functions - Need to finish documentation
+unsigned * get_res();
+
 int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color);
 int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);

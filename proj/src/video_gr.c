@@ -16,9 +16,12 @@ static unsigned vram_size;
 static unsigned vram_base;
 static unsigned bits_per_pixel;
 
-unsigned * get_res() {
-	unsigned res[2] = {h_res, v_res};
-	return res;
+unsigned get_Xres() {
+	return h_res;
+}
+
+unsigned get_Yres() {
+	return v_res;
 }
 
 void paint_pixel(int x, int y, int color, char * ptr) {

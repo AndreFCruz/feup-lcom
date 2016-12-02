@@ -34,19 +34,33 @@ int get_mouse_y(input_t * input) {
 //Not a int cause no message of error can happen
 void update_mouse_position(input_t * input, int  x_var, int y_var) {
 
-	if (input->mouse_pos[0] + x_var < 0)
+	//Flags to know if i can increment the variations on x or y.
+	char alterationX = 0;
+	char alterationY = 0;
+
+	//Checking the X borders
+	if ((input->mouse_pos[0] + x_var) < 0) {
 		input->mouse_pos[0] = 0;
-	else if (input->mouse_pos[0] + x_var > input->res[0])
+		alterationX = 1;
+	}
+	else if (input->mouse_pos[0] + x_var >= input->res[0]) {
 		input->mouse_pos[0] = input->res[0];
+		alterationX = 1;
+	}
 
-	if (input->mouse_pos[1] + y_var < 0)
+	//Checking the Y borders
+	if (input->mouse_pos[1] + y_var < 0) {
 		input->mouse_pos[1] = 0;
-	else if (input->mouse_pos[1] + x_var > input->res[1])
+		alterationY = 1;
+	}
+	else if (input->mouse_pos[1] + y_var >= input->res[1]) {
 		input->mouse_pos[1] = input->res[1];
+		alterationY = 1;
+	}
 
-	//If any of the positions was altered, I should not mess with them now
-	if (input->mouse_pos[0] != 0 && input->mouse_pos[0] != input->res[0])
+	//Only if not at the borders, should be updated
+	if (!alterationX)
 		input->mouse_pos[0] += x_var;
-	if (input->mouse_pos[1] != 0 && input->mouse_pos[1] != input->res[1])
+	if (!alterationY)
 		input->mouse_pos[1] += y_var;
 }

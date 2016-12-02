@@ -34,7 +34,8 @@ void *vg_init(unsigned short mode);
 int vg_exit(void);
 
 //Added functions - Need to finish documentation
-unsigned * get_res();
+unsigned get_Xres();
+unsigned get_Yres();
 
 int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color);

@@ -142,4 +142,3 @@ void delete_explosion(Explosion * ptr) {
 
 
 
-

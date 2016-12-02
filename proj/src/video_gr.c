@@ -90,7 +90,6 @@ int vg_exit() {
 }
 
 //Added Functions
-
 int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color) {
 
@@ -172,11 +171,11 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	// Argument Checks
 		if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
-			printf("test_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
+			printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
 			return 1;
 		}
 		if ( color >= 0x40 ) {
-			printf("test_square: invalid color. Was 0x%X.\n", color);
+			printf("draw_square: invalid color. Was 0x%X.\n", color);
 			return 1;
 		}
 
@@ -195,7 +194,7 @@ int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
 		char * pix_map = read_xpm(xpm, &width, &height);
 
 		if ( OK != is_valid_pos(xi, yi) ) {
-			printf("test_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
+			printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
 			return 1;
 		}
 

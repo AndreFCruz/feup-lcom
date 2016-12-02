@@ -1,7 +1,7 @@
 #ifndef __INPUT_H
 #define __INPUT_H
 
-typedef enum {MAKE, BREAK /* pressed/released? */} key_state;
+typedef enum {MAKE, BREAK, NONE /* pressed/released? */} key_state;
 
 typedef enum {UP, DOWN /* pressed/released? */} button_state;
 

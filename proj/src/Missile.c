@@ -49,11 +49,11 @@ int round_float(float f) {
  */
 
 // Constructor for Generic Missile
-static Missile * new_missile(unsigned * init_pos, float * vel) {
+static Missile * new_missile(const unsigned * init_pos, float * vel) {
 	Missile * self = (Missile *) malloc(sizeof(Missile));
 
 //	self->init_pos = init_pos;
-//	self->init_pos = {init_pos[0], init_pos[1]};
+	memcpy(self->init_pos, init_pos, 2 * sizeof(unsigned));	// TODO Update other array assignments
 	self->pos = init_pos;
 
 	self->velocity = vel;
@@ -64,7 +64,7 @@ static Missile * new_missile(unsigned * init_pos, float * vel) {
 }
 
 // Constructor for Enemy Missile
-Missile * new_emissile(unsigned * init_pos, float * vel) {
+Missile * new_emissile(const unsigned * init_pos, float * vel) {
 	Missile * self = new_missile(init_pos, vel);
 	self->color = 4;
 	self->isFriendly = FALSE;
@@ -97,11 +97,11 @@ void missile_update(Missile * ptr) {
 
 	//Update Position
 	int tmp;
-	if ( (tmp = round_float(ptr->pending_update[0])) > 1 ) {
+	if ( (tmp = round_float(ptr->pending_movement[0])) > 1 ) {
 		ptr->pos[0] += tmp;
 		ptr->pending_movement[0] -= tmp;
 	}
-	if ( (tmp = round_float(ptr->pending_update[1])) > 1 ) {
+	if ( (tmp = round_float(ptr->pending_movement[1])) > 1 ) {
 		ptr->pos[1] += tmp;
 		ptr->pending_movement[1] -= tmp;
 	}

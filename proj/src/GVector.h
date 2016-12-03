@@ -12,6 +12,8 @@ typedef struct gvector_t GVector;
 GVector * new_gvector(unsigned el_size);
 void delete_gvector(GVector * self);
 
+unsigned gvector_get_size(GVector * self);
+
 void * gvector_at(GVector * self, unsigned index);
 void * gvector_push_back(GVector * self, void * elem);  // realloc may happen
 

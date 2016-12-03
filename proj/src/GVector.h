@@ -17,6 +17,7 @@ unsigned gvector_get_size(GVector * self);
 void * gvector_at(GVector * self, unsigned index);
 void * gvector_push_back(GVector * self, void * elem);  // realloc may happen
 
+void gvector_erase(GVector * self, unsigned index);		// realloc may happen
 void gvector_pop_back(GVector * self);                  // realloc may happen
 void gvector_clear(GVector * self);
 

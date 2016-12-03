@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "GVector.h"
 
 
@@ -39,6 +40,7 @@ unsigned gvector_get_size(GVector * self) {
     return self->size;
 }
 
+// Private Method
 static void gvector_check_capacity(GVector * self) {
     if ( (self->capacity - self->size) > self->increments ) {
         self->capacity -= self->increments;
@@ -63,13 +65,29 @@ void * gvector_push_back(GVector * self, void * elem) {
 }
 
 void gvector_pop_back(GVector * self) {
-    if (self->size != 0) {
-        --(self->size);
-    }
-    else
-        return;
+    if (0 == self->size) {
+    	printf("GVector::pop_back tried to pop empty vector\n");
+    	return;
+    } else {
+    	--(self->size);
+    	gvector_check_capacity(self);
+	}
+}
 
-    gvector_check_capacity(self);
+void gvector_erase(GVector * self, unsigned index) {
+	if (self->size <= index) {
+		printf("GVector::erase tried to erase out_of_range index\n");
+		return;
+	}
+
+	// unsigned i;
+	// for (i = 0; i < self->size; ++i) {
+
+	// }
+	--(self->size);
+	memmove(self->array + index * self->el_size, self->array + (index + 1) * self->el_size, (self->size - index) * self->el_size);
+
+	gvector_check_capacity(self);
 }
 
 void gvector_clear(GVector * self) {

@@ -49,22 +49,27 @@ int round_float(float f) {
  */
 
 // Constructor for Generic Missile
-static Missile * new_missile(const unsigned * init_pos, float * vel) {
+static Missile * new_missile(const unsigned * init_pos, const float * vel) {
 	Missile * self = (Missile *) malloc(sizeof(Missile));
 
 //	self->init_pos = init_pos;
 	memcpy(self->init_pos, init_pos, 2 * sizeof(unsigned));	// TODO Update other array assignments
-	self->pos = init_pos;
+//	self->pos = init_pos;
+	memcpy(self->pos, init_pos, 2 * sizeof(unsigned));
 
-	self->velocity = vel;
+//	self->velocity = vel;
+	memcpy(self->velocity, vel, 2 * sizeof(float));
 
-	self->color = 3;	// FOR DEBUGGING -- should never be displayed with this color
+	self->pending_movement[0] = 0.;
+	self->pending_movement[1] = 0.;
+
+	self->color = 1;
 
 	return self;
 }
 
 // Constructor for Enemy Missile
-Missile * new_emissile(const unsigned * init_pos, float * vel) {
+Missile * new_emissile(const unsigned * init_pos, const float * vel) {
 	Missile * self = new_missile(init_pos, vel);
 	self->color = 4;
 	self->isFriendly = FALSE;
@@ -72,11 +77,12 @@ Missile * new_emissile(const unsigned * init_pos, float * vel) {
 }
 
 // Constructor for Friendly Missile
-Missile * new_fmissile(unsigned * init_pos, float * vel, unsigned * mouse_pos) {
+Missile * new_fmissile(const unsigned * init_pos, const float * vel, const unsigned * mouse_pos) {
 	Missile * self = new_missile(init_pos, vel);
 	self->color = 6;
 	self->isFriendly = TRUE;
-	self->end_pos = mouse_pos;
+//	self->end_pos = mouse_pos;
+	memcpy(self->end_pos, mouse_pos, 2 * sizeof(unsigned));
 	return self;
 }
 
@@ -123,11 +129,14 @@ unsigned missile_getYPos(Missile * ptr) {
  * Methods for Explosion
  */
 
-Explosion * new_explosion(unsigned * position) {
+Explosion * new_explosion(const unsigned * position) {
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
-	self->pos = position;
+//	self->pos = position;
+	memcpy(self->pos, position, 2 * sizeof(unsigned));
 	self->curr_frame = 0;
+
+	// TODO
 	// Initiate Bitmaps and number of frames
 
 	return self;

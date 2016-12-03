@@ -9,7 +9,7 @@ struct gvector_t;
 typedef struct gvector_t GVector;
 
 /* Methods */
-GVector * new_gvector(unsigned size, unsigned el_size);
+GVector * new_gvector(unsigned el_size);
 void delete_gvector(GVector * self);
 
 void * gvector_at(GVector * self, unsigned index);

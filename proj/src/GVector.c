@@ -1,4 +1,7 @@
+#include <stdlib.h>
+#include <string.h>
 #include "GVector.h"
+
 
 struct gvector_t {
     unsigned size;              // number of elements in generic vector
@@ -13,7 +16,7 @@ GVector * new_gvector(unsigned el_size) {
     if (0 == el_size)
         return NULL;
 
-    GVector * self = (GVector *) malloc(size_of(gvector_t));
+    GVector * self = (GVector *) malloc(sizeof(GVector));
     if (NULL == self)
         return NULL;
 
@@ -32,27 +35,37 @@ void delete_gvector(GVector * self) {
     free(self);
 }
 
-static gvector_check_capacity(GVector * self) {
+unsigned gvector_get_size(GVector * self) {
+    return self->size;
+}
+
+static void gvector_check_capacity(GVector * self) {
     if ( (self->capacity - self->size) > self->increments ) {
         self->capacity -= self->increments;
+        self->array = realloc(self->array, self->capacity * self->el_size);
+    } else if ( self->capacity == self->size ) {
+        self->capacity += self->increments;
         self->array = realloc(self->array, self->capacity * self->el_size);
     }
 }
 
+// Returns void pointer, result must be cast to proper type
 void * gvector_at(GVector * self, unsigned index) {
-    return index < self->size ? array + index * el_size : NULL;
+    return index < self->size ? self->array + index * self->el_size : NULL;
 }
 
 
 void * gvector_push_back(GVector * self, void * elem) {
-    if (self->size < self->capacity) {
-        memcpy(self->array + self->el_size * self->size)
-    }
+    gvector_check_capacity(self);
+    memcpy(self->array + self->el_size * self->size++, elem, self->el_size);
+
+    return gvector_at(self, self->size - 1);
 }
 
 void gvector_pop_back(GVector * self) {
-    if (self->size != 0)
+    if (self->size != 0) {
         --(self->size);
+    }
     else
         return;
 
@@ -64,3 +77,6 @@ void gvector_clear(GVector * self) {
 
     gvector_check_capacity(self);
 }
+
+
+

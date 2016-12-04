@@ -74,8 +74,10 @@ int main()
 //						if (counter == PACKET_NELEMENTS) {
 //							fill_screen(0);
 //							update_mouse_position(input, int_value(packet[1], packet[0] & BYTE0_X_SIGN), -int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
+//							if (mouse_inside_area(input, 462, 334,562, 434) == OK)
+//								draw_square(ptr, 462, 334,100, 4);
 //							draw_xpm(ptr, get_mouse_x(input), get_mouse_y(input), cross);
-//							//draw_xpm(ptr, packet[1], packet[2] , cross);
+//
 //							counter = 0;
 //						}
 //						timerCount = elapsed = 0;

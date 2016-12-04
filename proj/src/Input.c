@@ -64,3 +64,12 @@ void update_mouse_position(input_t * input, int  x_var, int y_var) {
 	if (!alterationY)
 		input->mouse_pos[1] += y_var;
 }
+
+int mouse_inside_area (input_t * input, int x_initial, int y_initial, int x_final, int y_final) {
+	if (input->mouse_pos[0] >= x_initial && input->mouse_pos[0] <= x_final) {
+		if (input->mouse_pos[1] >= y_initial && input->mouse_pos[1] <= y_final)
+			return 0;
+		else return 1;
+	}
+	else return 1;
+}

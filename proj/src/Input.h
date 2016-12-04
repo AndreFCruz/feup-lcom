@@ -31,5 +31,6 @@ int get_mouse_x(input_t * input);
 int get_mouse_y(input_t * input);
 
 void update_mouse_position(input_t * input, int  x_var, int y_var);
+int mouse_inside_area (input_t * input, int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
 
 #endif

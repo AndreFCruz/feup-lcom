@@ -14,6 +14,7 @@
 #include "pixmap.h"
 #include "stddef.h"
 #include "mouse.h"
+#include "Bitmap.h"
 
 /* ** */
 
@@ -23,7 +24,7 @@ int main()
 
 	// Rudimentary Game Setup
 	char * ptr;
-	if ( (ptr = vg_init(MODE_1024X768_256)) == NULL ) {
+	if ( (ptr = vg_init(MODE_800X600_64k)) == NULL ) {
 		printf("test_square failed VRAM map in vg_init\n");
 		return 1;
 	}
@@ -34,11 +35,12 @@ int main()
 //	draw_circle(ptr, 300, 300, 200, 18);
 //	draw_square(ptr, 50, 300, 100, 23);
 //	draw_xpm(ptr, 500, 500, penguin);
-
-	//Mouses-tests
+//
+//	//Mouses-tests
+//	Bitmap* background = loadBitmap("/home/lcom/svn/proj/res/Background.bmp");
 //	input_t * input = new_input(get_Xres(), get_Yres());
 //
-//	unsigned short idle_time = 3;
+//	unsigned short idle_time = 5;
 //	int ipc_status;
 //	message msg;
 //
@@ -72,7 +74,8 @@ int main()
 //						mouse_handler(packet, & counter);
 //
 //						if (counter == PACKET_NELEMENTS) {
-//							fill_screen(0);
+//							//fill_screen(1);
+//							drawBitmap(ptr,background,0,0,ALIGN_LEFT);
 //							update_mouse_position(input, int_value(packet[1], packet[0] & BYTE0_X_SIGN), -int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
 //							if (mouse_inside_area(input, 462, 334,562, 434) == OK)
 //								draw_square(ptr, 462, 334,100, 4);
@@ -108,9 +111,11 @@ int main()
 //
 //	unsigned char dummy;
 //	sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer, so keyboard can be used after service call
+//
+//	deleteBitmap(background);
 	/* Finish of Mouse Test */
 
-	//timer_delay(5);
+	timer_delay(5);
 
 	return vg_exit();
 }

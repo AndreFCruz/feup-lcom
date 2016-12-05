@@ -11,8 +11,8 @@ input_t * new_input(unsigned h_res, unsigned v_res) {
 	n_input->LMB = UP;
 	n_input->MMB = UP;
 
-	n_input->mouse_pos[0] = 512;
-	n_input->mouse_pos[1] = 384;
+	n_input->mouse_pos[0] = h_res/2;
+	n_input->mouse_pos[1] = v_res/2;
 
 	n_input->res[0] = h_res;
 	n_input->res[1] = v_res;

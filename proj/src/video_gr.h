@@ -43,6 +43,7 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color);
 int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
+int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi);
  /** @} end of video_gr */
  
 #endif /* __VIDEO_GR_H */

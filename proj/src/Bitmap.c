@@ -117,7 +117,7 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
         if (pos < 0 || pos >= get_Yres())
             continue;
 
-        bufferStartPos = ptr;	//TODO: RECONFIRMAR
+        bufferStartPos = ptr;
         bufferStartPos += x * 2 + pos * get_Xres() * 2;
 
         imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;

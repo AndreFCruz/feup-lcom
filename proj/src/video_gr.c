@@ -25,7 +25,8 @@ unsigned get_Yres() {
 }
 
 void paint_pixel(int x, int y, int color, char * ptr) {
-	*(ptr + x + y * h_res) = color;
+	//*(ptr + x + y * h_res) = color;
+	*(ptr + (x * 2 + y * h_res * 2)) = color;
 }
 
 int is_valid_pos(unsigned short x, unsigned short y) {
@@ -211,4 +212,44 @@ int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
 			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
 		}
 	}
+}
+
+int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi) {
+
+	//Drawing the horizontal line of the cross
+	if (xi-10 < 0) {
+		draw_line(ptr, 0,yi-1,xi+10,yi-1,0);
+		draw_line(ptr, 0,yi,xi+10,yi,0);
+		draw_line(ptr, 0,yi+1,xi+10,yi+1,0);
+	}
+	else if (xi+10 > h_res) {
+		draw_line(ptr,xi-10,yi-1,h_res-1,yi-1,0);
+		draw_line(ptr,xi-10,yi,h_res-1,yi,0);
+		draw_line(ptr,xi-10,yi+1,h_res-1,yi+1,0);
+	}
+	else {
+		draw_line(ptr,xi-10,yi-1,xi+10,yi-1,0);
+		draw_line(ptr,xi-10,yi,xi+10,yi,0);
+		draw_line(ptr,xi-10,yi+1,xi+10,yi+1,0);
+	}
+
+	//Drawing the vertical line of the cross
+	if (yi-10 < 0) {
+		draw_line(ptr,xi-1,0,xi-1,yi+10,0);
+		draw_line(ptr,xi,0,xi,yi+10,0);
+		draw_line(ptr,xi+1,0,xi+1,yi+10,0);
+	}
+	else if (yi+10 > v_res) {
+		draw_line(ptr,xi-1,yi-10,xi-1,v_res-1,0);
+		draw_line(ptr,xi,yi-10,xi,v_res-1,0);
+		draw_line(ptr,xi+1,yi-10,xi+1,v_res-1,0);
+	}
+	else {
+		draw_line(ptr,xi-1,yi-10,xi-1,yi+10,0);
+		draw_line(ptr,xi,yi-10,xi,yi+10,0);
+		draw_line(ptr,xi+1,yi-10,xi+1,yi+10,0);
+	}
+
+	//draw_line(ptr,xi-10,yi,xi+10,yi,0);
+	//draw_line(ptr,xi,yi-10,xi,yi+10,0);
 }

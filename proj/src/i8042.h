@@ -12,7 +12,7 @@
 #define KBC_IRQ             1   /**< @brief KBC IRQ line */
 #define KBD_INITIAL_HOOK_ID 1   /**< @brief KBD Initial hook_id */
 
-#define ESQ_BREAK_CODE      0x81    /**< @brief ESQ key break code */
+#define ESC_BREAK_CODE      0x81    /**< @brief ESC key break code */
 
 // /* Timer 0 useful macros */
 // #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */

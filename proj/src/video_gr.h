@@ -21,7 +21,7 @@ int is_valid_pos(unsigned short x, unsigned short y);
 
 void fill_screen(uint16_t color);
 
-void paint_pixel(int x, int y, int color, uint16_t * ptr);
+void paint_pixel(int x, int y, int color);
 
 /**
  * @brief Initializes the video module in graphics mode
@@ -47,15 +47,17 @@ int vg_exit(void);
 unsigned get_Xres();
 unsigned get_Yres();
 
-int draw_line (char * ptr, unsigned short xi, unsigned short yi,
+int draw_line (unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color);
-int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
-int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color);
+int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
+int draw_square (unsigned short x, unsigned short y, unsigned short size, unsigned long color);
 //int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
-int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi);
+int draw_mouse_cross (unsigned short xi, unsigned short yi);
 
 uint16_t rgb (char red_value, char green_value, char blue_value);
+
+int buffer_handler ();
 
 
 

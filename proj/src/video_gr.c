@@ -25,8 +25,8 @@ unsigned get_Yres() {
 	return v_res;
 }
 
-void paint_pixel(int x, int y, int color, uint16_t * ptr) {
-	*(ptr + x + y * h_res) = color;
+void paint_pixel(int x, int y, int color) {
+	*((uint16_t *)buffer_ptr + x + y * h_res) = color;	//TODO Re-check thsi cast
 	//*(ptr + (x * 2 + y * h_res * 2)) = color;
 }
 
@@ -36,7 +36,7 @@ int is_valid_pos(unsigned short x, unsigned short y) {
 
 //TODO CHECK IF IT WORKS WITH 2BYTE COLOUR
 void fill_screen(uint16_t color) {
-	memset(video_mem, color, h_res * v_res);
+	memset(buffer_ptr, color, h_res * v_res);
 }
 
 // Snippet based on the PDF
@@ -81,7 +81,10 @@ void *vg_init(unsigned short mode) {
 	if(video_mem == MAP_FAILED)
 		panic("couldn’t map video memory");
 
-	return video_mem;
+	//Buffer initialization for use in double buffering
+	buffer_ptr = (void *) malloc(vram_size);
+
+	return buffer_ptr;
 }
 
 int vg_exit() {
@@ -100,7 +103,7 @@ int vg_exit() {
 }
 
 //Added Functions
-int draw_line (char * ptr, unsigned short xi, unsigned short yi,
+int draw_line (unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color) {
 
 
@@ -150,13 +153,13 @@ int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 
 	unsigned i;
 	for (i = 0; i <= n; ++i) {
-		paint_pixel(x, y, color, (uint16_t *) ptr);
+		paint_pixel(x, y, color);
 		x += (x_variation / (float) n);
 		y += (y_variation / (float) n);
 	}
 }
 
-int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color) {
+int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color) {
 
 	if ( OK != is_valid_pos(center_x+radius, center_y+radius) || OK != is_valid_pos(center_x-radius, center_y-radius) ) {
 		printf("draw_circle: invalid position for circle. Center was: (%d, %d). Radius was %d.\n", center_x, center_y, radius);
@@ -168,7 +171,7 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 
 	while( y_var <= (center_y+radius)) {
 		if ((x_var-center_x)*(x_var-center_x) + (y_var-center_y)*(y_var-center_y) <= radius*radius)
-			paint_pixel(x_var, y_var, color, (uint16_t *) ptr);
+			paint_pixel(x_var, y_var, color);
 
 		++x_var;
 		if (x_var > center_x+radius) {
@@ -178,7 +181,7 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 	}
 }
 
-int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
+int draw_square (unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
 	// Argument Checks
 	if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
 		printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
@@ -193,7 +196,7 @@ int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short 
 	unsigned i, j;
 	for (i = x; i < size + x; i++) {
 		for (j = y; j < size + y; j++) {
-			paint_pixel(i, j, color, (uint16_t *) ptr);
+			paint_pixel(i, j, color);
 		}
 	}
 }
@@ -214,42 +217,42 @@ int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short 
 //			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), (uint16_t *) ptr);
 //		}
 //	}
-//}
+//}for (int i = 0; io)
 
-int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi) {
+int draw_mouse_cross (unsigned short xi, unsigned short yi) {
 
 	//Drawing the horizontal line of the cross
 	if (xi-10 < 0) {
-		draw_line(ptr, 0,yi-1,xi+10,yi-1,0);
-		draw_line(ptr, 0,yi,xi+10,yi,0);
-		draw_line(ptr, 0,yi+1,xi+10,yi+1,0);
+		draw_line(0,yi-1,xi+10,yi-1,0);
+		draw_line(0,yi,xi+10,yi,0);
+		draw_line(0,yi+1,xi+10,yi+1,0);
 	}
 	else if (xi+10 > h_res) {
-		draw_line(ptr,xi-10,yi-1,h_res-1,yi-1,0);
-		draw_line(ptr,xi-10,yi,h_res-1,yi,0);
-		draw_line(ptr,xi-10,yi+1,h_res-1,yi+1,0);
+		draw_line(xi-10,yi-1,h_res-1,yi-1,0);
+		draw_line(xi-10,yi,h_res-1,yi,0);
+		draw_line(xi-10,yi+1,h_res-1,yi+1,0);
 	}
 	else {
-		draw_line(ptr,xi-10,yi-1,xi+10,yi-1,0);
-		draw_line(ptr,xi-10,yi,xi+10,yi,0);
-		draw_line(ptr,xi-10,yi+1,xi+10,yi+1,0);
+		draw_line(xi-10,yi-1,xi+10,yi-1,0);
+		draw_line(xi-10,yi,xi+10,yi,0);
+		draw_line(xi-10,yi+1,xi+10,yi+1,0);
 	}
 
 	//Drawing the vertical line of the cross
 	if (yi-10 < 0) {
-		draw_line(ptr,xi-1,0,xi-1,yi+10,0);
-		draw_line(ptr,xi,0,xi,yi+10,0);
-		draw_line(ptr,xi+1,0,xi+1,yi+10,0);
+		draw_line(xi-1,0,xi-1,yi+10,0);
+		draw_line(xi,0,xi,yi+10,0);
+		draw_line(xi+1,0,xi+1,yi+10,0);
 	}
 	else if (yi+10 > v_res) {
-		draw_line(ptr,xi-1,yi-10,xi-1,v_res-1,0);
-		draw_line(ptr,xi,yi-10,xi,v_res-1,0);
-		draw_line(ptr,xi+1,yi-10,xi+1,v_res-1,0);
+		draw_line(xi-1,yi-10,xi-1,v_res-1,0);
+		draw_line(xi,yi-10,xi,v_res-1,0);
+		draw_line(xi+1,yi-10,xi+1,v_res-1,0);
 	}
 	else {
-		draw_line(ptr,xi-1,yi-10,xi-1,yi+10,0);
-		draw_line(ptr,xi,yi-10,xi,yi+10,0);
-		draw_line(ptr,xi+1,yi-10,xi+1,yi+10,0);
+		draw_line(xi-1,yi-10,xi-1,yi+10,0);
+		draw_line(xi,yi-10,xi,yi+10,0);
+		draw_line(xi+1,yi-10,xi+1,yi+10,0);
 	}
 
 	//draw_line(ptr,xi-10,yi,xi+10,yi,0);
@@ -260,4 +263,10 @@ int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi) {
 uint16_t rgb (char red_value, char green_value, char blue_value) {
 	uint16_t return_value;
 	return (((red_value>>2) << 11) + ((green_value>>2) << 5) + (blue_value>>2));
+}
+
+//TODO: Re-check
+int buffer_handler () {
+	memcpy(video_mem,buffer_ptr,vram_size);
+	return 0;
 }

@@ -1,122 +1,134 @@
-/* includes */
-#include <minix/syslib.h>
-#include <minix/driver.h>
-#include <minix/com.h>
-#include <minix/sysutil.h>
+#include "planetary.h"
 #include "video_gr.h"
 #include "timer.h"
 #include "keyboard.h"
 #include "i8042.h"
 #include "read_xpm.h"
-#include "math.h"
 #include "Input.h"
 #include "vbe.h"
 #include "pixmap.h"
 #include "stddef.h"
 #include "mouse.h"
 #include "Bitmap.h"
+#include "GVector.h"
+#include "Missile.h"
 
-/* ** */
+static char * v_mem = NULL;	// TODO Mudar para o video_gr ??
 
-int main()
-{
+void event_update(event_t * evt, Input * in) {
+	static state_t game_state = MENU;
+
+	switch(state_t) {
+	case MENU:
+		if (*evt == EXIT) {
+			exit();
+		}
+		break;
+
+	case GAME_SINGLE:
+		if (*evt == EXIT) {
+			state_t = MENU;
+			menu_loop();
+		}
+		break;
+
+	case GAME_MULTI:
+
+		break;
+
+	default:
+		printf("planetary::event_update Unrecognized State!");
+		break;
+	}
+}
+// TODO Mudar V_MEM ptr para o video_gr.c
+int start() {
 	sef_startup();
 
-	// Rudimentary Game Setup
-	char * ptr;
-	if ( (ptr = vg_init(MODE_800X600_64k)) == NULL ) {
+	if ( (v_mem = vg_init(MODE_800X600_64k)) == NULL ) {
 		printf("test_square failed VRAM map in vg_init\n");
 		return 1;
 	}
 
+	// Iniciar Menu?
+}
 
-	//Testes
-	//draw_line(ptr, 100,100,800,300,37);
-	//draw_circle(ptr, 300, 300, 200, 18);
-	//draw_square(ptr, 50, 300, 100, 23);
-	//draw_xpm(ptr, 500, 500, penguin);
+void exit() {
+	vg_exit();
+}
 
-	//Mouses-tests
-	Bitmap* background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
-	input_t * input = new_input(get_Xres(), get_Yres());
+//event_t menu_loop(char * v_mem) {
+//	if (NULL == v_mem) {
+//		start();
+//	}
+//
+//	// Loop (com teclado e rato) que retorna o evento correto quando é premido o botão START_GAME etc.
+//}
 
-	unsigned short idle_time = 5;
-	int ipc_status;
-	message msg;
-
-	/* Subscribe all interrupts */
-	int mouse_irq_set;
-	if ( (mouse_irq_set = BIT(mouse_subscribe_int())) < 0 ) {
-		printf("test_async() -> FAILED mouse_subscribe_int()\n");
+event_t game_loop(){
+	if (NULL == v_mem) {
+		start();
 	}
-	int timer_irq_set;
-	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 ) {
-		printf("test_async() -> FAILED timer_subscribe_int()\n");
-	}
-	/* */
 
-	unsigned int timerCount = 0;	// Number of timer interrupts
-	unsigned short elapsed = 0;		// Time inactive in seconds
-	unsigned char packet[PACKET_NELEMENTS];
-	unsigned short counter = 0;		// Keeps the number of bytes ready in the packet
+	GVector * e_missiles = new_gvector(sizeof(Missile));
+	GVector * f_missiles = new_gvector(sizeof(Missile));
 
-	int r;
-	while( elapsed < idle_time ) {	// Exits when cnt reaches 0
+	int r; int esc_flag = 0;
+	while( ! esc_flag ) { // While ESC BreakCode not detected
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
-			printf("driver_receive failed with: %d\n", r);
-			continue;
+			 printf("driver_receive failed with: %d\n", r);
+			 continue;
 		}
 		if (is_ipc_notify(ipc_status)) { /* received notification */
 			switch (_ENDPOINT_P(msg.m_source)) {
-				case HARDWARE: /* hardware interrupt notification */
-					if (msg.NOTIFY_ARG & mouse_irq_set) {
-						mouse_handler(packet, & counter);
+			case HARDWARE: /* hardware interrupt notification */
+				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
 
-						if (counter == PACKET_NELEMENTS) {
-							//fill_screen(1);
-							drawBitmap(ptr,background,0,0,ALIGN_LEFT);
-							update_mouse_position(input, int_value(packet[1], packet[0] & BYTE0_X_SIGN), -int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
-							if (mouse_inside_area(input, 462, 334,562, 434) == OK)
-								draw_square(ptr, 462, 334,100, WHITE);
-							//draw_xpm(ptr, get_mouse_x(input), get_mouse_y(input), cross);
-							draw_mouse_cross(ptr,get_mouse_x(input), get_mouse_y(input));
+				}
 
-							counter = 0;
-						}
-						timerCount = elapsed = 0;
+				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
+					/* Update Input, game_state and draw current state */
+
+
+
+					/* Draw Game */
+
+					unsigned i;
+					// Draw enemy missiles
+					for (i = 0; i < gvector_get_size(e_missiles); ++i) {
+						draw_missile(gvector_at(e_missiles, i));
 					}
-					if (msg.NOTIFY_ARG & timer_irq_set) {
-						if ( ++timerCount % 60 == 0 )
-							++elapsed;
+
+					// Draw friendly missiles
+					for (i = 0; i < gvector_get_size(f_missiles); ++i) {
+						// TODO
+						gvector_at(f_missiles, i);
 					}
-					break;
-				default:
-					break; /* no other notifications expected: do nothing */
+				}
+
+				break;
+			default:
+				break; /* no other notifications expected: do nothing */
 			}
 		} else { /* received a standard message, not a notification */
-			/* no standard messages expected: do nothing */
+				/* no standard messages expected: do nothing */
 			printf("Error: received unexpected standard message.\n");
+			return 1;
 		}
 	}
 
-	/* Unsubscribe all interrupts */
-	if ( mouse_unsubscribe_int() < 0 ) {
-		printf("test_async() -> FAILED mouse_unsubscribe_int()\n");
+	if ( kbd_unsubscribe_int() < 0 ) {
+		printf("game_loop -> FAILED kbd_unsubscribe_int()\n");
+		return 1;
 	}
 	if ( timer_unsubscribe_int() < 0 ) {
-#define M_TOLERANCE 2	// Mouse Tolerance for small direction changes
-		printf("test_async() -> FAILED timer_unsubscribe_int()\n");
+		printf("game_loop -> FAILED timer_unsubscribe_int()\n");
+		return 1;
 	}
-	/* */
 
-	unsigned char dummy;
-	sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer, so keyboard can be used after service call
 
-	deleteBitmap(background);
-	/* Finish of Mouse Test */
-
-	//timer_delay(5);
-
-	return vg_exit();
+//	event_t evt = EXIT;
+//	return evt;
+	return event_t(EXIT);
 }

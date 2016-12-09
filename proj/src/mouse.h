@@ -7,6 +7,8 @@
  * Functions for using the i8042 KBC/KBD
  */
 
+// TODO delete unnecessary types!!
+// TODO tidy code from previous labs
 /* Types needed for function type_gesture() - State Machine */
 typedef enum {INIT, DRAW, COMP} state_t;
 typedef enum {RDOWN, RUP, VERTLINE} ev_type_t;

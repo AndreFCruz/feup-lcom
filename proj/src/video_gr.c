@@ -9,6 +9,7 @@
 
 /* Static global variables */
 static void *video_mem;		/* Process address to which VRAM is mapped */
+static void *buffer_ptr;
 
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
@@ -24,16 +25,17 @@ unsigned get_Yres() {
 	return v_res;
 }
 
-void paint_pixel(int x, int y, int color, char * ptr) {
-	//*(ptr + x + y * h_res) = color;
-	*(ptr + (x * 2 + y * h_res * 2)) = color;
+void paint_pixel(int x, int y, int color, uint16_t * ptr) {
+	*(ptr + x + y * h_res) = color;
+	//*(ptr + (x * 2 + y * h_res * 2)) = color;
 }
 
 int is_valid_pos(unsigned short x, unsigned short y) {
 	return (x < h_res && y < v_res) ? OK : 1;
 }
 
-void fill_screen(unsigned char color) {
+//TODO CHECK IF IT WORKS WITH 2BYTE COLOUR
+void fill_screen(uint16_t color) {
 	memset(video_mem, color, h_res * v_res);
 }
 
@@ -148,7 +150,7 @@ int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 
 	unsigned i;
 	for (i = 0; i <= n; ++i) {
-		paint_pixel(x, y, color, ptr);
+		paint_pixel(x, y, color, (uint16_t *) ptr);
 		x += (x_variation / (float) n);
 		y += (y_variation / (float) n);
 	}
@@ -166,7 +168,7 @@ int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, u
 
 	while( y_var <= (center_y+radius)) {
 		if ((x_var-center_x)*(x_var-center_x) + (y_var-center_y)*(y_var-center_y) <= radius*radius)
-			paint_pixel(x_var, y_var, color, ptr);
+			paint_pixel(x_var, y_var, color, (uint16_t *) ptr);
 
 		++x_var;
 		if (x_var > center_x+radius) {
@@ -182,7 +184,7 @@ int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short 
 		printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
 		return 1;
 	}
-	if ( color >= 0x40 ) {
+	if ( color >= 0xFFFFFF) {
 		printf("draw_square: invalid color. Was 0x%X.\n", color);
 		return 1;
 	}
@@ -191,28 +193,28 @@ int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short 
 	unsigned i, j;
 	for (i = x; i < size + x; i++) {
 		for (j = y; j < size + y; j++) {
-			paint_pixel(i, j, color, ptr);
+			paint_pixel(i, j, color, (uint16_t *) ptr);
 		}
 	}
 }
 
-int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
-	int width, height;
-	// xpm to pix_map, update width and height
-	char * pix_map = read_xpm(xpm, &width, &height);
-
-	if ( OK != is_valid_pos(xi, yi) ) {
-		printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
-		return 1;
-	}
-
-	unsigned i, j;
-	for (i = 0; i < width; i++) {
-		for (j = 0; j < height; j++) {
-			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), ptr);
-		}
-	}
-}
+//int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
+//	int width, height;
+//	// xpm to pix_map, update width and height
+//	char * pix_map = read_xpm(xpm, &width, &height);
+//
+//	if ( OK != is_valid_pos(xi, yi) ) {
+//		printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
+//		return 1;
+//	}
+//
+//	unsigned i, j;
+//	for (i = 0; i < width; i++) {
+//		for (j = 0; j < height; j++) {
+//			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), (uint16_t *) ptr);
+//		}
+//	}
+//}
 
 int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi) {
 
@@ -252,4 +254,10 @@ int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi) {
 
 	//draw_line(ptr,xi-10,yi,xi+10,yi,0);
 	//draw_line(ptr,xi,yi-10,xi,yi+10,0);
+}
+
+/* TODO: Acrescentar  as conjdiçoes de superior a 255, Por aql return muito mais bonitinho e explicado, Terminar as restantes macros das cores */
+uint16_t rgb (char red_value, char green_value, char blue_value) {
+	uint16_t return_value;
+	return (((red_value>>2) << 11) + ((green_value>>2) << 5) + (blue_value>>2));
 }

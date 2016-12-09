@@ -78,7 +78,7 @@ int main()
 							drawBitmap(ptr,background,0,0,ALIGN_LEFT);
 							update_mouse_position(input, int_value(packet[1], packet[0] & BYTE0_X_SIGN), -int_value(packet[2], packet[0] & BYTE0_Y_SIGN));
 							if (mouse_inside_area(input, 462, 334,562, 434) == OK)
-								draw_square(ptr, 462, 334,100, 4);
+								draw_square(ptr, 462, 334,100, WHITE);
 							//draw_xpm(ptr, get_mouse_x(input), get_mouse_y(input), cross);
 							draw_mouse_cross(ptr,get_mouse_x(input), get_mouse_y(input));
 

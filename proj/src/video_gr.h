@@ -1,6 +1,16 @@
 #ifndef __VIDEO_GR_H
 #define __VIDEO_GR_H
 
+#include <stdint.h>
+
+ /* RGB Color Defnitions */
+#define BLACK 			rgb(0,0,0)
+#define STRONG_PINK		rgb(255,0,127)
+#define NAVY			rgb(0,128,255)
+#define RED				rgb(255,0,0)
+#define YELLOW			rgb(255,255,0)
+#define WHITE			rgb(255,255,255)
+
 /** @defgroup video_gr video_gr
  * @{
  *
@@ -9,9 +19,9 @@
 
 int is_valid_pos(unsigned short x, unsigned short y);
 
-void fill_screen(unsigned char color);
+void fill_screen(uint16_t color);
 
-void paint_pixel(int x, int y, int color, char * ptr);
+void paint_pixel(int x, int y, int color, uint16_t * ptr);
 
 /**
  * @brief Initializes the video module in graphics mode
@@ -41,9 +51,14 @@ int draw_line (char * ptr, unsigned short xi, unsigned short yi,
 		           unsigned short xf, unsigned short yf, unsigned long color);
 int draw_circle (char * ptr, unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
 int draw_square (char * ptr, unsigned short x, unsigned short y, unsigned short size, unsigned long color);
-int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
+//int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
 int draw_mouse_cross (char * ptr, unsigned short xi, unsigned short yi);
+
+uint16_t rgb (char red_value, char green_value, char blue_value);
+
+
+
  /** @} end of video_gr */
  
 #endif /* __VIDEO_GR_H */

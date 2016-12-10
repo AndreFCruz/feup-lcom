@@ -39,9 +39,9 @@ void paint_pixel(int x, int y, int color);
  *  and the number of colors
  * 
  * @param mode 16-bit VBE mode to set
- * @return Virtual address VRAM was mapped to. NULL, upon failure.
+ * @return 0 upon success, non-zero on failure
  */
-void *vg_init(unsigned short mode);
+int vg_init(unsigned short mode);
 
  /**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)

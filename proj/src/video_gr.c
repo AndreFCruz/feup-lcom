@@ -42,7 +42,7 @@ void fill_screen(uint16_t color) {
 }
 
 // Snippet based on the PDF
-void *vg_init(unsigned short mode) {
+int vg_init(unsigned short mode) {
 	struct reg86u r;
 
 	r.u.b.ah = VBE_CALL;
@@ -52,10 +52,10 @@ void *vg_init(unsigned short mode) {
 
 	if( sys_int86(&r) != OK ) {
 		printf("set_vbe_mode: sys_int86() failed\n");
-		return NULL;
+		return 1;
 	}
 	if ( OK != vbe_assert_error(r.u.b.ah) )
-		return NULL;
+		return 1;
 
 	int n;
 	struct mem_range mr;
@@ -63,7 +63,7 @@ void *vg_init(unsigned short mode) {
 
 	if (vbe_get_mode_info(mode, vbe_mode_p) != OK) {
 		printf("vg_init(): vbe_get_mode_info failed\n");
-		return NULL;
+		return 1;
 	}
 
 	h_res = vbe_mode_p->XResolution;
@@ -86,7 +86,7 @@ void *vg_init(unsigned short mode) {
 	//Buffer initialization for use in double buffering
 	buffer_ptr = (void *) malloc(vram_size);
 
-	return buffer_ptr;
+	return OK;
 }
 
 int vg_exit() {

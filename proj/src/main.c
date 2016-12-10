@@ -15,6 +15,7 @@
 /* Interrupt Handlers' Loop */
 int main()
 {
+	printf("START OF PROJECT SERVICE\n");
 	sef_startup();
 
 	srand(time(NULL));
@@ -50,7 +51,7 @@ int main()
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 
-	int r; int gameRunning;
+	int r; int gameRunning = 1;
 	while( gameRunning ) {
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
@@ -61,10 +62,14 @@ int main()
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /* hardware interrupt notification */
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+					printf("main::keyboard interrupt\n");
+
 					keyboard_handler();
 				}
 
 				if (msg.NOTIFY_ARG & mouse_irq_set) {
+					printf("main::mouse interrupt\n");
+
 					mouse_handler(packet, & counter);
 					if (counter == PACKET_NELEMENTS) {
 						update_mouse_position(packet);
@@ -73,8 +78,10 @@ int main()
 				}
 
 				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
+					printf("main::timer interrupt\n");
 
-					// TODO Call game timer handler (frame, update etc.)
+					if ( OK != timer_handler() )
+						gameRunning = 0;
 
 				}
 
@@ -104,6 +111,8 @@ int main()
 	/* ** */
 
 	// TODO For The Long Haul: kbd output buffer may need to be cleared with sys_inb
+
+	printf("PROJECT SERVICE ENDED\n");
 
 	return vg_exit();
 }

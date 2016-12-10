@@ -1,6 +1,8 @@
 #ifndef __MISSILE_H
 #define __MISSILE_H
 
+#include <stdint.h>
+
 struct missile_t;
 typedef struct missile_t Missile;
 
@@ -11,6 +13,7 @@ typedef struct explosion_t Explosion;
 Missile * new_emissile();
 Missile * new_fmissile(const unsigned * init_pos, const float * vel, const unsigned * mouse_pos);
 
+size_t missile_getSizeOf();
 unsigned missile_getXPos(Missile * ptr);
 unsigned missile_getYPos(Missile * ptr);
 unsigned missile_getInitX(Missile * ptr);

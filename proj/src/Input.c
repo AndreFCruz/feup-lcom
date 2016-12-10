@@ -1,3 +1,4 @@
+#include <minix/syslib.h>
 #include "Input.h"
 
 static Input_t * input = NULL;
@@ -25,7 +26,7 @@ static Input_t * new_input() {
 
 Input_t * input_instance() {
 	if ( NULL == input ) {
-		input = new_input
+		input = new_input();
 	}
 	else
 		return input;
@@ -37,8 +38,8 @@ void keyboard_handler() {
 		printf("keyboard_handler::keyboard_read() failed\n");
 }
 
-key_t keyboard_get_key() {
-	key_t tmp = input_instance()->keycode;
+keycode_t keyboard_get_key() {
+	keycode_t tmp = input_instance()->keycode;
 	input_instance()->keycode = NONE;	// Key handled
 	return tmp;
 }
@@ -127,33 +128,33 @@ void update_mouse_position(unsigned char * packet) {
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
 	// Flags to check whether the Border was reached
-	int validX = OK;
-	int validY = OK;
+	int validX = 1;
+	int validY = 1;
 
 	//Checking the X borders
 	if ((Input->mouse_pos[0] + x_value) < 0) {
 		Input->mouse_pos[0] = 0;
-		validX = 1;
+		validX = 0;
 	}
 	else if (Input->mouse_pos[0] + x_value >= Input->res[0]) {
 		Input->mouse_pos[0] = Input->res[0];
-		validX = 1;
+		validX = 0;
 	}
 
 	//Checking the Y borders
 	if (Input->mouse_pos[1] + y_value < 0) {
 		Input->mouse_pos[1] = 0;
-		validY = 1;
+		validY = 0;
 	}
 	else if (Input->mouse_pos[1] + y_value >= Input->res[1]) {
 		Input->mouse_pos[1] = Input->res[1];
-		validY = 1;
+		validY = 0;
 	}
 
 	//Only if not at the borders, should be updated
-	if ( OK == validX )
+	if ( validX )
 		Input->mouse_pos[0] += x_value;
-	if ( OK == validY )
+	if ( validY )
 		Input->mouse_pos[1] += y_value;
 }
 
@@ -161,7 +162,7 @@ int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final) {
 	Input_t * Input = input_instance();
 	if (Input->mouse_pos[0] >= x_initial && Input->mouse_pos[0] <= x_final &&
 			Input->mouse_pos[1] >= y_initial && Input->mouse_pos[1] <= y_final)
-		return OK;
-	else
 		return 1;
+	else
+		return 0;
 }

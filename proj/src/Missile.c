@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include "Missile.h"
+#include "video_gr.h"
 
 /**
  * Structs
@@ -137,6 +139,9 @@ uint16_t missile_getColor(Missile * ptr) {
 	return ptr->color;
 }
 
+size_t missile_getSizeOf() {
+	return sizeof(missile_t);
+}
 
 /**
  * Methods for Explosion

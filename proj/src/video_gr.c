@@ -17,12 +17,16 @@ static unsigned vram_size;
 static unsigned vram_base;
 static unsigned bits_per_pixel;
 
-unsigned get_Xres() {
+unsigned vg_getHorRes() {
 	return h_res;
 }
 
-unsigned get_Yres() {
+unsigned vg_getVerRes() {
 	return v_res;
+}
+
+void * vg_getBufferPtr() {
+	return buffer_ptr;
 }
 
 void paint_pixel(int x, int y, int color) {

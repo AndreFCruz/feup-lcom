@@ -17,6 +17,12 @@
  * Functions for outputing data to screen in graphics mode
  */
 
+unsigned vg_getHorRes();
+
+unsigned vg_getVerRes();
+
+void * vg_getBufferPtr();
+
 int is_valid_pos(unsigned short x, unsigned short y);
 
 void fill_screen(uint16_t color);

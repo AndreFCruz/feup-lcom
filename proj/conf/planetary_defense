@@ -1,4 +1,4 @@
-service main
+service planetary_defense
 {
         system
                 UMAP

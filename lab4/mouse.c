@@ -180,7 +180,6 @@ int mouse_fetch_config(unsigned char * config)
 }
 
 
-//Make function that updates the type correctly?
 void event_update (event_t * evt, const unsigned char *packet, short length)
 {
 	int x_value = int_value(packet[1], packet[0] & BYTE0_X_SIGN);

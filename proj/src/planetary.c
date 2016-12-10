@@ -50,6 +50,8 @@ int start() {
 		return 1;
 	}
 
+	// Subscribe Interrupts ? IRQs globais ?
+
 	// Iniciar Menu?
 }
 

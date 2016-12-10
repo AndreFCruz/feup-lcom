@@ -42,7 +42,7 @@ int main()
 
 	//Initiate Graphics Mode
 	if ( OK != vg_init(MODE_800X600_64k)) {
-		printf("FAILED vg_init\n");
+		printf("main::vg_init Failed\n");
 		return 1;
 	}
 

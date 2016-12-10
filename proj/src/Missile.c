@@ -119,11 +119,11 @@ int missile_isFriendly(Missile * ptr) {
 	return (ptr->isFriendly == TRUE ? 1 : 0);
 }
 
-unsigned missile_getXPos(Missile * ptr) {
+unsigned missile_getPosX(Missile * ptr) {
 	return ptr->pos[0];
 }
 
-unsigned missile_getYPos(Missile * ptr) {
+unsigned missile_getPosY(Missile * ptr) {
 	return ptr->pos[1];
 }
 
@@ -140,7 +140,7 @@ uint16_t missile_getColor(Missile * ptr) {
 }
 
 size_t missile_getSizeOf() {
-	return sizeof(missile_t);
+	return sizeof(Missile);
 }
 
 /**

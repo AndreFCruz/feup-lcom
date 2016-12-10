@@ -91,8 +91,7 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
     else if (alignment == ALIGN_RIGHT)
         x -= width;
 
-    if (x + width < 0 || x > get_Xres() || y + height < 0
-            || y > get_Yres())
+    if (x + width < 0 || x > vg_getHorRes() || y + height < 0 || y > vg_getVerRes())
         return;
 
     int xCorrection = 0;
@@ -101,10 +100,10 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
         drawWidth -= xCorrection;
         x = 0;
 
-        if (drawWidth > get_Xres())
-            drawWidth = get_Xres();
-    } else if (x + drawWidth >= get_Xres()) {
-        drawWidth = get_Xres() - x;
+        if (drawWidth > vg_getHorRes())
+            drawWidth = vg_getHorRes();
+    } else if (x + drawWidth >= vg_getHorRes()) {
+        drawWidth = vg_getHorRes() - x;
     }
 
     char* bufferStartPos;
@@ -114,11 +113,11 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
     for (i = 0; i < height; i++) {
         int pos = y + height - 1 - i;
 
-        if (pos < 0 || pos >= get_Yres())
+        if (pos < 0 || pos >= vg_getVerRes())
             continue;
 
         bufferStartPos = ptr;
-        bufferStartPos += x * 2 + pos * get_Xres() * 2;
+        bufferStartPos += x * 2 + pos * vg_getHorRes() * 2;
 
         imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;
 

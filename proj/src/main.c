@@ -2,6 +2,8 @@
 #include <minix/driver.h>
 #include <minix/com.h>
 #include <minix/sysutil.h>
+#include <time.h>	// for the random seed
+#include <stdlib.h>
 #include "video_gr.h"
 #include "Input.h"
 #include "stddef.h"
@@ -13,6 +15,8 @@
 int main()
 {
 	sef_startup();
+
+	srand(time(NULL));
 
 	int ipc_status;
 	message msg;

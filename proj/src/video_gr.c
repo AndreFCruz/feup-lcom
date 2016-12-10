@@ -30,15 +30,13 @@ void * vg_getBufferPtr() {
 }
 
 void paint_pixel(int x, int y, int color) {
-	*((uint16_t *)buffer_ptr + x + y * h_res) = color;	//TODO Re-check thsi cast
-	//*(ptr + (x * 2 + y * h_res * 2)) = color;
+	*((uint16_t *)buffer_ptr + x + y * h_res) = color;
 }
 
 int is_valid_pos(unsigned short x, unsigned short y) {
 	return (x < h_res && y < v_res) ? OK : 1;
 }
 
-//TODO CHECK IF IT WORKS WITH 2BYTE COLOUR
 void fill_screen(uint16_t color) {
 	memset(buffer_ptr, color, h_res * v_res);
 }
@@ -161,6 +159,8 @@ int draw_line (unsigned short xi, unsigned short yi,
 		x += (x_variation / (float) n);
 		y += (y_variation / (float) n);
 	}
+
+	return OK;
 }
 
 int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color) {
@@ -183,6 +183,8 @@ int draw_circle (unsigned short center_x, unsigned short center_y, unsigned shor
 			y_var++;
 		}
 	}
+
+	return OK;
 }
 
 int draw_square (unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
@@ -203,27 +205,16 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, unsign
 			paint_pixel(i, j, color);
 		}
 	}
+
+	return OK;
 }
 
-//int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]) {
-//	int width, height;
-//	// xpm to pix_map, update width and height
-//	char * pix_map = read_xpm(xpm, &width, &height);
-//
-//	if ( OK != is_valid_pos(xi, yi) ) {
-//		printf("draw_xpm: invalid position for xpm. Was (%d,%d).\n", xi, yi);
-//		return 1;
-//	}
-//
-//	unsigned i, j;
-//	for (i = 0; i < width; i++) {
-//		for (j = 0; j < height; j++) {
-//			paint_pixel(i + xi, j + yi, *(pix_map + i + j * width), (uint16_t *) ptr);
-//		}
-//	}
-//}for (int i = 0; io)
-
 int draw_mouse_cross (unsigned short xi, unsigned short yi) {
+
+	if (!is_valid_pos(xi,yi)) {
+		printf("Invalid Position for Draw Mouse.\n");
+		return 1;
+	}
 
 	//Drawing the horizontal line of the cross
 	if (xi-10 < 0) {
@@ -261,16 +252,25 @@ int draw_mouse_cross (unsigned short xi, unsigned short yi) {
 
 	//draw_line(ptr,xi-10,yi,xi+10,yi,0);
 	//draw_line(ptr,xi,yi-10,xi,yi+10,0);
+
+	return OK;
 }
 
-/* TODO: Acrescentar  as conjdiçoes de superior a 255, Por aql return muito mais bonitinho e explicado, Terminar as restantes macros das cores */
+// TODO Melhorar...
+void draw_missile(Missile * m) {
+	unsigned thickness = 4, idx = 0;
+	for (; idx < thickness; ++idx) {
+		draw_line(missile_getInitX(m), missile_getInitY(m), missile_getPosX(m), missile_getPosY(m), missile_getColor(m));
+	}
+}
+
+
+/* TODO: Acrescentar  as condicoes de superior a 255, Por aql return muito mais bonitinho e explicado, Terminar as restantes macros das cores */
 uint16_t rgb (char red_value, char green_value, char blue_value) {
 	uint16_t return_value;
 	return (((red_value>>2) << 11) + ((green_value>>2) << 5) + (blue_value>>2));
 }
 
-//TODO: Re-check
-int buffer_handler () {
+void buffer_handler () {
 	memcpy(video_mem,buffer_ptr,vram_size);
-	return 0;
 }

@@ -37,7 +37,7 @@ Input_t * input_instance();	// For singleton-like behaviour
 void delete_input();		// Destructor
 
 void keyboard_handler();
-key_t keyboard_get_key();
+key_t input_get_key();
 
 int get_mouse_x();
 int get_mouse_y();

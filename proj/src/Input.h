@@ -3,16 +3,20 @@
 
 
 typedef enum {UP, DOWN /* pressed/released? */} button_state;
-typedef enum {KEY_MAKE, KEY_BREAK, KEY_NONE /* pressed/released? */} key_state;
+typedef enum {	// TODO Update with actual keycodes!!
+	ESC_MAKE = 0x0,
+	ESC_BREAK = 0x0,
+	ENTER_MAKE = 0x0,
+	UP_MAKE = 0x0,
+	DOWN_MAKE = 0x0,
+	RIGHT_MAKE = 0x0,
+	LEFT_MAKE = 0x0,
+	NONE = 0x0
+} key_t;
 
 typedef struct {
 	/* Keyboard Keys */
-	key_state ESC;
-	key_state ENTER;
-	key_state UP;
-	key_state DOWN;
-	key_state RIGHT;
-	key_state LEFT;
+	key_t keycode;
 
 	/* Mouse Buttons */
 	button_state RMB;
@@ -28,13 +32,18 @@ typedef struct {
 
 //TODO: Add Documentation
 
-Input_t * new_input(unsigned h_res, unsigned v_res);	// Constructor
-void delete_input(Input_t * Input);	// Destructor
+Input_t * input_instance();	// For singleton-like behaviour
 
-int get_mouse_x(Input_t * Input);
-int get_mouse_y(Input_t * Input);
+void delete_input();		// Destructor
 
-void update_mouse_position(Input_t * Input, int  x_var, int y_var);
-int mouse_inside_area (Input_t * Input, int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
+void keyboard_handler();
+key_t keyboard_get_key();
+
+int get_mouse_x();
+int get_mouse_y();
+
+void keyboard_update_input()
+void update_mouse_position(unsigned char * packet);
+int mouse_inside_area (int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
 
 #endif

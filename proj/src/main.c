@@ -3,16 +3,8 @@
 #include <minix/com.h>
 #include <minix/sysutil.h>
 #include "video_gr.h"
-#include "timer.h"
-#include "keyboard.h"
-#include "i8042.h"
-#include "read_xpm.h"
-#include "math.h"
 #include "Input.h"
-#include "vbe.h"
-#include "pixmap.h"
 #include "stddef.h"
-#include "mouse.h"
 #include "Bitmap.h"
 #include "planetary.h"
 
@@ -53,8 +45,8 @@ int main()
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 
-	int r;
-	while( ! esc_flag ) {
+	int r; int gameRunning;
+	while( gameRunning ) {
 		/* Get a request message. */
 		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
 			 printf("driver_receive failed with: %d\n", r);
@@ -64,9 +56,15 @@ int main()
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /* hardware interrupt notification */
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+					keyboard_handler();
+				}
 
-					// TODO Call game keyboard handler
-
+				if (msg.NITIFY_ARG & mouse_irq_set) {
+					mouse_handler(packet, & counter);
+					if (counter == PACKET_NELEMENTS) {
+						update_mouse_position(packet);
+						counter = 0;
+					}
 				}
 
 				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
@@ -75,15 +73,6 @@ int main()
 
 				}
 
-				if (msg.NITIFY_ARG & mouse_irq_set) {
-					mouse_handler(packet, & counter);
-					if (counter == PACKET_NELEMENTS) {
-						counter = 0;
-
-						// TODO Call mouse handler on packet ready
-
-					}
-				}
 				break;
 			}
 		} else { /* received a standard message, not a notification */

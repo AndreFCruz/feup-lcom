@@ -16,17 +16,17 @@
  * Better run my version of lab5 as follows:
  *     service run `pwd`/lab5 -args "mode 0x105"
  */
-//#define VRAM_PHYS_ADDR	0xF0000000	// Standard
+//#define VRAM_PHYS_ADDR		0xF0000000	// Standard
 //#define VRAM_PHYS_ADDR		0xE0000000	// PC Andre
-#define BITS_PER_PIXEL		8
+//#define BITS_PER_PIXEL		8
 
-/* Private global variables */
+/* Static global variables */
 
 static void *video_mem;		/* Process address to which VRAM is mapped */
 
 static unsigned h_res;		/* Horizontal screen resolution in pixels */
 static unsigned v_res;		/* Vertical screen resolution in pixels */
-static unsigned vram_size = H_RES_0X105 * V_RES_0X105 * BITS_PER_PIXEL;
+static unsigned vram_size;
 static unsigned vram_base;
 static unsigned bits_per_pixel;
 

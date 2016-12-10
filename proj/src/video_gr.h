@@ -2,6 +2,7 @@
 #define __VIDEO_GR_H
 
 #include <stdint.h>
+#include "Missile.h"
 
  /* RGB Color Defnitions */
 #define BLACK 			rgb(0,0,0)
@@ -60,6 +61,7 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, unsign
 //int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
 int draw_mouse_cross (unsigned short xi, unsigned short yi);
+void draw_missile(Missile * ptr);
 
 uint16_t rgb (char red_value, char green_value, char blue_value);
 

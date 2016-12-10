@@ -166,7 +166,7 @@ int wait_esc_release(void)
 				case HARDWARE: /* hardware interrupt notification */
 					if (msg.NOTIFY_ARG & keyboard_irq_set) { /* subscribed interrupt */
 
-						if ( keyboard_read() == ESQ_BREAK_CODE ) {
+						if ( keyboard_read() == ESC_BREAK_CODE ) {
 							esc_flag = !esc_flag;
 						}
 					}

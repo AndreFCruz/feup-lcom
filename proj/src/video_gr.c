@@ -5,7 +5,7 @@
 #include <sys/types.h>
 
 #include "vbe.h"
-//#include "defs.h"
+#include "Missile.h"
 
 /* Static global variables */
 static void *video_mem;		/* Process address to which VRAM is mapped */
@@ -256,16 +256,16 @@ int draw_mouse_cross (unsigned short xi, unsigned short yi) {
 	return OK;
 }
 
-// TODO Melhorar...
-void draw_missile(Missile * m) {
+// TODO Melhorar?
+void draw_missile(Missile * ptr) {
 	unsigned thickness = 4, idx = 0;
 	for (; idx < thickness; ++idx) {
-		draw_line(missile_getInitX(m), missile_getInitY(m), missile_getPosX(m), missile_getPosY(m), missile_getColor(m));
+		draw_line(missile_getInitX(ptr), missile_getInitY(ptr), missile_getPosX(ptr), missile_getPosY(ptr), missile_getColor(ptr));
 	}
 }
 
 
-/* TODO: Acrescentar  as condicoes de superior a 255, Por aql return muito mais bonitinho e explicado, Terminar as restantes macros das cores */
+/* TODO: Acrescentar condicoes color_val > 255?, Terminar as restantes macros das cores */
 uint16_t rgb (char red_value, char green_value, char blue_value) {
 	uint16_t return_value;
 	return (((red_value>>2) << 11) + ((green_value>>2) << 5) + (blue_value>>2));

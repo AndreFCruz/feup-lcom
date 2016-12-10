@@ -9,6 +9,7 @@
 #include "stddef.h"
 #include "Bitmap.h"
 #include "planetary.h"
+#include "vbe.h"
 
 
 /* Interrupt Handlers' Loop */
@@ -63,7 +64,7 @@ int main()
 					keyboard_handler();
 				}
 
-				if (msg.NITIFY_ARG & mouse_irq_set) {
+				if (msg.NOTIFY_ARG & mouse_irq_set) {
 					mouse_handler(packet, & counter);
 					if (counter == PACKET_NELEMENTS) {
 						update_mouse_position(packet);

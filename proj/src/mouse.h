@@ -7,18 +7,7 @@
  * Functions for using the i8042 KBC/KBD
  */
 
-// TODO delete unnecessary types!!
-// TODO tidy code from previous labs
 /* Types needed for function type_gesture() - State Machine */
-typedef enum {INIT, DRAW, COMP} state_t;
-typedef enum {RDOWN, RUP, VERTLINE} ev_type_t;
-typedef enum {UPWARDS, DOWNWARDS} direction_t;
-
-typedef struct {
-	ev_type_t type;
-	int y_delta, x_delta;
-	direction_t dir;
-} event_t;
 
  /**
   * @brief Function to get the signed value of an unsigned value

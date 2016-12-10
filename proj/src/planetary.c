@@ -14,34 +14,30 @@ typedef struct {
 	unsigned frames;		// FRAMES survived, frames == times * 60
 	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
     Bitmap* background;
-	state_t state;
-
-
 } Game_t;
 
 static Game_t * new_game() {
 	Game_t * Game = malloc(sizeof(Game_t));
 
-	Game->state = GAME_SINGLE;
-	Game->elapsed = 0;
-	Game->frames_till_enemy = 120;
+	Game->frames = 0;
+	Game->enemy_spawn_fr = 120;
 
 	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
 
-	e_missiles = new_gvector(sizeof(Missile));
-	f_missiles = new_gvector(sizeof(Missile));
+	Game->e_missiles = new_gvector(missile_getSizeOf());
+	Game->f_missiles = new_gvector(missile_getSizeOf());
 
 }
 
 static Game_t * game_ptr = NULL;
 
 Game_t * game_instance() {
-	if ( NULL == Game ) {
-		Game = new_game();
-		return Game;
+	if ( NULL == game_ptr ) {
+		game_ptr = new_game();
+		return game_ptr;
 	}
 	else
-		return Game;
+		return game_ptr;
 }
 
 void delete_game() {
@@ -55,41 +51,44 @@ unsigned next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
 }
 
 int timer_handler() {
-	switch (gameState) {
-	case MENU:
-		if (menu_timer_handler() == EXIT)
-			return 1;
-		break;
-	case GAME_SINGLE:
-		if (game_timer_handler() == EXIT)
-			gameState = MENU;
-		break;
-	case GAME_MULTI:
-		printf("FOR THE LONG HAUL...\n");
-		break;
-	}
+//	static state_t game_state = GAME_SINGLE;
+//
+//	switch (game_state) {
+//	case MENU:
+//		if (menu_timer_handler() == EXIT_CURRENT)
+//			return 1;
+//		break;
+//	case GAME_SINGLE:
+//		if (game_timer_handler() == EXIT_CURRENT)
+//			game_state = MENU;
+//		break;
+//	case GAME_MULTI:
+//		printf("FOR THE LONG HAUL...\n");
+//		break;
+//	}
 
-	return OK;
+	event_t evt = game_timer_handler();
+
+	return 0;
 }
 
-event_t menu_timer_handler() {
+int menu_timer_handler() {
+	// TODO Menu
 
-	event_t tmp = NONE;
-	return tmp;
+	return 1;
 }
 
-event_t game_timer_handler() {
+int game_timer_handler() {
 
 	Input_t * Input = input_instance();
 	Game_t * game = game_instance();
-	event_t evt = NONE;
 	unsigned idx;
 
 	/** Handle Input **/
 	// Keyboard
 	switch (input_get_key()) {
 	case ESC_BREAK:
-		evt = EXIT;
+		return 1;	// TODO proper way out?
 		break;
 	default:
 		break;
@@ -102,7 +101,7 @@ event_t game_timer_handler() {
 	game->frames++;
 	if (game->frames == game->enemy_spawn_fr) {
 		game->enemy_spawn_fr = next_spawn_frame();
-		Missile * new_enemy = new_emissile();//TODO
+		Missile * new_enemy = new_emissile();
 		gvector_push_back(game->e_missiles, new_enemy);
 	}
 
@@ -113,20 +112,20 @@ event_t game_timer_handler() {
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(game->e_missiles); ++idx) {
-		draw_missile(gvector_at((game->e_missiles, idx));
-		missile_update(gvector_at((game->e_missiles, idx));
+		draw_missile(gvector_at(game->e_missiles, idx));
+		missile_update(gvector_at(game->e_missiles, idx));
 	}
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(game->f_missiles); ++idx) {
-		draw_missile(gvector_at((game->f_missiles, idx));
-		missile_update(gvector_at((game->f_missiles, idx));
+		draw_missile(gvector_at(game->f_missiles, idx));
+		missile_update(gvector_at(game->f_missiles, idx));
 	}
 
 	// Draw and Update Explosions
 
 
 
-	return tmp;
+	return 0;
 }
 

@@ -1,4 +1,4 @@
-service planetary
+service main
 {
         system
                 UMAP

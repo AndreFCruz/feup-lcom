@@ -38,7 +38,7 @@ void keyboard_handler() {
 		printf("keyboard_handler::keyboard_read() failed\n");
 }
 
-keycode_t keyboard_get_key() {
+keycode_t input_get_key() {
 	keycode_t tmp = input_instance()->keycode;
 	input_instance()->keycode = NONE;	// Key handled
 	return tmp;

@@ -1,6 +1,7 @@
 #ifndef __INPUT_H
 #define __INPUT_H
 
+#include "i8042.h"
 #include "keyboard.h"
 #include "mouse.h"
 
@@ -10,7 +11,7 @@ typedef enum {UP, DOWN /* pressed/released? */} button_state;
 // TODO Update with actual make/break codes!!
 typedef enum {
 	ESC_MAKE = 0x1,
-	ESC_BREAK = 0x2,
+	ESC_BREAK = ESC_BREAK_CODE,
 	ENTER_MAKE = 0x3,
 	UP_MAKE = 0x4,
 	DOWN_MAKE = 0x5,

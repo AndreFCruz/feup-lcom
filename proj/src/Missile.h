@@ -14,8 +14,8 @@ Missile * new_emissile();
 Missile * new_fmissile(const unsigned * init_pos, const float * vel, const unsigned * mouse_pos);
 
 size_t missile_getSizeOf();
-unsigned missile_getXPos(Missile * ptr);
-unsigned missile_getYPos(Missile * ptr);
+unsigned missile_getPosX(Missile * ptr);
+unsigned missile_getPosY(Missile * ptr);
 unsigned missile_getInitX(Missile * ptr);
 unsigned missile_getInitY(Missile * ptr);
 uint16_t missile_getColor(Missile * ptr);

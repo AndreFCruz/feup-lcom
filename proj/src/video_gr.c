@@ -207,7 +207,7 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, unsign
 
 int draw_mouse_cross (unsigned short xi, unsigned short yi) {
 
-	if (!is_valid_pos(xi,yi)) {
+	if ( OK != is_valid_pos(xi,yi) ) {
 		printf("Invalid Position for Draw Mouse.\n");
 		return 1;
 	}

@@ -84,8 +84,10 @@ Missile * new_emissile() {
 }
 
 // Constructor for Friendly Missile
-Missile * new_fmissile(const unsigned * init_pos, const int * mouse_pos) {
-	float vel[2] = {(mouse_pos[0] - (int)init_pos[0]) / 300, (mouse_pos[1] - (int)init_pos[1]) / 300};	//TODO Vel should not be time/frame based
+Missile * new_fmissile(const unsigned * init_pos, const unsigned * mouse_pos) {
+	printf("new_fmissile Constructor Called\n");
+	float vel[2] = {((int)mouse_pos[0] - (int)init_pos[0]) / 300., ((int)mouse_pos[1] - (int)init_pos[1]) / 300.};	//TODO Vel should not be time/frame based
+	printf("new_fmissile vel calculated\n");
 	Missile * self = new_missile(init_pos, vel);
 	self->color = YELLOW;
 	self->isFriendly = TRUE;

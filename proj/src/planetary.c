@@ -28,6 +28,7 @@ static Game_t * new_game() {
 	Game->enemy_spawn_fr = 120;
 
 	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
+	//Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());

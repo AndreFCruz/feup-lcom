@@ -254,7 +254,7 @@ int draw_mouse_cross (unsigned short xi, unsigned short yi) {
 
 // TODO Melhorar?
 void draw_missile(Missile * ptr) {
-	unsigned thickness = 4, idx = 0;
+	unsigned thickness = 8, idx = 0;
 	for (; idx < thickness; ++idx) {
 		draw_line(missile_getInitX(ptr), missile_getInitY(ptr), missile_getPosX(ptr), missile_getPosY(ptr), missile_getColor(ptr));
 	}

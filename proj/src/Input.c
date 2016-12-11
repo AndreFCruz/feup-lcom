@@ -137,7 +137,7 @@ void update_mouse_position(unsigned char * packet) {
 		validX = 0;
 	}
 	else if (Input->mouse_pos[0] + x_value >= Input->res[0]) {
-		Input->mouse_pos[0] = Input->res[0];
+		Input->mouse_pos[0] = Input->res[0] - 1;
 		validX = 0;
 	}
 
@@ -147,7 +147,7 @@ void update_mouse_position(unsigned char * packet) {
 		validY = 0;
 	}
 	else if (Input->mouse_pos[1] + y_value >= Input->res[1]) {
-		Input->mouse_pos[1] = Input->res[1];
+		Input->mouse_pos[1] = Input->res[1] - 1;
 		validY = 0;
 	}
 
@@ -155,7 +155,7 @@ void update_mouse_position(unsigned char * packet) {
 	if ( validX )
 		Input->mouse_pos[0] += x_value;
 	if ( validY )
-		Input->mouse_pos[1] += y_value;
+		Input->mouse_pos[1] -= y_value;
 }
 
 int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final) {

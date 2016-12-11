@@ -74,7 +74,7 @@ static Missile * new_missile(const unsigned * init_pos, const float * vel) {
 // Constructor for Enemy Missile
 Missile * new_emissile() {
 	unsigned init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
-	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 10 + 1 : rand() % 10 - 10), 4.0 / (1 + rand() % 8)};
+	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 8 + 1 : rand() % 8 - 8), 4.0 / (1 + rand() % 8)};
 	Missile * self = new_missile(init_pos, vel);
 	self->color = RED;
 	self->isFriendly = FALSE;

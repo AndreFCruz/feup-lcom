@@ -24,7 +24,7 @@ static Game_t * new_game() {
 	Game->frames = 0;
 	Game->enemy_spawn_fr = 120;
 
-	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
+	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
@@ -54,7 +54,7 @@ void delete_game() {
 
 // Returns the frame in which an enemy should be spawned
 unsigned next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
-	return 300 * pow(1 + game_instance()->frames / 512, -1);
+	return game_instance()->frames + 300 * pow(1 + game_instance()->frames / 512, -1);
 }
 
 int timer_handler() {

@@ -6,11 +6,12 @@
 
  /* RGB Color Defnitions */
 #define BLACK 			rgb(0,0,0)
+#define WHITE			rgb(255,255,255)
+#define TRANSPARENCY	rgb(0,255,0)
 #define STRONG_PINK		rgb(255,0,127)
 #define NAVY			rgb(0,128,255)
 #define RED				rgb(255,0,0)
 #define YELLOW			rgb(255,255,0)
-#define WHITE			rgb(255,255,255)
 
 /** @defgroup video_gr video_gr
  * @{
@@ -63,7 +64,7 @@ int draw_square(unsigned short x, unsigned short y, unsigned short size, unsigne
 int draw_mouse_cross(const int * mouse_pos);
 void draw_missile(Missile * ptr);
 
-uint16_t rgb(char red_value, char green_value, char blue_value);
+uint16_t rgb(unsigned char red_value, unsigned char green_value, unsigned char blue_value);
 
 int buffer_handler();
 

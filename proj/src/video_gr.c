@@ -261,10 +261,28 @@ void draw_missile(Missile * ptr) {
 }
 
 
-/* TODO: Acrescentar condicoes color_val > 255?, Terminar as restantes macros das cores */
-uint16_t rgb (char red_value, char green_value, char blue_value) {
+/* TODO: Terminar as restantes macros das cores */
+uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {
+
+	//Checking if value's are not outside of gama
+	if (red_value > 255 || green_value > 255 || blue_value > 255) {
+		printf ("Values must be belong to [0,255] gama.\nRed Value was: %d.\n"
+				"Green Value was: %d.\nBlue Value was: %d.\n", red_value, green_value, blue_value);
+		return -1;
+	}
+
 	uint16_t return_value;
-	return (((red_value>>2) << 11) + ((green_value>>2) << 5) + (blue_value>>2));
+
+	//Setting Blue
+	return_value += (blue_value >> 3);
+
+	//Setting Green
+	return_value += ((green_value >> 2) << 5);
+
+	//Setting Red
+	return_value += ((red_value >> 3) << (6 +5));
+
+	return return_value;
 }
 
 void buffer_handler () {

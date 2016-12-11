@@ -205,49 +205,49 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, unsign
 	return OK;
 }
 
-int draw_mouse_cross (unsigned short xi, unsigned short yi) {
+int draw_mouse_cross (const int * pos) {
 
-	if ( OK != is_valid_pos(xi,yi) ) {
+	if ( OK != is_valid_pos(pos[0], pos[1]) ) {
 		printf("Invalid Position for Draw Mouse.\n");
 		return 1;
 	}
 
 	//Drawing the horizontal line of the cross
-	if (xi-10 < 0) {
-		draw_line(0,yi-1,xi+10,yi-1,0);
-		draw_line(0,yi,xi+10,yi,0);
-		draw_line(0,yi+1,xi+10,yi+1,0);
+	if (pos[0]-10 < 0) {
+		draw_line(0,pos[1]-1,pos[0]+10,pos[1]-1,0);
+		draw_line(0,pos[1],pos[0]+10,pos[1],0);
+		draw_line(0,pos[1]+1,pos[0]+10,pos[1]+1,0);
 	}
-	else if (xi+10 > h_res) {
-		draw_line(xi-10,yi-1,h_res-1,yi-1,0);
-		draw_line(xi-10,yi,h_res-1,yi,0);
-		draw_line(xi-10,yi+1,h_res-1,yi+1,0);
+	else if (pos[0]+10 > h_res) {
+		draw_line(pos[0]-10,pos[1]-1,h_res-1,pos[1]-1,0);
+		draw_line(pos[0]-10,pos[1],h_res-1,pos[1],0);
+		draw_line(pos[0]-10,pos[1]+1,h_res-1,pos[1]+1,0);
 	}
 	else {
-		draw_line(xi-10,yi-1,xi+10,yi-1,0);
-		draw_line(xi-10,yi,xi+10,yi,0);
-		draw_line(xi-10,yi+1,xi+10,yi+1,0);
+		draw_line(pos[0]-10,pos[1]-1,pos[0]+10,pos[1]-1,0);
+		draw_line(pos[0]-10,pos[1],pos[0]+10,pos[1],0);
+		draw_line(pos[0]-10,pos[1]+1,pos[0]+10,pos[1]+1,0);
 	}
 
 	//Drawing the vertical line of the cross
-	if (yi-10 < 0) {
-		draw_line(xi-1,0,xi-1,yi+10,0);
-		draw_line(xi,0,xi,yi+10,0);
-		draw_line(xi+1,0,xi+1,yi+10,0);
+	if (pos[1]-10 < 0) {
+		draw_line(pos[0]-1,0,pos[0]-1,pos[1]+10,0);
+		draw_line(pos[0],0,pos[0],pos[1]+10,0);
+		draw_line(pos[0]+1,0,pos[0]+1,pos[1]+10,0);
 	}
-	else if (yi+10 > v_res) {
-		draw_line(xi-1,yi-10,xi-1,v_res-1,0);
-		draw_line(xi,yi-10,xi,v_res-1,0);
-		draw_line(xi+1,yi-10,xi+1,v_res-1,0);
+	else if (pos[1]+10 > v_res) {
+		draw_line(pos[0]-1,pos[1]-10,pos[0]-1,v_res-1,0);
+		draw_line(pos[0],pos[1]-10,pos[0],v_res-1,0);
+		draw_line(pos[0]+1,pos[1]-10,pos[0]+1,v_res-1,0);
 	}
 	else {
-		draw_line(xi-1,yi-10,xi-1,yi+10,0);
-		draw_line(xi,yi-10,xi,yi+10,0);
-		draw_line(xi+1,yi-10,xi+1,yi+10,0);
+		draw_line(pos[0]-1,pos[1]-10,pos[0]-1,pos[1]+10,0);
+		draw_line(pos[0],pos[1]-10,pos[0],pos[1]+10,0);
+		draw_line(pos[0]+1,pos[1]-10,pos[0]+1,pos[1]+10,0);
 	}
 
-	//draw_line(ptr,xi-10,yi,xi+10,yi,0);
-	//draw_line(ptr,xi,yi-10,xi,yi+10,0);
+	//draw_line(ptr,pos[0]-10,pos[1],pos[0]+10,pos[1],0);
+	//draw_line(ptr,pos[0],pos[1]-10,pos[0],pos[1]+10,0);
 
 	return OK;
 }

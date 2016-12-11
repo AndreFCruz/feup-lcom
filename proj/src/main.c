@@ -72,7 +72,7 @@ int main()
 
 					mouse_handler(packet, & counter);
 					if (counter == PACKET_NELEMENTS) {
-						update_mouse_position(packet);
+						mouse_packet_handler(packet);
 						counter = 0;
 					}
 				}

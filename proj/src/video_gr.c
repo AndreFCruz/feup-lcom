@@ -113,10 +113,6 @@ int draw_line (unsigned short xi, unsigned short yi,
 		printf("draw_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
 		return 1;
 	}
-	if ( color >= 0x40 ) {
-		printf("draw_line: invalid color. Was 0x%X.\n", color);
-		return 1;
-	}
 
 	// x and y variation
 	int x_variation = xf-xi;
@@ -193,7 +189,7 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, unsign
 		printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
 		return 1;
 	}
-	if ( color >= 0xFFFFFF) {
+	if ( color >= 0xFFFF) {
 		printf("draw_square: invalid color. Was 0x%X.\n", color);
 		return 1;
 	}

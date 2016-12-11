@@ -17,6 +17,8 @@ typedef struct {
 } Game_t;
 
 static Game_t * new_game() {
+	printf("New Game Instance!!\n");
+
 	Game_t * Game = malloc(sizeof(Game_t));
 
 	Game->frames = 0;
@@ -27,22 +29,27 @@ static Game_t * new_game() {
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
 
+	return Game;
 }
 
 static Game_t * game_ptr = NULL;
 
 Game_t * game_instance() {
 	if ( NULL == game_ptr ) {
-		game_ptr = new_game();
-		return game_ptr;
+		return (game_ptr = new_game());
 	}
 	else
 		return game_ptr;
 }
 
 void delete_game() {
-	free(game_ptr);
-	game_ptr = NULL;
+	if (NULL != game_ptr) {
+		deleteBitmap(game_ptr->background);
+		delete_gvector(game_ptr->e_missiles);
+		delete_gvector(game_ptr->f_missiles);
+		free(game_ptr);
+		game_ptr = NULL;
+	}
 }
 
 // Returns the frame in which an enemy should be spawned
@@ -67,7 +74,7 @@ int timer_handler() {
 //		break;
 //	}
 
-	event_t evt = game_timer_handler();
+	game_timer_handler();
 
 	return 0;
 }
@@ -82,6 +89,8 @@ int game_timer_handler() {
 
 	Input_t * Input = input_instance();
 	Game_t * game = game_instance();
+	if (NULL == game)
+		printf("THIS SHOULD NEVER HAPPEN, MAKES NO SENSE\n");
 	unsigned idx;
 
 	/** Handle Input **/
@@ -97,24 +106,32 @@ int game_timer_handler() {
 	// Mouse
 	//spawn missiles on mouse clicks
 
+	printf("Got to line 102 planetary.c\n");
+
 	/** Spontaneous Game Events **/
-	game->frames++;
+	++(game->frames);
 	if (game->frames == game->enemy_spawn_fr) {
 		game->enemy_spawn_fr = next_spawn_frame();
+		printf("Spawning New Enemy Missile\n");
 		Missile * new_enemy = new_emissile();
 		gvector_push_back(game->e_missiles, new_enemy);
 	}
 
+	printf("Got to line 111 planetary.c\n");
 
 	/** Draw Game **/
-	drawBitmap(vg_getBufferPtr(),game->background,0,0,ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), game->background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_x(), get_mouse_y());
+
+	printf("Drew BitMaps -- Got to line 117 planetary.c\n");
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(game->e_missiles); ++idx) {
 		draw_missile(gvector_at(game->e_missiles, idx));
 		missile_update(gvector_at(game->e_missiles, idx));
 	}
+
+	printf("Got to line 125 planetary.c\n");
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(game->f_missiles); ++idx) {
@@ -124,7 +141,7 @@ int game_timer_handler() {
 
 	// Draw and Update Explosions
 
-
+	printf("Ended game_timer_handler -- Got to line 131 planetary.c\n");
 
 	return 0;
 }

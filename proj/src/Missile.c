@@ -54,6 +54,8 @@ int round_float(float f) {
 
 // Constructor for Generic Missile
 static Missile * new_missile(const unsigned * init_pos, const float * vel) {
+	printf("Missile Constructor Called\n");
+
 	Missile * self = (Missile *) malloc(sizeof(Missile));
 
 	memcpy(self->init_pos, init_pos, 2 * sizeof(unsigned));

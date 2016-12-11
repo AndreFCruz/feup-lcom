@@ -82,6 +82,7 @@ int main()
 
 					if ( OK != timer_handler() )
 						gameRunning = 0;
+					buffer_handler();
 
 				}
 

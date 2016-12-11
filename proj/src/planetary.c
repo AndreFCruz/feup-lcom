@@ -35,6 +35,8 @@ static Game_t * new_game() {
 	Game->base_pos[0] = L_BASE_X;
 	Game->base_pos[1] = BASE_Y;
 
+	printf("Game Instance was successfully created\n");
+
 	return Game;
 }
 
@@ -109,14 +111,16 @@ int game_timer_handler() {
 		break;
 	}
 
+	printf("Checking Mouse Input\n");
+
 	// Mouse
 	//spawn missiles on mouse clicks
-	if (Input->RMB) {
+	if (get_mouseRMB) {
 		Missile * tmp = new_fmissile(self->base_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, new_fmissile);
 	}
 
-	printf("Got to line 102 planetary.c\n");
+	printf("Game Spontaneous Update\n");
 
 	/** Spontaneous self Events **/
 	++(self->frames);
@@ -127,13 +131,13 @@ int game_timer_handler() {
 		gvector_push_back(self->e_missiles, new_enemy);
 	}
 
-	printf("Got to line 111 planetary.c\n");
+	printf("Drawing Game\n");
 
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), self->background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_pos());
 
-	printf("Drew BitMaps -- Got to line 117 planetary.c\n");
+	printf("Drew BitMaps, Drawing and Updating Missiles\n");
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
@@ -141,7 +145,7 @@ int game_timer_handler() {
 		missile_update(gvector_at(self->e_missiles, idx));
 	}
 
-	printf("Got to line 125 planetary.c\n");
+	printf("Enemy missiles handled, handling friendly missiles\n");
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(self->f_missiles); ++idx) {
@@ -151,7 +155,7 @@ int game_timer_handler() {
 
 	// Draw and Update Explosions
 
-	printf("Ended game_timer_handler -- Got to line 131 planetary.c\n");
+	printf("-- Ended game_timer_handler --\n");
 
 	return 0;
 }

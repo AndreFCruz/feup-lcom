@@ -46,6 +46,9 @@ keycode_t input_get_key();
 //int get_mouse_x();
 //int get_mouse_y();
 const int * get_mouse_pos();
+int get_mouseRMB();
+int get_mouseLMB();
+int get_mouseMMB();
 
 void mouse_packet_handler(unsigned char * packet);
 int mouse_inside_area (int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise

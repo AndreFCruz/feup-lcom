@@ -118,6 +118,16 @@ const int * get_mouse_pos() {
 	return input_instance()->mouse_pos;
 }
 
+int get_mouseRMB() {
+	return input_instance()->RMB;
+}
+int get_mouseLMB() {
+	return input_instance()->LMB;
+}
+int get_mouseMMB() {
+	return input_instance()->MMB;
+}
+
 //Not a int cause no message of error can happen
 void mouse_packet_handler(unsigned char * packet) {
 	Input_t * Input = input_instance();

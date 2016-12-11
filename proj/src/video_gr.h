@@ -54,18 +54,18 @@ int vg_exit(void);
 unsigned get_Xres();
 unsigned get_Yres();
 
-int draw_line (unsigned short xi, unsigned short yi,
-		           unsigned short xf, unsigned short yf, unsigned long color);
-int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
-int draw_square (unsigned short x, unsigned short y, unsigned short size, unsigned long color);
+int draw_line(unsigned short xi, unsigned short yi,
+		unsigned short xf, unsigned short yf, unsigned long color);
+int draw_circle(unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
+int draw_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color);
 //int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
-int draw_mouse_cross (unsigned short xi, unsigned short yi);
+int draw_mouse_cross(unsigned short xi, unsigned short yi);
 void draw_missile(Missile * ptr);
 
-uint16_t rgb (char red_value, char green_value, char blue_value);
+uint16_t rgb(char red_value, char green_value, char blue_value);
 
-int buffer_handler ();
+int buffer_handler();
 
 
 

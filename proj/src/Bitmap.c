@@ -106,22 +106,30 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
         drawWidth = vg_getHorRes() - x;
     }
 
-    char* bufferStartPos;
-    char* imgStartPos;
+    //Changes to Ferrolho's code
+    uint16_t* bufferStartPos;
+    uint16_t* imgStartPos;
 
     int i;
+    int j;
     for (i = 0; i < height; i++) {
         int pos = y + height - 1 - i;
 
         if (pos < 0 || pos >= vg_getVerRes())
             continue;
 
-        bufferStartPos = ptr;
-        bufferStartPos += x * 2 + pos * vg_getHorRes() * 2;
+        bufferStartPos = (uint16_t*) ptr;
+        bufferStartPos += x + pos * vg_getHorRes();
 
-        imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;
+        for (j = 0; j <= width; j++) {
+        	if (*((uint16_t *) bmp->bitmapData + xCorrection + i*width + j) != TRANSPARENCY) {
 
-        memcpy(bufferStartPos, imgStartPos, drawWidth * 2);
+        		imgStartPos = (uint16_t*) bmp-> bitmapData + xCorrection ;
+        		imgStartPos += i * width + j;
+
+        		memcpy(bufferStartPos + j, imgStartPos,sizeof(uint16_t) );
+        	}
+        }
     }
 }
 

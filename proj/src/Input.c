@@ -11,9 +11,9 @@ static Input_t * new_input() {
 
 	Input->keycode = NONE;
 
-	Input->RMB = UP;
-	Input->LMB = UP;
-	Input->MMB = UP;
+	Input->RMB = 0;
+	Input->LMB = 0;
+	Input->MMB = 0;
 
 	Input->res[0] = vg_getHorRes();
 	Input->res[1] = vg_getVerRes();
@@ -106,18 +106,29 @@ void delete_input() {
 	input = NULL;
 }
 
-int get_mouse_x() {
-	return input_instance()->mouse_pos[0];
-}
+//int get_mouse_x() {
+//	return input_instance()->mouse_pos[0];
+//}
+//
+//int get_mouse_y() {
+//	return input_instance()->mouse_pos[1];
+//}
 
-int get_mouse_y() {
-	return input_instance()->mouse_pos[1];
+const int * get_mouse_pos() {
+	return input_instance()->mouse_pos;
 }
 
 //Not a int cause no message of error can happen
-void update_mouse_position(unsigned char * packet) {
+void mouse_packet_handler(unsigned char * packet) {
 	Input_t * Input = input_instance();
 
+	/** Update Buttons **/
+	Input->RMB = packet[0] & BYTE0_RB;
+	Input->LMB = packet[0] & BYTE0_LB;
+	Input->MMB = packet[0] & BYTE0_MB;
+
+
+	/** Update Position **/
 	int x_value = int_value(packet[1], packet[0] & BYTE0_X_SIGN);
 	int y_value = int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
 

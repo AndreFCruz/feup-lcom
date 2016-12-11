@@ -75,6 +75,8 @@ static Missile * new_missile(const unsigned * init_pos, const float * vel) {
 Missile * new_emissile() {
 	unsigned init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
 	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 8 + 1 : rand() % 8 - 8), 4.0 / (1 + rand() % 8)};
+	//TODO find function that shoots left if missile is on the right of screen, and vice-verca (with rand() variations)
+
 	Missile * self = new_missile(init_pos, vel);
 	self->color = RED;
 	self->isFriendly = FALSE;
@@ -82,7 +84,8 @@ Missile * new_emissile() {
 }
 
 // Constructor for Friendly Missile
-Missile * new_fmissile(const unsigned * init_pos, const float * vel, const unsigned * mouse_pos) {
+Missile * new_fmissile(const unsigned * init_pos, const int * mouse_pos) {
+	float vel[2] = {(mouse_pos[0] - (int)init_pos[0]) / 300, (mouse_pos[1] - (int)init_pos[1]) / 300};	//TODO Vel should not be time/frame based
 	Missile * self = new_missile(init_pos, vel);
 	self->color = YELLOW;
 	self->isFriendly = TRUE;

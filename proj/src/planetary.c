@@ -14,6 +14,9 @@ typedef struct {
 	unsigned frames;		// FRAMES survived, frames == times * 60
 	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
     Bitmap* background;
+
+    unsigned base_pos[2];	// (x,y) position of missile origin (base)
+
 } Game_t;
 
 static Game_t * new_game() {
@@ -28,6 +31,9 @@ static Game_t * new_game() {
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
+
+	Game->base_pos[0] = L_BASE_X;
+	Game->base_pos[1] = BASE_Y;
 
 	return Game;
 }
@@ -88,8 +94,8 @@ int menu_timer_handler() {
 int game_timer_handler() {
 
 	Input_t * Input = input_instance();
-	Game_t * game = game_instance();
-	if (NULL == game)
+	Game_t * self = game_instance();
+	if (NULL == self)
 		printf("THIS SHOULD NEVER HAPPEN, MAKES NO SENSE\n");
 	unsigned idx;
 
@@ -97,7 +103,7 @@ int game_timer_handler() {
 	// Keyboard
 	switch (input_get_key()) {
 	case ESC_BREAK:
-		return 1;	// TODO proper way out?
+		return 1;	// TODO Does not Exit...
 		break;
 	default:
 		break;
@@ -105,38 +111,42 @@ int game_timer_handler() {
 
 	// Mouse
 	//spawn missiles on mouse clicks
+	if (Input->RMB) {
+		Missile * tmp = new_fmissile(self->base_pos, get_mouse_pos());
+		gvector_push_back(self->f_missiles, new_fmissile);
+	}
 
 	printf("Got to line 102 planetary.c\n");
 
-	/** Spontaneous Game Events **/
-	++(game->frames);
-	if (game->frames == game->enemy_spawn_fr) {
-		game->enemy_spawn_fr = next_spawn_frame();
+	/** Spontaneous self Events **/
+	++(self->frames);
+	if (self->frames == self->enemy_spawn_fr) {
+		self->enemy_spawn_fr = next_spawn_frame();
 		printf("Spawning New Enemy Missile\n");
 		Missile * new_enemy = new_emissile();
-		gvector_push_back(game->e_missiles, new_enemy);
+		gvector_push_back(self->e_missiles, new_enemy);
 	}
 
 	printf("Got to line 111 planetary.c\n");
 
-	/** Draw Game **/
-	drawBitmap(vg_getBufferPtr(), game->background, 0, 0, ALIGN_LEFT);
-	draw_mouse_cross(get_mouse_x(), get_mouse_y());
+	/** Draw self **/
+	drawBitmap(vg_getBufferPtr(), self->background, 0, 0, ALIGN_LEFT);
+	draw_mouse_cross(get_mouse_pos());
 
 	printf("Drew BitMaps -- Got to line 117 planetary.c\n");
 
 	// Draw and Update enemy missiles
-	for (idx = 0; idx < gvector_get_size(game->e_missiles); ++idx) {
-		draw_missile(gvector_at(game->e_missiles, idx));
-		missile_update(gvector_at(game->e_missiles, idx));
+	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
+		draw_missile(gvector_at(self->e_missiles, idx));
+		missile_update(gvector_at(self->e_missiles, idx));
 	}
 
 	printf("Got to line 125 planetary.c\n");
 
 	// Draw and Update friendly missiles
-	for (idx = 0; idx < gvector_get_size(game->f_missiles); ++idx) {
-		draw_missile(gvector_at(game->f_missiles, idx));
-		missile_update(gvector_at(game->f_missiles, idx));
+	for (idx = 0; idx < gvector_get_size(self->f_missiles); ++idx) {
+		draw_missile(gvector_at(self->f_missiles, idx));
+		missile_update(gvector_at(self->f_missiles, idx));
 	}
 
 	// Draw and Update Explosions

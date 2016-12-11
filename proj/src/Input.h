@@ -6,8 +6,6 @@
 #include "mouse.h"
 
 
-typedef enum {UP, DOWN /* pressed/released? */} button_state;
-
 // TODO Update with actual make/break codes!!
 typedef enum {
 	ESC_MAKE = 0x1,
@@ -25,9 +23,9 @@ typedef struct {
 	keycode_t keycode;
 
 	/* Mouse Buttons */
-	button_state RMB;
-	button_state LMB;
-	button_state MMB;
+	int RMB;
+	int LMB;
+	int MMB;
 
 	/* Mouse Position */
 	int mouse_pos[2];
@@ -45,11 +43,11 @@ void delete_input();		// Destructor
 void keyboard_handler();
 keycode_t input_get_key();
 
-int get_mouse_x();
-int get_mouse_y();
+//int get_mouse_x();
+//int get_mouse_y();
+const int * get_mouse_pos();
 
-void keyboard_update_input();
-void update_mouse_position(unsigned char * packet);
+void mouse_packet_handler(unsigned char * packet);
 int mouse_inside_area (int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
 
 #endif

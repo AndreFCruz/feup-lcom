@@ -263,14 +263,6 @@ void draw_missile(Missile * ptr) {
 
 /* TODO: Terminar as restantes macros das cores */
 uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {
-
-	//Checking if value's are not outside of gama
-	if (red_value > 255 || green_value > 255 || blue_value > 255) {
-		printf ("Values must be belong to [0,255] gama.\nRed Value was: %d.\n"
-				"Green Value was: %d.\nBlue Value was: %d.\n", red_value, green_value, blue_value);
-		return -1;
-	}
-
 	uint16_t return_value;
 
 	//Setting Blue
@@ -280,7 +272,7 @@ uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char 
 	return_value += ((green_value >> 2) << 5);
 
 	//Setting Red
-	return_value += ((red_value >> 3) << (6 +5));
+	return_value += ((red_value >> 3) << (6 + 5));
 
 	return return_value;
 }

@@ -2,6 +2,7 @@
 #define __MISSILE_H
 
 #include <stdint.h>
+#include "Bitmap.h"
 
 struct missile_t;
 typedef struct missile_t Missile;
@@ -25,6 +26,13 @@ Explosion * delete_missile(Missile * ptr);
 
 /* Explosion's Methods */
 Explosion * new_explosion(const unsigned * position);
+
+int explosion_update(Explosion * ptr);
+
+Bitmap * explosion_getBitmap(Explosion * ptr);
+
+size_t explosion_getSizeOf();
+
 void delete_explosion(Explosion * ptr);
 
 

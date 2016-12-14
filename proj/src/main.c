@@ -61,12 +61,6 @@ int main()
 		if (is_ipc_notify(ipc_status)) { /* received notification */
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /* hardware interrupt notification */
-				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-					printf("main::keyboard interrupt\n");
-
-					keyboard_handler();
-				}
-
 				if (msg.NOTIFY_ARG & mouse_irq_set) {
 					printf("main::mouse interrupt\n");
 
@@ -77,11 +71,19 @@ int main()
 					}
 				}
 
+				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
+					printf("main::keyboard interrupt\n");
+
+					keyboard_handler();
+				}
+
 				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
 					printf("main::timer interrupt\n");
 
-					if ( OK != timer_handler() )
+					if ( OK != timer_handler() ) {
+						printf("Timer Handler Returned EXIT Code!\n");
 						gameRunning = 0;
+					}
 					buffer_handler();
 
 				}

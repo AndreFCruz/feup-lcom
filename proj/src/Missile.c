@@ -29,12 +29,11 @@ struct explosion_t {
 	unsigned pos[2];
 	unsigned radius;
 
-	Bitmap ** sprites;
-	unsigned curr_sprite_index;
-	unsigned no_sprites;
+	Bitmap ** bmps;
+	unsigned curr_bmp_index;
+	unsigned no_bmps;
 	unsigned curr_frame;
-	unsigned frames_per_sprite;
-
+	unsigned frames_per_bmp;
 };
 
 /**
@@ -154,17 +153,17 @@ size_t missile_getSizeOf() {
  * Methods for Explosion
  */
 
-Explosion * new_explosion(const unsigned * position, Bitmap ** bmps) {
+Explosion * new_explosion(const unsigned * position) {
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
 	memcpy(self->pos, position, 2 * sizeof(unsigned));
 	self->curr_frame = 0;
-	self->curr_sprite_index = 0;
-	self->frames_per_sprite = 5;
-	self->no_sprites = 16;
+	self->curr_bmp_index = 0;
+	self->frames_per_bmp = 5;
+	self->no_bmps = 16;
 	self->radius = 28;	// TODO Check
 
-	self->sprites = bmps;
+	self->bmps = game_getExplosionBmps();
 
 	return self;
 }
@@ -174,19 +173,19 @@ void delete_explosion(Explosion * ptr) {
 }
 
 int explosion_update(Explosion * ptr) { // TODO Check!
-	if (++(ptr->curr_frame) > ptr->frames_per_sprite) {
+	if (++(ptr->curr_frame) > ptr->frames_per_bmp) {
 		ptr->curr_frame = 0;
-		if (++(ptr->curr_sprite_index) >= ptr->no_sprites) {
+		if (++(ptr->curr_bmp_index) >= ptr->no_bmps) {
 			return 1; // return 1 indicates the animation finished, ptr should be deleted
 		}
-		// update radius
+		// TODO update radius
 	}
 
 	return 0;
 }
 
-Bitmap * explosion_getBitmap(Bitmap * ptr) {
-	return ptr->sprites[ptr->curr_sprite_index];
+Bitmap * explosion_getBitmap(Explosion * ptr) {
+	return ptr->bmps[ptr->curr_bmp_index];
 }
 
 size_t explosion_getSizeOf() {

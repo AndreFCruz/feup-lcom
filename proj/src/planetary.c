@@ -13,7 +13,8 @@ typedef struct {
 
 	unsigned frames;		// FRAMES survived, frames == times * 60
 	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
-    Bitmap* background;
+    Bitmap * background;
+	Bitmap ** explosion_bmps;
 
     unsigned base_pos[2];	// (x,y) position of missile origin (base)
 
@@ -29,6 +30,15 @@ static Game_t * new_game() {
 
 	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
 	//Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
+
+	// Load Explosion BitMaps
+	Bitmap* bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
+	Game->explosion_bmps;
+	int i;
+	for (i = 0; i < NUM_EXPLOSION_BMPS; ++i) {
+		//filename : base + i
+//		bmps[i] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" /* + i.bmp */);
+	}
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
@@ -60,6 +70,11 @@ void delete_game() {
 		game_ptr = NULL;
 	}
 }
+
+Bitmap ** game_getExplosionBmps() {
+	return game_instance()->explosion_bmps;
+}
+
 
 // Returns the frame in which an enemy should be spawned
 unsigned next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
@@ -99,20 +114,21 @@ int game_timer_handler() {
 	Input_t * Input = input_instance();
 	Game_t * self = game_instance();
 	if (NULL == self)
-		printf("THIS SHOULD NEVER HAPPEN, MAKES NO SENSE\n");
+		printf("THIS SHOULD NEVER HAPPEN\n");
 	unsigned idx;
 
 	/** Handle Input **/
 	// Keyboard
 	switch (input_get_key()) {
 	case ESC_BREAK:
+		printf("ESC BREAK_CODE DETECTED\n");
 		return 1;	// TODO Does not Exit...
 		break;
 	default:
 		break;
 	}
 
-	printf("Checking Mouse Input\n");
+//	printf("Checking Mouse Input\n");
 
 	// Mouse
 	//spawn missiles on mouse clicks
@@ -121,7 +137,7 @@ int game_timer_handler() {
 		gvector_push_back(self->f_missiles, new_fmissile);
 	}
 
-	printf("Game Spontaneous Update\n");
+//	printf("Game Spontaneous Update\n");
 
 	/** Spontaneous self Events **/
 	++(self->frames);
@@ -132,13 +148,13 @@ int game_timer_handler() {
 		gvector_push_back(self->e_missiles, new_enemy);
 	}
 
-	printf("Drawing Game\n");
+//	printf("Drawing Game\n");
 
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), self->background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_pos());
 
-	printf("Drew BitMaps, Drawing and Updating Missiles\n");
+//	printf("Drew BitMaps, Drawing and Updating Missiles\n");
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
@@ -146,7 +162,7 @@ int game_timer_handler() {
 		missile_update(gvector_at(self->e_missiles, idx));
 	}
 
-	printf("Enemy missiles handled, handling friendly missiles\n");
+//	printf("Enemy missiles handled, handling friendly missiles\n");
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(self->f_missiles); ++idx) {
@@ -156,7 +172,7 @@ int game_timer_handler() {
 
 	// Draw and Update Explosions
 
-	printf("-- Ended game_timer_handler --\n");
+//	printf("-- Ended game_timer_handler --\n");
 
 	return 0;
 }

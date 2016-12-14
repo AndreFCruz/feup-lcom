@@ -29,9 +29,9 @@ struct explosion_t {
 	unsigned pos[2];
 	unsigned radius;
 
-	unsigned life_span;
-
-//	Bitmap ** sprites;
+	Bitmap ** sprites;
+	unsigned curr_sprite_index;
+	unsigned no_sprites;
 	unsigned curr_frame;
 	unsigned frames_per_sprite;
 
@@ -154,25 +154,44 @@ size_t missile_getSizeOf() {
  * Methods for Explosion
  */
 
-Explosion * new_explosion(const unsigned * position) {
+Explosion * new_explosion(const unsigned * position, Bitmap ** bmps) {
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
-//	self->pos = position;
 	memcpy(self->pos, position, 2 * sizeof(unsigned));
 	self->curr_frame = 0;
+	self->curr_sprite_index = 0;
+	self->frames_per_sprite = 5;
+	self->no_sprites = 16;
+	self->radius = 28;	// TODO Check
 
-	// TODO
-	// Initiate Bitmaps and number of frames
+	self->sprites = bmps;
 
 	return self;
 }
-
 
 void delete_explosion(Explosion * ptr) {
 	free(ptr);
 }
 
+int explosion_update(Explosion * ptr) { // TODO Check!
+	if (++(ptr->curr_frame) > ptr->frames_per_sprite) {
+		ptr->curr_frame = 0;
+		if (++(ptr->curr_sprite_index) >= ptr->no_sprites) {
+			return 1; // return 1 indicates the animation finished, ptr should be deleted
+		}
+		// update radius
+	}
 
+	return 0;
+}
+
+Bitmap * explosion_getBitmap(Bitmap * ptr) {
+	return ptr->sprites[ptr->curr_sprite_index];
+}
+
+size_t explosion_getSizeOf() {
+	return sizeof(Explosion);
+}
 
 
 

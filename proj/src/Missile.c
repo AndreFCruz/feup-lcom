@@ -10,8 +10,8 @@
 typedef enum {TRUE, FALSE} bool;
 
 struct missile_t {
-	unsigned init_pos[2];	// Initial Position for Missile Trail
-	unsigned pos[2];		// Current Position
+	int init_pos[2];	// Initial Position for Missile Trail
+	int pos[2];		// Current Position
 
 	float velocity[2];		// Velocity, in pixels PER frame
 	float pending_movement[2];	// Movement left unperformed on the previous frame
@@ -20,14 +20,14 @@ struct missile_t {
 
 	/* Attributes for Friendly Missile */
 	bool isFriendly;
-	unsigned end_pos[2];
+	int end_pos[2];
 
 };
 
 
 struct explosion_t {
-	unsigned pos[2];
-	unsigned radius;
+	int pos[2];
+	int radius;
 
 	Bitmap ** bmps;
 	unsigned curr_bmp_index;
@@ -52,13 +52,13 @@ int round_float(float f) {
  */
 
 // Constructor for Generic Missile
-static Missile * new_missile(const unsigned * init_pos, const float * vel) {
+static Missile * new_missile(const int * init_pos, const float * vel) {
 	printf("Missile Constructor Called\n");
 
 	Missile * self = (Missile *) malloc(sizeof(Missile));
 
-	memcpy(self->init_pos, init_pos, 2 * sizeof(unsigned));
-	memcpy(self->pos, init_pos, 2 * sizeof(unsigned));
+	memcpy(self->init_pos, init_pos, 2 * sizeof(int));
+	memcpy(self->pos, init_pos, 2 * sizeof(int));
 
 	memcpy(self->velocity, vel, 2 * sizeof(float));
 
@@ -72,7 +72,7 @@ static Missile * new_missile(const unsigned * init_pos, const float * vel) {
 
 // Constructor for Enemy Missile
 Missile * new_emissile() {
-	unsigned init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
+	int init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
 	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 8 + 1 : rand() % 8 - 8), 4.0 / (1 + rand() % 8)};
 	//TODO find function that shoots left if missile is on the right of screen, and vice-verca (with rand() variations)
 
@@ -83,19 +83,23 @@ Missile * new_emissile() {
 }
 
 // Constructor for Friendly Missile
-Missile * new_fmissile(const unsigned * init_pos, const unsigned * mouse_pos) {
+Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	printf("new_fmissile Constructor Called\n");
-	float vel[2] = {0.5, -1.0};	//TODO Vel should not be time/frame based
+
+	// TODO VEL IS NOT RIGHT
+	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
+
 	Missile * self = new_missile(init_pos, vel);
 	self->color = YELLOW;
 	self->isFriendly = TRUE;
-	memcpy(self->end_pos, mouse_pos, 2 * sizeof(unsigned));
+	memcpy(self->end_pos, mouse_pos, 2 * sizeof(int));
 	return self;
 }
 
 
 Explosion * delete_missile(Missile * ptr) {
-	Explosion * exp = new_explosion(ptr->pos);
+	int pos[2] = {ptr->pos[0], ptr->pos[1]};
+	Explosion * exp = new_explosion(pos);
 
 	free(ptr);
 
@@ -135,19 +139,19 @@ int missile_isFriendly(Missile * ptr) {
 	return (ptr->isFriendly == TRUE ? 1 : 0);
 }
 
-unsigned missile_getPosX(Missile * ptr) {
+int missile_getPosX(Missile * ptr) {
 	return ptr->pos[0];
 }
 
-unsigned missile_getPosY(Missile * ptr) {
+int missile_getPosY(Missile * ptr) {
 	return ptr->pos[1];
 }
 
-unsigned missile_getInitX(Missile * ptr) {
+int missile_getInitX(Missile * ptr) {
 	return ptr->init_pos[0];
 }
 
-unsigned missile_getInitY(Missile * ptr) {
+int missile_getInitY(Missile * ptr) {
 	return ptr->init_pos[1];
 }
 
@@ -163,17 +167,17 @@ size_t missile_getSizeOf() {
  * Methods for Explosion
  */
 
-Explosion * new_explosion(const unsigned * position) {
+Explosion * new_explosion(const int * position) {
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
-	memcpy(self->pos, position, 2 * sizeof(unsigned));
+	memcpy(self->pos, position, 2 * sizeof(int));
 	self->curr_frame = 0;
 	self->curr_bmp_index = 0;
 	self->frames_per_bmp = 5;
 	self->no_bmps = 16;
 	self->radius = 28;	// TODO Check
 
-	self->bmps = game_getExplosionBmps();
+	self->bmps = (Bitmap **) (game_getExplosionBmps());
 
 	return self;
 }
@@ -198,11 +202,11 @@ Bitmap * explosion_getBitmap(Explosion * ptr) {
 	return ptr->bmps[ptr->curr_bmp_index];
 }
 
-unsigned explosion_getPosX(Explosion * ptr) {
+int explosion_getPosX(Explosion * ptr) {
 	return ptr->pos[0];
 }
 
-unsigned explosion_getPosY(Explosion * ptr) {
+int explosion_getPosY(Explosion * ptr) {
 	return ptr->pos[1];
 }
 

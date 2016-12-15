@@ -192,5 +192,20 @@ size_t explosion_getSizeOf() {
 	return sizeof(Explosion);
 }
 
+//Collisions
+int missile_atCity(Missile * ptr) {
+	if (ptr->pos[1] > 545)
+		return 1;
+	else return 0;
+}
+
+int missile_atExplosion(Missile * ptr, Explosion * e_ptr) {
+	int x_var = (ptr->pos[0] - e_ptr->pos[0]);
+	int y_var = (ptr->pos[1] - e_ptr->pos[1]);
+
+	if (x_var*x_var+y_var*y_var <= e_ptr->radius)	//x²+y² <= r²
+		return 1;
+	else return 0;
+}
 
 

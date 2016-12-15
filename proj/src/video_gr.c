@@ -110,7 +110,7 @@ int draw_line (unsigned short xi, unsigned short yi,
 
 
 	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {
-		printf("draw_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
+		//printf("draw_line: invalid position for line. Was (%d,%d) to (%d,%d).\n", xi, yi, xf, yf);
 		return 1;
 	}
 
@@ -254,12 +254,11 @@ int draw_mouse_cross (const int * pos) {
 
 // TODO Melhorar?
 void draw_missile(Missile * ptr) {
-	unsigned thickness = 8, idx = 0;
+	unsigned thickness = 5, idx = 0;
 	for (; idx < thickness; ++idx) {
-		draw_line(missile_getInitX(ptr), missile_getInitY(ptr), missile_getPosX(ptr), missile_getPosY(ptr), missile_getColor(ptr));
+		draw_line(missile_getInitX(ptr)+idx, missile_getInitY(ptr), missile_getPosX(ptr)+idx, missile_getPosY(ptr), missile_getColor(ptr));
 	}
 }
-
 
 /* TODO: Terminar as restantes macros das cores */
 uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {

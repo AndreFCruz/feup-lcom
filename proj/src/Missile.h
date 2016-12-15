@@ -24,6 +24,10 @@ void missile_update(Missile * ptr);
 int missile_isFriendly(Missile * ptr);
 Explosion * delete_missile(Missile * ptr);
 
+//Colisions
+int missile_atCity(Missile * ptr);
+int missile_atExplosion(Missile * ptr, Explosion * e_ptr);
+
 /* Explosion's Methods */
 Explosion * new_explosion(const unsigned * position);
 

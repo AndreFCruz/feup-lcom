@@ -10,6 +10,7 @@
 typedef struct {
 	GVector * e_missiles;	// Enemy Missiles
 	GVector * f_missiles;	// Friendly Missiles
+	GVector * explosions;		//Current Explosions	-	TODO: Check Andre
 
 	unsigned frames;		// FRAMES survived, frames == times * 60
 	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
@@ -28,8 +29,8 @@ static Game_t * new_game() {
 	Game->frames = 0;
 	Game->enemy_spawn_fr = 120;
 
-	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-	//Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
+	//Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
+	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
 
 	// Load Explosion BitMaps
 	Bitmap* bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
@@ -42,6 +43,7 @@ static Game_t * new_game() {
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
+	Game->explosions = new_gvector(explosion_getSizeOf());	//TODO: CHeck Andre
 
 	Game->base_pos[0] = L_BASE_X;
 	Game->base_pos[1] = BASE_Y;
@@ -170,7 +172,40 @@ int game_timer_handler() {
 		missile_update(gvector_at(self->f_missiles, idx));
 	}
 
-	// Draw and Update Explosions
+// 	Collisions e_missiles with floor
+	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
+		if (missile_atCity (gvector_at(self->e_missiles, idx))) {
+			//Erasing from vector
+			Missile * helper = gvector_at(self->e_missiles, idx);
+			gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
+			--idx;
+
+			//Freeing memory allocated
+			delete_missile(helper);
+		}
+	}
+
+	//Collisions f_missiles with e_missiles - N faz sentido. Faz mais sentido e_missiles com explosoes...
+	//Pq o f_missiles vai explodir para a zona onde foi lançado... Tenho e de ver se se vai encontrar dentro do
+	//raio de alguma explosão
+
+	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
+		unsigned idx2;
+
+		for (idx2 = 0; idx < gvector_get_size(self->e_missiles); ++idx2) {
+			if (missile_atExplosion(gvector_at(self->e_missiles, idx2),gvector_at(self->explosions, idx))) {
+				//Erasing from vector
+				Missile * helper = gvector_at(self->e_missiles, idx2);
+				gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
+				--idx2;
+
+				//Freeing memory allocated
+				delete_missile(helper);
+			}
+		}
+	}
+
+// Draw and Update Explosions
 
 //	printf("-- Ended game_timer_handler --\n");
 

@@ -85,8 +85,7 @@ Missile * new_emissile() {
 // Constructor for Friendly Missile
 Missile * new_fmissile(const unsigned * init_pos, const unsigned * mouse_pos) {
 	printf("new_fmissile Constructor Called\n");
-	float vel[2] = {((int)mouse_pos[0] - (int)init_pos[0]) / 300., ((int)mouse_pos[1] - (int)init_pos[1]) / 300.};	//TODO Vel should not be time/frame based
-	printf("new_fmissile vel calculated\n");
+	float vel[2] = {0.5, -1.0};	//TODO Vel should not be time/frame based
 	Missile * self = new_missile(init_pos, vel);
 	self->color = YELLOW;
 	self->isFriendly = TRUE;
@@ -100,10 +99,13 @@ Explosion * delete_missile(Missile * ptr) {
 
 	free(ptr);
 
+	printf("DELETE MISSILE CALLED\n");
+
 	return exp;
 }
 
-void missile_update(Missile * ptr) {
+// Returns 1 if missile is to be deleted
+int missile_update(Missile * ptr) {
 
 	//Update Pending Movement
 	ptr->pending_movement[0] += ptr->velocity[0];
@@ -119,6 +121,14 @@ void missile_update(Missile * ptr) {
 		ptr->pos[1] += tmp;
 		ptr->pending_movement[1] -= tmp;
 	}
+
+	// IF is Friendly Missile
+	if (ptr->isFriendly == TRUE) {
+		if ( abs(ptr->init_pos[0] - ptr->pos[0]) < ptr->velocity[0] && abs(ptr->init_pos[1] - ptr->pos[1]) < ptr->velocity[1] )
+			return 1; // Reached End Pos -- Should Explode
+	}
+
+	return 0;
 }
 
 int missile_isFriendly(Missile * ptr) {
@@ -188,15 +198,16 @@ Bitmap * explosion_getBitmap(Explosion * ptr) {
 	return ptr->bmps[ptr->curr_bmp_index];
 }
 
-size_t explosion_getSizeOf() {
-	return sizeof(Explosion);
+unsigned explosion_getPosX(Explosion * ptr) {
+	return ptr->pos[0];
 }
 
-//Collisions
-int missile_atCity(Missile * ptr) {
-	if (ptr->pos[1] > 545)
-		return 1;
-	else return 0;
+unsigned explosion_getPosY(Explosion * ptr) {
+	return ptr->pos[1];
+}
+
+size_t explosion_getSizeOf() {
+	return sizeof(Explosion);
 }
 
 int missile_atExplosion(Missile * ptr, Explosion * e_ptr) {

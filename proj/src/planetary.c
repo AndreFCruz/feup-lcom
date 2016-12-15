@@ -10,7 +10,7 @@
 typedef struct {
 	GVector * e_missiles;	// Enemy Missiles
 	GVector * f_missiles;	// Friendly Missiles
-	GVector * explosions;		//Current Explosions	-	TODO: Check Andre
+	GVector * explosions;	// Explosions on Screen
 
 	unsigned frames;		// FRAMES survived, frames == times * 60
 	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
@@ -21,6 +21,16 @@ typedef struct {
 
 } Game_t;
 
+
+//// TODO NOT WORKING
+//char * explosion_bmp_extension(const char * s1, unsigned i) {
+//	char * new_string = malloc(strlen(s1) + 3 + strlen(".bmp"));
+//	strcpy(new_string, s1);
+//	strcat(new_string, ".bmp");
+//
+//	return new_string;
+//}
+
 static Game_t * new_game() {
 	printf("New Game Instance!!\n");
 
@@ -29,21 +39,41 @@ static Game_t * new_game() {
 	Game->frames = 0;
 	Game->enemy_spawn_fr = 120;
 
-	//Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
+	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
+//	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
 
 	// Load Explosion BitMaps
-	Bitmap* bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
-	Game->explosion_bmps;
-	int i;
-	for (i = 0; i < NUM_EXPLOSION_BMPS; ++i) {
-		//filename : base + i
-//		bmps[i] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" /* + i.bmp */);
-	}
+	Game->explosion_bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
+
+//	int i;	// GOD DAMN IT
+//	for (i = 0; i < NUM_EXPLOSION_BMPS; ++i) {
+//		//filename : base + i
+//		char * tmp = explosion_bmp_extension("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/", i);
+//		printf("    LOAD EXPLOSIONS : %s", tmp);
+//		Game->explosion_bmps[i] = loadBitmap(tmp);
+//	}
+
+	Game->explosion_bmps[0] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/00.bmp");
+	Game->explosion_bmps[1] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/01.bmp");
+	Game->explosion_bmps[2] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/02.bmp");
+	Game->explosion_bmps[3] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/03.bmp");
+	Game->explosion_bmps[4] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/04.bmp");
+	Game->explosion_bmps[5] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/05.bmp");
+	Game->explosion_bmps[6] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/06.bmp");
+	Game->explosion_bmps[7] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/07.bmp");
+	Game->explosion_bmps[8] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/08.bmp");
+	Game->explosion_bmps[9] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/09.bmp");
+	Game->explosion_bmps[10] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/10.bmp");
+	Game->explosion_bmps[11] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/11.bmp");
+	Game->explosion_bmps[12] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/12.bmp");
+	Game->explosion_bmps[13] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/13.bmp");
+	Game->explosion_bmps[14] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/14.bmp");
+	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/15.bmp");
+
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
-	Game->explosions = new_gvector(explosion_getSizeOf());	//TODO: CHeck Andre
+	Game->explosions = new_gvector(explosion_getSizeOf());
 
 	Game->base_pos[0] = L_BASE_X;
 	Game->base_pos[1] = BASE_Y;
@@ -134,9 +164,9 @@ int game_timer_handler() {
 
 	// Mouse
 	//spawn missiles on mouse clicks
-	if (get_mouseRMB) {
+	if (get_mouseRMB()) {
 		Missile * tmp = new_fmissile(self->base_pos, get_mouse_pos());
-		gvector_push_back(self->f_missiles, new_fmissile);
+		gvector_push_back(self->f_missiles, tmp);
 	}
 
 //	printf("Game Spontaneous Update\n");
@@ -172,16 +202,29 @@ int game_timer_handler() {
 		missile_update(gvector_at(self->f_missiles, idx));
 	}
 
+	// Draw and Update Explosions
+	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
+		Explosion * current = gvector_at(self->explosions, idx);
+		drawBitmap(vg_getBufferPtr(), explosion_getBitmap(current), explosion_getPosX(current), explosion_getPosY(current) - 32, ALIGN_CENTER);
+		if (explosion_update(current)) { // Animation ended ?
+			printf("Explosion Animation Ended\n");
+			gvector_erase(self->explosions, idx);
+			--idx;
+			delete_explosion(current);
+		}
+	}
+
 // 	Collisions e_missiles with floor
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
-		if (missile_atCity (gvector_at(self->e_missiles, idx))) {
+		Missile * current = gvector_at(self->e_missiles, idx);
+		if (missile_getPosY(current) > BASE_Y) {
 			//Erasing from vector
 			Missile * helper = gvector_at(self->e_missiles, idx);
 			gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
 			--idx;
 
 			//Freeing memory allocated
-			delete_missile(helper);
+			gvector_push_back(self->explosions, delete_missile(helper));
 		}
 	}
 

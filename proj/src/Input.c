@@ -133,9 +133,20 @@ void mouse_packet_handler(unsigned char * packet) {
 	Input_t * Input = input_instance();
 
 	/** Update Buttons **/
-	Input->RMB = packet[0] & BYTE0_RB;
-	Input->LMB = packet[0] & BYTE0_LB;
-	Input->MMB = packet[0] & BYTE0_MB;
+	if (Input->RMB)
+		Input->RMB = 0;
+	else
+		Input->RMB = packet[0] & BYTE0_RB;
+
+	if (Input->LMB)
+		Input->LMB = 0;
+	else
+		Input->LMB = packet[0] & BYTE0_LB;
+
+	if (Input->MMB)
+		Input->MMB = 0;
+	else
+		Input->MMB = packet[0] & BYTE0_MB;
 
 
 	/** Update Position **/

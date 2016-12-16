@@ -25,7 +25,7 @@ int missile_isFriendly(Missile * ptr);
 Explosion * delete_missile(Missile * ptr);
 
 //Colisions
-int missile_atExplosion(Missile * ptr, Explosion * e_ptr);	// TODO MOVE THIS FUNCTION ELSEWHERE
+int missile_collidedWithExplosion(Missile * ptr, Explosion * e_ptr);
 
 /* Explosion's Methods */
 Explosion * new_explosion(const int * position);

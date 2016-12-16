@@ -78,7 +78,6 @@ int main()
 				}
 
 				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
-					printf("main::timer interrupt\n");
 
 					if ( OK != timer_handler() ) {
 						printf("Timer Handler Returned EXIT Code!\n");

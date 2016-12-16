@@ -32,7 +32,7 @@ struct explosion_t {
 	Bitmap ** bmps;
 	unsigned curr_bmp_index;
 	unsigned no_bmps;
-	unsigned curr_frame;
+	unsigned frame_count;
 	unsigned frames_per_bmp;
 };
 
@@ -83,7 +83,6 @@ Missile * new_emissile() {
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 
-	// TODO VEL IS NOT RIGHT
 	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
 	//float vel[2] = {5,-5};
 	Missile * self = new_missile(init_pos, vel);
@@ -169,13 +168,13 @@ Explosion * new_explosion(const int * position) {
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
 	memcpy(self->pos, position, 2 * sizeof(int));
-	self->curr_frame = 0;
+	self->frame_count = 0;
 	self->curr_bmp_index = 0;
 	self->frames_per_bmp = 5;
 	self->no_bmps = 16;
 	self->radius = 28;	// TODO Check
 
-	self->bmps = (Bitmap **) (game_getExplosionBmps());
+	self->bmps = game_getExplosionBmps();
 
 	return self;
 }
@@ -185,11 +184,22 @@ void delete_explosion(Explosion * ptr) {
 }
 
 int explosion_update(Explosion * ptr) { // TODO Check!
-	if (++(ptr->curr_frame) > ptr->frames_per_bmp) {
-		ptr->curr_frame = 0;
-		--(ptr->radius);	// Update radius (!)
-		if (++(ptr->curr_bmp_index) >= ptr->no_bmps) {
-			return 1; // return 1 indicates the animation finished, ptr should be deleted
+//	if (++(ptr->frame_count) > ptr->frames_per_bmp) {
+//		ptr->frame_count = 0;
+//		--(ptr->radius);	// Update radius (!)
+//		if (++(ptr->curr_bmp_index) >= ptr->no_bmps) {
+//			return 1; // return 1 indicates the animation finished, ptr should be deleted
+//		}
+//	}
+//
+//	return 0;
+
+	ptr->frame_count += 1;
+	if ((ptr->frame_count % ptr->frames_per_bmp) == 0) {
+		ptr->curr_bmp_index += 1;
+		ptr->radius -= 1;
+		if (ptr->curr_bmp_index >= ptr->no_bmps) {
+			return 1;
 		}
 	}
 

@@ -70,6 +70,23 @@ static Game_t * new_game() {
 	Game->explosion_bmps[14] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/14.bmp");
 	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/15.bmp");
 
+//	Game->explosion_bmps[0] = loadBitmap("/home/lcom/svn/proj/res/Explosion/00.bmp");
+//	Game->explosion_bmps[1] = loadBitmap("/home/lcom/svn/proj/res/Explosion/01.bmp");
+//	Game->explosion_bmps[2] = loadBitmap("/home/lcom/svn/proj/res/Explosion/02.bmp");
+//	Game->explosion_bmps[3] = loadBitmap("/home/lcom/svn/proj/res/Explosion/03.bmp");
+//	Game->explosion_bmps[4] = loadBitmap("/home/lcom/svn/proj/res/Explosion/04.bmp");
+//	Game->explosion_bmps[5] = loadBitmap("/home/lcom/svn/proj/res/Explosion/05.bmp");
+//	Game->explosion_bmps[6] = loadBitmap("/home/lcom/svn/proj/res/Explosion/06.bmp");
+//	Game->explosion_bmps[7] = loadBitmap("/home/lcom/svn/proj/res/Explosion/07.bmp");
+//	Game->explosion_bmps[8] = loadBitmap("/home/lcom/svn/proj/res/Explosion/08.bmp");
+//	Game->explosion_bmps[9] = loadBitmap("/home/lcom/svn/proj/res/Explosion/09.bmp");
+//	Game->explosion_bmps[10] = loadBitmap("/home/lcom/svn/proj/res/Explosion/10.bmp");
+//	Game->explosion_bmps[11] = loadBitmap("/home/lcom/svn/proj/res/Explosion/11.bmp");
+//	Game->explosion_bmps[12] = loadBitmap("/home/lcom/svn/proj/res/Explosion/12.bmp");
+//	Game->explosion_bmps[13] = loadBitmap("/home/lcom/svn/proj/res/Explosion/13.bmp");
+//	Game->explosion_bmps[14] = loadBitmap("/home/lcom/svn/proj/res/Explosion/14.bmp");
+//	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/proj/res/Explosion/15.bmp");
+
 
 	Game->e_missiles = new_gvector(missile_getSizeOf());
 	Game->f_missiles = new_gvector(missile_getSizeOf());
@@ -220,17 +237,13 @@ int game_timer_handler() {
 		if (missile_getPosY(current) > BASE_Y) {
 			//Erasing from vector
 			Missile * helper = gvector_at(self->e_missiles, idx);
-			gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
+			gvector_erase(self->e_missiles, idx);	//TODO: Erases all the missiles on the screen, why?
 			--idx;
 
 			//Freeing memory allocated
 			gvector_push_back(self->explosions, delete_missile(helper));
 		}
 	}
-
-	//Collisions f_missiles with e_missiles - N faz sentido. Faz mais sentido e_missiles com explosoes...
-	//Pq o f_missiles vai explodir para a zona onde foi lançado... Tenho e de ver se se vai encontrar dentro do
-	//raio de alguma explosão
 
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
 		unsigned idx2;

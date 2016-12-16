@@ -96,12 +96,10 @@ Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 
 
 Explosion * delete_missile(Missile * ptr) {
-	int pos[2] = {ptr->pos[0], ptr->pos[1]};
-	Explosion * exp = new_explosion(pos);
-
+	Explosion * exp = new_explosion(ptr->pos);
 	free(ptr);
 
-	printf("DELETE MISSILE CALLED\n");
+	printf("\t\tDELETE MISSILE CALLED\n");
 
 	return exp;
 }
@@ -115,11 +113,11 @@ int missile_update(Missile * ptr) {
 
 	//Update Position
 	int tmp;
-	if ( (abs(tmp = round_float(ptr->pending_movement[0]))) > 1) {
+	if ( abs(tmp = round_float(ptr->pending_movement[0])) > 1 ) {
 		ptr->pos[0] += tmp;
 		ptr->pending_movement[0] -= tmp;
 	}
-	if ( (abs(tmp = round_float(ptr->pending_movement[1]))) > 1) {
+	if ( abs(tmp = round_float(ptr->pending_movement[1])) > 1 ) {
 		ptr->pos[1] += tmp;
 		ptr->pending_movement[1] -= tmp;
 	}
@@ -166,6 +164,8 @@ size_t missile_getSizeOf() {
  */
 
 Explosion * new_explosion(const int * position) {
+	printf("\t\t\tEXPLOSION CONSTRUCTOR CALLED\n");
+
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
 	memcpy(self->pos, position, 2 * sizeof(int));
@@ -187,10 +187,10 @@ void delete_explosion(Explosion * ptr) {
 int explosion_update(Explosion * ptr) { // TODO Check!
 	if (++(ptr->curr_frame) > ptr->frames_per_bmp) {
 		ptr->curr_frame = 0;
+		--(ptr->radius);	// Update radius (!)
 		if (++(ptr->curr_bmp_index) >= ptr->no_bmps) {
 			return 1; // return 1 indicates the animation finished, ptr should be deleted
 		}
-		// TODO update radius
 	}
 
 	return 0;
@@ -212,11 +212,11 @@ size_t explosion_getSizeOf() {
 	return sizeof(Explosion);
 }
 
-int missile_atExplosion(Missile * ptr, Explosion * e_ptr) {
-	int x_var = (ptr->pos[0] - e_ptr->pos[0]);
-	int y_var = (ptr->pos[1] - e_ptr->pos[1]);
+int missile_collidedWithExplosion(Missile * m_ptr, Explosion * e_ptr) {
+	int x_var = (m_ptr->pos[0] - e_ptr->pos[0]);
+	int y_var = (m_ptr->pos[1] - e_ptr->pos[1]);
 
-	if (x_var*x_var+y_var*y_var <= e_ptr->radius)	//x²+y² <= r²
+	if (x_var*x_var + y_var*y_var <= e_ptr->radius*e_ptr->radius)	//x²+y² <= r²
 		return 1;
 	else return 0;
 }

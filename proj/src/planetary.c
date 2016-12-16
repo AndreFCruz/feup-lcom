@@ -224,38 +224,38 @@ int game_timer_handler() {
 		Explosion * current = gvector_at(self->explosions, idx);
 		drawBitmap(vg_getBufferPtr(), explosion_getBitmap(current), explosion_getPosX(current), explosion_getPosY(current) - 32, ALIGN_CENTER);
 		if (explosion_update(current)) { // Animation ended ?
-			printf("Explosion Animation Ended\n");
+			printf("\t\t\tExplosion Animation Ended\n");
 			gvector_erase(self->explosions, idx);
 			--idx;
 			delete_explosion(current);
+			printf("\t\t\tExplosion deleted\n");
 		}
 	}
 
-// 	Collisions e_missiles with floor
+	// Check Collisions e_missiles with sky-line
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
 		Missile * current = gvector_at(self->e_missiles, idx);
 		if (missile_getPosY(current) > BASE_Y) {
 			//Erasing from vector
-			Missile * helper = gvector_at(self->e_missiles, idx);
 			gvector_erase(self->e_missiles, idx);	//TODO: Erases all the missiles on the screen, why?
 			--idx;
 
 			//Freeing memory allocated
-			gvector_push_back(self->explosions, delete_missile(helper));
+			gvector_push_back(self->explosions, delete_missile(current));
 		}
 	}
 
+	// Check Collisions missiles with explosions
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
 		unsigned idx2;
 
 		for (idx2 = 0; idx < gvector_get_size(self->e_missiles); ++idx2) {
-			if (missile_atExplosion(gvector_at(self->e_missiles, idx2),gvector_at(self->explosions, idx))) {
+			if (missile_collidedWithExplosion(gvector_at(self->e_missiles, idx2),gvector_at(self->explosions, idx))) {
 				//Erasing from vector
 				Missile * helper = gvector_at(self->e_missiles, idx2);
 				gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
 				--idx2;
 
-				//Freeing memory allocated
 				delete_missile(helper);
 			}
 		}

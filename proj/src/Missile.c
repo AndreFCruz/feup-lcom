@@ -53,19 +53,19 @@ int round_float(float f) {
 
 // Constructor for Generic Missile
 static Missile * new_missile(const int * init_pos, const float * vel) {
-	Missile * self = (Missile *) malloc(sizeof(Missile));
+	Missile * m_ptr = (Missile *) malloc(sizeof(Missile));
 
-	memcpy(self->init_pos, init_pos, 2 * sizeof(int));
-	memcpy(self->pos, init_pos, 2 * sizeof(int));
+	memmove(m_ptr->init_pos, init_pos, 2 * sizeof(int));
+	memmove(m_ptr->pos, init_pos, 2 * sizeof(int));
 
-	memcpy(self->velocity, vel, 2 * sizeof(float));
+	memmove(m_ptr->velocity, vel, 2 * sizeof(float));
 
-	self->pending_movement[0] = 0.;
-	self->pending_movement[1] = 0.;
+	m_ptr->pending_movement[0] = 0.;
+	m_ptr->pending_movement[1] = 0.;
 
-	self->color = 0XFFFF;	// White, to be changed on enemy/friendly constructor
+	m_ptr->color = 0XFFFF;	// White, to be changed on enemy/friendly constructor
 
-	return self;
+	return m_ptr;
 }
 
 // Constructor for Enemy Missile
@@ -74,10 +74,10 @@ Missile * new_emissile() {
 	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 8 + 1 : rand() % 8 - 8), 4.0 / (1 + rand() % 8)};
 	//TODO find function that shoots left if missile is on the right of screen, and vice-verca (with rand() variations)
 
-	Missile * self = new_missile(init_pos, vel);
-	self->color = RED;
-	self->isFriendly = FALSE;
-	return self;
+	Missile * m_ptr = new_missile(init_pos, vel);
+	m_ptr->color = RED;
+	m_ptr->isFriendly = FALSE;
+	return m_ptr;
 }
 
 // Constructor for Friendly Missile
@@ -85,18 +85,20 @@ Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 
 	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
 	//float vel[2] = {5,-5};
-	Missile * self = new_missile(init_pos, vel);
-	self->color = YELLOW;
-	self->isFriendly = TRUE;
-	memcpy(self->end_pos, mouse_pos, 2 * sizeof(int));
+	Missile * m_ptr = new_missile(init_pos, vel);
+	m_ptr->color = YELLOW;
+	m_ptr->isFriendly = TRUE;
+	memmove(m_ptr->end_pos, mouse_pos, 2 * sizeof(int));
 
-	return self;
+	return m_ptr;
 }
 
 
-Explosion * delete_missile(Missile * ptr) {
-	Explosion * exp = new_explosion(ptr->pos);
-	free(ptr);
+Explosion * delete_missile(Missile * m_ptr) {
+	Explosion * exp = new_explosion(m_ptr->pos);
+	printf("PTR freed: %d", m_ptr);
+
+	free(m_ptr);
 
 	printf("\t\tDELETE MISSILE CALLED\n");
 
@@ -104,54 +106,54 @@ Explosion * delete_missile(Missile * ptr) {
 }
 
 // Returns 1 if missile is to be deleted
-int missile_update(Missile * ptr) {
+int missile_update(Missile * m_ptr) {
 
 	//Update Pending Movement
-	ptr->pending_movement[0] += ptr->velocity[0];
-	ptr->pending_movement[1] += ptr->velocity[1];
+	m_ptr->pending_movement[0] += m_ptr->velocity[0];
+	m_ptr->pending_movement[1] += m_ptr->velocity[1];
 
 	//Update Position
 	int tmp;
-	if ( abs(tmp = round_float(ptr->pending_movement[0])) > 1 ) {
-		ptr->pos[0] += tmp;
-		ptr->pending_movement[0] -= tmp;
+	if ( abs(tmp = round_float(m_ptr->pending_movement[0])) > 1 ) {
+		m_ptr->pos[0] += tmp;
+		m_ptr->pending_movement[0] -= tmp;
 	}
-	if ( abs(tmp = round_float(ptr->pending_movement[1])) > 1 ) {
-		ptr->pos[1] += tmp;
-		ptr->pending_movement[1] -= tmp;
+	if ( abs(tmp = round_float(m_ptr->pending_movement[1])) > 1 ) {
+		m_ptr->pos[1] += tmp;
+		m_ptr->pending_movement[1] -= tmp;
 	}
 
 	// IF is Friendly Missile
-	if (ptr->isFriendly == TRUE) {
-		if ( abs(ptr->init_pos[0] - ptr->pos[0]) < ptr->velocity[0] && abs(ptr->init_pos[1] - ptr->pos[1]) < ptr->velocity[1] )
+	if (m_ptr->isFriendly == TRUE) {
+		if ( abs(m_ptr->init_pos[0] - m_ptr->pos[0]) < 3 && abs(m_ptr->init_pos[1] - m_ptr->pos[1]) < 3 )
 			return 1; // Reached End Pos -- Should Explode
 	}
 
 	return 0;
 }
 
-int missile_isFriendly(Missile * ptr) {
-	return (ptr->isFriendly == TRUE ? 1 : 0);
+int missile_isFriendly(Missile * m_ptr) {
+	return (m_ptr->isFriendly == TRUE ? 1 : 0);
 }
 
-int missile_getPosX(Missile * ptr) {
-	return ptr->pos[0];
+int missile_getPosX(Missile * m_ptr) {
+	return m_ptr->pos[0];
 }
 
-int missile_getPosY(Missile * ptr) {
-	return ptr->pos[1];
+int missile_getPosY(Missile * m_ptr) {
+	return m_ptr->pos[1];
 }
 
-int missile_getInitX(Missile * ptr) {
-	return ptr->init_pos[0];
+int missile_getInitX(Missile * m_ptr) {
+	return m_ptr->init_pos[0];
 }
 
-int missile_getInitY(Missile * ptr) {
-	return ptr->init_pos[1];
+int missile_getInitY(Missile * m_ptr) {
+	return m_ptr->init_pos[1];
 }
 
-uint16_t missile_getColor(Missile * ptr) {
-	return ptr->color;
+uint16_t missile_getColor(Missile * m_ptr) {
+	return m_ptr->color;
 }
 
 size_t missile_getSizeOf() {
@@ -167,7 +169,7 @@ Explosion * new_explosion(const int * position) {
 
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
-	memcpy(self->pos, position, 2 * sizeof(int));
+	memmove(self->pos, position, 2 * sizeof(int));
 	self->frame_count = 0;
 	self->curr_bmp_index = 0;
 	self->frames_per_bmp = 5;
@@ -179,26 +181,27 @@ Explosion * new_explosion(const int * position) {
 	return self;
 }
 
-void delete_explosion(Explosion * ptr) {
-	free(ptr);
+void delete_explosion(Explosion * e_ptr) {
+	printf("PTR freed: %d", e_ptr);
+	free(e_ptr);
 }
 
-int explosion_update(Explosion * ptr) { // TODO Check!
-//	if (++(ptr->frame_count) > ptr->frames_per_bmp) {
-//		ptr->frame_count = 0;
-//		--(ptr->radius);	// Update radius (!)
-//		if (++(ptr->curr_bmp_index) >= ptr->no_bmps) {
-//			return 1; // return 1 indicates the animation finished, ptr should be deleted
+int explosion_update(Explosion * e_ptr) { // TODO Check!
+//	if (++(e_ptr->frame_count) > e_ptr->frames_per_bmp) {
+//		e_ptr->frame_count = 0;
+//		--(e_ptr->radius);	// Update radius (!)
+//		if (++(e_ptr->curr_bmp_index) >= e_ptr->no_bmps) {
+//			return 1; // return 1 indicates the animation finished, e_ptr should be deleted
 //		}
 //	}
 //
 //	return 0;
 
-	ptr->frame_count += 1;
-	if ((ptr->frame_count % ptr->frames_per_bmp) == 0) {
-		ptr->curr_bmp_index += 1;
-		ptr->radius -= 1;
-		if (ptr->curr_bmp_index >= ptr->no_bmps) {
+	e_ptr->frame_count += 1;
+	if ((e_ptr->frame_count % e_ptr->frames_per_bmp) == 0) {
+		e_ptr->curr_bmp_index += 1;
+		e_ptr->radius -= 1;
+		if (e_ptr->curr_bmp_index >= e_ptr->no_bmps) {
 			return 1;
 		}
 	}
@@ -206,16 +209,16 @@ int explosion_update(Explosion * ptr) { // TODO Check!
 	return 0;
 }
 
-Bitmap * explosion_getBitmap(Explosion * ptr) {
-	return ptr->bmps[ptr->curr_bmp_index];
+Bitmap * explosion_getBitmap(Explosion * e_ptr) {
+	return e_ptr->bmps[e_ptr->curr_bmp_index];
 }
 
-int explosion_getPosX(Explosion * ptr) {
-	return ptr->pos[0];
+int explosion_getPosX(Explosion * e_ptr) {
+	return e_ptr->pos[0];
 }
 
-int explosion_getPosY(Explosion * ptr) {
-	return ptr->pos[1];
+int explosion_getPosY(Explosion * e_ptr) {
+	return e_ptr->pos[1];
 }
 
 size_t explosion_getSizeOf() {

@@ -67,9 +67,15 @@ static void gvector_check_capacity(GVector * self) {
 #endif
 
     if ( (self->capacity - self->size) > self->increments ) {
+#if DEBUG
+    	printf("\nGVector REALLOC --\n");
+#endif
         self->capacity -= self->increments;
         self->array = realloc(self->array, self->capacity * self->el_size);
     } else if ( self->capacity == self->size ) {
+#if DEBUG
+    	printf("\nGVector REALLOC --\n");
+#endif
         self->capacity += self->increments;
         self->array = realloc(self->array, self->capacity * self->el_size);
     }

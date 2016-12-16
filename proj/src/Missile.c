@@ -53,8 +53,6 @@ int round_float(float f) {
 
 // Constructor for Generic Missile
 static Missile * new_missile(const int * init_pos, const float * vel) {
-	printf("Missile Constructor Called\n");
-
 	Missile * self = (Missile *) malloc(sizeof(Missile));
 
 	memcpy(self->init_pos, init_pos, 2 * sizeof(int));
@@ -84,15 +82,15 @@ Missile * new_emissile() {
 
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
-	printf("new_fmissile Constructor Called\n");
 
 	// TODO VEL IS NOT RIGHT
 	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
-
+	//float vel[2] = {5,-5};
 	Missile * self = new_missile(init_pos, vel);
 	self->color = YELLOW;
 	self->isFriendly = TRUE;
 	memcpy(self->end_pos, mouse_pos, 2 * sizeof(int));
+
 	return self;
 }
 
@@ -117,11 +115,11 @@ int missile_update(Missile * ptr) {
 
 	//Update Position
 	int tmp;
-	if ( (tmp = round_float(ptr->pending_movement[0])) > 1 ) {
+	if ( (abs(tmp = round_float(ptr->pending_movement[0]))) > 1) {
 		ptr->pos[0] += tmp;
 		ptr->pending_movement[0] -= tmp;
 	}
-	if ( (tmp = round_float(ptr->pending_movement[1])) > 1 ) {
+	if ( (abs(tmp = round_float(ptr->pending_movement[1]))) > 1) {
 		ptr->pos[1] += tmp;
 		ptr->pending_movement[1] -= tmp;
 	}

@@ -174,14 +174,15 @@ void mouse_packet_handler(unsigned char * packet) {
 	}
 
 	//Checking the Y borders
-	if (Input->mouse_pos[1] + y_value < 0) {
+	if (Input->mouse_pos[1] - y_value < 0) {
 		Input->mouse_pos[1] = 0;
 		validY = 0;
 	}
-	else if (Input->mouse_pos[1] + y_value >= Input->res[1]) {
+	else if (Input->mouse_pos[1] - y_value >= Input->res[1]) {
 		Input->mouse_pos[1] = Input->res[1] - 1;
 		validY = 0;
 	}
+
 
 	//Only if not at the borders, should be updated
 	if ( validX )

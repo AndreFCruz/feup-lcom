@@ -186,7 +186,6 @@ int game_timer_handler() {
 		gvector_push_back(self->f_missiles, tmp);
 	}
 
-//	printf("Game Spontaneous Update\n");
 
 	/** Spontaneous self Events **/
 	++(self->frames);
@@ -215,8 +214,14 @@ int game_timer_handler() {
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(self->f_missiles); ++idx) {
-		draw_missile(gvector_at(self->f_missiles, idx));
-		missile_update(gvector_at(self->f_missiles, idx));
+		Missile * current = gvector_at(self->f_missiles, idx);
+		draw_missile(current);
+		if (missile_update(current)) { // Reached End-Pos
+			gvector_erase(self->f_missiles, idx);
+			--idx;
+
+			gvector_push_back(self->explosions, delete_missile(current));
+		}
 	}
 
 	// Draw and Update Explosions
@@ -236,11 +241,9 @@ int game_timer_handler() {
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
 		Missile * current = gvector_at(self->e_missiles, idx);
 		if (missile_getPosY(current) > BASE_Y) {
-			//Erasing from vector
 			gvector_erase(self->e_missiles, idx);	//TODO: Erases all the missiles on the screen, why?
 			--idx;
 
-			//Freeing memory allocated
 			gvector_push_back(self->explosions, delete_missile(current));
 		}
 	}
@@ -251,7 +254,6 @@ int game_timer_handler() {
 
 		for (idx2 = 0; idx < gvector_get_size(self->e_missiles); ++idx2) {
 			if (missile_collidedWithExplosion(gvector_at(self->e_missiles, idx2),gvector_at(self->explosions, idx))) {
-				//Erasing from vector
 				Missile * helper = gvector_at(self->e_missiles, idx2);
 				gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
 				--idx2;
@@ -261,7 +263,6 @@ int game_timer_handler() {
 		}
 	}
 
-// Draw and Update Explosions
 
 //	printf("-- Ended game_timer_handler --\n");
 

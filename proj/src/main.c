@@ -1,3 +1,5 @@
+#define DEBUG 1
+
 #include <minix/syslib.h>
 #include <minix/driver.h>
 #include <minix/com.h>
@@ -15,7 +17,7 @@
 /* Interrupt Handlers' Loop */
 int main()
 {
-	printf("START OF PROJECT SERVICE\n");
+	printf("\t\t\tSTART OF PROJECT SERVICE\n");
 	sef_startup();
 
 	srand(time(NULL));
@@ -42,7 +44,7 @@ int main()
 	/* ** */
 
 	//Initiate Graphics Mode
-	if ( OK != vg_init(MODE_800X600_64k)) {
+	if ( OK != vg_init(MODE_800X600_64k) ) {
 		printf("main::vg_init Failed\n");
 		return 1;
 	}
@@ -62,7 +64,7 @@ int main()
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /* hardware interrupt notification */
 				if (msg.NOTIFY_ARG & mouse_irq_set) {
-					printf("main::mouse interrupt\n");
+//					printf("main::mouse interrupt\n");
 
 					mouse_handler(packet, & counter);
 					if (counter == PACKET_NELEMENTS) {
@@ -72,7 +74,7 @@ int main()
 				}
 
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-					printf("main::keyboard interrupt\n");
+//					printf("main::keyboard interrupt\n");
 
 					keyboard_handler();
 				}
@@ -114,7 +116,7 @@ int main()
 
 	// TODO For The Long Haul: kbd output buffer may need to be cleared with sys_inb
 
-	printf("PROJECT SERVICE ENDED\n");
+	printf("\t\t\tPROJECT SERVICE ENDED\n");
 
 	return vg_exit();
 }

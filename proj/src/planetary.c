@@ -147,9 +147,7 @@ int timer_handler() {
 //		break;
 //	}
 
-	game_timer_handler();
-
-	return 0;
+	return game_timer_handler();
 }
 
 int menu_timer_handler() {
@@ -249,14 +247,13 @@ int game_timer_handler() {
 	}
 
 	// Check Collisions missiles with explosions
+	unsigned j;
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
-		unsigned idx2;
-
-		for (idx2 = 0; idx < gvector_get_size(self->e_missiles); ++idx2) {
-			if (missile_collidedWithExplosion(gvector_at(self->e_missiles, idx2),gvector_at(self->explosions, idx))) {
-				Missile * helper = gvector_at(self->e_missiles, idx2);
+		for (j = 0; j < gvector_get_size(self->e_missiles); ++j) {
+			if (missile_collidedWithExplosion(gvector_at(self->e_missiles, j),gvector_at(self->explosions, idx))) {
+				Missile * helper = gvector_at(self->e_missiles, j);
 				gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
-				--idx2;
+				--j;
 
 				delete_missile(helper);
 			}

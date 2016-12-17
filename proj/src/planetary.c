@@ -12,8 +12,8 @@ typedef struct {
 	GVector * f_missiles;	// Friendly Missiles
 	GVector * explosions;	// Explosions on Screen
 
-	unsigned frames;		// FRAMES survived, frames == times * 60
-	unsigned enemy_spawn_fr;// FRAME in which an enemy should be spawned
+	unsigned long frames;		// FRAMES survived, frames == times * 60
+	unsigned long enemy_spawn_fr;// FRAME in which an enemy should be spawned
     Bitmap * background;
 	Bitmap ** explosion_bmps;
 
@@ -23,7 +23,8 @@ typedef struct {
 
 
 //// TODO NOT WORKING
-//char * explosion_bmp_extension(const char * s1, unsigned i) {
+//Bitmap ** load_bmps(const char * s1, unsigned num) {
+//	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
 //	char * new_string = malloc(strlen(s1) + 3 + strlen(".bmp"));
 //	strcpy(new_string, s1);
 //	strcat(new_string, ".bmp");
@@ -44,6 +45,7 @@ static Game_t * new_game() {
 
 	// Load Explosion BitMaps
 	Game->explosion_bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
+//	Game->explosion_bmps = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" , 16);
 
 //	int i;	// GOD DAMN IT
 //	for (i = 0; i < NUM_EXPLOSION_BMPS; ++i) {
@@ -88,9 +90,9 @@ static Game_t * new_game() {
 //	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/proj/res/Explosion/15.bmp");
 
 
-	Game->e_missiles = new_gvector(missile_getSizeOf());
-	Game->f_missiles = new_gvector(missile_getSizeOf());
-	Game->explosions = new_gvector(explosion_getSizeOf());
+	Game->e_missiles = new_gvector(sizeof(void*));
+	Game->f_missiles = new_gvector(sizeof(void*));
+	Game->explosions = new_gvector(sizeof(void*));
 
 	Game->base_pos[0] = L_BASE_X;
 	Game->base_pos[1] = BASE_Y;
@@ -115,19 +117,22 @@ void delete_game() {
 		deleteBitmap(game_ptr->background);
 		delete_gvector(game_ptr->e_missiles);
 		delete_gvector(game_ptr->f_missiles);
+		delete_gvector(game_ptr->explosions);
 		free(game_ptr);
 		game_ptr = NULL;
 	}
 }
 
 Bitmap ** game_getExplosionBmps() {
-	return game_instance()->explosion_bmps;
+	return (game_instance()->explosion_bmps);
 }
 
 
-// Returns the frame in which an enemy should be spawned
-unsigned next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
-	return game_instance()->frames + 300 * pow(1 + game_instance()->frames / 512, -1);
+// Returns the frame in which an enemy should be spawned -- TODO not fully working
+unsigned long next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
+	unsigned long tmp = game_instance()->frames + 300 * pow(1 + game_instance()->frames / 512, -1);
+	printf("New Missile Spawn Calculated. Current: %lu, Next: %lu.\n", game_instance()->frames, tmp);
+	return tmp;
 }
 
 int timer_handler() {
@@ -169,19 +174,17 @@ int game_timer_handler() {
 	switch (input_get_key()) {
 	case ESC_BREAK:
 		printf("ESC BREAK_CODE DETECTED\n");
-		return 1;	// TODO Does not Exit...
+		return 1;
 		break;
 	default:
 		break;
 	}
 
-//	printf("Checking Mouse Input\n");
-
 	// Mouse
 	//spawn missiles on mouse clicks
 	if (get_mouseRMB()) {
 		Missile * tmp = new_fmissile(self->base_pos, get_mouse_pos());
-		gvector_push_back(self->f_missiles, tmp);
+		gvector_push_back(self->f_missiles, &tmp);
 	}
 
 
@@ -191,41 +194,36 @@ int game_timer_handler() {
 		self->enemy_spawn_fr = next_spawn_frame();
 		printf("Spawning New Enemy Missile\n");
 		Missile * new_enemy = new_emissile();
-		gvector_push_back(self->e_missiles, new_enemy);
+		gvector_push_back(self->e_missiles, &new_enemy);
 	}
-
-//	printf("Drawing Game\n");
 
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), self->background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_pos());
 
-//	printf("Drew BitMaps, Drawing and Updating Missiles\n");
-
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
-		draw_missile(gvector_at(self->e_missiles, idx));
-		missile_update(gvector_at(self->e_missiles, idx));
+		draw_missile(* (Missile **) gvector_at(self->e_missiles, idx));
+		missile_update(* (Missile **) gvector_at(self->e_missiles, idx));
 	}
-
-//	printf("Enemy missiles handled, handling friendly missiles\n");
 
 	// Draw and Update friendly missiles
 	for (idx = 0; idx < gvector_get_size(self->f_missiles); ++idx) {
-		Missile * current = gvector_at(self->f_missiles, idx);
+		Missile * current = * (Missile **) gvector_at(self->f_missiles, idx);
 		draw_missile(current);
 		if (missile_update(current)) { // Reached End-Pos
 			gvector_erase(self->f_missiles, idx);
 			--idx;
 
-			gvector_push_back(self->explosions, delete_missile(current));
+			Explosion * tmp = (Explosion *) delete_missile(current);
+			gvector_push_back(self->explosions, &tmp);
 		}
 	}
 
 	// Draw and Update Explosions
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
-		Explosion * current = gvector_at(self->explosions, idx);
-		drawBitmap(vg_getBufferPtr(), explosion_getBitmap(current), explosion_getPosX(current), explosion_getPosY(current) - 32, ALIGN_CENTER);
+		Explosion * current = * (Explosion **) gvector_at(self->explosions, idx);
+		draw_explosion(current);
 		if (explosion_update(current)) { // Animation ended ?
 			printf("\t\t\tExplosion Animation Ended\n");
 			gvector_erase(self->explosions, idx);
@@ -237,31 +235,33 @@ int game_timer_handler() {
 
 	// Check Collisions e_missiles with sky-line
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
-		Missile * current = gvector_at(self->e_missiles, idx);
+		Missile * current = * (Missile **) gvector_at(self->e_missiles, idx);
 		if (missile_getPosY(current) > BASE_Y) {
-			gvector_erase(self->e_missiles, idx);	//TODO: Erases all the missiles on the screen, why?
+			gvector_erase(self->e_missiles, idx);
 			--idx;
 
-			gvector_push_back(self->explosions, delete_missile(current));
+			Explosion * tmp = delete_missile(current);
+			gvector_push_back(self->explosions, &tmp);
 		}
 	}
 
 	// Check Collisions missiles with explosions
 	unsigned j;
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
+		Explosion * exp_ptr = * (Explosion **) gvector_at(self->explosions, idx);
+
 		for (j = 0; j < gvector_get_size(self->e_missiles); ++j) {
-			if (missile_collidedWithExplosion(gvector_at(self->e_missiles, j),gvector_at(self->explosions, idx))) {
-				Missile * helper = gvector_at(self->e_missiles, j);
-				gvector_erase(self->e_missiles,idx);	//TODO: Erases all the missiles on the screen, why?
+			Missile * missile_ptr = * (Missile **) gvector_at(self->e_missiles, j);
+
+			if (missile_collidedWithExplosion(missile_ptr, exp_ptr)) {
+				gvector_erase(self->e_missiles,idx);
 				--j;
 
-				delete_missile(helper);
+				Explosion * tmp = delete_missile(missile_ptr);
+				gvector_push_back(self->explosions, &tmp);
 			}
 		}
 	}
-
-
-//	printf("-- Ended game_timer_handler --\n");
 
 	return 0;
 }

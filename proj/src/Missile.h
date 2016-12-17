@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include "Bitmap.h"
 
+#define EXPLOSION_SIZE_X	64
+#define EXPLOSION_SIZE_Y	64
+
 struct missile_t;
 typedef struct missile_t Missile;
 

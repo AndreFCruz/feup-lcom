@@ -118,7 +118,13 @@ int main()
 
 	printf("\t\t\tPROJECT SERVICE ENDED\n");
 
-	return vg_exit();
+	int ret = vg_exit();
+
+	printf("***********************\n");
+	printf("* Thanks for Playing! *\n");
+	printf("***********************\n");
+
+	return ret;
 }
 
 

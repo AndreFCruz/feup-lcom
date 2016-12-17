@@ -1,5 +1,3 @@
-#define DEBUG 1
-
 #include <minix/syslib.h>
 #include <minix/driver.h>
 #include <minix/com.h>

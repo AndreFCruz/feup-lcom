@@ -29,7 +29,7 @@ int is_valid_pos(unsigned short x, unsigned short y);
 
 void fill_screen(uint16_t color);
 
-void paint_pixel(int x, int y, int color);
+void paint_pixel(int x, int y, uint16_t color);
 
 /**
  * @brief Initializes the video module in graphics mode
@@ -56,9 +56,9 @@ unsigned get_Xres();
 unsigned get_Yres();
 
 int draw_line(unsigned short xi, unsigned short yi,
-		unsigned short xf, unsigned short yf, unsigned long color);
-int draw_circle(unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color);
-int draw_square(unsigned short x, unsigned short y, unsigned short size, unsigned long color);
+		unsigned short xf, unsigned short yf, uint16_t color);
+int draw_circle(unsigned short center_x, unsigned short center_y, unsigned short radius, uint16_t color);
+int draw_square(unsigned short x, unsigned short y, unsigned short size, uint16_t color);
 //int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
 
 int draw_mouse_cross(const int * mouse_pos);

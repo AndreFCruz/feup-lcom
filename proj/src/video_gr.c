@@ -29,7 +29,7 @@ void * vg_getBufferPtr() {
 	return buffer_ptr;
 }
 
-void paint_pixel(int x, int y, int color) {
+void paint_pixel(int x, int y, uint16_t color) {
 	*((uint16_t *)buffer_ptr + x + y * h_res) = color;
 }
 
@@ -159,7 +159,7 @@ int draw_line (unsigned short xi, unsigned short yi,
 	return OK;
 }
 
-int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, unsigned long color) {
+int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, uint16_t color) {
 
 	if ( OK != is_valid_pos(center_x+radius, center_y+radius) || OK != is_valid_pos(center_x-radius, center_y-radius) ) {
 		printf("draw_circle: invalid position for circle. Center was: (%d, %d). Radius was %d.\n", center_x, center_y, radius);
@@ -183,14 +183,10 @@ int draw_circle (unsigned short center_x, unsigned short center_y, unsigned shor
 	return OK;
 }
 
-int draw_square (unsigned short x, unsigned short y, unsigned short size, unsigned long color) {
+int draw_square (unsigned short x, unsigned short y, unsigned short size, uint16_t color) {
 	// Argument Checks
 	if ( OK != is_valid_pos(x, y) || OK != is_valid_pos(x + size, y + size) ) {
 		printf("draw_square: invalid position for square. Was (%d,%d) to (%d,%d).\n", x, y, x + size, y + size);
-		return 1;
-	}
-	if ( color >= 0xFFFF) {
-		printf("draw_square: invalid color. Was 0x%X.\n", color);
 		return 1;
 	}
 
@@ -254,11 +250,12 @@ int draw_mouse_cross (const int * pos) {
 
 // TODO Melhorar?
 void draw_missile(Missile * ptr) {
-	unsigned thickness = 5, idx = 0;
+	unsigned thickness = 4, idx = 0;
 
 	for (; idx < thickness; ++idx) {
 		draw_line(missile_getInitX(ptr)+idx, missile_getInitY(ptr), missile_getPosX(ptr)+idx, missile_getPosY(ptr), missile_getColor(ptr));
 	}
+	draw_circle(missile_getPosX(ptr), missile_getPosY(ptr), 3, 0xF8CF);
 }
 
 void draw_explosion(Explosion * ptr) {

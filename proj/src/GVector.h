@@ -1,6 +1,8 @@
 #ifndef __GVECTOR_H
 #define __GVECTOR_H
 
+#define DEBUG 0
+
 /**
  * Struct for Generic Vector Container
  */

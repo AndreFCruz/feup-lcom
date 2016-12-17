@@ -261,6 +261,10 @@ void draw_missile(Missile * ptr) {
 	}
 }
 
+void draw_explosion(Explosion * ptr) {
+	drawBitmap(buffer_ptr, explosion_getBitmap(ptr), explosion_getPosX(ptr), explosion_getPosY(ptr) - (EXPLOSION_SIZE_X / 2), ALIGN_CENTER);
+}
+
 /* TODO: Terminar as restantes macros das cores */
 uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {
 	uint16_t return_value;

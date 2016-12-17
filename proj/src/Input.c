@@ -119,34 +119,39 @@ const int * get_mouse_pos() {
 }
 
 int get_mouseRMB() {
-	return input_instance()->RMB;
-}
-int get_mouseLMB() {
-	return input_instance()->LMB;
-}
-int get_mouseMMB() {
-	return input_instance()->MMB;
+	if (input_instance()->RMB) {
+		input_instance()->RMB = 0;
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
-//Not a int cause no message of error can happen
+int get_mouseLMB() {
+	if (input_instance()->LMB) {
+		input_instance()->LMB = 0;
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+int get_mouseMMB() {
+	if (input_instance()->MMB) {
+		input_instance()->MMB = 0;
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 void mouse_packet_handler(unsigned char * packet) {
 	Input_t * Input = input_instance();
 
 	/** Update Buttons **/
-	if (Input->RMB)
-		Input->RMB = 0;
-	else
-		Input->RMB = packet[0] & BYTE0_RB;
-
-	if (Input->LMB)
-		Input->LMB = 0;
-	else
-		Input->LMB = packet[0] & BYTE0_LB;
-
-	if (Input->MMB)
-		Input->MMB = 0;
-	else
-		Input->MMB = packet[0] & BYTE0_MB;
+	Input->RMB = packet[0] & BYTE0_RB;
+	Input->LMB = packet[0] & BYTE0_LB;
+	Input->MMB = packet[0] & BYTE0_MB;
 
 
 	/** Update Position **/

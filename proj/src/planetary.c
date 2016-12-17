@@ -112,12 +112,13 @@ Game_t * game_instance() {
 		return game_ptr;
 }
 
-void delete_game() {
+void delete_game() { // TODO Delete all missiles/explosions ?
 	if (NULL != game_ptr) {
 		deleteBitmap(game_ptr->background);
 		delete_gvector(game_ptr->e_missiles);
 		delete_gvector(game_ptr->f_missiles);
 		delete_gvector(game_ptr->explosions);
+		free(game_ptr->explosion_bmps);
 		free(game_ptr);
 		game_ptr = NULL;
 	}
@@ -136,23 +137,26 @@ unsigned long next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
 }
 
 int timer_handler() {
-//	static state_t game_state = GAME_SINGLE;
-//
-//	switch (game_state) {
-//	case MENU:
-//		if (menu_timer_handler() == EXIT_CURRENT)
-//			return 1;
-//		break;
-//	case GAME_SINGLE:
-//		if (game_timer_handler() == EXIT_CURRENT)
-//			game_state = MENU;
-//		break;
-//	case GAME_MULTI:
-//		printf("FOR THE LONG HAUL...\n");
-//		break;
-//	}
+	static game_state_t game_state = GAME_SINGLE;
 
-	return game_timer_handler();
+	switch (game_state) {
+	case MENU:
+		if ( menu_timer_handler() != OK )
+			return 1;
+		break;
+	case GAME_SINGLE:
+		if ( game_timer_handler() != OK ) {
+			delete_game();
+//			game_state = MENU;
+			return 1;
+		}
+		break;
+	case GAME_MULTI:
+		printf("FOR THE LONG HAUL...\n");
+		break;
+	}
+
+	return OK;
 }
 
 int menu_timer_handler() {
@@ -254,7 +258,7 @@ int game_timer_handler() {
 			Missile * missile_ptr = * (Missile **) gvector_at(self->e_missiles, j);
 
 			if (missile_collidedWithExplosion(missile_ptr, exp_ptr)) {
-				gvector_erase(self->e_missiles,idx);
+				gvector_erase(self->e_missiles,j);
 				--j;
 
 				Explosion * tmp = delete_missile(missile_ptr);
@@ -263,6 +267,6 @@ int game_timer_handler() {
 		}
 	}
 
-	return 0;
+	return OK;
 }
 

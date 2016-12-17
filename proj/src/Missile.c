@@ -82,13 +82,13 @@ Missile * new_emissile() {
 
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
-
 	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
-	//float vel[2] = {5,-5};
 	Missile * m_ptr = new_missile(init_pos, vel);
 	m_ptr->color = YELLOW;
 	m_ptr->isFriendly = TRUE;
 	memmove(m_ptr->end_pos, mouse_pos, 2 * sizeof(int));
+
+	printf("NEW FRIENDLY MISSILE. End-Pos: (%d, %d)\n", m_ptr->end_pos[0], m_ptr->end_pos[1]);
 
 	return m_ptr;
 }
@@ -96,7 +96,6 @@ Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 
 Explosion * delete_missile(Missile * m_ptr) {
 	Explosion * exp = new_explosion(m_ptr->pos);
-	printf("PTR freed: %d", m_ptr);
 
 	free(m_ptr);
 
@@ -125,8 +124,10 @@ int missile_update(Missile * m_ptr) {
 
 	// IF is Friendly Missile
 	if (m_ptr->isFriendly == TRUE) {
-		if ( abs(m_ptr->init_pos[0] - m_ptr->pos[0]) < 3 && abs(m_ptr->init_pos[1] - m_ptr->pos[1]) < 3 )
+		if ( abs(m_ptr->pos[0] - m_ptr->end_pos[0]) < 4 && abs(m_ptr->pos[1] - m_ptr->end_pos[1]) < 4 ) {
+			printf("\tFriendly Missile Reached End-Pos\n");
 			return 1; // Reached End Pos -- Should Explode
+		}
 	}
 
 	return 0;
@@ -182,31 +183,30 @@ Explosion * new_explosion(const int * position) {
 }
 
 void delete_explosion(Explosion * e_ptr) {
-	printf("PTR freed: %d", e_ptr);
 	free(e_ptr);
 }
 
 int explosion_update(Explosion * e_ptr) { // TODO Check!
-//	if (++(e_ptr->frame_count) > e_ptr->frames_per_bmp) {
-//		e_ptr->frame_count = 0;
-//		--(e_ptr->radius);	// Update radius (!)
-//		if (++(e_ptr->curr_bmp_index) >= e_ptr->no_bmps) {
-//			return 1; // return 1 indicates the animation finished, e_ptr should be deleted
-//		}
-//	}
-//
-//	return 0;
-
-	e_ptr->frame_count += 1;
-	if ((e_ptr->frame_count % e_ptr->frames_per_bmp) == 0) {
-		e_ptr->curr_bmp_index += 1;
-		e_ptr->radius -= 1;
-		if (e_ptr->curr_bmp_index >= e_ptr->no_bmps) {
-			return 1;
+	if (++(e_ptr->frame_count) > e_ptr->frames_per_bmp) {
+		e_ptr->frame_count = 0;
+		--(e_ptr->radius);	// Update radius (!)
+		if (++(e_ptr->curr_bmp_index) >= e_ptr->no_bmps) {
+			return 1; // return 1 indicates the animation finished, e_ptr should be deleted
 		}
 	}
 
 	return 0;
+
+//	e_ptr->frame_count += 1;
+//	if ((e_ptr->frame_count % e_ptr->frames_per_bmp) == 0) {
+//		e_ptr->curr_bmp_index += 1;
+//		e_ptr->radius -= 1;
+//		if (e_ptr->curr_bmp_index >= e_ptr->no_bmps) {
+//			return 1;
+//		}
+//	}
+//
+//	return 0;
 }
 
 Bitmap * explosion_getBitmap(Explosion * e_ptr) {

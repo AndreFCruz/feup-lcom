@@ -4,7 +4,8 @@
 #include "Bitmap.h"
 #include "GVector.h"
 #include "Missile.h"
-#include <stdlib.h>	// rand()
+#include <stdlib.h>
+#include <string.h>
 
 
 typedef struct {
@@ -21,16 +22,34 @@ typedef struct {
 
 } Game_t;
 
+// Load sequence of bitmaps numbered 00 to num
+Bitmap ** load_bmps(const char * s1, unsigned num) {
+	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
+	char * path = (char*) malloc(strlen(s1) + 2 + strlen(".bmp"));
+	strcpy(path, s1);
+	strcat(path, "00.bmp");
 
-//// TODO NOT WORKING
-//Bitmap ** load_bmps(const char * s1, unsigned num) {
-//	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
-//	char * new_string = malloc(strlen(s1) + 3 + strlen(".bmp"));
-//	strcpy(new_string, s1);
-//	strcat(new_string, ".bmp");
-//
-//	return new_string;
-//}
+	printf("Template String: %s\n", path);
+
+	unsigned i, j;
+	for (i = 0; i < num; ++i) {
+		char parsed_num[2]; // Parse unsigned int to string
+		snprintf(parsed_num, 3, "%02d", i);
+
+		printf("parsed_num: %s\n", parsed_num);
+
+		for (j = 0; path[j] != 0 && parsed_num[j] != 0; ++j) {
+			path[strlen(s1) + j] = parsed_num[j];
+		}
+
+		printf("load bitmap: %s\n", path);
+
+		// Load Bitmap
+		array[i] = loadBitmap(path);
+	}
+
+	return array;
+}
 
 static Game_t * new_game() {
 	printf("New Game Instance!!\n");
@@ -41,54 +60,9 @@ static Game_t * new_game() {
 	Game->enemy_spawn_fr = 120;
 
 	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-//	Game->background = loadBitmap("/home/lcom/svn/proj/res/background.bmp");
 
 	// Load Explosion BitMaps
-	Game->explosion_bmps = malloc(NUM_EXPLOSION_BMPS * sizeof(Bitmap*));
-//	Game->explosion_bmps = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" , 16);
-
-//	int i;	// GOD DAMN IT
-//	for (i = 0; i < NUM_EXPLOSION_BMPS; ++i) {
-//		//filename : base + i
-//		char * tmp = explosion_bmp_extension("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/", i);
-//		printf("    LOAD EXPLOSIONS : %s", tmp);
-//		Game->explosion_bmps[i] = loadBitmap(tmp);
-//	}
-
-	Game->explosion_bmps[0] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/00.bmp");
-	Game->explosion_bmps[1] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/01.bmp");
-	Game->explosion_bmps[2] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/02.bmp");
-	Game->explosion_bmps[3] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/03.bmp");
-	Game->explosion_bmps[4] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/04.bmp");
-	Game->explosion_bmps[5] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/05.bmp");
-	Game->explosion_bmps[6] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/06.bmp");
-	Game->explosion_bmps[7] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/07.bmp");
-	Game->explosion_bmps[8] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/08.bmp");
-	Game->explosion_bmps[9] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/09.bmp");
-	Game->explosion_bmps[10] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/10.bmp");
-	Game->explosion_bmps[11] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/11.bmp");
-	Game->explosion_bmps[12] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/12.bmp");
-	Game->explosion_bmps[13] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/13.bmp");
-	Game->explosion_bmps[14] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/14.bmp");
-	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/15.bmp");
-
-//	Game->explosion_bmps[0] = loadBitmap("/home/lcom/svn/proj/res/Explosion/00.bmp");
-//	Game->explosion_bmps[1] = loadBitmap("/home/lcom/svn/proj/res/Explosion/01.bmp");
-//	Game->explosion_bmps[2] = loadBitmap("/home/lcom/svn/proj/res/Explosion/02.bmp");
-//	Game->explosion_bmps[3] = loadBitmap("/home/lcom/svn/proj/res/Explosion/03.bmp");
-//	Game->explosion_bmps[4] = loadBitmap("/home/lcom/svn/proj/res/Explosion/04.bmp");
-//	Game->explosion_bmps[5] = loadBitmap("/home/lcom/svn/proj/res/Explosion/05.bmp");
-//	Game->explosion_bmps[6] = loadBitmap("/home/lcom/svn/proj/res/Explosion/06.bmp");
-//	Game->explosion_bmps[7] = loadBitmap("/home/lcom/svn/proj/res/Explosion/07.bmp");
-//	Game->explosion_bmps[8] = loadBitmap("/home/lcom/svn/proj/res/Explosion/08.bmp");
-//	Game->explosion_bmps[9] = loadBitmap("/home/lcom/svn/proj/res/Explosion/09.bmp");
-//	Game->explosion_bmps[10] = loadBitmap("/home/lcom/svn/proj/res/Explosion/10.bmp");
-//	Game->explosion_bmps[11] = loadBitmap("/home/lcom/svn/proj/res/Explosion/11.bmp");
-//	Game->explosion_bmps[12] = loadBitmap("/home/lcom/svn/proj/res/Explosion/12.bmp");
-//	Game->explosion_bmps[13] = loadBitmap("/home/lcom/svn/proj/res/Explosion/13.bmp");
-//	Game->explosion_bmps[14] = loadBitmap("/home/lcom/svn/proj/res/Explosion/14.bmp");
-//	Game->explosion_bmps[15] = loadBitmap("/home/lcom/svn/proj/res/Explosion/15.bmp");
-
+	Game->explosion_bmps = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" , NUM_EXPLOSION_BMPS);
 
 	Game->e_missiles = new_gvector(sizeof(void*));
 	Game->f_missiles = new_gvector(sizeof(void*));

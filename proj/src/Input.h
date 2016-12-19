@@ -51,6 +51,7 @@ int get_mouseLMB();
 int get_mouseMMB();
 
 void mouse_packet_handler(unsigned char * packet);
-int mouse_inside_area (int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
+int mouse_inside_rect (int x_initial, int y_initial, int x_final, int y_final);	//Return 0 if true, non-zero otherwise
+int mouse_inside_circle (int x_center, int y_center, int radius);
 
 #endif

@@ -7,6 +7,37 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+// Load sequence of bitmaps numbered [00, num)
+Bitmap ** load_bmps(const char * s1, unsigned num) {
+	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
+	char * path = (char*) malloc(strlen(s1) + 2 + strlen(".bmp"));
+	strcpy(path, s1);
+	strcat(path, "00.bmp");
+
+	printf("Loading Animation BMPs with Template String \"%s\"\n", path);
+
+	unsigned i, j;
+	for (i = 0; i < num; ++i) {
+		char parsed_num[2]; // Parse unsigned int to string
+		snprintf(parsed_num, 3, "%02d", i);
+
+		for (j = 0; path[j] != 0 && parsed_num[j] != 0; ++j) {
+			path[strlen(s1) + j] = parsed_num[j];
+		}
+
+		array[i] = loadBitmap(path);
+	}
+
+	return array;
+}
+
+
+// TODO Mudar Structs de Menu e Game para outro ficheiro?
+
+/**
+ * Menu Struct and Methods
+ */
 typedef struct {
 	Bitmap * background;
 
@@ -74,7 +105,11 @@ void delete_menu () { // TODO Delete all missiles/explosions ?
 		menu_ptr = NULL;
 	}
 }
+/** **/
 
+/**
+ * Game Struct and Methods
+ */
 typedef struct {
 	GVector * e_missiles;	// Enemy Missiles
 	GVector * f_missiles;	// Friendly Missiles
@@ -82,41 +117,14 @@ typedef struct {
 
 	unsigned long frames;		// FRAMES survived, frames == times * 60
 	unsigned long enemy_spawn_fr;// FRAME in which an enemy should be spawned
+
     Bitmap * background;
 	Bitmap ** explosion_bmps;
 
     unsigned base_pos[2];	// (x,y) position of missile origin (base)
 
+
 } Game_t;
-
-// Load sequence of bitmaps numbered 00 to num
-Bitmap ** load_bmps(const char * s1, unsigned num) {
-	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
-	char * path = (char*) malloc(strlen(s1) + 2 + strlen(".bmp"));
-	strcpy(path, s1);
-	strcat(path, "00.bmp");
-
-	printf("Template String: %s\n", path);
-
-	unsigned i, j;
-	for (i = 0; i < num; ++i) {
-		char parsed_num[2]; // Parse unsigned int to string
-		snprintf(parsed_num, 3, "%02d", i);
-
-		printf("parsed_num: %s\n", parsed_num);
-
-		for (j = 0; path[j] != 0 && parsed_num[j] != 0; ++j) {
-			path[strlen(s1) + j] = parsed_num[j];
-		}
-
-		printf("load bitmap: %s\n", path);
-
-		// Load Bitmap
-		array[i] = loadBitmap(path);
-	}
-
-	return array;
-}
 
 static Game_t * new_game() {
 	printf("New Game Instance!!\n");
@@ -168,13 +176,12 @@ void delete_game() { // TODO Delete all missiles/explosions ?
 Bitmap ** game_getExplosionBmps() {
 	return (game_instance()->explosion_bmps);
 }
+/** **/
 
 
-// Returns the frame in which an enemy should be spawned -- TODO not fully working
-unsigned long next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
-	unsigned long tmp = game_instance()->frames + 300 * pow(1 + game_instance()->frames / 512, -1);
-	printf("New Missile Spawn Calculated. Current: %lu, Next: %lu.\n", game_instance()->frames, tmp);
-	return tmp;
+// Returns the frame in which an enemy should be spawned
+unsigned long next_spawn_frame() {// 500 * (1 + frames / 512)^(-1)
+	return game_instance()->frames + 256000. / (game_instance()->frames + 512);
 }
 
 int timer_handler() {
@@ -182,7 +189,8 @@ int timer_handler() {
 
 	switch (game_state) {
 	case MENU:
-		menu_timer_handler(&game_state);
+		if ( menu_timer_handler(&game_state) != OK )
+			return 1;
 		break;
 	case GAME_SINGLE:
 		if ( game_timer_handler() != OK ) {
@@ -195,12 +203,8 @@ int timer_handler() {
 		game_state = MENU;
 		break;
 	case HIGH_SCORES:
-		printf("PRINT THE SCORES HERE");
+		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
 		game_state = MENU;
-		break;
-	case EXIT_BUTTON:
-		delete_menu();
-		return 1;
 		break;
 	}
 
@@ -208,9 +212,18 @@ int timer_handler() {
 }
 
 int menu_timer_handler(game_state_t * game_state) {
-	// TODO Menu
 	Input_t * Input = input_instance();
 	Menu_t * Menu = menu_instance();
+
+	/** Handle Keyboard Input **/
+	switch (input_get_key()) {
+	case ESC_BREAK:
+		printf("ESC BREAK_CODE DETECTED\n");
+		return 1;
+		break;
+	default:
+		break;
+	}
 
 	drawBitmap(vg_getBufferPtr(), Menu->background, 0, 0, ALIGN_LEFT);
 
@@ -219,33 +232,25 @@ int menu_timer_handler(game_state_t * game_state) {
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_SINGLE;
-			return 1;
 		}
 	}
-
 	else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1], Menu->MP_pos[0] + Menu->options_size[0], Menu->MP_pos[1] + Menu->options_size[1])) {
 		drawBitmap(vg_getBufferPtr(), Menu->MParea, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_MULTI;
-			return 1;
 		}
 	}
-
 	else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1], Menu->HS_pos[0] + Menu->options_size[0], Menu->HS_pos[1] + Menu->options_size[1])) {
 		drawBitmap(vg_getBufferPtr(), Menu->HSarea, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = HIGH_SCORES;
-			return 1;
 		}
 	}
-
 	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1], Menu->exit_radius) && get_mouseRMB()) {
-		* game_state = EXIT_BUTTON;
 		return 1;
 	}
-
 
 	draw_mouse_cross(get_mouse_pos());
 

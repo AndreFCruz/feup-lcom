@@ -22,7 +22,7 @@
 #define EXIT_Y			566
 #define EXIT_RADIUS		17
 
-typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, EXIT_BUTTON /* CREDITS ? */} game_state_t;
+typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES /* CREDITS ? */} game_state_t;
 //typedef enum {START_SINGLE, START_MULTI, EPSILON /* CREDITS ? */} event_t;
 
 Bitmap ** game_getExplosionBmps();

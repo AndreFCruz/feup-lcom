@@ -12,7 +12,7 @@
 #define R_BASE_X	750
 #define BASE_Y		550
 
-typedef enum {MENU, GAME_SINGLE, GAME_MULTI /* CREDITS ? */} game_state_t;
+typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES /* CREDITS ? */} game_state_t;
 //typedef enum {START_SINGLE, START_MULTI, EPSILON /* CREDITS ? */} event_t;
 
 Bitmap ** game_getExplosionBmps();

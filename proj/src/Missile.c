@@ -82,7 +82,10 @@ Missile * new_emissile() {
 
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
-	float vel[2] = {((float)mouse_pos[0] - (float)init_pos[0]) / 300., -1 * fabs(((float)mouse_pos[1] - (float)init_pos[1]) / 300.)};	//TODO Vel should not be time/frame based
+	float vel[2];	//TODO: Vector should not be time / frame based
+	vel[0] = 2*((float)mouse_pos[0] - (float)init_pos[0]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+	vel[1] = 2*((float)mouse_pos[1] - (float)init_pos[1]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+
 	Missile * m_ptr = new_missile(init_pos, vel);
 	m_ptr->color = YELLOW;
 	m_ptr->isFriendly = TRUE;

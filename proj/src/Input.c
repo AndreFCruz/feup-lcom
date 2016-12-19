@@ -198,8 +198,21 @@ void mouse_packet_handler(unsigned char * packet) {
 
 int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final) {
 	Input_t * Input = input_instance();
+
 	if (Input->mouse_pos[0] >= x_initial && Input->mouse_pos[0] <= x_final &&
 			Input->mouse_pos[1] >= y_initial && Input->mouse_pos[1] <= y_final)
+		return 1;
+	else
+		return 0;
+}
+
+int mouse_inside_circle (int x_center, int y_center, int radius) {
+	Input_t * Input = input_instance();
+
+	int x_var = Input->mouse_pos[0] - x_center;
+	int y_var = Input->mouse_pos[1] - y_center;
+
+	if (x_var * x_var + y_var * y_var <= radius * radius) // x² + y² <= r²
 		return 1;
 	else
 		return 0;

@@ -7,6 +7,73 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct {
+	Bitmap * background;
+
+	Bitmap * SParea;
+	unsigned SP_pos[2];		//(x,y) position of Single Player Button
+
+	Bitmap * MParea;		//(x,y) position of Multi Player Button
+	unsigned MP_pos[2];
+
+	Bitmap * HSarea;		//(x,y) position of High Scores Button
+	unsigned HS_pos[2];
+
+	unsigned options_size[2];	// Height and Width of Menu Buttons
+
+	unsigned exit_pos[2];	// (x,y) position of Exit button center
+	unsigned exit_radius;	// Height and width of Exit Button
+
+} Menu_t;
+
+static Menu_t * new_menu() {
+
+	Menu_t * Menu = malloc(sizeof(Menu_t));
+
+	Menu->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");
+
+	Menu-> SParea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
+	Menu-> SP_pos[0] = BUTTONS_X;
+	Menu-> SP_pos[1] = SINGLEP_Y;
+
+	Menu-> MParea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
+	Menu-> MP_pos[0] = BUTTONS_X;
+	Menu-> MP_pos[1] = MULTIP_Y;
+
+	Menu-> HSarea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
+	Menu->HS_pos[0] = BUTTONS_X;
+	Menu->HS_pos[1] = HIGHS_Y;
+
+	Menu-> options_size[0] = BUTTONS_WIDTH;
+	Menu-> options_size[1] = BUTTONS_HEIGHT;
+
+	Menu->exit_pos[0] = EXIT_X;
+	Menu->exit_pos[1] = EXIT_Y;
+	Menu-> exit_radius = EXIT_RADIUS;
+
+	return Menu;
+}
+
+static Menu_t * menu_ptr = NULL;
+
+static Menu_t * menu_instance() {
+	if ( NULL == menu_ptr ) {
+		return (menu_ptr = new_menu());
+	}
+	else
+		return menu_ptr;
+}
+
+void delete_menu () { // TODO Delete all missiles/explosions ?
+	if (NULL != menu_ptr) {
+		deleteBitmap(menu_ptr->background);
+		deleteBitmap(menu_ptr->SParea);
+		deleteBitmap(menu_ptr->MParea);
+		deleteBitmap(menu_ptr->HSarea);
+		free(menu_ptr);
+		menu_ptr = NULL;
+	}
+}
 
 typedef struct {
 	GVector * e_missiles;	// Enemy Missiles
@@ -111,32 +178,78 @@ unsigned long next_spawn_frame() {// 300 * (1 + frames / 512)^(-1)
 }
 
 int timer_handler() {
-	static game_state_t game_state = GAME_SINGLE;
+	static game_state_t game_state = MENU;
 
 	switch (game_state) {
 	case MENU:
-		if ( menu_timer_handler() != OK )
-			return 1;
+		menu_timer_handler(&game_state);
 		break;
 	case GAME_SINGLE:
 		if ( game_timer_handler() != OK ) {
 			delete_game();
-//			game_state = MENU;
-			return 1;
+			game_state = MENU;
 		}
 		break;
 	case GAME_MULTI:
 		printf("FOR THE LONG HAUL...\n");
+		game_state = MENU;
+		break;
+	case HIGH_SCORES:
+		printf("PRINT THE SCORES HERE");
+		game_state = MENU;
+		break;
+	case EXIT_BUTTON:
+		delete_menu();
+		return 1;
 		break;
 	}
 
 	return OK;
 }
 
-int menu_timer_handler() {
+int menu_timer_handler(game_state_t * game_state) {
 	// TODO Menu
+	Input_t * Input = input_instance();
+	Menu_t * Menu = menu_instance();
 
-	return 1;
+	drawBitmap(vg_getBufferPtr(), Menu->background, 0, 0, ALIGN_LEFT);
+
+	if (mouse_inside_rect(Menu->SP_pos[0], Menu->SP_pos[1], Menu->SP_pos[0] + Menu->options_size[0], Menu->SP_pos[1] + Menu->options_size[1])) {
+		drawBitmap(vg_getBufferPtr(), Menu->SParea, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
+
+		if (get_mouseRMB()) {
+			* game_state = GAME_SINGLE;
+			return 1;
+		}
+	}
+
+	else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1], Menu->MP_pos[0] + Menu->options_size[0], Menu->MP_pos[1] + Menu->options_size[1])) {
+		drawBitmap(vg_getBufferPtr(), Menu->MParea, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
+
+		if (get_mouseRMB()) {
+			* game_state = GAME_MULTI;
+			return 1;
+		}
+	}
+
+	else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1], Menu->HS_pos[0] + Menu->options_size[0], Menu->HS_pos[1] + Menu->options_size[1])) {
+		drawBitmap(vg_getBufferPtr(), Menu->HSarea, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
+
+		if (get_mouseRMB()) {
+			* game_state = HIGH_SCORES;
+			return 1;
+		}
+	}
+
+	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1], Menu->exit_radius) && get_mouseRMB()) {
+		* game_state = EXIT_BUTTON;
+		return 1;
+	}
+
+
+	draw_mouse_cross(get_mouse_pos());
+
+	return OK;
 }
 
 int game_timer_handler() {

@@ -76,6 +76,7 @@ typedef struct {
 	unsigned long enemy_spawn_fr;// FRAME in which an enemy should be spawned
 
     unsigned base_pos[2];	// (x,y) position of missile origin (base)
+    unsigned health_points;
 
 } Game_t;
 
@@ -93,6 +94,8 @@ static Game_t * new_game() {
 
 	Game->base_pos[0] = L_BASE_X;
 	Game->base_pos[1] = BASE_Y;
+
+	Game->health_points = 3;
 
 	printf("Game Instance was successfully created\n");
 
@@ -132,8 +135,10 @@ int timer_handler() {
 
 	switch (game_state) {
 	case MENU:
-		if ( menu_timer_handler(&game_state) != OK )
+		if ( menu_timer_handler(&game_state) != OK ) {
+			delete_bmps_holder();
 			return 1;
+		}
 		break;
 	case GAME_SINGLE:
 		if ( game_timer_handler() != OK ) {
@@ -168,24 +173,24 @@ int menu_timer_handler(game_state_t * game_state) {
 		break;
 	}
 
-	drawBitmap(vg_getBufferPtr(), BMPsInstance()->menu_background, 0, 0, ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->menu_background, 0, 0, ALIGN_LEFT);
 
 	if (mouse_inside_rect(Menu->SP_pos[0], Menu->SP_pos[1], Menu->SP_pos[0] + Menu->options_size[0], Menu->SP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsInstance()->SP_button, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->SP_button, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_SINGLE;
 		}
 	}
 	else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1], Menu->MP_pos[0] + Menu->options_size[0], Menu->MP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsInstance()->MP_button, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->MP_button, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_MULTI;
 		}
 	}
 	else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1], Menu->HS_pos[0] + Menu->options_size[0], Menu->HS_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsInstance()->HS_button, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_button, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = HIGH_SCORES;
@@ -237,8 +242,16 @@ int game_timer_handler() {
 	}
 
 	/** Draw self **/
-	drawBitmap(vg_getBufferPtr(), BMPsInstance()->game_background, 0, 0, ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_pos());
+
+	// Draw Score - Upper Right Corner
+	draw_number(self->frames / 60, 780, 20);
+
+	// Draw Lives - Upper Left Corner
+	for (idx = 0; idx < self->health_points; ++idx) {
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->heart, 20 + (idx * HEART_SIZE_X + 10), 20, ALIGN_LEFT);
+	}
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {

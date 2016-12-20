@@ -1,54 +1,21 @@
+#include <stdlib.h>
+#include <string.h>
 #include "planetary.h"
 #include "video_gr.h"
 #include "Input.h"
 #include "Bitmap.h"
 #include "GVector.h"
 #include "Missile.h"
-#include <stdlib.h>
-#include <string.h>
+#include "BMPsHolder.h"
 
-
-// Load sequence of bitmaps numbered [00, num)
-Bitmap ** load_bmps(const char * s1, unsigned num) {
-	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
-	char * path = (char*) malloc(strlen(s1) + 2 + strlen(".bmp"));
-	strcpy(path, s1);
-	strcat(path, "00.bmp");
-
-	printf("Loading Animation BMPs with Template String \"%s\"\n", path);
-
-	unsigned i, j;
-	for (i = 0; i < num; ++i) {
-		char parsed_num[2]; // Parse unsigned int to string
-		snprintf(parsed_num, 3, "%02d", i);
-
-		for (j = 0; path[j] != 0 && parsed_num[j] != 0; ++j) {
-			path[strlen(s1) + j] = parsed_num[j];
-		}
-
-		array[i] = loadBitmap(path);
-	}
-
-	return array;
-}
-
-
-// TODO Mudar Structs de Menu e Game para outro ficheiro?
 
 /**
  * Menu Struct and Methods
  */
 typedef struct {
-	Bitmap * background;
-
-	Bitmap * SParea;
 	unsigned SP_pos[2];		//(x,y) position of Single Player Button
-
-	Bitmap * MParea;		//(x,y) position of Multi Player Button
-	unsigned MP_pos[2];
-
-	Bitmap * HSarea;		//(x,y) position of High Scores Button
-	unsigned HS_pos[2];
+	unsigned MP_pos[2];		//(x,y) position of Multi Player Button
+	unsigned HS_pos[2];		//(x,y) position of High Scores Button
 
 	unsigned options_size[2];	// Height and Width of Menu Buttons
 
@@ -58,29 +25,23 @@ typedef struct {
 } Menu_t;
 
 static Menu_t * new_menu() {
-
 	Menu_t * Menu = malloc(sizeof(Menu_t));
 
-	Menu->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");
+	Menu->SP_pos[0] = BUTTONS_X;
+	Menu->SP_pos[1] = SINGLEP_Y;
 
-	Menu-> SParea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
-	Menu-> SP_pos[0] = BUTTONS_X;
-	Menu-> SP_pos[1] = SINGLEP_Y;
+	Menu->MP_pos[0] = BUTTONS_X;
+	Menu->MP_pos[1] = MULTIP_Y;
 
-	Menu-> MParea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
-	Menu-> MP_pos[0] = BUTTONS_X;
-	Menu-> MP_pos[1] = MULTIP_Y;
-
-	Menu-> HSarea = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
 	Menu->HS_pos[0] = BUTTONS_X;
 	Menu->HS_pos[1] = HIGHS_Y;
 
-	Menu-> options_size[0] = BUTTONS_WIDTH;
-	Menu-> options_size[1] = BUTTONS_HEIGHT;
+	Menu->options_size[0] = BUTTONS_WIDTH;
+	Menu->options_size[1] = BUTTONS_HEIGHT;
 
 	Menu->exit_pos[0] = EXIT_X;
 	Menu->exit_pos[1] = EXIT_Y;
-	Menu-> exit_radius = EXIT_RADIUS;
+	Menu->exit_radius = EXIT_RADIUS;
 
 	return Menu;
 }
@@ -95,12 +56,8 @@ static Menu_t * menu_instance() {
 		return menu_ptr;
 }
 
-void delete_menu () { // TODO Delete all missiles/explosions ?
+static void delete_menu () { // TODO Delete all missiles/explosions ?
 	if (NULL != menu_ptr) {
-		deleteBitmap(menu_ptr->background);
-		deleteBitmap(menu_ptr->SParea);
-		deleteBitmap(menu_ptr->MParea);
-		deleteBitmap(menu_ptr->HSarea);
 		free(menu_ptr);
 		menu_ptr = NULL;
 	}
@@ -118,26 +75,17 @@ typedef struct {
 	unsigned long frames;		// FRAMES survived, frames == times * 60
 	unsigned long enemy_spawn_fr;// FRAME in which an enemy should be spawned
 
-    Bitmap * background;
-	Bitmap ** explosion_bmps;
-
     unsigned base_pos[2];	// (x,y) position of missile origin (base)
-
 
 } Game_t;
 
 static Game_t * new_game() {
-	printf("New Game Instance!!\n");
+	printf("Game Instance called!\n");
 
 	Game_t * Game = malloc(sizeof(Game_t));
 
 	Game->frames = 0;
 	Game->enemy_spawn_fr = 120;
-
-	Game->background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-
-	// Load Explosion BitMaps
-	Game->explosion_bmps = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" , NUM_EXPLOSION_BMPS);
 
 	Game->e_missiles = new_gvector(sizeof(void*));
 	Game->f_missiles = new_gvector(sizeof(void*));
@@ -163,19 +111,14 @@ Game_t * game_instance() {
 
 void delete_game() { // TODO Delete all missiles/explosions ?
 	if (NULL != game_ptr) {
-		deleteBitmap(game_ptr->background);
 		delete_gvector(game_ptr->e_missiles);
 		delete_gvector(game_ptr->f_missiles);
 		delete_gvector(game_ptr->explosions);
-		free(game_ptr->explosion_bmps);
 		free(game_ptr);
 		game_ptr = NULL;
 	}
 }
 
-Bitmap ** game_getExplosionBmps() {
-	return (game_instance()->explosion_bmps);
-}
 /** **/
 
 
@@ -225,24 +168,24 @@ int menu_timer_handler(game_state_t * game_state) {
 		break;
 	}
 
-	drawBitmap(vg_getBufferPtr(), Menu->background, 0, 0, ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), BMPsInstance()->menu_background, 0, 0, ALIGN_LEFT);
 
 	if (mouse_inside_rect(Menu->SP_pos[0], Menu->SP_pos[1], Menu->SP_pos[0] + Menu->options_size[0], Menu->SP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), Menu->SParea, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsInstance()->SP_button, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_SINGLE;
 		}
 	}
 	else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1], Menu->MP_pos[0] + Menu->options_size[0], Menu->MP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), Menu->MParea, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsInstance()->MP_button, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = GAME_MULTI;
 		}
 	}
 	else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1], Menu->HS_pos[0] + Menu->options_size[0], Menu->HS_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), Menu->HSarea, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsInstance()->HS_button, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
 
 		if (get_mouseRMB()) {
 			* game_state = HIGH_SCORES;
@@ -294,7 +237,7 @@ int game_timer_handler() {
 	}
 
 	/** Draw self **/
-	drawBitmap(vg_getBufferPtr(), self->background, 0, 0, ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), BMPsInstance()->game_background, 0, 0, ALIGN_LEFT);
 	draw_mouse_cross(get_mouse_pos());
 
 	// Draw and Update enemy missiles

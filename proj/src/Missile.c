@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include "Missile.h"
 #include "video_gr.h"
+#include "BMPsHolder.h"
 
 /**
  * Structs
@@ -178,9 +179,9 @@ Explosion * new_explosion(const int * position) {
 	self->curr_bmp_index = 0;
 	self->frames_per_bmp = 5;
 	self->no_bmps = 16;
-	self->radius = 28;	// TODO Check
+	self->radius = 28;
 
-	self->bmps = game_getExplosionBmps();
+	self->bmps = (Bitmap **) BMPsInstance()->explosion;
 
 	return self;
 }
@@ -199,17 +200,6 @@ int explosion_update(Explosion * e_ptr) { // TODO Check!
 	}
 
 	return 0;
-
-//	e_ptr->frame_count += 1;
-//	if ((e_ptr->frame_count % e_ptr->frames_per_bmp) == 0) {
-//		e_ptr->curr_bmp_index += 1;
-//		e_ptr->radius -= 1;
-//		if (e_ptr->curr_bmp_index >= e_ptr->no_bmps) {
-//			return 1;
-//		}
-//	}
-//
-//	return 0;
 }
 
 Bitmap * explosion_getBitmap(Explosion * e_ptr) {

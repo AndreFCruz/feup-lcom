@@ -6,6 +6,7 @@
 
 #include "vbe.h"
 #include "Missile.h"
+#include "BMPsHolder.h"
 
 /* Static global variables */
 static void *video_mem;		/* Process address to which VRAM is mapped */
@@ -248,7 +249,7 @@ int draw_mouse_cross (const int * pos) {
 	return OK;
 }
 
-// TODO Melhorar?
+// TODO Melhorar? Bitmap?
 void draw_missile(Missile * ptr) {
 	unsigned thickness = 4, idx = 0;
 
@@ -262,7 +263,13 @@ void draw_explosion(Explosion * ptr) {
 	drawBitmap(buffer_ptr, explosion_getBitmap(ptr), explosion_getPosX(ptr), explosion_getPosY(ptr) - (EXPLOSION_SIZE_X / 2), ALIGN_CENTER);
 }
 
-/* TODO: Terminar as restantes macros das cores */
+void draw_number(unsigned num, unsigned posX, unsigned posY) {
+	unsigned i;
+	for (i = 0 ; num > 0; ++i, num = num / 10) {
+		drawBitmap(buffer_ptr, BMPsHolder()->numbers[num % 10], posX - i * NUMBER_SIZE_X, posY, ALIGN_RIGHT);
+	}
+}
+
 uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {
 	uint16_t return_value;
 

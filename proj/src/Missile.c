@@ -181,7 +181,7 @@ Explosion * new_explosion(const int * position) {
 	self->no_bmps = 16;
 	self->radius = 28;
 
-	self->bmps = (Bitmap **) BMPsInstance()->explosion;
+	self->bmps = (Bitmap **) BMPsHolder()->explosion;
 
 	return self;
 }

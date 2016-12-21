@@ -9,7 +9,7 @@
 #define EXPLOSION_SIZE_Y	64
 
 #define NUMBER_SIZE_X		30
-#define NUMBER_SIZE_Y		44
+#define NUMBER_SIZE_Y		45
 
 #define HEART_SIZE_X		64
 #define HEART_SIZE_Y		56

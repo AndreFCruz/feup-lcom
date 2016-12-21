@@ -159,7 +159,7 @@ int timer_handler() {
 	return OK;
 }
 
-int menu_timer_handler(game_state_t * game_state) {
+void menu_timer_handler(game_state_t * game_state) {
 	Input_t * Input = input_instance();
 	Menu_t * Menu = menu_instance();
 
@@ -178,31 +178,23 @@ int menu_timer_handler(game_state_t * game_state) {
 	if (mouse_inside_rect(Menu->SP_pos[0], Menu->SP_pos[1], Menu->SP_pos[0] + Menu->options_size[0], Menu->SP_pos[1] + Menu->options_size[1])) {
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->SP_button, Menu->SP_pos[0], Menu->SP_pos[1], ALIGN_LEFT);
 
-		if (get_mouseRMB()) {
+		if (get_mouseRMB())
 			* game_state = GAME_SINGLE;
-		}
 	}
 	else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1], Menu->MP_pos[0] + Menu->options_size[0], Menu->MP_pos[1] + Menu->options_size[1])) {
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->MP_button, Menu->MP_pos[0], Menu->MP_pos[1], ALIGN_LEFT);
 
-		if (get_mouseRMB()) {
+		if (get_mouseRMB())
 			* game_state = GAME_MULTI;
-		}
 	}
 	else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1], Menu->HS_pos[0] + Menu->options_size[0], Menu->HS_pos[1] + Menu->options_size[1])) {
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_button, Menu->HS_pos[0], Menu->HS_pos[1], ALIGN_LEFT);
 
-		if (get_mouseRMB()) {
+		if (get_mouseRMB())
 			* game_state = HIGH_SCORES;
-		}
-	}
-	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1], Menu->exit_radius) && get_mouseRMB()) {
-		return 1;
 	}
 
 	draw_mouse_cross(get_mouse_pos());
-
-	return OK;
 }
 
 int game_timer_handler() {

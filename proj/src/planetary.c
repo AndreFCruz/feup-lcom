@@ -297,6 +297,10 @@ static int game_timer_handler() {
 //		}
 	}
 
+	// Draw Cannons
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_left, self->cannon_pos[0], CANNON_POS_Y, ALIGN_LEFT);
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_right, self->cannon_pos[1], CANNON_POS_Y, ALIGN_RIGHT);
+
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
 		draw_missile(* (Missile **) gvector_at(self->e_missiles, idx));

@@ -42,6 +42,8 @@ typedef struct {
 
 	Bitmap * game_background;
 	Bitmap * heart;
+	Bitmap * cannon_left;
+	Bitmap * cannon_right;
 
 	Bitmap * menu_background;
 	Bitmap * SP_button;

@@ -108,7 +108,7 @@ static Game_t * new_game() {
 		Game->bases_hp[idx] = 2;
 	}
 	for (idx = 0; idx < NUM_BASES; ++idx) {
-		Game->bases_pos[idx] = idx * ((float) vg_getHorRes() - 200.) / NUM_BASES;
+		Game->bases_pos[idx] = 200 + idx * ((float) vg_getHorRes() - 200.) / NUM_BASES;
 	}
 
 	printf("Game Instance was successfully created\n");
@@ -253,7 +253,12 @@ static int game_timer_handler() {
 	// Mouse
 	//spawn missiles on mouse clicks
 	if (get_mouseRMB()) {
-		int tmp_pos[2] = {self->cannon_pos[0], CANNON_POS_Y};
+		int tmp_pos[2] = {self->cannon_pos[0] + CANNON_PROJECTILE_OFFSET, CANNON_POS_Y};
+		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
+		gvector_push_back(self->f_missiles, &tmp);
+	}
+	if (get_mouseLMB()) {
+		int tmp_pos[2] = {self->cannon_pos[1] - CANNON_PROJECTILE_OFFSET, CANNON_POS_Y};
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, &tmp);
 	}
@@ -282,6 +287,7 @@ static int game_timer_handler() {
 	// TODO
 	// Draw Bases/Houses
 	for (idx = 0; idx < NUM_BASES; ++idx) {
+		printf("Drawing base %d. BMP ptr: %d. PosX: %d. PosY: %d.\n", idx, BMPsHolder()->buildings[self->bases_hp[idx]], self->bases_pos[idx], GROUND_Y - BUILDING_SIZE_Y);
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->buildings[self->bases_hp[idx]], self->bases_pos[idx], GROUND_Y - BUILDING_SIZE_Y, ALIGN_CENTER);
 //		switch (self->bases_hp[idx]) {
 //		case 0:

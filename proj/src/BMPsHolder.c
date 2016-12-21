@@ -29,8 +29,6 @@ Bitmap ** load_bmps(const char * s1, unsigned num) {
 }
 
 static BMPsHolder_t * new_bmps_holder() {
-	printf("New BMP_HOLDER Instance\n");
-
 	BMPsHolder_t * ptr = malloc(sizeof(BMPsHolder_t));
 
 	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/", 10);
@@ -39,12 +37,14 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->ground_explosion; // TODO
 
 	ptr->game_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-	ptr->heart = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/heart.bmp");
+	ptr->heart = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/8_bit_heart.bmp");
 
 	ptr->menu_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");
 	ptr->SP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
 	ptr->MP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
 	ptr->HS_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
+
+	printf("New BMPsHolder Instance\n");
 
 	return ptr;
 }

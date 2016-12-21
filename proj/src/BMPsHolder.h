@@ -14,6 +14,12 @@
 #define BIG_NUMBER_SIZE_X	68
 #define BIG_NUMBER_SIZE_Y	102
 
+#define BUILDING_SIZE_X		160
+#define BUILDING0_SIZE_Y	16
+#define BUILDING1_SIZE_Y	48
+#define BUILDING2_SIZE_Y	76
+#define BUILDING_SIZE_Y		76
+
 #define HEART_SIZE_X		48
 #define HEART_SIZE_Y		48
 
@@ -32,6 +38,7 @@ typedef struct {
 	Bitmap ** big_numbers;
 	Bitmap ** explosion;
 	Bitmap ** ground_explosion; // TODO
+	Bitmap ** buildings;
 
 	Bitmap * game_background;
 	Bitmap * heart;

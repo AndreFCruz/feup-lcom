@@ -8,6 +8,9 @@
 #include "Missile.h"
 #include "BMPsHolder.h"
 
+static int menu_timer_handler();
+static int game_timer_handler();
+
 
 /**
  * Menu Struct and Methods
@@ -75,8 +78,11 @@ typedef struct {
 	unsigned long frames;		// FRAMES survived, frames == times * 60
 	unsigned long enemy_spawn_fr;// FRAME in which an enemy should be spawned
 
-    unsigned base_pos[2];	// (x,y) position of missile origin (base)
+    unsigned cannon_pos[2];	// x position of the left and right cannons
     unsigned health_points;
+
+    unsigned bases_hp[3];	// 0 (destroyed), 1 (damaged) or 2 (intact)
+    unsigned bases_pos[3];	// x position of the three bases
 
 } Game_t;
 
@@ -92,10 +98,18 @@ static Game_t * new_game() {
 	Game->f_missiles = new_gvector(sizeof(void*));
 	Game->explosions = new_gvector(sizeof(void*));
 
-	Game->base_pos[0] = L_BASE_X;
-	Game->base_pos[1] = BASE_Y;
-
 	Game->health_points = 3;
+
+	Game->cannon_pos[0] = LEFT_CANNON_POS_X;
+	Game->cannon_pos[1] = RIGHT_CANNON_POS_X;
+
+	unsigned idx;
+	for (idx = 0; idx < NUM_BASES; ++idx) {
+		Game->bases_hp[idx] = 2;
+	}
+	for (idx = 0; idx < NUM_BASES; ++idx) {
+		Game->bases_pos[idx] = idx * ((float) vg_getHorRes() - 200.) / NUM_BASES;
+	}
 
 	printf("Game Instance was successfully created\n");
 
@@ -104,7 +118,7 @@ static Game_t * new_game() {
 
 static Game_t * game_ptr = NULL;
 
-Game_t * game_instance() {
+static Game_t * game_instance() {
 	if ( NULL == game_ptr ) {
 		return (game_ptr = new_game());
 	}
@@ -112,13 +126,28 @@ Game_t * game_instance() {
 		return game_ptr;
 }
 
-void delete_game() { // TODO Delete all missiles/explosions ?
+static void delete_game() {
 	if (NULL != game_ptr) {
+		unsigned idx;
+		for (idx = 0; idx < gvector_get_size(game_ptr->e_missiles); ++idx) {
+			free(* (Missile **) gvector_at(game_ptr->e_missiles, idx));
+		}
 		delete_gvector(game_ptr->e_missiles);
+
+		for (idx = 0; idx < gvector_get_size(game_ptr->f_missiles); ++idx) {
+			free(* (Missile **) gvector_at(game_ptr->f_missiles, idx));
+		}
 		delete_gvector(game_ptr->f_missiles);
+
+		for (idx = 0; idx < gvector_get_size(game_ptr->explosions); ++idx) {
+			free(* (Explosion **) gvector_at(game_ptr->explosions, idx));
+		}
 		delete_gvector(game_ptr->explosions);
+
 		free(game_ptr);
 		game_ptr = NULL;
+
+		printf("\tGame Instance was successfully deleted!\n");
 	}
 }
 
@@ -159,7 +188,7 @@ int timer_handler() {
 	return OK;
 }
 
-int menu_timer_handler(game_state_t * game_state) {
+static int menu_timer_handler(game_state_t * game_state) {
 	Input_t * Input = input_instance();
 	Menu_t * Menu = menu_instance();
 
@@ -202,7 +231,7 @@ int menu_timer_handler(game_state_t * game_state) {
 	return OK;
 }
 
-int game_timer_handler() {
+static int game_timer_handler() {
 
 	Input_t * Input = input_instance();
 	Game_t * self = game_instance();
@@ -224,7 +253,8 @@ int game_timer_handler() {
 	// Mouse
 	//spawn missiles on mouse clicks
 	if (get_mouseRMB()) {
-		Missile * tmp = new_fmissile(self->base_pos, get_mouse_pos());
+		int tmp_pos[2] = {self->cannon_pos[0], CANNON_POS_Y};
+		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, &tmp);
 	}
 
@@ -242,11 +272,29 @@ int game_timer_handler() {
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0, ALIGN_LEFT);
 
 	// Draw Score - Upper Right Corner
-	draw_score(self->frames / 60, 780, 20);
+	draw_score(self->frames / 60, vg_getHorRes() - 10, 10);
 
 	// Draw Lives - Upper Left Corner
 	for (idx = 0; idx < self->health_points; ++idx) {
-		drawBitmap(vg_getBufferPtr(), BMPsHolder()->heart, 20 + (idx * HEART_SIZE_X + 10), 20, ALIGN_LEFT);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->heart, 10 + (idx * HEART_SIZE_X + 10), 10, ALIGN_LEFT);
+	}
+
+	// TODO
+	// Draw Bases/Houses
+	for (idx = 0; idx < NUM_BASES; ++idx) {
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->buildings[self->bases_hp[idx]], self->bases_pos[idx], GROUND_Y - BUILDING_SIZE_Y, ALIGN_CENTER);
+//		switch (self->bases_hp[idx]) {
+//		case 0:
+//			drawBitmap();
+//			break;
+//		case 1:
+//			break;
+//		case 2:
+//			break;
+//		default:
+//			printf("Base HP > 2 ! Shouldn not happen !\n");
+//			break;
+//		}
 	}
 
 	// Draw and Update enemy missiles
@@ -281,10 +329,10 @@ int game_timer_handler() {
 		}
 	}
 
-	// Check Collisions e_missiles with sky-line
+	// Check Collisions e_missiles with ground
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
 		Missile * current = * (Missile **) gvector_at(self->e_missiles, idx);
-		if (missile_getPosY(current) > BASE_Y) {
+		if (missile_getPosY(current) > GROUND_Y) {
 			gvector_erase(self->e_missiles, idx);
 			--idx;
 

@@ -33,8 +33,13 @@ static BMPsHolder_t * new_bmps_holder() {
 
 	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/", 10);
 	ptr->big_numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big", 10);
-	ptr->explosion = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/" , NUM_EXPLOSION_BMPS);
+	ptr->explosion = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/", NUM_EXPLOSION_BMPS);
 	ptr->ground_explosion; // TODO
+	ptr->buildings = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
+
+	unsigned i;
+	for (i = 0; i < 3; ++i)
+		printf("Building %d PTR: %d\n", i, ptr->buildings[i]);
 
 	ptr->game_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
 	ptr->heart = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/8_bit_heart.bmp");

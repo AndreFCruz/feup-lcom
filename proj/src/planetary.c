@@ -146,11 +146,11 @@ int timer_handler() {
 			game_state = MENU;
 		}
 		break;
-	case GAME_MULTI:
+	case GAME_MULTI: // TODO
 		printf("FOR THE LONG HAUL...\n");
 		game_state = MENU;
 		break;
-	case HIGH_SCORES:
+	case HIGH_SCORES: // TODO
 		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
 		game_state = MENU;
 		break;
@@ -159,7 +159,7 @@ int timer_handler() {
 	return OK;
 }
 
-void menu_timer_handler(game_state_t * game_state) {
+int menu_timer_handler(game_state_t * game_state) {
 	Input_t * Input = input_instance();
 	Menu_t * Menu = menu_instance();
 
@@ -193,8 +193,13 @@ void menu_timer_handler(game_state_t * game_state) {
 		if (get_mouseRMB())
 			* game_state = HIGH_SCORES;
 	}
+	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1], Menu->exit_radius) && get_mouseRMB()) {
+		return 1;
+	}
 
 	draw_mouse_cross(get_mouse_pos());
+
+	return OK;
 }
 
 int game_timer_handler() {
@@ -235,10 +240,9 @@ int game_timer_handler() {
 
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0, ALIGN_LEFT);
-	draw_mouse_cross(get_mouse_pos());
 
 	// Draw Score - Upper Right Corner
-	draw_number(self->frames / 60, 780, 20);
+	draw_score(self->frames / 60, 780, 20);
 
 	// Draw Lives - Upper Left Corner
 	for (idx = 0; idx < self->health_points; ++idx) {
@@ -306,6 +310,10 @@ int game_timer_handler() {
 			}
 		}
 	}
+
+	// Draw mouse cross last, so it is in the top layer
+	draw_mouse_cross(get_mouse_pos());
+
 
 	return OK;
 }

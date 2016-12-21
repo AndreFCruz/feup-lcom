@@ -243,9 +243,6 @@ int draw_mouse_cross (const int * pos) {
 		draw_line(pos[0]+1,pos[1]-10,pos[0]+1,pos[1]+10,0);
 	}
 
-	//draw_line(ptr,pos[0]-10,pos[1],pos[0]+10,pos[1],0);
-	//draw_line(ptr,pos[0],pos[1]-10,pos[0],pos[1]+10,0);
-
 	return OK;
 }
 
@@ -263,11 +260,20 @@ void draw_explosion(Explosion * ptr) {
 	drawBitmap(buffer_ptr, explosion_getBitmap(ptr), explosion_getPosX(ptr), explosion_getPosY(ptr) - (EXPLOSION_SIZE_X / 2), ALIGN_CENTER);
 }
 
-void draw_number(unsigned num, unsigned posX, unsigned posY) {
+void draw_number(unsigned num, Bitmap ** font, unsigned size_x, unsigned posX, unsigned posY) {
 	unsigned i;
 	for (i = 0 ; num > 0; ++i, num = num / 10) {
-		drawBitmap(buffer_ptr, BMPsHolder()->numbers[num % 10], posX - i * NUMBER_SIZE_X, posY, ALIGN_RIGHT);
+		drawBitmap(buffer_ptr, font[num % 10], posX - i * (size_x + 2), posY, ALIGN_RIGHT);
 	}
+}
+
+void draw_score(unsigned num, unsigned posX, unsigned posY) {
+	draw_number(num, BMPsHolder()->numbers, NUMBER_SIZE_X, posX, posY);
+}
+
+// TODO Currently big_numbers' bmps aren't being loaded
+void draw_score_big(unsigned num, unsigned posX, unsigned posY) {
+	draw_number(num, BMPsHolder()->big_numbers, BIG_NUMBER_SIZE_X, posX, posY);
 }
 
 uint16_t rgb (unsigned char red_value, unsigned char green_value, unsigned char blue_value) {

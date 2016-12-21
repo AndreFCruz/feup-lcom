@@ -64,6 +64,8 @@ int draw_square(unsigned short x, unsigned short y, unsigned short size, uint16_
 int draw_mouse_cross(const int * mouse_pos);
 void draw_missile(Missile * ptr);
 void draw_number(unsigned num, unsigned posX, unsigned posY);
+void draw_score(unsigned num, unsigned posX, unsigned posY);
+void draw_score_big(unsigned num, unsigned posX, unsigned posY);
 
 uint16_t rgb(unsigned char red_value, unsigned char green_value, unsigned char blue_value);
 

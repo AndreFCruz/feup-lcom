@@ -83,7 +83,7 @@ Missile * new_emissile() {
 
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
-	float vel[2];	//TODO: Vector should not be time / frame based
+	float vel[2];
 	vel[0] = 4*((float)mouse_pos[0] - (float)init_pos[0]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
 	vel[1] = 4*((float)mouse_pos[1] - (float)init_pos[1]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
 

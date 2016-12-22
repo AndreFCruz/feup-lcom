@@ -84,8 +84,10 @@ Missile * new_emissile() {
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	float vel[2];
-	vel[0] = 4*((float)mouse_pos[0] - (float)init_pos[0]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
-	vel[1] = 4*((float)mouse_pos[1] - (float)init_pos[1]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0])) + (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+	vel[0] = 4*((float)mouse_pos[0] - (float)init_pos[0]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
+				+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+	vel[1] = 4*((float)mouse_pos[1] - (float)init_pos[1]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
+				+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
 
 	Missile * m_ptr = new_missile(init_pos, vel);
 	m_ptr->color = YELLOW;
@@ -218,6 +220,7 @@ size_t explosion_getSizeOf() {
 	return sizeof(Explosion);
 }
 
+
 int missile_collidedWithExplosion(Missile * m_ptr, Explosion * e_ptr) {
 	int x_var = (m_ptr->pos[0] - e_ptr->pos[0]);
 	int y_var = (m_ptr->pos[1] - e_ptr->pos[1]);
@@ -226,5 +229,18 @@ int missile_collidedWithExplosion(Missile * m_ptr, Explosion * e_ptr) {
 		return 1;
 	else return 0;
 }
+
+// (posX, posY) indicates the lower-left point of the rectangle
+int missile_collidedWithRect(Missile * ptr, unsigned posX, unsigned posY, unsigned sizeX, unsigned sizeY) {
+	if ( ptr->pos[0] > posX && ptr->pos[0] < (posX + sizeX)
+			&& ptr->pos[1] < posY && ptr->pos[1] > posY - sizeY) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
+
 
 

@@ -248,7 +248,7 @@ int draw_mouse_cross (const int * pos) {
 
 // TODO Melhorar? Bitmap?
 void draw_missile(Missile * ptr) {
-	unsigned thickness = 4, idx = 0;
+	unsigned thickness = 2, idx = 0;
 
 	for (; idx < thickness; ++idx) {
 		draw_line(missile_getInitX(ptr)+idx, missile_getInitY(ptr), missile_getPosX(ptr)+idx, missile_getPosY(ptr), missile_getColor(ptr));

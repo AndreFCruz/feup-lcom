@@ -24,8 +24,6 @@ int missile_update(Missile * ptr);
 int missile_isFriendly(Missile * ptr);
 Explosion * delete_missile(Missile * ptr);
 
-//Colisions
-int missile_collidedWithExplosion(Missile * ptr, Explosion * e_ptr);
 
 /* Explosion's Methods */
 Explosion * new_explosion(const int * position);
@@ -41,5 +39,9 @@ size_t explosion_getSizeOf();
 
 void delete_explosion(Explosion * ptr);
 
+
+//Collisions
+int missile_collidedWithExplosion(Missile * ptr, Explosion * e_ptr);
+int missile_collidedWithRect(Missile * ptr, unsigned posX, unsigned posY, unsigned sizeX, unsigned sizeY);
 
 #endif

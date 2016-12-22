@@ -23,6 +23,9 @@
 #define HEART_SIZE_X		48
 #define HEART_SIZE_Y		48
 
+#define CANNON_SIZE_X		50
+#define CANNON_SIZE_Y		64
+
 #define BUTTONS_X			211
 #define SINGLEP_Y			231
 #define MULTIP_Y			334

@@ -162,7 +162,7 @@ int draw_line (unsigned short xi, unsigned short yi,
 
 int draw_circle (unsigned short center_x, unsigned short center_y, unsigned short radius, uint16_t color) {
 
-	if ( OK != is_valid_pos(center_x+radius, center_y+radius) || OK != is_valid_pos(center_x-radius, center_y-radius) ) {
+	if ( OK != is_valid_pos(center_x, center_y) ) {
 		printf("draw_circle: invalid position for circle. Center was: (%d, %d). Radius was %d.\n", center_x, center_y, radius);
 		return 1;
 	}

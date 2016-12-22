@@ -11,7 +11,7 @@ struct explosion_t;
 typedef struct explosion_t Explosion;
 
 /* Missile's Methods */
-Missile * new_emissile();
+Missile * new_emissile(const unsigned * bases_pos);
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos);
 
 size_t missile_getSizeOf();

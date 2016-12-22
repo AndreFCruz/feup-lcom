@@ -276,14 +276,16 @@ static int game_timer_handler() {
 		gvector_push_back(self->f_missiles, &tmp);
 	}
 
+
 	/** Spontaneous self Events **/
 	++(self->frames);
 	if (self->frames == self->enemy_spawn_fr) {
 		self->enemy_spawn_fr = next_spawn_frame();
 		printf("Spawning New Enemy Missile\n");
-		Missile * new_enemy = new_emissile();
+		Missile * new_enemy = new_emissile(self->bases_pos);
 		gvector_push_back(self->e_missiles, &new_enemy);
 	}
+
 
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
@@ -299,7 +301,7 @@ static int game_timer_handler() {
 				ALIGN_CENTER);
 	}
 
-	// Draw Cannons -- TODO Fix Green Visal Artifacts
+	// Draw Cannons -- TODO Fix Green Visal Artifacts -- Switch Cannons to Background Image ?
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_left,
 			self->cannon_pos[0], CANNON_POS_Y, ALIGN_LEFT);
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_right,

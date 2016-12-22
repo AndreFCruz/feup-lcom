@@ -70,10 +70,20 @@ static Missile * new_missile(const int * init_pos, const float * vel) {
 }
 
 // Constructor for Enemy Missile
-Missile * new_emissile() {
+Missile * new_emissile(const unsigned * bases_pos) {
 	int init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
-	float vel[2] = { 1.0 / (rand() % 2 ? rand() % 8 + 1 : rand() % 8 - 8), 4.0 / (1 + rand() % 8)};
-	//TODO find function that shoots left if missile is on the right of screen, and vice-verca (with rand() variations)
+	unsigned base_to_attack = rand() % 3;
+	float end_pos[2] = { bases_pos[base_to_attack] + (float) BUILDING_SIZE_X / ((float) (rand() % 9) - 4), vg_getVerRes() };
+
+	float vel[2];
+	float magnitude = sqrt((((float)end_pos[0] - (float)init_pos[0])*((float)end_pos[0] - (float)init_pos[0]))
+					+ (((float)end_pos[0] - (float)init_pos[1])*((float)end_pos[1] - (float)init_pos[1])));
+
+	float rand_multiplier = (10. + (float) (rand() % 10)) / 10.;
+	vel[0] = (rand_multiplier / magnitude) * ((float)end_pos[0] - (float)init_pos[0]);
+	vel[1] = (rand_multiplier / magnitude) * ((float)end_pos[1] - (float)init_pos[1]);
+
+	printf("New Enemy Missile Vel: %d, %d\n", (int) vel[0], (int) vel[1]);
 
 	Missile * m_ptr = new_missile(init_pos, vel);
 	m_ptr->color = RED;
@@ -84,10 +94,11 @@ Missile * new_emissile() {
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	float vel[2];
-	vel[0] = 4*((float)mouse_pos[0] - (float)init_pos[0]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
-				+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
-	vel[1] = 4*((float)mouse_pos[1] - (float)init_pos[1]) / sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
-				+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+	float magnitude = sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
+					+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
+	vel[0] = (4. / magnitude) * ((float)mouse_pos[0] - (float)init_pos[0]);
+	vel[1] = (4. / magnitude) * ((float)mouse_pos[1] - (float)init_pos[1]);
+	// Velocity for Friendly Missiles is constant -- 4 pixels per frame
 
 	Missile * m_ptr = new_missile(init_pos, vel);
 	m_ptr->color = YELLOW;

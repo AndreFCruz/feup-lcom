@@ -1,7 +1,5 @@
 #include <minix/syslib.h>
 #include <stdlib.h>
-//#include <minix/sysutil.h>
-//#include <minix/com.h>
 #include "RTC.h"
 
 static int rtc_hook_id = RTC_INITIAL_HOOK_ID;
@@ -36,14 +34,14 @@ int rtc_unsubscribe_int()
 
 int rtc_read_register(int reg)
 {
-	int value;	//return value of function - value in the register reg
+	unsigned long value;	//return value of function - value in the register reg
 
 	if (sys_outb(RTC_ADDR_REG, reg) != OK) {
 		printf ("rtc_read_register -> Failed sys_outb().\n");
 		return -1;
 	}
 
-	if (sys_inb(RTC_DATA_REG, (unsigned long int *) &value) != OK) {
+	if (sys_inb(RTC_DATA_REG,  &value) != OK) {
 		printf ("rtc_read_register -> Failed sys_intb().\n");
 		return -1;
 	}
@@ -51,7 +49,7 @@ int rtc_read_register(int reg)
 	return value;
 }
 
-int rtc_write_register(int reg, int value)
+int rtc_write_register(unsigned long reg, unsigned long value)
 {
 	if (sys_outb(RTC_ADDR_REG, reg) != OK) {
 		printf ("rtc_write_register -> Failed sys_outb().\n");
@@ -85,28 +83,35 @@ Date_t * rtc_read_date(void)
 	Date_t * date = malloc(sizeof(Date_t));
 	date->year = 0;
 
-	while (date->year == 0) {
-		if (!rtc_updating()) {
-			if (date->day = rtc_read_register(AL_DAY)) {
-				printf ("rtc_read_date -> Failed rtc_read_register() - day.\n");
-				date->year = -1;
-				break;
-			}
-
-			if (date->month = rtc_read_register(AL_MONTH)) {
-				printf ("rtc_read_date -> Failed rtc_read_register() - month.\n");
-				date->year = -1;
-				break;
-			}
-
-			if (date->year = rtc_read_register(AL_YEAR)) {
-				printf ("rtc_read_date -> Failed rtc_read_register() - year.\n");
-				date->year = -1;
-				break;
-			}
+	if (!rtc_updating()) {
+		if ((date->day = rtc_read_register(AL_DAY)) == -1) {
+			printf ("rtc_read_date -> Failed rtc_read_register() - day.\n");
+			date->year = 0;
 		}
 
-		tickdelay(micros_to_ticks(20000));	//Review this cycle
+		if ((date->month = rtc_read_register(AL_MONTH)) == -1) {
+			printf ("rtc_read_date -> Failed rtc_read_register() - month.\n");
+			date->year = 0;
+		}
+
+		if ((date->year = rtc_read_register(AL_YEAR)) == -1) {
+			printf ("rtc_read_date -> Failed rtc_read_register() - year.\n");
+			date->year = 0;
+		}
+
 	}
 	return date;
 }
+
+// Slide Code mby adapt? enable e disable e ativar e desativar as outras interrupções
+//TODO: A chamada e feita depois de dar disabLE? ativar qd quero saber e dps ta a andar... ver as cenas do disable e do enable,
+//pode ser isso o responsavel pelos valores estranhos
+//void wait_valid_rtc(void) {
+//	unsigned long regA = 0;
+//	do {
+//			disable();
+//			sys_outb(RTC_ADDR_REG, RTC_REG_A);
+//			sys_inb(RTC_DATA_REG, &regA);
+//			enable();
+//	} while ( regA & RTC_UIP);
+//}

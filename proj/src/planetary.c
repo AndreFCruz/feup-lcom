@@ -7,6 +7,7 @@
 #include "GVector.h"
 #include "Missile.h"
 #include "BMPsHolder.h"
+#include "RTC.h"
 
 static int menu_timer_handler();
 static int game_timer_handler();
@@ -184,6 +185,8 @@ int timer_handler() {
 		break;
 	case HIGH_SCORES: // TODO
 		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
+		Date_t * date = rtc_read_date();
+		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\n", date->year, date->month, date->day);
 		game_state = MENU;
 		break;
 	}

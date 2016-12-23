@@ -10,6 +10,7 @@
 #include "Bitmap.h"
 #include "planetary.h"
 #include "vbe.h"
+#include "RTC.h"
 
 
 /* Interrupt Handlers' Loop */

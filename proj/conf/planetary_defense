@@ -19,10 +19,12 @@ service planetary_defense
                 40:4
                 60
                 64
+                70:2      
                 ;               
         irq
                 0         # TIMER 0 IRQ
                 1         # KBD IRQ 
+                8         # RTC
                 12        # AUX/MOUSE IRQ
                 ;       
         uid     0               

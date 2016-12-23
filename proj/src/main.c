@@ -10,7 +10,6 @@
 #include "Bitmap.h"
 #include "planetary.h"
 #include "vbe.h"
-#include "RTC.h"
 
 
 /* Interrupt Handlers' Loop */
@@ -38,6 +37,12 @@ int main()
 	int timer_irq_set; unsigned timer_freq = 60;
 	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
 		printf("FAILED timer_subscribe_int()\n");
+		return 1;
+	}
+
+	int rtc_irq_set;
+	if ( (rtc_irq_set = BIT(rtc_subscribe_int())) < 0 ) {
+		printf("FAILED rtc_subscribe_int()\n");
 		return 1;
 	}
 	/* ** */
@@ -109,6 +114,10 @@ int main()
 	}
 	if ( timer_unsubscribe_int() < 0 ) {
 		printf("FAILED timer_unsubscribe_int()\n");
+		return 1;
+	}
+	if ( rtc_unsubscribe_int() < 0 ) {
+		printf("FAILED rtc_unsubscribe_int()\n");
 		return 1;
 	}
 	/* ** */

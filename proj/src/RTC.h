@@ -2,9 +2,9 @@
 #define __RTC_H
 
 typedef struct {
-	int day;
-	int month;
-	int year;
+	unsigned long day;
+	unsigned long month;
+	unsigned long year;
 } Date_t;
 
  /**
@@ -39,7 +39,7 @@ typedef struct {
   *
   * @return Return 0 upon success and non-zero otherwise
   */
- int rtc_write_register(int reg, int value);
+ int rtc_write_register(unsigned long reg, unsigned long value);
 
  /*
   * @brief Checks if RTC is being updated
@@ -51,7 +51,7 @@ typedef struct {
  /*
   * @brief Gets Date from the RTC
   *
-  * @return Return a pointer to a date containing a day, a month and a year. If year is -1, function failed.
+  * @return Return a pointer to a date containing a day, a month and a year. If year is 0, function failed.
   */
  Date_t * rtc_read_date(void);
 
@@ -99,12 +99,12 @@ typedef struct {
 #define	D_VRT		BIT(7)		/**< @brief Valid Time */
 
 /* Date Registers - Adress Location */
-#define AL_DAY		7			/**< @brief Date of the Month */
-#define AL_MONTH	8			/**< @brief Month */
-#define AL_YEAR		9			/**< @brief Year */
-#define AL_REGA		10			/**< @brief Control Register A */
-#define AL_REGB		11			/**< @brief Control Register B */
-#define AL_REGC		12			/**< @brief Control Register C */
-#define AL_REGD		13			/**< @brief Control Register  */
+#define AL_DAY		0x07		/**< @brief Date of the Month */
+#define AL_MONTH	0x08		/**< @brief Month */
+#define AL_YEAR		0x09		/**< @brief Year */
+#define AL_REGA		0x0A		/**< @brief Control Register A */
+#define AL_REGB		0x0B		/**< @brief Control Register B */
+#define AL_REGC		0x0C		/**< @brief Control Register C */
+#define AL_REGD		0x0D		/**< @brief Control Register  */
 
 #endif

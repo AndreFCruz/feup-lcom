@@ -2,6 +2,8 @@
 #define __RTC_H
 
 typedef struct {
+	unsigned long minute;
+	unsigned long hour;
 	unsigned long day;
 	unsigned long month;
 	unsigned long year;
@@ -99,12 +101,19 @@ typedef struct {
 #define	D_VRT		BIT(7)		/**< @brief Valid Time */
 
 /* Date Registers - Adress Location */
-#define AL_DAY		0x07		/**< @brief Date of the Month */
-#define AL_MONTH	0x08		/**< @brief Month */
-#define AL_YEAR		0x09		/**< @brief Year */
-#define AL_REGA		0x0A		/**< @brief Control Register A */
-#define AL_REGB		0x0B		/**< @brief Control Register B */
-#define AL_REGC		0x0C		/**< @brief Control Register C */
-#define AL_REGD		0x0D		/**< @brief Control Register  */
+#define AL_SECONDS		0X00		/**< @brief Seconds */
+#define AL_SEC_ALARM	0X01		/**< @brief Seconds Alarm */
+#define AL_MINUTES		0X02		/**< @brief Minutes */
+#define AL_MIN_ALARM	0X03		/**< @brief Minutes Alarm */
+#define AL_HOURS		0X04		/**< @brief Hours (12-hour or 24-hour mode) */
+#define AL_HOURS_ALARAM	0X05		/**< @brief Hours Alarm */
+#define AL_DAY_OF_WEEK	0x06		/**< @brief Day of the Week (Sunday = 1) */
+#define AL_DAY			0x07		/**< @brief Day of the Month */
+#define AL_MONTH		0x08		/**< @brief Month */
+#define AL_YEAR			0x09		/**< @brief Year */
+#define AL_REGA			0x0A		/**< @brief Control Register A */
+#define AL_REGB			0x0B		/**< @brief Control Register B */
+#define AL_REGC			0x0C		/**< @brief Control Register C */
+#define AL_REGD			0x0D		/**< @brief Control Register  */
 
 #endif

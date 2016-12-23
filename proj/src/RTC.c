@@ -4,6 +4,13 @@
 
 static int rtc_hook_id = RTC_INITIAL_HOOK_ID;
 
+unsigned parserBCD (int value) {
+	if (value > 10) {
+		return (((value >> 4) * 10) + (value & 0x0F));	// 1st Algarism + 10 * 2nd Algarism
+	}
+	else return value;
+}
+
 int rtc_subscribe_int(void)
 {
 	if ( sys_irqsetpolicy (RTC_IRQ, IRQ_REENABLE, & rtc_hook_id) != OK ) {
@@ -81,22 +88,33 @@ Date_t * rtc_read_date(void)
 {
 	//Date Initialization
 	Date_t * date = malloc(sizeof(Date_t));
-	date->year = 0;
+	date->year = 3;
 
-	if (!rtc_updating()) {
-		if ((date->day = rtc_read_register(AL_DAY)) == -1) {
+	if (rtc_updating()) {
+
+		if ((date->minute = parserBCD(rtc_read_register(AL_MINUTES))) == -1) {
+			printf ("rtc_read_date -> Failed rtc_read_register() - minute.\n");
+			date->year = 0;
+		}
+
+		if ((date->hour = parserBCD(rtc_read_register(AL_HOURS))) == -1) {
+			printf ("rtc_read_date -> Failed rtc_read_register() - hour.\n");
+			date->year = 0;
+		}
+
+		if ((date->day = parserBCD(rtc_read_register(AL_DAY))) == -1) {
 			printf ("rtc_read_date -> Failed rtc_read_register() - day.\n");
 			date->year = 0;
 		}
 
-		if ((date->month = rtc_read_register(AL_MONTH)) == -1) {
+		if ((date->month = parserBCD(rtc_read_register(AL_MONTH))) == -1) {
 			printf ("rtc_read_date -> Failed rtc_read_register() - month.\n");
-			date->year = 0;
+			date->year = 1;
 		}
 
-		if ((date->year = rtc_read_register(AL_YEAR)) == -1) {
+		if ((date->year = parserBCD(rtc_read_register(AL_YEAR))) == -1) {
 			printf ("rtc_read_date -> Failed rtc_read_register() - year.\n");
-			date->year = 0;
+			date->year = 2;
 		}
 
 	}

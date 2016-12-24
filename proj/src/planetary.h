@@ -14,9 +14,9 @@
 #define RIGHT_CANNON_POS_X			795
 #define CANNON_PROJECTILE_OFFSET	35
 
+#define END_ANIMATION_DURATION		5	// in seconds
 
-typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES /* CREDITS ? */} game_state_t;
-//typedef enum {START_SINGLE, START_MULTI, EPSILON /* CREDITS ? */} event_t;
+typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, END_GAME_ANIMATION} game_state_t;
 
 int timer_handler();
 

@@ -19,7 +19,7 @@ static Input_t * new_input() {
 	Input->res[1] = vg_getVerRes();
 
 	Input->mouse_pos[0] = Input->res[0] / 2;
-	Input->mouse_pos[1] = Input->res[1] / 2;
+	Input->mouse_pos[1] = Input->res[1] / 5;
 
 	return Input;
 }

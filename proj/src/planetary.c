@@ -299,7 +299,9 @@ static int menu_timer_handler(game_state_t * game_state) {
 		printf("Menu Button Selection Went Out of Range! Was %x.\n", selected);
 	}
 
-	draw_mouse_cross(get_mouse_pos());
+	// Draw Mouse Pointer
+	printf("MPtr bitmap ptr : %x\n", BMPsHolder()->mouse_pointer);
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->mouse_pointer, get_mouse_pos()[0], get_mouse_pos()[1], ALIGN_LEFT);
 
 	return OK;
 }
@@ -544,14 +546,24 @@ static int game_timer_handler() {
 
 // Handles Timer Interrupts in the End of Game Animation State
 static int end_game_timer_handler() {
-	static unsigned elapsed = 0; // Interrupts since beginning of animation
+	static unsigned count = 0;	// For blinking animation
 
 	Game_t * self = game_instance();
 	unsigned idx;
 
-	++elapsed; // Animation finished ?
-	if (elapsed / 60. > END_ANIMATION_DURATION)
+	/** Handle Input **/
+	// Keyboard
+	switch (input_get_key()) {
+	case ESC_BREAK:
+		count = 0;
 		return 1;
+		break;
+	case ENTER_BREAK:
+		count = 0;
+		return 1;
+	default:
+		break;
+	}
 
 	// Draw Background
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
@@ -569,9 +581,10 @@ static int end_game_timer_handler() {
 		}
 	}
 
+	++count;
 	// Draw Blinking Score -- Center of Screen
-	if ( (elapsed / 60) % 2 ) // TODO Draw Score Big
-		draw_score(self->frames / 60, vg_getHorRes() / 2 - BIG_NUMBER_SIZE_X, vg_getVerRes() / 2 + BIG_NUMBER_SIZE_Y);
+	if ( (count / 60) % 2 ) // TODO Draw Score Big
+		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2, vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
 
 	// TODO show "highscore" bmp if it is one
 	// TODO Check if score is a highscore in the end of game_timer_handler

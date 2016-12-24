@@ -36,6 +36,9 @@
 #define EXIT_Y				566
 #define EXIT_RADIUS			17
 
+#define MOUSE_SIZE_X		32
+#define MOUSE_SIZE_Y		32
+
 typedef struct {
 	Bitmap ** numbers;
 	Bitmap ** big_numbers;
@@ -52,6 +55,7 @@ typedef struct {
 	Bitmap * SP_button;
 	Bitmap * MP_button;
 	Bitmap * HS_button;
+	Bitmap * mouse_pointer;
 } BMPsHolder_t;
 
 BMPsHolder_t * BMPsHolder();

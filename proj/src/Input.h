@@ -8,13 +8,10 @@
 
 // TODO Update with actual make/break codes!!
 typedef enum {
-	ESC_MAKE = 0x1,
 	ESC_BREAK = ESC_BREAK_CODE,
-	ENTER_MAKE = 0x3,
-	UP_MAKE = 0x4,
-	DOWN_MAKE = 0x5,
-	RIGHT_MAKE = 0x6,
-	LEFT_MAKE = 0x7,
+	ENTER_BREAK = ENTER_BREAK_CODE,
+	UP_MAKE = UP_MAKE_CODE,
+	DOWN_MAKE = DOWN_MAKE_CODE,
 	NO_KEY = 0x0
 } keycode_t;
 

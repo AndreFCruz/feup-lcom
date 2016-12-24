@@ -40,11 +40,11 @@ int main()
 		return 1;
 	}
 
-	int rtc_irq_set;
-	if ( (rtc_irq_set = BIT(rtc_subscribe_int())) < 0 ) {
-		printf("FAILED rtc_subscribe_int()\n");
-		return 1;
-	}
+//	int rtc_irq_set;
+//	if ( (rtc_irq_set = BIT(rtc_subscribe_int())) < 0 ) {
+//		printf("FAILED rtc_subscribe_int()\n");
+//		return 1;
+//	}
 	/* ** */
 
 	//Initiate Graphics Mode
@@ -116,13 +116,14 @@ int main()
 		printf("FAILED timer_unsubscribe_int()\n");
 		return 1;
 	}
-	if ( rtc_unsubscribe_int() < 0 ) {
-		printf("FAILED rtc_unsubscribe_int()\n");
-		return 1;
-	}
+//	if ( rtc_unsubscribe_int() < 0 ) {
+//		printf("FAILED rtc_unsubscribe_int()\n");
+//		return 1;
+//	}
 	/* ** */
 
-	// TODO For The Long Haul: kbd output buffer may need to be cleared with sys_inb
+	unsigned char dummy;
+	sys_inb(OUT_BUF, (unsigned long *) &dummy);	// Clear output buffer, so keyboard can be used after service call
 
 	printf("\t\t\tPROJECT SERVICE ENDED\n");
 

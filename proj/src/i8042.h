@@ -13,6 +13,9 @@
 #define KBD_INITIAL_HOOK_ID 1   /**< @brief KBD Initial hook_id */
 
 #define ESC_BREAK_CODE      0x81    /**< @brief ESC key break code */
+#define ENTER_BREAK_CODE	0x9C	/**< @brief Enter key break code */
+#define UP_MAKE_CODE		0xE048	/**< @brief Up Arrow key make code */
+#define DOWN_MAKE_CODE		0xE050	/**< @brief Down Arrow key make code */
 
 // /* Timer 0 useful macros */
 // #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
@@ -59,7 +62,6 @@
 //#define CAPS_LOCK			0x02
 //#define NUM_LOCK			0X01
 //#define SCROLL_LOCK		0x00
-
 
 #define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
 

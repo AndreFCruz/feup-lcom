@@ -195,16 +195,33 @@ int timer_handler() {
 }
 
 static int menu_timer_handler(game_state_t * game_state) {
+	static int selected = 0; // Button highlighted. 0 indicates none
+
 	Input_t * Input = input_instance();
 	Menu_t * Menu = menu_instance();
+
+	int enter_flag = 0; // Indicates whether enter was pressed
 
 	/** Handle Keyboard Input **/
 	switch (input_get_key()) {
 	case ESC_BREAK:
-		printf("ESC BREAK_CODE DETECTED\n");
+		printf("ESC BREAK_CODE DETECTED: 0x%X\n", ESC_BREAK);
 		return 1;
 		break;
+	case ENTER_BREAK:
+		printf("ENTER BREAK_CODE DETECTED: 0x%X\n", ENTER_BREAK);
+		enter_flag = 1;
+		break;
+	case UP_MAKE:
+		printf("UP_ARROW MAKE CODE DETECTED: 0x%X\n", UP_MAKE);
+		selected = selected - 1 < 0 ? 3 : selected - 1; // 3 is the number of buttons
+		break;
+	case DOWN_MAKE:
+		printf("DOWN_ARROW MAKE CODE DETECTED: 0x%X\n", DOWN_MAKE);
+		selected = selected + 1 > 3 ? 0 : selected + 1;
+		break;
 	default:
+		// Un-mapped key_code received, do nothing
 		break;
 	}
 
@@ -214,30 +231,61 @@ static int menu_timer_handler(game_state_t * game_state) {
 	if (mouse_inside_rect(Menu->SP_pos[0], Menu->SP_pos[1],
 			Menu->SP_pos[0] + Menu->options_size[0],
 			Menu->SP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsHolder()->SP_button, Menu->SP_pos[0],
-				Menu->SP_pos[1], ALIGN_LEFT);
+		selected = 1;
 
-		if (get_mouseRMB())
+		if (get_mouseRMB()) {
 			*game_state = GAME_SINGLE;
+			selected = 0;
+		}
 	} else if (mouse_inside_rect(Menu->MP_pos[0], Menu->MP_pos[1],
 			Menu->MP_pos[0] + Menu->options_size[0],
 			Menu->MP_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsHolder()->MP_button, Menu->MP_pos[0],
-				Menu->MP_pos[1], ALIGN_LEFT);
+		selected = 2;
 
-		if (get_mouseRMB())
+		if (get_mouseRMB()) {
 			*game_state = GAME_MULTI;
+			selected = 0;
+		}
 	} else if (mouse_inside_rect(Menu->HS_pos[0], Menu->HS_pos[1],
 			Menu->HS_pos[0] + Menu->options_size[0],
 			Menu->HS_pos[1] + Menu->options_size[1])) {
-		drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_button, Menu->HS_pos[0],
-				Menu->HS_pos[1], ALIGN_LEFT);
+		selected = 3;
 
-		if (get_mouseRMB())
+		if (get_mouseRMB()) {
 			*game_state = HIGH_SCORES;
-	} else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1],
+			selected = 0;
+		}
+	}
+	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1],
 			Menu->exit_radius) && get_mouseRMB()) {
 		return 1;
+	}
+
+	// Draw Selection Highlight
+	switch (selected) {
+	case 0:
+		// Nothing is selected
+		break;
+	case 1:
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->SP_button, Menu->SP_pos[0],
+						Menu->SP_pos[1], ALIGN_LEFT);
+		if (enter_flag)
+			*game_state = GAME_SINGLE;
+		break;
+	case 2:
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->MP_button, Menu->MP_pos[0],
+						Menu->MP_pos[1], ALIGN_LEFT);
+		if (enter_flag)
+			*game_state = GAME_MULTI;
+		break;
+	case 3:
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_button, Menu->HS_pos[0],
+						Menu->HS_pos[1], ALIGN_LEFT);
+		if (enter_flag)
+			*game_state = HIGH_SCORES;
+		break;
+	default:
+		printf("Menu Button Selection Went Out of Range! Was %x.\n", selected);
 	}
 
 	draw_mouse_cross(get_mouse_pos());

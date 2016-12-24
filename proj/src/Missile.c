@@ -105,8 +105,6 @@ Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	m_ptr->isFriendly = TRUE;
 	memmove(m_ptr->end_pos, mouse_pos, 2 * sizeof(int));
 
-	printf("NEW FRIENDLY MISSILE. End-Pos: (%d, %d)\n", m_ptr->end_pos[0], m_ptr->end_pos[1]);
-
 	return m_ptr;
 }
 
@@ -115,8 +113,6 @@ Explosion * delete_missile(Missile * m_ptr) {
 	Explosion * exp = new_explosion(m_ptr->pos);
 
 	free(m_ptr);
-
-	printf("\t\tDELETE MISSILE CALLED\n");
 
 	return exp;
 }
@@ -183,8 +179,6 @@ size_t missile_getSizeOf() {
  */
 
 Explosion * new_explosion(const int * position) {
-	printf("\t\t\tEXPLOSION CONSTRUCTOR CALLED\n");
-
 	Explosion * self = (Explosion *) malloc(sizeof(Explosion));
 
 	memmove(self->pos, position, 2 * sizeof(int));

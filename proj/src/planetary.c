@@ -11,6 +11,7 @@
 
 static int menu_timer_handler();
 static int game_timer_handler();
+static int end_game_timer_handler();
 
 /**
  * Menu Struct and Methods
@@ -58,7 +59,7 @@ static Menu_t * menu_instance() {
 		return menu_ptr;
 }
 
-static void delete_menu() { // TODO Delete all missiles/explosions ?
+static void delete_menu() {
 	if (NULL != menu_ptr) {
 		free(menu_ptr);
 		menu_ptr = NULL;
@@ -159,7 +160,7 @@ static void delete_game() {
 /** **/
 
 // Returns the frame in which an enemy should be spawned
-unsigned long next_spawn_frame() {	// 500 * (1 + frames / 512)^(-1)
+unsigned long next_spawn_frame() {	// 500 / (1 + frames / 512)
 	return game_instance()->frames + 256000. / (game_instance()->frames + 512);
 }
 
@@ -168,25 +169,32 @@ int timer_handler() {
 
 	switch (game_state) {
 	case MENU:
-		if (menu_timer_handler(&game_state) != OK) {
+		if ( OK != menu_timer_handler(&game_state) ) {
 			delete_bmps_holder();
+			delete_menu();
 			return 1;
 		}
 		break;
 	case GAME_SINGLE:
-		if (game_timer_handler() != OK) {
-			delete_game();
-			game_state = MENU;
+		if ( OK != game_timer_handler() ) {
+			game_state = END_GAME_ANIMATION;
 		}
 		break;
 	case GAME_MULTI: // TODO
 		printf("FOR THE LONG HAUL...\n");
 		game_state = MENU;
 		break;
+	case END_GAME_ANIMATION:
+		if ( OK != end_game_timer_handler() ) {
+			delete_game();
+			game_state = MENU;
+		}
+		break;
 	case HIGH_SCORES: // TODO
 		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
 		Date_t * date = rtc_read_date();
-		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n", date->year, date->month, date->day, date->hour, date->minute);
+		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
+				date->year, date->month, date->day, date->hour, date->minute);
 		game_state = MENU;
 		break;
 	}
@@ -255,8 +263,7 @@ static int menu_timer_handler(game_state_t * game_state) {
 			*game_state = HIGH_SCORES;
 			selected = 0;
 		}
-	}
-	else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1],
+	} else if (mouse_inside_circle(Menu->exit_pos[0], Menu->exit_pos[1],
 			Menu->exit_radius) && get_mouseRMB()) {
 		return 1;
 	}
@@ -268,19 +275,19 @@ static int menu_timer_handler(game_state_t * game_state) {
 		break;
 	case 1:
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->SP_button, Menu->SP_pos[0],
-						Menu->SP_pos[1], ALIGN_LEFT);
+				Menu->SP_pos[1], ALIGN_LEFT);
 		if (enter_flag)
 			*game_state = GAME_SINGLE;
 		break;
 	case 2:
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->MP_button, Menu->MP_pos[0],
-						Menu->MP_pos[1], ALIGN_LEFT);
+				Menu->MP_pos[1], ALIGN_LEFT);
 		if (enter_flag)
 			*game_state = GAME_MULTI;
 		break;
 	case 3:
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_button, Menu->HS_pos[0],
-						Menu->HS_pos[1], ALIGN_LEFT);
+				Menu->HS_pos[1], ALIGN_LEFT);
 		if (enter_flag)
 			*game_state = HIGH_SCORES;
 		break;
@@ -327,7 +334,6 @@ static int game_timer_handler() {
 		gvector_push_back(self->f_missiles, &tmp);
 	}
 
-
 	/** Spontaneous self Events **/
 	++(self->frames);
 	if (self->frames == self->enemy_spawn_fr) {
@@ -337,7 +343,6 @@ static int game_timer_handler() {
 		gvector_push_back(self->e_missiles, &new_enemy);
 	}
 
-
 	/** Draw self **/
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
 			ALIGN_LEFT);
@@ -346,10 +351,9 @@ static int game_timer_handler() {
 	for (idx = 0; idx < NUM_BASES; ++idx) {
 		unsigned base_hp = self->bases_hp[idx];
 
-		drawBitmap(vg_getBufferPtr(),
-				BMPsHolder()->buildings[base_hp],
-				self->bases_pos[idx], GROUND_Y - self->buildings_size_y[base_hp],
-				ALIGN_CENTER);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->buildings[base_hp],
+				self->bases_pos[idx],
+				GROUND_Y - self->buildings_size_y[base_hp], ALIGN_CENTER);
 	}
 
 	// Draw Cannons -- TODO Fix Green Visal Artifacts -- Switch Cannons to Background Image ?
@@ -382,14 +386,12 @@ static int game_timer_handler() {
 		Explosion * current = *(Explosion **) gvector_at(self->explosions, idx);
 		draw_explosion(current);
 		if (explosion_update(current)) { // Animation ended ?
-			printf("\t\t\tExplosion Animation Ended\n");
 			gvector_erase(self->explosions, idx);
 			--idx;
 			delete_explosion(current);
 			printf("\t\t\tExplosion deleted\n");
 		}
 	}
-
 
 	/** Collision Detection **/
 
@@ -412,7 +414,8 @@ static int game_timer_handler() {
 
 		// Check Enemy Missiles
 		for (j = 0; j < gvector_get_size(self->e_missiles); ++j) {
-			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles, j);
+			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles,
+					j);
 
 			if (missile_collidedWithExplosion(missile_ptr, exp_ptr)) {
 				gvector_erase(self->e_missiles, j);
@@ -425,7 +428,8 @@ static int game_timer_handler() {
 
 		// Check Friendly Missiles
 		for (j = 0; j < gvector_get_size(self->f_missiles); ++j) {
-			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles, j);
+			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles,
+					j);
 
 			if (missile_collidedWithExplosion(missile_ptr, exp_ptr)) {
 				gvector_erase(self->f_missiles, j);
@@ -447,11 +451,15 @@ static int game_timer_handler() {
 
 		// Enemy Missiles
 		for (j = 0; j < gvector_get_size(self->e_missiles); ++j) {
-			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles, j);
+			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles,
+					j);
 
-			if ( missile_collidedWithRect(missile_ptr, self->bases_pos[idx] - BUILDING_SIZE_X / 2.0,
-					GROUND_Y, BUILDING_SIZE_X, self->buildings_size_y[self->bases_hp[idx]]) ) {
-				printf("\tCollision Detected! Enemy Missile with base %d!\n", idx);
+			if (missile_collidedWithRect(missile_ptr,
+					self->bases_pos[idx] - BUILDING_SIZE_X / 2.0,
+					GROUND_Y, BUILDING_SIZE_X,
+					self->buildings_size_y[self->bases_hp[idx]])) {
+				printf("\tCollision Detected! Enemy Missile with base %d!\n",
+						idx);
 
 				gvector_erase(self->e_missiles, j);
 				--j;
@@ -459,7 +467,8 @@ static int game_timer_handler() {
 				Explosion * tmp = delete_missile(missile_ptr);
 				gvector_push_back(self->explosions, &tmp);
 
-				self->bases_hp[idx] = self->bases_hp[idx] > 0 ? self->bases_hp[idx] - 1 : 0;
+				self->bases_hp[idx] =
+						self->bases_hp[idx] > 0 ? self->bases_hp[idx] - 1 : 0;
 			}
 		}
 
@@ -503,10 +512,65 @@ static int game_timer_handler() {
 	// Draw mouse cross last, so it is in the top layer
 	draw_mouse_cross(get_mouse_pos());
 
+	if (0 == health_points) { // Everything Explodes in the End x)
 
-	// TODO If health_points == 0 play end_of_game animation (explode everything and show score in the middle of screen)
-	if (0 == health_points)
+		// Delete Enemy Missiles
+		while ( 0 != gvector_get_size(self->e_missiles) ) {
+			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles, 0);
+			gvector_erase(self->e_missiles, 0);
+
+			Explosion * tmp = delete_missile(missile_ptr);
+			gvector_push_back(self->explosions, &tmp);
+		}
+
+		// Delete Friendly Missiles
+		while ( 0 != gvector_get_size(self->f_missiles) ) {
+			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles, 0);
+			gvector_erase(self->f_missiles, 0);
+
+			Explosion * tmp = delete_missile(missile_ptr);
+			gvector_push_back(self->explosions, &tmp);
+		}
+
 		return 1;
+	}
+
+	return OK;
+}
+
+// Handles Timer Interrupts in the End of Game Animation State
+static int end_game_timer_handler() {
+	static unsigned elapsed = 0; // Interrupts since beginning of animation
+
+	Game_t * self = game_instance();
+	unsigned idx;
+
+	++elapsed; // Animation finished ?
+	if (elapsed / 60. > END_ANIMATION_DURATION)
+		return 1;
+
+	// Draw Background
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
+			ALIGN_LEFT);
+
+	// Draw and Update Explosions
+	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
+		Explosion * current = *(Explosion **) gvector_at(self->explosions, idx);
+		draw_explosion(current);
+		if (explosion_update(current)) { // Animation ended ?
+			gvector_erase(self->explosions, idx);
+			--idx;
+			delete_explosion(current);
+			printf("\t\t\tExplosion deleted\n");
+		}
+	}
+
+	// Draw Blinking Score -- Center of Screen
+	if ( (elapsed / 60) % 2 ) // TODO Draw Score Big
+		draw_score(self->frames / 60, vg_getHorRes() / 2 - BIG_NUMBER_SIZE_X, vg_getVerRes() / 2 + BIG_NUMBER_SIZE_Y);
+
+	// TODO show highscore bmp if it is one
+	// TODO Check if score is a highscore in the end of game_timer_handler
 
 	return OK;
 }

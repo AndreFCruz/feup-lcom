@@ -73,7 +73,7 @@ static Missile * new_missile(const int * init_pos, const float * vel) {
 Missile * new_emissile(const unsigned * bases_pos) {
 	int init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
 	unsigned base_to_attack = rand() % 3;
-	float end_pos[2] = { bases_pos[base_to_attack] + (float) BUILDING_SIZE_X / ((float) (rand() % 9) - 4), vg_getVerRes() };
+	float end_pos[2] = { bases_pos[base_to_attack] + (float) BUILDING_SIZE_X / (rand() % 2 ? rand() % 9 - 10 : rand() % 9 + 2), vg_getVerRes() };
 
 	float vel[2];
 	float magnitude = sqrt((((float)end_pos[0] - (float)init_pos[0])*((float)end_pos[0] - (float)init_pos[0]))

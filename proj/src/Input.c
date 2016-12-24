@@ -38,81 +38,28 @@ void keyboard_handler() {
 		printf("keyboard_handler::keyboard_read() failed\n");
 }
 
+// Removes keycode from Input's buffer, compatible with double byte make/break codes
 keycode_t input_get_key() {
+	static byteE0 = 0;	// flag corresponding to whether first byte 0xE0 was received
 	keycode_t tmp = input_instance()->keycode;
 	input_instance()->keycode = NONE;	// Key handled
-	return tmp;
-}
 
-//void keyboard_update_input() {
-//
-//	switch(keyboard_read()) {
-//	/* Esc Key */
-//	case ESC_MAKE_CODE:
-//		Input->ESC = KEY_MAKE;
-//		break;
-//	case ESC_BREAK_CODE:
-//		Input->ESC = KEY_BREAK;
-//		break;
-//
-//	/* Enter Key */
-//	case ENTER_MAKE_CODE:
-//		Input->ENTER = KEY_MAKE;
-//		break;
-//	case ENTER_BREAK_CODE:
-//		Input->ENTER = KEY_BREAK;
-//		break;
-//
-//	/* Up Arrow Key */
-//	case UP_MAKE_CODE:
-//		Input->UP = KEY_MAKE;
-//		break;
-//	case UP_BREAK_CODE:
-//		Input->UP = KEY_BREAK;
-//		break;
-//
-//	/* Down Arrow Key */
-//	case DOWN_MAKE_CODE:
-//		Input->DOWN = KEY_MAKE;
-//		break;
-//	case DOWN_BREAK_CODE:
-//		Input->DOWN = KEY_BREAK;
-//		break;
-//
-//	/* Right Arrow Key */
-//	case RIGHT_MAKE_CODE:
-//		Input->RIGHT = KEY_MAKE;
-//		break;
-//	case RIGHT_BREAK_CODE:
-//		Input->RIGHT = KEY_BREAK;
-//		break;
-//
-//	/* Left Arrow Key */
-//	case LEFT_MAKE_CODE:
-//		Input->LEFT = KEY_MAKE;
-//		break;
-//	case LEFT_BREAK_CODE:
-//		Input->LEFT = KEY_BREAK;
-//		break;
-//
-//	default:
-//		break;
-//	}
-//}
+	if (0xE0 == tmp) {
+		byteE0 = 1;
+		return NONE; // NONE == 0x0
+	} else if (byteE0) {
+		byteE0 = 0; // clear flag
+		return (0xE0 << 8) | tmp;
+	} else {
+		return tmp;
+	}
+}
 
 //Destructor
 void delete_input() {
 	free(input_instance());
 	input = NULL;
 }
-
-//int get_mouse_x() {
-//	return input_instance()->mouse_pos[0];
-//}
-//
-//int get_mouse_y() {
-//	return input_instance()->mouse_pos[1];
-//}
 
 const int * get_mouse_pos() {
 	return input_instance()->mouse_pos;

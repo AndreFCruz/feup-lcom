@@ -14,7 +14,7 @@ struct gvector_t {
 };
 
 GVector * new_gvector(unsigned el_size) {
-#if DEBUG == 1
+#if DEBUG
 	printf("\tNEW GVector called\n");
 #endif
 

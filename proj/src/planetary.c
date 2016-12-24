@@ -12,6 +12,7 @@
 static int menu_timer_handler();
 static int game_timer_handler();
 static int end_game_timer_handler();
+static int highscores_timer_handler();
 
 /**
  * Menu Struct and Methods
@@ -192,10 +193,13 @@ int timer_handler() {
 		break;
 	case HIGH_SCORES: // TODO
 		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
-		Date_t * date = rtc_read_date();
-		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
-				date->year, date->month, date->day, date->hour, date->minute);
-		game_state = MENU;
+//		Date_t * date = rtc_read_date();
+//		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
+//				date->year, date->month, date->day, date->hour, date->minute);
+//		game_state = MENU;
+		if ( OK != highscores_timer_handler() ) {
+			game_state = MENU;
+		}
 		break;
 	}
 
@@ -569,8 +573,29 @@ static int end_game_timer_handler() {
 	if ( (elapsed / 60) % 2 ) // TODO Draw Score Big
 		draw_score(self->frames / 60, vg_getHorRes() / 2 - BIG_NUMBER_SIZE_X, vg_getVerRes() / 2 + BIG_NUMBER_SIZE_Y);
 
-	// TODO show highscore bmp if it is one
+	// TODO show "highscore" bmp if it is one
 	// TODO Check if score is a highscore in the end of game_timer_handler
+
+	return OK;
+}
+
+//TODO draw bmp equal to menu, but without the buttons and the title, for the highscores
+static int highscores_timer_handler() {
+
+	/** Handle Keyboard Input **/
+	switch (input_get_key()) {
+	case ESC_BREAK:
+		printf("ESC BREAK_CODE DETECTED: 0x%X\n", ESC_BREAK);
+		return 1;
+		break;
+	default:
+		break;
+	}
+
+	// Draw Background
+
+	// Fetch and Draw Highscores
+
 
 	return OK;
 }

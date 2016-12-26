@@ -193,10 +193,9 @@ int timer_handler() {
 		break;
 	case HIGH_SCORES: // TODO
 		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
-//		Date_t * date = rtc_read_date();
-//		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
-//				date->year, date->month, date->day, date->hour, date->minute);
-//		game_state = MENU;
+		Date_t * date = rtc_read_date();
+		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
+				date->year, date->month, date->day, date->hour, date->minute);
 		if ( OK != highscores_timer_handler() ) {
 			game_state = MENU;
 		}

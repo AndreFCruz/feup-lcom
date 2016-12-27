@@ -608,6 +608,10 @@ static int highscores_timer_handler() {
 		break;
 	}
 
+	//Checking if Exit Button clicked
+    if (mouse_inside_circle(EXIT_X, EXIT_Y, EXIT_RADIUS) && get_mouseRMB())
+    		return 1;
+
 	// Draw Background
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_background, 0, 0, ALIGN_LEFT);
 
@@ -618,14 +622,25 @@ static int highscores_timer_handler() {
 	Score_t helper;
 	helper.score = 30;
 
-	updateScores(scores,helper);
+	//updateScores(scores,helper);
 
+	//TODO: Hard coded values, clean this after
 	unsigned i;
     for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
-		printf ("Doing it right?MAMMA MIA: %u.\n", scores[i].score);
+		draw_score(scores[i].score, 171, 230 + i * 67);
+		draw_score(scores[i].hour, 300, 230 + i * 67);
+		draw_score(scores[i].minute, 350, 230 + i * 67);
+		draw_score(scores[i].day, 420, 230 + i * 67);
+		draw_score(scores[i].month, 670, 230 + i * 67);
+		draw_score(scores[i].year, 741, 230 + i * 67);
+
+
+    	printf ("Doing it right?MAMMA MIA: %u.\n", scores[i].score);
     }
 
     //writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt", scores);
+
+
 
 	// Draw mouse cross last, so it is in the top layer
 	draw_mouse_cross(get_mouse_pos());

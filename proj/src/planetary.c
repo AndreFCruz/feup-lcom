@@ -8,6 +8,7 @@
 #include "Missile.h"
 #include "BMPsHolder.h"
 #include "RTC.h"
+#include "Highscores.h"
 
 static int menu_timer_handler();
 static int game_timer_handler();
@@ -192,10 +193,6 @@ int timer_handler() {
 		}
 		break;
 	case HIGH_SCORES: // TODO
-		printf("ACCESS SCORES FILE AND SHOW BEST ON SCREEN\n");
-		Date_t * date = rtc_read_date();
-		printf("\nYEAR: %d.\tMONTH: %d.\tDAY: %d.\tHour: %d.\tMinute: %d.\n",
-				date->year, date->month, date->day, date->hour, date->minute);
 		if ( OK != highscores_timer_handler() ) {
 			game_state = MENU;
 		}
@@ -360,12 +357,6 @@ static int game_timer_handler() {
 				self->bases_pos[idx],
 				GROUND_Y - self->buildings_size_y[base_hp], ALIGN_CENTER);
 	}
-
-	// Draw Cannons -- TODO Fix Green Visal Artifacts -- Switch Cannons to Background Image ?
-	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_left,
-			self->cannon_pos[0], CANNON_POS_Y, ALIGN_LEFT);
-	drawBitmap(vg_getBufferPtr(), BMPsHolder()->cannon_right,
-			self->cannon_pos[1], CANNON_POS_Y, ALIGN_RIGHT);
 
 	// Draw and Update enemy missiles
 	for (idx = 0; idx < gvector_get_size(self->e_missiles); ++idx) {
@@ -587,6 +578,19 @@ static int end_game_timer_handler() {
 
 	// TODO show "highscore" bmp if it is one
 	// TODO Check if score is a highscore in the end of game_timer_handler
+	Score_t endgame;
+	endgame.score = (self->frames / 60);
+
+	//Assembling Date and Hour
+	Date_t * date = rtc_read_date();
+	endgame.hour = date->hour;
+	endgame.minute = date->minute;
+	endgame.day = date->day;
+	endgame.month = date->month;
+	endgame.year = date->year;
+	free(date);
+
+	//updateScores(scores, endgame);
 
 	return OK;
 }
@@ -605,9 +609,26 @@ static int highscores_timer_handler() {
 	}
 
 	// Draw Background
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_background, 0, 0, ALIGN_LEFT);
 
 	// Fetch and Draw Highscores
+	Score_t * scores;
+	scores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
+	Score_t helper;
+	helper.score = 30;
+
+	updateScores(scores,helper);
+
+	unsigned i;
+    for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
+		printf ("Doing it right?MAMMA MIA: %u.\n", scores[i].score);
+    }
+
+    //writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt", scores);
+
+	// Draw mouse cross last, so it is in the top layer
+	draw_mouse_cross(get_mouse_pos());
 
 	return OK;
 }

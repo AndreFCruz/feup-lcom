@@ -5,7 +5,7 @@ COMPILER_TYPE= gnu
 CC= gcc
 
 PROG= planetary_defense
-SRCS= main.c planetary.c vbe.c video_gr.c timer.c keyboard.c mouse.c GVector.c Input.c Missile.c Bitmap.c BMPsHolder.c RTC.c
+SRCS= main.c planetary.c vbe.c video_gr.c timer.c keyboard.c mouse.c GVector.c Input.c Missile.c Bitmap.c BMPsHolder.c RTC.c Highscores.c
 
 CCFLAGS= -Wall
 

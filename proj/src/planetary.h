@@ -14,6 +14,15 @@
 #define RIGHT_CANNON_POS_X			795
 #define CANNON_PROJECTILE_OFFSET	32
 
+#define HIGHSCORES_TXT				"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt"
+#define SCORE_SCORE_X				169
+#define SCORE_HOUR_X				297
+#define SCORE_MINUTE_X				383
+#define SCORE_DAY_X					505
+#define SCORE_MONTH_X				595
+#define SCORE_YEAR_X				741
+#define SCORE_Y						230
+#define SCORE_Y_INC					67
 
 typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, END_GAME_ANIMATION} game_state_t;
 

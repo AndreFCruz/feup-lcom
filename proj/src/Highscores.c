@@ -4,7 +4,8 @@
 #include "GVector.h"
 
 Score_t * loadScores(const char* filename) {
-    Score_t scores[HIGHSCORE_NUMBER];
+    //Score_t scores[HIGHSCORE_NUMBER];
+	Score_t * scores = (Score_t*) malloc (sizeof(Score_t) * HIGHSCORE_NUMBER);
 
 	// allocating necessary size
     //Score_t* bmp = (Bitmap*) malloc(sizeof(Bitmap));
@@ -65,16 +66,23 @@ int updateScores(Score_t* scores, Score_t newscore) {
 	unsigned i;
 
 	for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
+		if ((scores[i].score == newscore.score) && (scores[i].hour == newscore.hour) && (scores[i].minute == newscore.minute)
+				&& (scores[i].day == newscore.day) && (scores[i].month == newscore.month) && (scores[i].year == newscore.year))
+			return 1;
+
 		if (scores[i].score < newscore.score) {
 			Score_t helper = scores[i];
 
 			scores[i] = newscore;	//Allowed
 			newscore = helper;
 			updated = OK;
+			printf("bUBICE: %u, %u:%u %u/%u/%u\n", scores[i].score, scores[i].hour,
+			    			scores[i].minute, scores[i].day, scores[i].month, scores[i].year);
 		}
+
 	}
 
-	if (updated)
+	if (updated == OK)
 		return OK;
 	else return 1;
 

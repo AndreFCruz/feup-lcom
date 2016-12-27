@@ -88,6 +88,8 @@ typedef struct {
 
 	unsigned buildings_size_y[3];
 
+	Score_t * highscores;	// Array containing HighScores
+
 } Game_t;
 
 static Game_t * new_game() {
@@ -119,6 +121,8 @@ static Game_t * new_game() {
 	Game->buildings_size_y[0] = BUILDING0_SIZE_Y;
 	Game->buildings_size_y[1] = BUILDING1_SIZE_Y;
 	Game->buildings_size_y[2] = BUILDING2_SIZE_Y;
+
+	Game->highscores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
 	printf("Game Instance was successfully created\n");
 
@@ -152,6 +156,7 @@ static void delete_game() {
 		}
 		delete_gvector(game_ptr->explosions);
 
+		free(highscores);
 		free(game_ptr);
 		game_ptr = NULL;
 
@@ -577,7 +582,7 @@ static int end_game_timer_handler() {
 		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2, vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
 
 	// TODO show "highscore" bmp if it is one
-	// TODO Check if score is a highscore in the end of game_timer_handler
+	//creating a new Score
 	Score_t endgame;
 	endgame.score = (self->frames / 60);
 
@@ -587,10 +592,11 @@ static int end_game_timer_handler() {
 	endgame.minute = date->minute;
 	endgame.day = date->day;
 	endgame.month = date->month;
-	endgame.year = date->year;
+	endgame.year = 2000 + date->year;
 	free(date);
 
-	//updateScores(scores, endgame);
+	if (updateScores(self->highscores, endgame) == OK)
+		writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt", self->highscores);
 
 	return OK;
 }
@@ -619,28 +625,15 @@ static int highscores_timer_handler() {
 	Score_t * scores;
 	scores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
-	Score_t helper;
-	helper.score = 30;
-
-	//updateScores(scores,helper);
-
-	//TODO: Hard coded values, clean this after
 	unsigned i;
     for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
-		draw_score(scores[i].score, 171, 230 + i * 67);
-		draw_score(scores[i].hour, 300, 230 + i * 67);
-		draw_score(scores[i].minute, 350, 230 + i * 67);
-		draw_score(scores[i].day, 420, 230 + i * 67);
-		draw_score(scores[i].month, 670, 230 + i * 67);
-		draw_score(scores[i].year, 741, 230 + i * 67);
-
-
-    	printf ("Doing it right?MAMMA MIA: %u.\n", scores[i].score);
+		draw_score(scores[i].score, SCORE_SCORE_X, SCORE_Y + i * SCORE_Y_INC);
+		draw_score(scores[i].hour, SCORE_HOUR_X, SCORE_Y + i * SCORE_Y_INC);
+		draw_score(scores[i].minute, SCORE_MINUTE_X, SCORE_Y + i * SCORE_Y_INC);
+		draw_score(scores[i].day, SCORE_DAY_X, SCORE_Y + i * SCORE_Y_INC);
+		draw_score(scores[i].month, SCORE_MONTH_X, SCORE_Y + i * SCORE_Y_INC);
+		draw_score(scores[i].year, SCORE_YEAR_X, SCORE_Y + i * SCORE_Y_INC);
     }
-
-    //writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt", scores);
-
-
 
 	// Draw mouse cross last, so it is in the top layer
 	draw_mouse_cross(get_mouse_pos());

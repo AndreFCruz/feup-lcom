@@ -24,7 +24,7 @@
 #define HEART_SIZE_Y		48
 
 #define CANNON_SIZE_X		50
-#define CANNON_SIZE_Y		64
+#define CANNON_SIZE_Y		62
 
 #define BUTTONS_X			211
 #define SINGLEP_Y			231
@@ -47,9 +47,8 @@ typedef struct {
 	Bitmap ** buildings;
 
 	Bitmap * game_background;
+	Bitmap * HS_background;
 	Bitmap * heart;
-	Bitmap * cannon_left;
-	Bitmap * cannon_right;
 
 	Bitmap * menu_background;
 	Bitmap * SP_button;

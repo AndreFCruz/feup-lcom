@@ -37,10 +37,8 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->ground_explosion; // TODO
 	ptr->buildings = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
 
-	ptr->cannon_left = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Cannons_Missiles/laser_1.bmp");
-	ptr->cannon_right = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/Cannons_Missiles/laser_2.bmp");
-
 	ptr->game_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
+	ptr->HS_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/HSbackground.bmp");
 	ptr->heart = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/8_bit_heart.bmp");
 
 	ptr->menu_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");

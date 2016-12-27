@@ -9,6 +9,15 @@ typedef struct {
 	unsigned long year;
 } Date_t;
 
+/*
+ * @brief Parses a hexadecimal representation of a value to its BCD value
+ *
+ * @brief Value to be parsed
+ *
+ * @return Value parsed
+ */
+unsigned parserBCD (int value);
+
  /**
   * @brief Subscribes and enables RTC interrupts
   *

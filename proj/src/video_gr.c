@@ -107,7 +107,7 @@ int vg_exit() {
 
 //Added Functions
 int draw_line (unsigned short xi, unsigned short yi,
-		           unsigned short xf, unsigned short yf, unsigned long color) {
+		           unsigned short xf, unsigned short yf, uint16_t color) {
 
 
 	if ( OK != is_valid_pos(xi, yi) || OK != is_valid_pos(xf, yf) ) {
@@ -202,7 +202,7 @@ int draw_square (unsigned short x, unsigned short y, unsigned short size, uint16
 	return OK;
 }
 
-int draw_mouse_cross (const int * pos) {
+int draw_mouse_cross (const int * pos, uint16_t color) {
 
 	if ( OK != is_valid_pos(pos[0], pos[1]) ) {
 		printf("Invalid Position for Draw Mouse.\n");
@@ -211,36 +211,36 @@ int draw_mouse_cross (const int * pos) {
 
 	//Drawing the horizontal line of the cross
 	if (pos[0]-10 < 0) {
-		draw_line(0,pos[1]-1,pos[0]+10,pos[1]-1,0);
-		draw_line(0,pos[1],pos[0]+10,pos[1],0);
-		draw_line(0,pos[1]+1,pos[0]+10,pos[1]+1,0);
+		draw_line(0, pos[1]-1, pos[0]+10, pos[1]-1, color);
+		draw_line(0, pos[1], pos[0]+10, pos[1], color);
+		draw_line(0, pos[1]+1, pos[0]+10, pos[1]+1, color);
 	}
 	else if (pos[0]+10 > h_res) {
-		draw_line(pos[0]-10,pos[1]-1,h_res-1,pos[1]-1,0);
-		draw_line(pos[0]-10,pos[1],h_res-1,pos[1],0);
-		draw_line(pos[0]-10,pos[1]+1,h_res-1,pos[1]+1,0);
+		draw_line(pos[0]-10, pos[1]-1, h_res-1, pos[1]-1, color);
+		draw_line(pos[0]-10, pos[1], h_res-1, pos[1], color);
+		draw_line(pos[0]-10, pos[1]+1, h_res-1, pos[1]+1, color);
 	}
 	else {
-		draw_line(pos[0]-10,pos[1]-1,pos[0]+10,pos[1]-1,0);
-		draw_line(pos[0]-10,pos[1],pos[0]+10,pos[1],0);
-		draw_line(pos[0]-10,pos[1]+1,pos[0]+10,pos[1]+1,0);
+		draw_line(pos[0]-10, pos[1]-1, pos[0]+10, pos[1]-1, color);
+		draw_line(pos[0]-10, pos[1], pos[0]+10, pos[1], color);
+		draw_line(pos[0]-10, pos[1]+1, pos[0]+10, pos[1]+1, color);
 	}
 
 	//Drawing the vertical line of the cross
 	if (pos[1]-10 < 0) {
-		draw_line(pos[0]-1,0,pos[0]-1,pos[1]+10,0);
-		draw_line(pos[0],0,pos[0],pos[1]+10,0);
-		draw_line(pos[0]+1,0,pos[0]+1,pos[1]+10,0);
+		draw_line(pos[0]-1, 0, pos[0]-1, pos[1]+10, color);
+		draw_line(pos[0], 0, pos[0], pos[1]+10, color);
+		draw_line(pos[0]+1, 0, pos[0]+1, pos[1]+10, color);
 	}
 	else if (pos[1]+10 > v_res) {
-		draw_line(pos[0]-1,pos[1]-10,pos[0]-1,v_res-1,0);
-		draw_line(pos[0],pos[1]-10,pos[0],v_res-1,0);
-		draw_line(pos[0]+1,pos[1]-10,pos[0]+1,v_res-1,0);
+		draw_line(pos[0]-1, pos[1]-10, pos[0]-1, v_res-1, color);
+		draw_line(pos[0], pos[1]-10, pos[0], v_res-1, color);
+		draw_line(pos[0]+1, pos[1]-10, pos[0]+1, v_res-1, color);
 	}
 	else {
-		draw_line(pos[0]-1,pos[1]-10,pos[0]-1,pos[1]+10,0);
-		draw_line(pos[0],pos[1]-10,pos[0],pos[1]+10,0);
-		draw_line(pos[0]+1,pos[1]-10,pos[0]+1,pos[1]+10,0);
+		draw_line(pos[0]-1, pos[1]-10, pos[0]-1, pos[1]+10, color);
+		draw_line(pos[0], pos[1]-10, pos[0], pos[1]+10, color);
+		draw_line(pos[0]+1, pos[1]-10, pos[0]+1, pos[1]+10, color);
 	}
 
 	return OK;
@@ -271,7 +271,7 @@ void draw_score(unsigned num, unsigned posX, unsigned posY) {
 	draw_number(num, BMPsHolder()->numbers, NUMBER_SIZE_X, posX, posY);
 }
 
-// TODO Currently big_numbers' bmps aren't being loaded
+// TODO Check big_numbers' bmps
 void draw_score_big(unsigned num, unsigned posX, unsigned posY) {
 	draw_number(num, BMPsHolder()->big_numbers, BIG_NUMBER_SIZE_X, posX, posY);
 }

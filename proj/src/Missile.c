@@ -188,7 +188,7 @@ Explosion * new_explosion(const int * position) {
 	self->no_bmps = 16;
 	self->radius = 28;
 
-	self->bmps = (Bitmap **) BMPsHolder()->explosion;
+	self->bmps = BMPsHolder()->explosion;
 
 	return self;
 }
@@ -197,10 +197,11 @@ void delete_explosion(Explosion * e_ptr) {
 	free(e_ptr);
 }
 
-int explosion_update(Explosion * e_ptr) { // TODO Check!
+int explosion_update(Explosion * e_ptr) {
 	if (++(e_ptr->frame_count) > e_ptr->frames_per_bmp) {
 		e_ptr->frame_count = 0;
 		--(e_ptr->radius);	// Update radius (!)
+							// Radius diminishes roughly proportionally to the increase of bmp idx
 		if (++(e_ptr->curr_bmp_index) >= e_ptr->no_bmps) {
 			return 1; // return 1 indicates the animation finished, e_ptr should be deleted
 		}

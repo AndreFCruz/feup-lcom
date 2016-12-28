@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Highscores.h"
-#include "GVector.h"
 
 Score_t * loadScores(const char* filename) {
     //Score_t scores[HIGHSCORE_NUMBER];
@@ -58,6 +57,7 @@ int writeScores(const char* filename, Score_t * scores) {
     	fprintf(filePtr, "%u, %u:%u %u/%u/%u\n", scores[i].score, scores[i].hour,
     			scores[i].minute, scores[i].day, scores[i].month, scores[i].year);
     }
+    fclose(filePtr);
 }
 
 int updateScores(Score_t* scores, Score_t newscore) {

@@ -43,7 +43,7 @@ typedef struct {
 	Bitmap ** numbers;
 	Bitmap ** big_numbers;
 	Bitmap ** explosion;
-	Bitmap ** ground_explosion; // TODO
+	//Bitmap ** ground_explosion; // TODO
 	Bitmap ** buildings;
 
 	Bitmap * game_background;
@@ -54,7 +54,6 @@ typedef struct {
 	Bitmap * SP_button;
 	Bitmap * MP_button;
 	Bitmap * HS_button;
-	Bitmap * mouse_pointer;
 } BMPsHolder_t;
 
 BMPsHolder_t * BMPsHolder();

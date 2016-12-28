@@ -34,7 +34,7 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/", 10);
 	ptr->big_numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big", 10);
 	ptr->explosion = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/", NUM_EXPLOSION_BMPS);
-	ptr->ground_explosion; // TODO
+	//ptr->ground_explosion; // TODO
 	ptr->buildings = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
 
 	ptr->game_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
@@ -45,7 +45,6 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->SP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
 	ptr->MP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
 	ptr->HS_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
-	ptr->mouse_pointer = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/mouse_pointer.bmp");
 
 	printf("New BMPsHolder Instance\n");
 

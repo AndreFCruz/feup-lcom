@@ -122,7 +122,8 @@ static Game_t * new_game() {
 	Game->buildings_size_y[1] = BUILDING1_SIZE_Y;
 	Game->buildings_size_y[2] = BUILDING2_SIZE_Y;
 
-	Game->highscores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
+	Game->highscores = loadScores(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
 	printf("Game Instance was successfully created\n");
 
@@ -175,14 +176,14 @@ int timer_handler() {
 
 	switch (game_state) {
 	case MENU:
-		if ( OK != menu_timer_handler(&game_state) ) {
+		if ( OK != menu_timer_handler(&game_state)) {
 			delete_bmps_holder();
 			delete_menu();
 			return 1;
 		}
 		break;
 	case GAME_SINGLE:
-		if ( OK != game_timer_handler() ) {
+		if ( OK != game_timer_handler()) {
 			game_state = END_GAME_ANIMATION;
 		}
 		break;
@@ -191,13 +192,13 @@ int timer_handler() {
 		game_state = MENU;
 		break;
 	case END_GAME_ANIMATION:
-		if ( OK != end_game_timer_handler() ) {
+		if ( OK != end_game_timer_handler()) {
 			delete_game();
 			game_state = MENU;
 		}
 		break;
-	case HIGH_SCORES: // TODO
-		if ( OK != highscores_timer_handler() ) {
+	case HIGH_SCORES:
+		if ( OK != highscores_timer_handler()) {
 			game_state = MENU;
 		}
 		break;
@@ -299,9 +300,8 @@ static int menu_timer_handler(game_state_t * game_state) {
 		printf("Menu Button Selection Went Out of Range! Was %x.\n", selected);
 	}
 
-	// Draw Mouse Pointer
-	printf("MPtr bitmap ptr : %x\n", BMPsHolder()->mouse_pointer);
-	drawBitmap(vg_getBufferPtr(), BMPsHolder()->mouse_pointer, get_mouse_pos()[0], get_mouse_pos()[1], ALIGN_LEFT);
+	// Draw mouse cross last, so it is in the top layer
+	draw_mouse_cross(get_mouse_pos(), WHITE);
 
 	return OK;
 }
@@ -510,13 +510,14 @@ static int game_timer_handler() {
 	}
 
 	// Draw mouse cross last, so it is in the top layer
-	draw_mouse_cross(get_mouse_pos());
+	draw_mouse_cross(get_mouse_pos(), WHITE);
 
 	if (0 == health_points) { // Everything Explodes in the End x)
 
 		// Delete Enemy Missiles
-		while ( 0 != gvector_get_size(self->e_missiles) ) {
-			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles, 0);
+		while (0 != gvector_get_size(self->e_missiles)) {
+			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles,
+					0);
 			gvector_erase(self->e_missiles, 0);
 
 			Explosion * tmp = delete_missile(missile_ptr);
@@ -524,8 +525,9 @@ static int game_timer_handler() {
 		}
 
 		// Delete Friendly Missiles
-		while ( 0 != gvector_get_size(self->f_missiles) ) {
-			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles, 0);
+		while (0 != gvector_get_size(self->f_missiles)) {
+			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles,
+					0);
 			gvector_erase(self->f_missiles, 0);
 
 			Explosion * tmp = delete_missile(missile_ptr);
@@ -577,8 +579,9 @@ static int end_game_timer_handler() {
 
 	++count;
 	// Draw Blinking Score -- Center of Screen
-	if ( (count / 60) % 2 ) // TODO Draw Score Big
-		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2, vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
+	if ((count / 60) % 2) // TODO Draw Score Big
+		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
+				vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
 
 	// TODO show "highscore" bmp if it is one
 	//creating a new Score
@@ -595,18 +598,25 @@ static int end_game_timer_handler() {
 	free(date);
 
 	if (updateScores(self->highscores, endgame) == OK)
-		writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt", self->highscores);
+		writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt",
+				self->highscores);
 
 	return OK;
 }
 
-//TODO draw bmp equal to menu, but without the buttons and the title, for the highscores
 static int highscores_timer_handler() {
+	static Score_t * scores = NULL;
+
+	// Fetch Highscores if not loaded
+	if (NULL == scores)
+		scores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
 	/** Handle Keyboard Input **/
 	switch (input_get_key()) {
 	case ESC_BREAK:
 		printf("ESC BREAK_CODE DETECTED: 0x%X\n", ESC_BREAK);
+		free(scores);
+		scores = NULL;
 		return 1;
 		break;
 	default:
@@ -614,28 +624,28 @@ static int highscores_timer_handler() {
 	}
 
 	//Checking if Exit Button clicked
-    if (mouse_inside_circle(EXIT_X, EXIT_Y, EXIT_RADIUS) && get_mouseRMB())
-    		return 1;
+	if (mouse_inside_circle(EXIT_X, EXIT_Y, EXIT_RADIUS) && get_mouseRMB()) {
+		free(scores);
+		scores = NULL;
+		return 1;
+	}
 
 	// Draw Background
-	drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_background, 0, 0, ALIGN_LEFT);
-
-	// Fetch and Draw Highscores
-	Score_t * scores;
-	scores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_background, 0, 0,
+			ALIGN_LEFT);
 
 	unsigned i;
-    for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
+	for (i = 0; i < HIGHSCORE_NUMBER; ++i) {
 		draw_score(scores[i].score, SCORE_SCORE_X, SCORE_Y + i * SCORE_Y_INC);
 		draw_score(scores[i].hour, SCORE_HOUR_X, SCORE_Y + i * SCORE_Y_INC);
 		draw_score(scores[i].minute, SCORE_MINUTE_X, SCORE_Y + i * SCORE_Y_INC);
 		draw_score(scores[i].day, SCORE_DAY_X, SCORE_Y + i * SCORE_Y_INC);
 		draw_score(scores[i].month, SCORE_MONTH_X, SCORE_Y + i * SCORE_Y_INC);
 		draw_score(scores[i].year, SCORE_YEAR_X, SCORE_Y + i * SCORE_Y_INC);
-    }
+	}
 
 	// Draw mouse cross last, so it is in the top layer
-	draw_mouse_cross(get_mouse_pos());
+	draw_mouse_cross(get_mouse_pos(), WHITE);
 
 	return OK;
 }

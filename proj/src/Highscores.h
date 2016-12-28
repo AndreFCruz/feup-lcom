@@ -1,6 +1,9 @@
 #ifndef __HIGHSCORES_H
 #define __HIGHSCORES_H
 
+#define OK						0
+#define HIGHSCORE_NUMBER		5	//Number of highest scores saved
+
 typedef struct {
 	unsigned score;
 	unsigned long minute;
@@ -10,13 +13,12 @@ typedef struct {
 	unsigned long year;
 } Score_t;
 
-Score_t * loadScore(const char* filename);
+
+Score_t * loadScores(const char* filename);
 
 int writeScores(const char* filename, Score_t * scores);
 
 int updateScores(Score_t* scores, Score_t newscore);
 
-#define OK		0
-#define HIGHSCORE_NUMBER		5	//Number of highest scores saved
 
 #endif

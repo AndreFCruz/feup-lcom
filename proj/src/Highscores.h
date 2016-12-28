@@ -2,7 +2,7 @@
 #define __HIGHSCORES_H
 
 #define OK						0
-#define HIGHSCORE_NUMBER		5	//Number of highest scores saved
+#define HIGHSCORE_NUMBER		5	//Number of high scores saved
 
 typedef struct {
 	unsigned score;

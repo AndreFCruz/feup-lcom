@@ -39,6 +39,9 @@
 #define MOUSE_SIZE_X		32
 #define MOUSE_SIZE_Y		32
 
+#define HIGHSCORE_SIZE_X	410
+#define HIGHSCORE_SIZE_Y	50
+
 typedef struct {
 	Bitmap ** numbers;
 	Bitmap ** big_numbers;
@@ -54,6 +57,7 @@ typedef struct {
 	Bitmap * SP_button;
 	Bitmap * MP_button;
 	Bitmap * HS_button;
+	Bitmap * highscore_text;
 } BMPsHolder_t;
 
 BMPsHolder_t * BMPsHolder();

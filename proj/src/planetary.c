@@ -12,7 +12,7 @@
 
 static int menu_timer_handler();
 static int game_timer_handler();
-static int end_game_timer_handler();
+static int end_game_timer_handler(int highscore_flag);
 static int highscores_timer_handler();
 
 /**
@@ -173,6 +173,9 @@ unsigned long next_spawn_frame() {	// 500 / (1 + frames / 512)
 
 int timer_handler() {
 	static game_state_t game_state = MENU;
+	static int highscore_flag = 0;
+
+	int ret;
 
 	switch (game_state) {
 	case MENU:
@@ -183,8 +186,15 @@ int timer_handler() {
 		}
 		break;
 	case GAME_SINGLE:
-		if ( OK != game_timer_handler()) {
+		ret = game_timer_handler();
+		if (OK != ret) {
 			game_state = END_GAME_ANIMATION;
+			printf("\tEND OF GAME -- \n");
+			if (2 == ret) // highscore
+			{
+				highscore_flag = 1;
+				printf("\t\tHIGHSCORE DETECTED!!\n");
+			}
 		}
 		break;
 	case GAME_MULTI: // TODO
@@ -192,9 +202,10 @@ int timer_handler() {
 		game_state = MENU;
 		break;
 	case END_GAME_ANIMATION:
-		if ( OK != end_game_timer_handler()) {
+		if ( OK != end_game_timer_handler(highscore_flag)) {
 			delete_game();
 			game_state = MENU;
+			highscore_flag = 0;
 		}
 		break;
 	case HIGH_SCORES:
@@ -534,6 +545,29 @@ static int game_timer_handler() {
 			gvector_push_back(self->explosions, &tmp);
 		}
 
+
+		/* Update Scores */
+		//creating a new Score
+		Score_t endgame;
+		endgame.score = (self->frames / 60);
+
+		//Assembling Date and Hour
+		Date_t * date = rtc_read_date();
+		endgame.hour = date->hour;
+		endgame.minute = date->minute;
+		endgame.day = date->day;
+		endgame.month = date->month;
+		endgame.year = 2000 + date->year;
+		free(date);
+
+		if (updateScores(self->highscores, endgame)) {
+			writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt",
+					self->highscores);
+			printf("END_OF_GAME->HIGHSCORE\n");
+			return 2; // return highscore flag
+		}
+
+
 		return 1;
 	}
 
@@ -541,7 +575,7 @@ static int game_timer_handler() {
 }
 
 // Handles Timer Interrupts in the End of Game Animation State
-static int end_game_timer_handler() {
+static int end_game_timer_handler(int highscore_flag) {
 	static unsigned count = 0;	// For blinking animation
 
 	Game_t * self = game_instance();
@@ -565,6 +599,13 @@ static int end_game_timer_handler() {
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
 			ALIGN_LEFT);
 
+	// Draw Highscore Text ?
+	if (highscore_flag) {
+		printf("HIGHSCORE ANIMATION! %d\n", self->frames / 60);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->highscore_text,
+				vg_getHorRes() / 2, 100, ALIGN_CENTER);
+	}
+
 	// Draw and Update Explosions
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
 		Explosion * current = *(Explosion **) gvector_at(self->explosions, idx);
@@ -579,27 +620,9 @@ static int end_game_timer_handler() {
 
 	++count;
 	// Draw Blinking Score -- Center of Screen
-	if ((count / 60) % 2) // TODO Draw Score Big
+	if ((count / 60) % 2)
 		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
 				vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
-
-	// TODO show "highscore" bmp if it is one
-	//creating a new Score
-	Score_t endgame;
-	endgame.score = (self->frames / 60);
-
-	//Assembling Date and Hour
-	Date_t * date = rtc_read_date();
-	endgame.hour = date->hour;
-	endgame.minute = date->minute;
-	endgame.day = date->day;
-	endgame.month = date->month;
-	endgame.year = 2000 + date->year;
-	free(date);
-
-	if (updateScores(self->highscores, endgame) == OK)
-		writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt",
-				self->highscores);
 
 	return OK;
 }
@@ -609,7 +632,8 @@ static int highscores_timer_handler() {
 
 	// Fetch Highscores if not loaded
 	if (NULL == scores)
-		scores = loadScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
+		scores = loadScores(
+				"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
 
 	/** Handle Keyboard Input **/
 	switch (input_get_key()) {

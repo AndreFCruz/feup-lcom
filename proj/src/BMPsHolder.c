@@ -45,6 +45,7 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->SP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
 	ptr->MP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
 	ptr->HS_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
+	ptr->highscore_text = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/highscore_text.bmp");
 
 	printf("New BMPsHolder Instance\n");
 

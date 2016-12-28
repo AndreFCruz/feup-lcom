@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "Missile.h"
 
- /* RGB Color Defnitions */
+/* RGB Color Defnitions */
 #define BLACK 			rgb(0,0,0)
 #define WHITE			rgb(255,255,255)
 #define TRANSPARENCY	rgb(0,255,0)
@@ -44,7 +44,7 @@ void paint_pixel(int x, int y, uint16_t color);
  */
 int vg_init(unsigned short mode);
 
- /**
+/**
  * @brief Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors)
  * 
  * @return 0 upon success, non-zero upon failure
@@ -55,24 +55,30 @@ int vg_exit(void);
 unsigned get_Xres();
 unsigned get_Yres();
 
-int draw_line(unsigned short xi, unsigned short yi,
-		unsigned short xf, unsigned short yf, uint16_t color);
-int draw_circle(unsigned short center_x, unsigned short center_y, unsigned short radius, uint16_t color);
-int draw_square(unsigned short x, unsigned short y, unsigned short size, uint16_t color);
-//int draw_xpm (char * ptr, unsigned short xi, unsigned short yi, char *xpm[]);
+int draw_line(unsigned short xi, unsigned short yi, unsigned short xf,
+		unsigned short yf, uint16_t color);
+
+int draw_circle(unsigned short center_x, unsigned short center_y,
+		unsigned short radius, uint16_t color);
+
+int draw_square(unsigned short x, unsigned short y, unsigned short size,
+		uint16_t color);
 
 int draw_mouse_cross(const int * mouse_pos, uint16_t color);
+
 void draw_missile(Missile * ptr);
+
 void draw_number(unsigned num, unsigned posX, unsigned posY);
+
 void draw_score(unsigned num, unsigned posX, unsigned posY);
+
 void draw_score_big(unsigned num, unsigned posX, unsigned posY);
 
-uint16_t rgb(unsigned char red_value, unsigned char green_value, unsigned char blue_value);
+uint16_t rgb(unsigned char red_value, unsigned char green_value,
+		unsigned char blue_value);
 
 int buffer_handler();
 
+/** @} end of video_gr */
 
-
- /** @} end of video_gr */
- 
 #endif /* __VIDEO_GR_H */

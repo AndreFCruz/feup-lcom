@@ -156,7 +156,6 @@ static void delete_game() {
 		}
 		delete_gvector(game_ptr->explosions);
 
-		free(highscores);
 		free(game_ptr);
 		game_ptr = NULL;
 

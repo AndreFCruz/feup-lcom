@@ -19,11 +19,15 @@ service planetary_defense
                 40:4
                 60
                 64
-                70:2      
+                70:2
+                2f8:8     # COM2
+                3f8:8     # COM1
                 ;               
         irq
                 0         # TIMER 0 IRQ
                 1         # KBD IRQ 
+                3         # COM2 IRQ
+                4         # COM1 IRQ
                 8         # RTC
                 12        # AUX/MOUSE IRQ
                 ;       

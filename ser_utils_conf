@@ -1,0 +1,36 @@
+service serial_port_utility
+{
+        system
+                UMAP
+                INT86
+                PRIVCTL
+                READBIOS
+                DEVIO
+                IRQCTL
+                ;
+        ipc
+                SYSTEM
+                rs
+                vm
+                pm
+                vfs
+                ;
+        io
+                40:4
+                60
+                64
+                70:2
+                2f8:8     # COM2
+                3f8:8     # COM1
+                ;               
+        irq
+                0         # TIMER 0 IRQ
+                1         # KBD IRQ 
+                3         # COM2 IRQ
+                4         # COM1 IRQ
+                8         # RTC
+                12        # AUX/MOUSE IRQ
+                ;       
+        uid     0               
+                ;	
+};

@@ -4,13 +4,6 @@
 
 static int rtc_hook_id = RTC_INITIAL_HOOK_ID;
 
-unsigned parserBCD (int value) {
-	if (value > 10) {
-		return (((value >> 4) * 10) + (value & 0x0F));	// 1st Algarism + 10 * 2nd Algarism
-	}
-	else return value;
-}
-
 int rtc_subscribe_int(void)
 {
 	if ( sys_irqsetpolicy (RTC_IRQ, IRQ_REENABLE, & rtc_hook_id) != OK ) {
@@ -37,23 +30,6 @@ int rtc_unsubscribe_int()
 	}
 
 	return OK;
-}
-
-int rtc_read_register(int reg)
-{
-	unsigned long value;	//return value of function - value in the register reg
-
-	if (sys_outb(RTC_ADDR_REG, reg) != OK) {
-		printf ("rtc_read_register -> Failed sys_outb().\n");
-		return -1;
-	}
-
-	if (sys_inb(RTC_DATA_REG,  &value) != OK) {
-		printf ("rtc_read_register -> Failed sys_intb().\n");
-		return -1;
-	}
-
-	return value;
 }
 
 int rtc_write_register(unsigned long reg, unsigned long value)
@@ -121,15 +97,3 @@ Date_t * rtc_read_date(void)
 	return date;
 }
 
-// Slide Code mby adapt? enable e disable e ativar e desativar as outras interrupções
-//TODO: A chamada e feita depois de dar disabLE? ativar qd quero saber e dps ta a andar... ver as cenas do disable e do enable,
-//pode ser isso o responsavel pelos valores estranhos
-//void wait_valid_rtc(void) {
-//	unsigned long regA = 0;
-//	do {
-//			disable();
-//			sys_outb(RTC_ADDR_REG, RTC_REG_A);
-//			sys_inb(RTC_DATA_REG, &regA);
-//			enable();
-//	} while ( regA & RTC_UIP);
-//}

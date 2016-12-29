@@ -127,7 +127,7 @@ void drawBitmap(char * ptr, Bitmap* bmp, int x, int y, Alignment alignment) {
         		imgStartPos = (uint16_t*) bmp-> bitmapData + xCorrection ;
         		imgStartPos += i * width + j;
 
-        		memcpy(bufferStartPos + j, imgStartPos,sizeof(uint16_t) );
+        		memcpy(bufferStartPos + j, imgStartPos, sizeof(uint16_t));
         	}
         }
     }

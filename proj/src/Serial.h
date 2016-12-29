@@ -6,6 +6,14 @@
 #define BIT(n) (0x01<<(n))
 #define OK		0
 
+#define COM1_IRQ 4
+#define COM2_IRQ 3
+
+#define COM1_PORT 0x3F8
+#define COM2_PORT 0x2F8
+
+#define SERIAL_INITIAL_HOOK_ID	4
+
 /* UART Acessible (8-bit) Registers */
 
 #define RBR		0	/**< @brief Receiver Buffer Register - Read */

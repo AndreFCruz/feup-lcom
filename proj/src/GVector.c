@@ -53,9 +53,9 @@ void delete_gvector(GVector * self) {
 }
 
 unsigned gvector_get_size(GVector * self) {
-#if DEBUG
-	printf("\tGVector SIZE called/finished: %d\n", self->size);
-#endif
+// #if DEBUG
+// 	printf("\tGVector SIZE called/finished: %lu\n", self->size);
+// #endif
 
     return self->size;
 }
@@ -63,7 +63,7 @@ unsigned gvector_get_size(GVector * self) {
 // Private Method
 static void gvector_check_capacity(GVector * self) {
 #if DEBUG
-	printf("GVector CHECK CAPACITY called\n");
+    printf("GVector CHECK CAPACITY called\n");
 #endif
 
     if ( (self->capacity - self->size) > self->increments ) {
@@ -81,9 +81,10 @@ static void gvector_check_capacity(GVector * self) {
     }
 
 #if DEBUG
-	printf("\tGVector CHECK CAPACITY finished\n");
+    printf("\tGVector CHECK CAPACITY finished\n");
 #endif
 }
+
 
 // Returns void pointer, result must be cast to proper type
 void * gvector_at(GVector * self, unsigned index) {

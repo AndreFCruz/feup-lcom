@@ -30,7 +30,7 @@
 #define OUT_BUF         0x60 /**< @brief KBC Output buffer register */
 #define STAT_REG        0x64 /**< @brief KBC Status register */
 #define KBC_CMD_REG     0x64 /**< @brief KBC Command register */
-#define KBD_IN_BUF      0x60 /**< @brief KBD Input buffer register */
+#define KBC_IN_BUF      0x60 /**< @brief KBD Input buffer register */
 
 /* KBC Status Register BITs' Meaning*/
 
@@ -57,11 +57,6 @@
 #define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
 #define IN_ACK			0xFA /**< @brief Success*/
 
-///* LED's useful macros*/
-//#define LED_TOGGLE_CMD	0xED /**< @brief Toggle Led Command */
-//#define CAPS_LOCK			0x02
-//#define NUM_LOCK			0X01
-//#define SCROLL_LOCK		0x00
 
 #define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
 

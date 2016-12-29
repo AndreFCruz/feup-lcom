@@ -1,4 +1,5 @@
 #include "Serial.h"
+#include <minix/syslib.h>
 
 static int serial_hook_id = SERIAL_INITIAL_HOOK_ID;
 

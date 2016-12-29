@@ -84,4 +84,28 @@
 #define FIFO_EN		BIT(0)	/**< @brief Enable both FIFO's */
 
 
+/** @defgroup Serial Port
+ * @{
+ *
+ * Functions for using the Serial Port
+ */
+
+
+ /**
+  * @brief Subscribes and enables Serial Port interrupts
+  *
+  * @return Returns bit order in interrupt mask; negative value on failure
+  */
+int serial_subscribe_int(void);
+
+/**
+ * @brief Unsubscribes Serial Port interrupts
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int serial_unsubscribe_int(void);
+
+/**@}*/
+
+
 #endif

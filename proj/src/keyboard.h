@@ -57,5 +57,6 @@
   */
  int wait_esc_release(void);
 
+ /**@}*/
 
 #endif

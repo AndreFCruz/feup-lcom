@@ -8,10 +8,10 @@
 .text
 _parserBCD:
 	xor 	%eax, %eax
-	pushl	%ebp
-	movl	%esp, %ebp	# copy stack pointer
+	pushl	%ebp			# prologue
+	movl	%esp, %ebp		#
 	cmpl	$10, 8(%ebp)	# arg > 10 ?
-	jle		BCDready	# arg < 10, already in BCD
+	jle		BCDready		# arg < 10 -> already in BCD
 	movl	8(%ebp), %eax
 	movl	%eax, %edx
 	sarl	$4, %edx
@@ -32,26 +32,26 @@ BCDend:
 
 _rtc_read_register:
 	xor		%eax, %eax
-	pushl	%ebp		# save ebp
+	pushl	%ebp			# save ebp
 	movl	%esp, %ebp
-	subl	$40, %esp
+	subl	$40, %esp		# reserve space
 	movl	8(%ebp), %eax
-	movl	$16, 8(%esp)
+	movl	$0x10, 8(%esp)
 	movl	%eax, 4(%esp)
 	movl	$RTC_ADDR_REG, (%esp)
-	call	_sys_out
-	testl	%eax, %eax
-	jz		OK1		# sys_out returned OK
+	call	_sys_out		# call sys_out
+	testl	%eax, %eax		# return is in eax
+	jz		OK1				# sys_out returned OK
 	movl	$-1, %eax
 	jmp		read_end
 OK1:
-	movl	$16, 8(%esp)
-	leal	-12(%ebp), %eax
+	movl	$0x10, 8(%esp)
+	leal	-12(%ebp), %eax	# load address to eax
 	movl	%eax, 4(%esp)
 	movl	$RTC_DATA_REG, (%esp)
 	call	_sys_in
 	testl	%eax, %eax
-	jz		OK2			# sys_in returned  OK
+	jz		OK2				# sys_in returned  OK
 	movl	$-1, %eax
 	jmp		read_end
 OK2:

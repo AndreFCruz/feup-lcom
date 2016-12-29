@@ -76,7 +76,7 @@ int keyboard_write(char data)		//Writes Data to the Keyboard Input Buffer
 		}
 		/* loop while 8042 input buffer is full */
 		if ( (stat & STAT_IBF) == 0 ) {
-			if ( sys_outb (KBD_IN_BUF, data) != OK ) {
+			if ( sys_outb (KBC_IN_BUF, data) != OK ) {
 				printf ("keyboard_write() -> FAILED sys_outb()\n");
            		return 1; 	//Failure
 		}

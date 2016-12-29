@@ -36,9 +36,6 @@
 #define EXIT_Y				566
 #define EXIT_RADIUS			17
 
-#define MOUSE_SIZE_X		32
-#define MOUSE_SIZE_Y		32
-
 #define HIGHSCORE_SIZE_X	410
 #define HIGHSCORE_SIZE_Y	50
 

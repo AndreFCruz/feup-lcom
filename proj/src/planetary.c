@@ -601,7 +601,6 @@ static int end_game_timer_handler(int highscore_flag) {
 
 	// Draw Highscore Text ?
 	if (highscore_flag) {
-		printf("HIGHSCORE ANIMATION! %d\n", self->frames / 60);
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->highscore_text,
 				vg_getHorRes() / 2, 100, ALIGN_CENTER);
 	}

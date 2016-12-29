@@ -70,13 +70,22 @@ typedef struct {
 } Date_t;
 
 /*
- * @brief Parses a hexadecimal representation of a value to its BCD value
+ * @brief (From Assembly) function to parse a base 2 value to BCD
  *
  * @brief Value to be parsed
  *
- * @return Value parsed
+ * @return Value in BCD
  */
-unsigned parserBCD (int value);
+extern int parserBCD(int value);
+
+/**
+ * @brief (From Assembly) Reads Value from register reg
+ *
+ * @param Register that will be read
+ *
+ * @return Returns bit order in interrupt mask; negative value on failure
+ */
+extern int rtc_read_register(int reg);
 
  /**
   * @brief Subscribes and enables RTC interrupts
@@ -91,15 +100,6 @@ unsigned parserBCD (int value);
   * @return Return 0 upon success and non-zero otherwise
   */
  int rtc_unsubscribe_int(void);
-
- /**
-  * @brief Reads Value from register reg
-  *
-  * @param Register that will be read
-  *
-  * @return Returns bit order in interrupt mask; negative value on failure
-  */
- int rtc_read_register(int reg);
 
  /**
   * @brief Writes value to register reg

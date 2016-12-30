@@ -14,12 +14,12 @@ typedef enum {
 
 struct missile_t {
 	int init_pos[2];	// Initial Position for Missile Trail
-	int pos[2];		// Current Position
+	int pos[2];			// Current Position
 
-	float velocity[2];		// Velocity, in pixels PER frame
+	float velocity[2];	// Velocity, in pixels PER frame
 	float pending_movement[2];// Movement left unperformed on the previous frame
 
-	uint16_t color;			// Color in RGB 5:6:5
+	uint16_t color;		// Color in RGB 5:6:5
 
 	/* Attributes for Friendly Missile */
 	bool isFriendly;
@@ -69,11 +69,16 @@ static Missile * new_missile(const int * init_pos, const float * vel) {
 }
 
 // Constructor for Enemy Missile
-Missile * new_emissile(const unsigned * bases_pos) {
+Missile * new_emissile(const unsigned * bases_pos, const unsigned * bases_hp) {
 	int init_pos[2] = { rand() % (vg_getHorRes() - 100) + 50, 0 };
 	unsigned base_to_attack = rand() % 3;
+
+	while (bases_hp[base_to_attack] == 0) // if dead select another
+		base_to_attack = (base_to_attack + 1) % 3;
+
+	// target random position around the base
 	float end_pos[2] = { bases_pos[base_to_attack]
-			+ (float) BUILDING_SIZE_X
+			+ 0.9 * BUILDING_SIZE_X
 					/ (rand() % 2 ? rand() % 9 - 10 : rand() % 9 + 2),
 			vg_getVerRes() };
 

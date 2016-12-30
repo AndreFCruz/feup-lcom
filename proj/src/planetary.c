@@ -356,7 +356,7 @@ static int game_timer_handler() {
 	if (self->frames == self->enemy_spawn_fr) {
 		self->enemy_spawn_fr = next_spawn_frame();
 		printf("Spawning New Enemy Missile\n");
-		Missile * new_enemy = new_emissile(self->bases_pos);
+		Missile * new_enemy = new_emissile(self->bases_pos, self->bases_hp);
 		gvector_push_back(self->e_missiles, &new_enemy);
 	}
 
@@ -523,7 +523,7 @@ static int game_timer_handler() {
 	}
 
 	// Draw mouse cross last, so it is in the top layer
-	draw_mouse_cross(get_mouse_pos(), WHITE);
+	draw_mouse_cross(get_mouse_pos(), BLACK);
 
 	if (0 == health_points) { // Everything Explodes in the End x)
 

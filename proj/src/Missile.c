@@ -8,18 +8,25 @@
 /**
  * Structs
  */
+
+/**
+ * boolean type
+ */
 typedef enum {
 	TRUE, FALSE
 } bool;
 
+/**
+ * Structure used to define a missile. Common to friendly and enemy missiles.
+ */
 struct missile_t {
-	int init_pos[2];	// Initial Position for Missile Trail
-	int pos[2];			// Current Position
+	int init_pos[2]; ///> Initial Position for Missile Trail
+	int pos[2];	///> Current Position
 
-	float velocity[2];	// Velocity, in pixels PER frame
-	float pending_movement[2];// Movement left unperformed on the previous frame
+	float velocity[2]; ///> Velocity, in pixels PER frame
+	float pending_movement[2]; ///> Movement left unperformed on the previous frame
 
-	uint16_t color;		// Color in RGB 5:6:5
+	uint16_t color; ///> Color in RGB 5:6:5
 
 	/* Attributes for Friendly Missile */
 	bool isFriendly;
@@ -27,13 +34,16 @@ struct missile_t {
 
 };
 
+/**
+ * Structure used to define explosions
+ */
 struct explosion_t {
-	int pos[2];
-	int radius;
+	int pos[2]; ///> Center position of Explosion (x,y)
+	int radius; ///> Radius of Explosion
 
-	Bitmap ** bmps;
-	unsigned curr_bmp_index;
-	unsigned no_bmps;
+	Bitmap ** bmps; ///> Explosion Animation
+	unsigned curr_bmp_index; ///> current bitmap being displayed
+	unsigned no_bmps; ///> Explosion ended
 	unsigned frame_count;
 	unsigned frames_per_bmp;
 };
@@ -42,7 +52,9 @@ struct explosion_t {
  * END of Structs
  */
 
-// Rounds float to nearest integer
+/**
+ * Rounds float to nearest integer
+ */
 int round_float(float f) {
 	return (f > (floor(f) + 0.5)) ? ceil(f) : floor(f);
 }
@@ -51,7 +63,9 @@ int round_float(float f) {
  * Methods for Missile
  */
 
-// Constructor for Generic Missile
+/**
+ * Constructor for Generic Missile
+ */
 static Missile * new_missile(const int * init_pos, const float * vel) {
 	Missile * m_ptr = (Missile *) malloc(sizeof(Missile));
 
@@ -63,12 +77,14 @@ static Missile * new_missile(const int * init_pos, const float * vel) {
 	m_ptr->pending_movement[0] = 0.;
 	m_ptr->pending_movement[1] = 0.;
 
-	m_ptr->color = WHITE;// White, to be changed on enemy/friendly constructor
+	m_ptr->color = WHITE; // White, to be changed on enemy/friendly constructor
 
 	return m_ptr;
 }
 
-// Constructor for Enemy Missile
+/**
+ * Constructor for Enemy Missile
+ */
 Missile * new_emissile(const unsigned * bases_pos, const unsigned * bases_hp) {
 	int init_pos[2] = { rand() % (vg_getHorRes() - 100) + 50, 0 };
 	unsigned base_to_attack = rand() % 3;
@@ -103,7 +119,9 @@ Missile * new_emissile(const unsigned * bases_pos, const unsigned * bases_hp) {
 	return m_ptr;
 }
 
-// Constructor for Friendly Missile
+/**
+ * Constructor for Friendly Missile
+ */
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	float vel[2];
 	float magnitude = sqrt(

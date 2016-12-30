@@ -77,7 +77,7 @@ typedef struct {
 	GVector * f_missiles;	// Friendly Missiles
 	GVector * explosions;	// Explosions on Screen
 
-	unsigned long frames;		// FRAMES survived, frames == times * 60
+	unsigned long frames;		// FRAMES survived, frames == times * FRAME_RATE
 	unsigned long enemy_spawn_fr;	// FRAME in which an enemy should be spawned
 
 	unsigned cannon_pos[2];	// x position of the left and right cannons
@@ -507,7 +507,7 @@ static int game_timer_handler() {
 	/** **/
 
 	// Draw Score - Upper Right Corner
-	draw_score(self->frames / 60, vg_getHorRes() - 10, 10);
+	draw_score(self->frames / FRAME_RATE, vg_getHorRes() - 10, 10);
 
 	// Calculate HP -- Game ends if it's zero
 	unsigned health_points = 0;
@@ -550,7 +550,7 @@ static int game_timer_handler() {
 		/* Update Scores */
 		//creating a new Score
 		Score_t endgame;
-		endgame.score = (self->frames / 60);
+		endgame.score = (self->frames / FRAME_RATE);
 
 		//Assembling Date and Hour
 		Date_t * date = rtc_read_date();
@@ -619,8 +619,8 @@ static int end_game_timer_handler(int highscore_flag) {
 
 	++count;
 	// Draw Blinking Score -- Center of Screen
-	if ((count / 60) % 2)
-		draw_score(self->frames / 60, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
+	if ((count / FRAME_RATE) % 2)
+		draw_score(self->frames / FRAME_RATE, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
 				vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
 
 	return OK;

@@ -49,4 +49,6 @@ int writeScores(const char* filename, Score_t * scores);
  */
 int updateScores(Score_t* scores, Score_t newscore);
 
-#endif
+/**@}*/
+
+#endif /* __HIGHSCORES_H */

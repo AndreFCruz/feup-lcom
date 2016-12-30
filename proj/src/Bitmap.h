@@ -1,4 +1,5 @@
-/* A totalidade do código de "Bitmap.h" é da autoria de Henrique Ferrolho.
+/* O código de Bitmap.h/.c é predominantemente da autoria de Henrique Ferrolho.
+ * Foram feitas algumas alterações ao "Bitmap.c" para permitir bitmaps com transparência.
  * Este código foi retirado da página web: http://difusal.blogspot.pt/2014/09/minixtutorial-8-loading-bmp-images.html
  */
 

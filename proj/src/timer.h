@@ -70,4 +70,6 @@ int timer_test_square(unsigned long freq);
  */
 int timer_test_config(unsigned long timer);
 
+/**@}*/
+
 #endif /* __TIMER_H */

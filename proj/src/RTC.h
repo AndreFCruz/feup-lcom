@@ -129,4 +129,6 @@ int rtc_updating(void);
  */
 Date_t * rtc_read_date(void);
 
-#endif
+/**@}*/
+
+#endif /* __RTC_H */

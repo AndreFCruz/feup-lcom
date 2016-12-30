@@ -20,11 +20,12 @@ typedef struct explosion_t Explosion;
 /**
  * @brief Generates a new enemy missile
  *
- * @param bases_pos Array containing the position of the bases, so the missile can randomly target one
+ * @param bases_pos Array containing the bases' positions, so the missile can randomly target one
+ * @param bases_hp Array containing the bases' Health Points, to avoid dead bases
  *
  * @return Pointer to the the newly created enemy missile
  */
-Missile * new_emissile(const unsigned * bases_pos);
+Missile * new_emissile(const unsigned * bases_pos, const unsigned * bases_hp);
 
 /**
  * @brief Generates a new friendly missile

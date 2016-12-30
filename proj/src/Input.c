@@ -8,7 +8,6 @@ static Input_t * new_input() {
 
 	Input_t* Input = (Input_t*) malloc(sizeof(Input_t));
 
-
 	Input->keycode = NONE;
 
 	Input->RMB = 0;
@@ -25,22 +24,21 @@ static Input_t * new_input() {
 }
 
 Input_t * input_instance() {
-	if ( NULL == input ) {
+	if (NULL == input) {
 		input = new_input();
-	}
-	else
+	} else
 		return input;
 }
 
 // Keyboard Handler : to be called on keyboard interrupts
 void keyboard_handler() {
-	if ( (input_instance()->keycode = keyboard_read()) < 0 )
+	if ((input_instance()->keycode = keyboard_read()) < 0)
 		printf("keyboard_handler::keyboard_read() failed\n");
 }
 
 // Removes keycode from Input's buffer, compatible with double byte make/break codes
 keycode_t input_get_key() {
-	static byteE0 = 0;	// flag corresponding to whether first byte 0xE0 was received
+	static int byteE0 = 0; // flag corresponding to whether first byte 0xE0 was received
 	keycode_t tmp = input_instance()->keycode;
 	input_instance()->keycode = NONE;	// Key handled
 
@@ -100,15 +98,14 @@ void mouse_packet_handler(unsigned char * packet) {
 	Input->LMB = packet[0] & BYTE0_LB;
 	Input->MMB = packet[0] & BYTE0_MB;
 
-
 	/** Update Position **/
 	int x_value = int_value(packet[1], packet[0] & BYTE0_X_SIGN);
 	int y_value = int_value(packet[2], packet[0] & BYTE0_Y_SIGN);
 
 	// Handle Overflow
-	if ( (packet[0] & BYTE0_X_OVF) != 0 )
+	if ((packet[0] & BYTE0_X_OVF) != 0)
 		x_value += (packet[0] & BYTE0_X_SIGN ? -255 : 255);
-	if ( (packet[0] & BYTE0_Y_OVF) != 0 )
+	if ((packet[0] & BYTE0_Y_OVF) != 0)
 		y_value += (packet[0] & BYTE0_Y_SIGN ? -255 : 255);
 
 	// Flags to check whether the Border was reached
@@ -119,8 +116,7 @@ void mouse_packet_handler(unsigned char * packet) {
 	if ((Input->mouse_pos[0] + x_value) < 0) {
 		Input->mouse_pos[0] = 0;
 		validX = 0;
-	}
-	else if (Input->mouse_pos[0] + x_value >= Input->res[0]) {
+	} else if (Input->mouse_pos[0] + x_value >= Input->res[0]) {
 		Input->mouse_pos[0] = Input->res[0] - 1;
 		validX = 0;
 	}
@@ -129,31 +125,30 @@ void mouse_packet_handler(unsigned char * packet) {
 	if (Input->mouse_pos[1] - y_value < 0) {
 		Input->mouse_pos[1] = 0;
 		validY = 0;
-	}
-	else if (Input->mouse_pos[1] - y_value >= Input->res[1]) {
+	} else if (Input->mouse_pos[1] - y_value >= Input->res[1]) {
 		Input->mouse_pos[1] = Input->res[1] - 1;
 		validY = 0;
 	}
 
-
 	//Only if not at the borders, should be updated
-	if ( validX )
+	if (validX)
 		Input->mouse_pos[0] += x_value;
-	if ( validY )
+	if (validY)
 		Input->mouse_pos[1] -= y_value;
 }
 
 int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final) {
 	Input_t * Input = input_instance();
 
-	if (Input->mouse_pos[0] >= x_initial && Input->mouse_pos[0] <= x_final &&
-			Input->mouse_pos[1] >= y_initial && Input->mouse_pos[1] <= y_final)
+	if (Input->mouse_pos[0] >= x_initial && Input->mouse_pos[0] <= x_final
+			&& Input->mouse_pos[1] >= y_initial
+			&& Input->mouse_pos[1] <= y_final)
 		return 1;
 	else
 		return 0;
 }
 
-int mouse_inside_circle (int x_center, int y_center, int radius) {
+int mouse_inside_circle(int x_center, int y_center, int radius) {
 	Input_t * Input = input_instance();
 
 	int x_var = Input->mouse_pos[0] - x_center;

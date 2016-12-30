@@ -1,7 +1,13 @@
 #ifndef __RTC_H
 #define __RTC_H
 
- /* Useful Macros for the RTC */
+/** @defgroup Serial Port
+ * @{
+ *
+ * Functions for using the RTC - Real Time Clock
+ */
+
+/* Useful Macros for the RTC */
 
 #define BIT(n) (0x01<<(n))
 #define OK		0
@@ -9,7 +15,6 @@
 /* RTC Macros */
 #define RTC_IRQ					8	/**< @brief RTC IRQ line */
 #define RTC_INITIAL_HOOK_ID		8	/**< @brief RTC Initial hook_id */
-
 
 #define RTC_ADDR_REG			0x70
 #define RTC_DATA_REG			0x71
@@ -59,8 +64,6 @@
 #define AL_REGC			0x0C		/**< @brief Control Register C */
 #define AL_REGD			0x0D		/**< @brief Control Register  */
 
-
-
 typedef struct {
 	unsigned long minute;
 	unsigned long hour;
@@ -87,44 +90,43 @@ extern int parserBCD(int value);
  */
 extern int rtc_read_register(int reg);
 
- /**
-  * @brief Subscribes and enables RTC interrupts
-  *
-  * @return Returns bit order in interrupt mask; negative value on failure
-  */
- int rtc_subscribe_int(void);
+/**
+ * @brief Subscribes and enables RTC interrupts
+ *
+ * @return Returns bit order in interrupt mask; negative value on failure
+ */
+int rtc_subscribe_int(void);
 
- /**
-  * @brief Unsubscribes RTC interrupts
-  *
-  * @return Return 0 upon success and non-zero otherwise
-  */
- int rtc_unsubscribe_int(void);
+/**
+ * @brief Unsubscribes RTC interrupts
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int rtc_unsubscribe_int(void);
 
- /**
-  * @brief Writes value to register reg
-  *
-  * @param Register to be written
-  *
-  * New value of register reg
-  *
-  * @return Return 0 upon success and non-zero otherwise
-  */
- int rtc_write_register(unsigned long reg, unsigned long value);
+/**
+ * @brief Writes value to register reg
+ *
+ * @param Register to be written
+ *
+ * New value of register reg
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int rtc_write_register(unsigned long reg, unsigned long value);
 
- /*
-  * @brief Checks if RTC is being updated
-  *
-  * @return Return 0 if RTC is being updated and non-zero otherwise
-  */
- int rtc_updating(void);
+/*
+ * @brief Checks if RTC is being updated
+ *
+ * @return Return 0 if RTC is being updated and non-zero otherwise
+ */
+int rtc_updating(void);
 
- /*
-  * @brief Gets Date from the RTC
-  *
-  * @return Return a pointer to a date containing a day, a month and a year. If year is 0, function failed.
-  */
- Date_t * rtc_read_date(void);
-
+/*
+ * @brief Gets Date from the RTC
+ *
+ * @return Return a pointer to a date containing a day, a month and a year. If year is 0, function failed.
+ */
+Date_t * rtc_read_date(void);
 
 #endif

@@ -17,15 +17,6 @@
 #define UP_MAKE_CODE		0xE048	/**< @brief Up Arrow key make code */
 #define DOWN_MAKE_CODE		0xE050	/**< @brief Down Arrow key make code */
 
-// /* Timer 0 useful macros */
-// #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
-// #define TIMER0_IRQSET		0	 /**< @brief Timer 0 Policy Bit */
-
-// /* I/O port addresses */
-//
-// #define TIMER_0			0x40 /**< @brief Timer 0 count register */
-// #define TIMER_CTRL		0x43 /**< @brief Control register */
-
 // INPUT_BUFFER is accessed by ports 0x60 or 0x64, depending on context
 #define OUT_BUF         0x60 /**< @brief KBC Output buffer register */
 #define STAT_REG        0x64 /**< @brief KBC Status register */
@@ -56,7 +47,6 @@
 #define IN_RESEND       0XFE /**< @brief Error: Resend latest byte  */
 #define IN_ERROR        0XFC /**< @brief Error: Restart the entire sequence */
 #define IN_ACK			0xFA /**< @brief Success*/
-
 
 #define KBD_DELAY_US		20000   // KBC respond Time-Out in micro seconds
 

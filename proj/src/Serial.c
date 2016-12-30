@@ -1,15 +1,19 @@
+#include <minix/syslib.h>
+//#include <minix/drivers.h>
+//#include <minix/com.h>
+//#include <minix/sysutil.h>
 #include "Serial.h"
 #include <minix/syslib.h>
 
 static int serial_hook_id = SERIAL_INITIAL_HOOK_ID;
 
-int serial_subscribe_int(void)
-{
-	if ( sys_irqsetpolicy (COM1_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &serial_hook_id) != OK ) {
+int serial_subscribe_int(void) {
+	if (sys_irqsetpolicy(COM1_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE,
+			&serial_hook_id) != OK) {
 		printf("serial_subscribe_int() -> FAILED sys_irqsetpolicy()\n");
 		return -1;
 	}
-	if ( sys_irqenable (&serial_hook_id) != OK ) {
+	if (sys_irqenable(&serial_hook_id) != OK) {
 		printf("serial_subscribe_int() -> FAILED sys_irqenable()\n");
 		return -1;
 	}
@@ -17,13 +21,12 @@ int serial_subscribe_int(void)
 	return SERIAL_INITIAL_HOOK_ID;
 }
 
-int serial_unsubscribe_int(void)
-{
-	if ( sys_irqdisable (&serial_hook_id) != OK ) {
+int serial_unsubscribe_int(void) {
+	if (sys_irqdisable(&serial_hook_id) != OK) {
 		printf("serial_unsubscribe_int() -> FAILED sys_irqdisable()\n");
 		return -1;
 	}
-	if ( sys_irqrmpolicy (&serial_hook_id) != OK ) {
+	if (sys_irqrmpolicy(&serial_hook_id) != OK) {
 		printf("serial_unsubscribe_int() -> FAILED sys_irqrmpolicy()\n");
 		return -1;
 	}

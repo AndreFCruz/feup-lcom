@@ -60,6 +60,8 @@ int writeScores(const char* filename, Score_t* scores) {
 				scores[i].month, scores[i].year);
 	}
 	fclose(filePtr);
+
+	return OK;
 }
 
 int updateScores(Score_t* scores, Score_t newscore) {

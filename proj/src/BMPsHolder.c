@@ -31,21 +31,34 @@ Bitmap ** load_bmps(const char * s1, unsigned num) {
 static BMPsHolder_t * new_bmps_holder() {
 	BMPsHolder_t * ptr = malloc(sizeof(BMPsHolder_t));
 
-	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/", 10);
-	ptr->big_numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big", 10);
-	ptr->explosion = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/", NUM_EXPLOSION_BMPS);
-	//ptr->ground_explosion; // TODO
-	ptr->buildings = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
+	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/",
+			10);
+	ptr->big_numbers = load_bmps(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big", 10);
+	ptr->explosion = load_bmps(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/",
+			NUM_EXPLOSION_BMPS);
+	ptr->buildings = load_bmps(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
 
-	ptr->game_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
-	ptr->HS_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/HSbackground.bmp");
-	ptr->heart = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/8_bit_heart.bmp");
+	ptr->game_background = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
+	ptr->HS_background = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/HSbackground.bmp");
+	ptr->heart = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/8_bit_heart.bmp");
 
-	ptr->menu_background = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");
-	ptr->SP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
-	ptr->MP_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
-	ptr->HS_button = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
-	ptr->highscore_text = loadBitmap("/home/lcom/svn/lcom1617-t4g01/proj/res/highscore_text.bmp");
+	ptr->menu_background =
+			loadBitmap(
+					"/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/InitialMenu.bmp");
+	ptr->SP_button = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/SpArea.bmp");
+	ptr->MP_button = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/MpArea.bmp");
+	ptr->HS_button = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/InitialMenu/HsArea.bmp");
+	ptr->highscore_text = loadBitmap(
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/highscore_text.bmp");
 
 	printf("New BMPsHolder Instance\n");
 
@@ -53,17 +66,21 @@ static BMPsHolder_t * new_bmps_holder() {
 }
 
 void delete_bmps_holder() {
-	if ( NULL != bmps_ptr ) { // TODO Delete stuff
+	if (NULL != bmps_ptr) { // TODO Delete stuff
 		deleteBitmap(bmps_ptr->menu_background);
 		deleteBitmap(bmps_ptr->SP_button);
 		deleteBitmap(bmps_ptr->MP_button);
 		deleteBitmap(bmps_ptr->HS_button);
+		deleteBitmap(bmps_ptr->HS_background);
+		deleteBitmap(bmps_ptr->heart);
+		deleteBitmap(bmps_ptr->highscore_text);
+		//TODO: Missing the delete of the arrays of bmps
 		bmps_ptr = NULL;
 	}
 }
 
 BMPsHolder_t * BMPsHolder() {
-	if ( NULL == bmps_ptr ) {
+	if (NULL == bmps_ptr) {
 		return (bmps_ptr = new_bmps_holder());
 	} else {
 		return bmps_ptr;

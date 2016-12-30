@@ -24,8 +24,11 @@
 #define SCORE_Y						230
 #define SCORE_Y_INC					67
 
-typedef enum {MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, END_GAME_ANIMATION} game_state_t;
+typedef enum {
+	MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, END_GAME_ANIMATION
+} game_state_t;
 
+//TODO: Aqui so leva mesmo esta função ? Rever isto antes da documentação
 int timer_handler();
 
 #endif

@@ -37,7 +37,7 @@
 
 #define TIMER_LSB		BIT(4)  /**< @brief Initialize Counter LSB only */
 #define TIMER_MSB		BIT(5)  /**< @brief Initialize Counter MSB only */
-#define TIMER_LSB_MSB		(TIMER_LSB | TIMER_MSB) /**< @brief Initialize LSB first and MSB afterwards */
+#define TIMER_LSB_MSB	(TIMER_LSB | TIMER_MSB) /**< @brief Initialize LSB first and MSB afterwards */
 
 /* Operating mode: bits 3, 2 and 1 */
 
@@ -54,7 +54,6 @@
 #define TIMER_RB_COUNT_         BIT(5)    /**< @selection bit for RB COUNT - active LOW (0 value is active) */
 #define TIMER_RB_STATUS_        BIT(4)    /**< @selection bit for RB STATUS - active LOW (0 value is active) */
 #define TIMER_RB_SEL(n)         BIT((n)+1)
-
 
 /**@}*/
 

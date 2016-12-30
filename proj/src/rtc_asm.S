@@ -26,7 +26,8 @@ _parserBCD:
 BCDready:
 	movl	8(%ebp), %eax
 BCDend:
-	popl	%ebp
+#	popl	%ebp
+	leave
 	ret
 
 

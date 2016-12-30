@@ -64,12 +64,15 @@
 #define AL_REGC			0x0C		/**< @brief Control Register C */
 #define AL_REGD			0x0D		/**< @brief Control Register  */
 
+/**
+ * @brief Structure used to save a date
+ */
 typedef struct {
-	unsigned long minute;
-	unsigned long hour;
-	unsigned long day;
-	unsigned long month;
-	unsigned long year;
+	unsigned long minute; ///> Minute of the date
+	unsigned long hour; ///> Hour of the date
+	unsigned long day; ///> Day of the date
+	unsigned long month; ///> Month of the date
+	unsigned long year; ///> Year of the date
 } Date_t;
 
 /*

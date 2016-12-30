@@ -7,15 +7,18 @@
  */
 
 #define OK						0
-#define HIGHSCORE_NUMBER		5	//Number of high scores saved
+#define HIGHSCORE_NUMBER		5	/**< @brief Number of high scores saved */
 
+/**
+ * @brief A structure that contains a score's information
+ */
 typedef struct {
-	unsigned score;
-	unsigned long minute;
-	unsigned long hour;
-	unsigned long day;
-	unsigned long month;
-	unsigned long year;
+	unsigned score; ///> Value of the score
+	unsigned long minute; ///> Minute when the score was generated
+	unsigned long hour; ///> Hour when the score was generated
+	unsigned long day; ///> Day when the score was generated
+	unsigned long month; ///> Month when the score was generated
+	unsigned long year; ///> year Year when the score was generated
 } Score_t;
 
 /**

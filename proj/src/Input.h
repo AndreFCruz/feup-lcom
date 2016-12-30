@@ -11,6 +11,10 @@
 #include "mouse.h"
 
 // TODO Update with actual make/break codes!!
+
+/**
+ * Keyboard scan codes that should be recognized
+ */
 typedef enum {
 	ESC_BREAK = ESC_BREAK_CODE,
 	ENTER_BREAK = ENTER_BREAK_CODE,
@@ -19,20 +23,20 @@ typedef enum {
 	NO_KEY = 0x0
 } keycode_t;
 
+/**
+ * @brief Structure that keeps record of all the user input information
+ */
 typedef struct {
-	/* Keyboard Keys */
-	keycode_t keycode;
 
-	/* Mouse Buttons */
-	int RMB;
-	int LMB;
-	int MMB;
+	keycode_t keycode; ///> Current keyboard key
 
-	/* Mouse Position */
-	int mouse_pos[2];
+	int RMB; ///> Flag for Right Mouse Button (pressed or not)
+	int LMB; ///> Flag for Left Mouse Button (pressed or not)
+	int MMB; ///> Flag for Middle Mouse Button (pressed or not)
 
-	/* Resolution */
-	unsigned res[2];
+	int mouse_pos[2]; ///> Current position of the mouse onn screen (x,y)
+
+	unsigned res[2]; ///> Resolution of the screen
 } Input_t;
 
 /**

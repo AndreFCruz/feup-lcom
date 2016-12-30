@@ -35,6 +35,15 @@ Missile * new_emissile(const unsigned * bases_pos, const unsigned * bases_hp);
  *
  * @return Pointer to the newly created friendly missile
  */
+
+/**
+ * @brief Generates a new friendly missile
+ *
+ * @param init_pos Array containing the initial position of the missile (x,y), associated to the cannon that fired it.
+ * @param mouse_pos Array containing the mouse position where the friendly missile will explode
+ *
+ * @return Pointer to the newly created friendly missile
+ */
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos);
 
 /**
@@ -193,8 +202,8 @@ int missile_collidedWithExplosion(Missile * ptr, Explosion * e_ptr);
  * @brief Check if a Missile collided with a Rectangle
  *
  * @param ptr Pointer to the Missile in question
- * @param posX Initial position of the rectangle in the horizontal axis
- * @param posY Initial position of the rectangle in the vertical axis
+ * @param posX Lower left position of the rectangle in the horizontal axis
+ * @param posY Lower left position of the rectangle in the vertical axis
  * @param sizeX Width of the rectangle
  * @param sizeY Height of the rectangle
  *

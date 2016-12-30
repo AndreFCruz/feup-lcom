@@ -3,7 +3,11 @@
 
 static Input_t * input = NULL;
 
-//Private Constructor -- to ensure only one instance of this type is running
+/**
+ * Private Constructor- Assures only 1 instance is running.
+ *
+ * Creates a new instance of the type Input_t
+ */
 static Input_t * new_input() {
 
 	Input_t* Input = (Input_t*) malloc(sizeof(Input_t));

@@ -123,7 +123,7 @@ static Game_t * new_game() {
 	Game->buildings_size_y[2] = BUILDING2_SIZE_Y;
 
 	Game->highscores = loadScores(
-			"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
+			SCORES_TXT_PATH	);
 
 	printf("Game Instance was successfully created\n");
 

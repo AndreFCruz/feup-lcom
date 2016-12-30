@@ -102,7 +102,6 @@ int vg_exit() {
 		return 0;
 }
 
-//Added Functions
 int draw_line(unsigned short xi, unsigned short yi, unsigned short xf,
 		unsigned short yf, uint16_t color) {
 

@@ -101,19 +101,19 @@ int mouse_handler(unsigned char * packet, unsigned short * counter);
 #define SET_STREAM_MODE		0xEA	/**< @brief Send data on events */
 #define STATUS_REQUEST		0xE9	/**< @brief Get mouse configuration (3 bytes) */
 #define SET_RESOLUTION		0XE8
-#define SET_SCALING_2_1		0xE7	/**< @brief Aceleration mode */
+#define SET_SCALING_2_1		0xE7	/**< @brief Acceleration mode */
 #define SET_SCALING_1_1		0xE6	/**< @brief Linear mode */
 
 /* PS/2 Mouse Packet Meanings */
 
-#define BYTE0_Y_OVF			BIT(7)
-#define BYTE0_X_OVF			BIT(6)
+#define BYTE0_Y_OVF			BIT(7)	/** <@brief Bit set if overflow occurred in the vertical axis */
+#define BYTE0_X_OVF			BIT(6)	/** <@brief Bit set if overflow occurred in the horizontal axis */
 #define BYTE0_Y_SIGN		BIT(5)
 #define BYTE0_X_SIGN		BIT(4)
 #define BYTE0_SYNC_BIT		BIT(3)	/** <@brief Bit that helps to synchronize the packet */
-#define BYTE0_MB			BIT(2)
-#define BYTE0_LB			BIT(1)
-#define BYTE0_RB			BIT(0)
+#define BYTE0_MB			BIT(2)	/** <@brief Bit set if Right mouse button pressed */
+#define BYTE0_LB			BIT(1)	/** <@brief Bit set if Right mouse button pressed */
+#define BYTE0_RB			BIT(0)	/** <@brief Bit set if Right mouse button pressed */
 
 #define DELAY_US		20000   // KBC respond Time-Out in micro seconds
 

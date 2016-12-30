@@ -33,7 +33,7 @@ unsigned vg_getHorRes();
  */
 unsigned vg_getVerRes();
 
-/**	TODO: Recheck this 1
+/**
  * @brief Gets the pointer to the graphics Buffer used for double-buffering
  *
  * @return Pointer to the graphics Buffer used for double-buffering
@@ -128,10 +128,12 @@ void draw_missile(Missile * ptr);
  * @brief Draws a number at certain position
  *
  * @param num number to be drawn
+ * @param font Font used as an array of 10 numbers
+ * @param size_x Horizontal size of the Font, in pixels
  * @param posX Position of the number in the horizontal axis
  * @param posY Position of the number in the vertical axis
  */
-void draw_number(unsigned num, unsigned posX, unsigned posY);
+void draw_number(unsigned num, Bitmap ** font, unsigned size_x, unsigned posX, unsigned posY);
 
 /**
  * @brief Draws a score at certain position
@@ -164,7 +166,8 @@ uint16_t rgb(unsigned char red_value, unsigned char green_value,
 		unsigned char blue_value);
 
 /**
- * @brief Implementation of the double_buffering
+ * @brief Copies the contents of the video buffer to video_mem at once.
+ * (Implementation of double_buffering)
  */
 void buffer_handler();
 

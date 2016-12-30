@@ -631,8 +631,7 @@ static int highscores_timer_handler() {
 
 	// Fetch Highscores if not loaded
 	if (NULL == scores)
-		scores = loadScores(
-				"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt");
+		scores = loadScores(SCORES_TXT_PATH);
 
 	/** Handle Keyboard Input **/
 	switch (input_get_key()) {

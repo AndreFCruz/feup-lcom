@@ -1,6 +1,11 @@
 #ifndef __BMPS_HOLDER_H
 #define __BMPS_HOLDER_H
 
+/** @defgroup BMPsHolder BMPsHolder
+ * @{
+ * Functions for manipulating a structure holding Bitmaps.
+ */
+
 #include "Bitmap.h"
 
 #define NUM_EXPLOSION_BMPS	16
@@ -57,10 +62,26 @@ typedef struct {
 	Bitmap * highscore_text;
 } BMPsHolder_t;
 
+/*
+ * @brief Creates a new instance (BMPsHolder_t) if there is none, otherwise returns the existing one (Singleton lie behaviour).
+ *
+ * @return Pointer to a BMPsHolder instance.
+ */
 BMPsHolder_t * BMPsHolder();
 
+/*
+ * @brief Destroys the BMPsHolder instance, freeing all the resources used by it
+ */
 void delete_bmps_holder();
 
+/*
+ * @brief Load sequence of bitmaps numbered [00, num];
+ *
+ * @param s1 path of the location of the Bitmaps
+ * @param num number of Bitmaps to be loaded
+ *
+ * @return Array of bitmaps, of size num, containing the loaded sequence
+ */
 Bitmap ** load_bmps(const char * s1, unsigned num);
 
 #endif

@@ -12,10 +12,8 @@
 #include "vbe.h"
 #include "RTC.h"
 
-
 /* Interrupt Handlers' Loop */
-int main()
-{
+int main() {
 	printf("\t\t\tSTART OF PROJECT SERVICE\n");
 	sef_startup();
 
@@ -26,29 +24,31 @@ int main()
 
 	/* Subscribe Interrupts */
 	int keyboard_irq_set;
-	if ( (keyboard_irq_set = BIT(kbd_subscribe_int())) < 0 ) { // hook_id returned for keyboard
+	if ((keyboard_irq_set = BIT(kbd_subscribe_int())) < 0) { // hook_id returned for keyboard
 		printf("FAILED kbd_subscribe_int()\n");
 		return 1;
 	}
 	int mouse_irq_set;
-	if ( (mouse_irq_set = BIT(mouse_subscribe_int())) < 0 ) {
+	if ((mouse_irq_set = BIT(mouse_subscribe_int())) < 0) {
 		printf("FAILED mouse_subscribe_int()\n");
 		return 1;
 	}
-	int timer_irq_set; unsigned timer_freq = 60;
-	if ( (timer_irq_set = BIT(timer_subscribe_int())) < 0 || timer_set_square(0, timer_freq) != OK ) { // hook_id returned for Timer 0
+	int timer_irq_set;
+	unsigned timer_freq = 60;
+	if ((timer_irq_set = BIT(timer_subscribe_int()))
+			< 0|| timer_set_square(0, timer_freq) != OK) { // hook_id returned for Timer 0
 		printf("FAILED timer_subscribe_int()\n");
 		return 1;
 	}
 	int rtc_irq_set;
-	if ( (rtc_irq_set = BIT(rtc_subscribe_int())) < 0 ) {
+	if ((rtc_irq_set = BIT(rtc_subscribe_int())) < 0) {
 		printf("FAILED rtc_subscribe_int()\n");
 		return 1;
 	}
 	/* ** */
 
 	//Initiate Graphics Mode
-	if ( OK != vg_init(MODE_800X600_64k) ) {
+	if ( OK != vg_init(MODE_800X600_64k)) {
 		printf("main::vg_init Failed\n");
 		return 1;
 	}
@@ -57,20 +57,20 @@ int main()
 	unsigned char packet[PACKET_NELEMENTS];
 	unsigned short counter = 0; // Keeps the number of bytes ready in the packet
 
-	int r; int gameRunning = 1;
-	while( gameRunning ) {
+	int r;
+	int gameRunning = 1;
+	while (gameRunning) {
 		/* Get a request message. */
-		if ( (r = driver_receive(ANY, &msg, &ipc_status)) != 0 ) {
-			 printf("driver_receive failed with: %d\n", r);
-			 continue;
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
+			printf("driver_receive failed with: %d\n", r);
+			continue;
 		}
 		if (is_ipc_notify(ipc_status)) { /* received notification */
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /* hardware interrupt notification */
 				if (msg.NOTIFY_ARG & mouse_irq_set) {
-//					printf("main::mouse interrupt\n");
 
-					mouse_handler(packet, & counter);
+					mouse_handler(packet, &counter);
 					if (counter == PACKET_NELEMENTS) {
 						mouse_packet_handler(packet);
 						counter = 0;
@@ -78,14 +78,13 @@ int main()
 				}
 
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
-//					printf("main::keyboard interrupt\n");
 
 					keyboard_handler();
 				}
 
 				if (msg.NOTIFY_ARG & timer_irq_set) { /* timer interrupt */
 
-					if ( OK != timer_handler() ) {
+					if ( OK != timer_handler()) {
 						printf("Timer Handler Returned EXIT Code!\n");
 						gameRunning = 0;
 					}
@@ -96,27 +95,26 @@ int main()
 				break;
 			}
 		} else { /* received a standard message, not a notification */
-				/* no standard messages expected: do nothing */
+			/* no standard messages expected: do nothing */
 			printf("Error: received unexpected standard message.\n");
 			return 1;
 		}
 	}
 
-
 	/* Unsubscribe All Interrupts */
-	if ( kbd_unsubscribe_int() < 0 ) {
+	if (kbd_unsubscribe_int() < 0) {
 		printf("FAILED kbd_unsubscribe_int()\n");
 		return 1;
 	}
-	if ( mouse_unsubscribe_int() < 0 ) {
+	if (mouse_unsubscribe_int() < 0) {
 		printf("FAILED mouse_unsubscribe_int()\n");
 		return 1;
 	}
-	if ( timer_unsubscribe_int() < 0 ) {
+	if (timer_unsubscribe_int() < 0) {
 		printf("FAILED timer_unsubscribe_int()\n");
 		return 1;
 	}
-	if ( rtc_unsubscribe_int() < 0 ) {
+	if (rtc_unsubscribe_int() < 0) {
 		printf("FAILED rtc_unsubscribe_int()\n");
 		return 1;
 	}
@@ -135,5 +133,4 @@ int main()
 
 	return ret;
 }
-
 

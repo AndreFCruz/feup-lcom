@@ -8,14 +8,16 @@
 /**
  * Structs
  */
-typedef enum {TRUE, FALSE} bool;
+typedef enum {
+	TRUE, FALSE
+} bool;
 
 struct missile_t {
 	int init_pos[2];	// Initial Position for Missile Trail
 	int pos[2];		// Current Position
 
 	float velocity[2];		// Velocity, in pixels PER frame
-	float pending_movement[2];	// Movement left unperformed on the previous frame
+	float pending_movement[2];// Movement left unperformed on the previous frame
 
 	uint16_t color;			// Color in RGB 5:6:5
 
@@ -24,7 +26,6 @@ struct missile_t {
 	int end_pos[2];
 
 };
-
 
 struct explosion_t {
 	int pos[2];
@@ -41,12 +42,10 @@ struct explosion_t {
  * END of Structs
  */
 
-
 // Rounds float to nearest integer
 int round_float(float f) {
 	return (f > (floor(f) + 0.5)) ? ceil(f) : floor(f);
 }
-
 
 /**
  * Methods for Missile
@@ -64,24 +63,32 @@ static Missile * new_missile(const int * init_pos, const float * vel) {
 	m_ptr->pending_movement[0] = 0.;
 	m_ptr->pending_movement[1] = 0.;
 
-	m_ptr->color = 0XFFFF;	// White, to be changed on enemy/friendly constructor
+	m_ptr->color = WHITE;// White, to be changed on enemy/friendly constructor
 
 	return m_ptr;
 }
 
 // Constructor for Enemy Missile
 Missile * new_emissile(const unsigned * bases_pos) {
-	int init_pos[2] = {rand() % (vg_getHorRes() - 100) + 50, 0};
+	int init_pos[2] = { rand() % (vg_getHorRes() - 100) + 50, 0 };
 	unsigned base_to_attack = rand() % 3;
-	float end_pos[2] = { bases_pos[base_to_attack] + (float) BUILDING_SIZE_X / (rand() % 2 ? rand() % 9 - 10 : rand() % 9 + 2), vg_getVerRes() };
+	float end_pos[2] = { bases_pos[base_to_attack]
+			+ (float) BUILDING_SIZE_X
+					/ (rand() % 2 ? rand() % 9 - 10 : rand() % 9 + 2),
+			vg_getVerRes() };
 
 	float vel[2];
-	float magnitude = sqrt((((float)end_pos[0] - (float)init_pos[0])*((float)end_pos[0] - (float)init_pos[0]))
-					+ (((float)end_pos[0] - (float)init_pos[1])*((float)end_pos[1] - (float)init_pos[1])));
+	float magnitude = sqrt(
+			(((float) end_pos[0] - (float) init_pos[0])
+					* ((float) end_pos[0] - (float) init_pos[0]))
+					+ (((float) end_pos[0] - (float) init_pos[1])
+							* ((float) end_pos[1] - (float) init_pos[1])));
 
 	float rand_multiplier = (10. + (float) (rand() % 10)) / 10.;
-	vel[0] = (rand_multiplier / magnitude) * ((float)end_pos[0] - (float)init_pos[0]);
-	vel[1] = (rand_multiplier / magnitude) * ((float)end_pos[1] - (float)init_pos[1]);
+	vel[0] = (rand_multiplier / magnitude)
+			* ((float) end_pos[0] - (float) init_pos[0]);
+	vel[1] = (rand_multiplier / magnitude)
+			* ((float) end_pos[1] - (float) init_pos[1]);
 
 	printf("New Enemy Missile Vel: %d, %d\n", (int) vel[0], (int) vel[1]);
 
@@ -94,10 +101,13 @@ Missile * new_emissile(const unsigned * bases_pos) {
 // Constructor for Friendly Missile
 Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 	float vel[2];
-	float magnitude = sqrt((((float)mouse_pos[0] - (float)init_pos[0])*((float)mouse_pos[0] - (float)init_pos[0]))
-					+ (((float)mouse_pos[0] - (float)init_pos[1])*((float)mouse_pos[1] - (float)init_pos[1])));
-	vel[0] = (4. / magnitude) * ((float)mouse_pos[0] - (float)init_pos[0]);
-	vel[1] = (4. / magnitude) * ((float)mouse_pos[1] - (float)init_pos[1]);
+	float magnitude = sqrt(
+			(((float) mouse_pos[0] - (float) init_pos[0])
+					* ((float) mouse_pos[0] - (float) init_pos[0]))
+					+ (((float) mouse_pos[0] - (float) init_pos[1])
+							* ((float) mouse_pos[1] - (float) init_pos[1])));
+	vel[0] = (4. / magnitude) * ((float) mouse_pos[0] - (float) init_pos[0]);
+	vel[1] = (4. / magnitude) * ((float) mouse_pos[1] - (float) init_pos[1]);
 	// Velocity for Friendly Missiles is constant -- 4 pixels per frame
 
 	Missile * m_ptr = new_missile(init_pos, vel);
@@ -107,7 +117,6 @@ Missile * new_fmissile(const int * init_pos, const int * mouse_pos) {
 
 	return m_ptr;
 }
-
 
 Explosion * delete_missile(Missile * m_ptr) {
 	Explosion * exp = new_explosion(m_ptr->pos);
@@ -126,18 +135,19 @@ int missile_update(Missile * m_ptr) {
 
 	//Update Position
 	int tmp;
-	if ( abs(tmp = round_float(m_ptr->pending_movement[0])) > 1 ) {
+	if (abs(tmp = round_float(m_ptr->pending_movement[0])) > 1) {
 		m_ptr->pos[0] += tmp;
 		m_ptr->pending_movement[0] -= tmp;
 	}
-	if ( abs(tmp = round_float(m_ptr->pending_movement[1])) > 1 ) {
+	if (abs(tmp = round_float(m_ptr->pending_movement[1])) > 1) {
 		m_ptr->pos[1] += tmp;
 		m_ptr->pending_movement[1] -= tmp;
 	}
 
 	// IF is Friendly Missile
 	if (m_ptr->isFriendly == TRUE) {
-		if ( abs(m_ptr->pos[0] - m_ptr->end_pos[0]) < 4 && abs(m_ptr->pos[1] - m_ptr->end_pos[1]) < 4 ) {
+		if (abs(m_ptr->pos[0] - m_ptr->end_pos[0]) < 4
+				&& abs(m_ptr->pos[1] - m_ptr->end_pos[1]) < 4) {
 			printf("\tFriendly Missile Reached End-Pos\n");
 			return 1; // Reached End Pos -- Should Explode
 		}
@@ -226,27 +236,26 @@ size_t explosion_getSizeOf() {
 	return sizeof(Explosion);
 }
 
+/* Collisions */
 
 int missile_collidedWithExplosion(Missile * m_ptr, Explosion * e_ptr) {
 	int x_var = (m_ptr->pos[0] - e_ptr->pos[0]);
 	int y_var = (m_ptr->pos[1] - e_ptr->pos[1]);
 
-	if (x_var*x_var + y_var*y_var <= e_ptr->radius*e_ptr->radius)	//x²+y² <= r²
+	if (x_var * x_var + y_var * y_var <= e_ptr->radius * e_ptr->radius)	//x²+y² <= r²
 		return 1;
-	else return 0;
+	else
+		return 0;
 }
 
 // (posX, posY) indicates the lower-left point of the rectangle
-int missile_collidedWithRect(Missile * ptr, unsigned posX, unsigned posY, unsigned sizeX, unsigned sizeY) {
-	if ( ptr->pos[0] > posX && ptr->pos[0] < (posX + sizeX)
-			&& ptr->pos[1] < posY && ptr->pos[1] > posY - sizeY) {
+int missile_collidedWithRect(Missile * ptr, unsigned posX, unsigned posY,
+		unsigned sizeX, unsigned sizeY) {
+	if (ptr->pos[0] > posX && ptr->pos[0] < (posX + sizeX) && ptr->pos[1] < posY
+			&& ptr->pos[1] > posY - sizeY) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
-
-
-
-
 

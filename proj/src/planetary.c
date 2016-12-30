@@ -191,7 +191,7 @@ int timer_handler() {
 			game_state = END_GAME_ANIMATION;
 			printf("\tEND OF GAME -- \n");
 			if (2 == ret) // highscore
-			{
+					{
 				highscore_flag = 1;
 				printf("\t\tHIGHSCORE DETECTED!!\n");
 			}
@@ -483,6 +483,8 @@ static int game_timer_handler() {
 			}
 		}
 
+		//TODO: Limpar este código?
+
 		// Friendly Missiles -> friendly fire allowed ?
 //		for (j = 0; j < gvector_get_size(self->f_missiles); ++j) {
 //			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles, j);
@@ -545,7 +547,6 @@ static int game_timer_handler() {
 			gvector_push_back(self->explosions, &tmp);
 		}
 
-
 		/* Update Scores */
 		//creating a new Score
 		Score_t endgame;
@@ -566,7 +567,6 @@ static int game_timer_handler() {
 			printf("END_OF_GAME->HIGHSCORE\n");
 			return 2; // return highscore flag
 		}
-
 
 		return 1;
 	}

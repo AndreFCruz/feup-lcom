@@ -4,7 +4,9 @@
 #include "Bitmap.h"
 #include "BMPsHolder.h"
 
-#define OK		0
+#define OK			0
+
+#define FRAME_RATE	60
 
 #define GROUND_Y					595
 

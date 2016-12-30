@@ -338,13 +338,13 @@ static int game_timer_handler() {
 
 	// Mouse
 	//spawn missiles on mouse clicks
-	if (get_mouseRMB()) {
+	if ( get_mouseRMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES ) {
 		int tmp_pos[2] = { self->cannon_pos[0] + CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, &tmp);
 	}
-	if (get_mouseLMB()) {
+	if ( get_mouseLMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES ) {
 		int tmp_pos[2] = { self->cannon_pos[1] - CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());

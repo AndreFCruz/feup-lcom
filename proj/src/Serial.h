@@ -22,20 +22,20 @@
 
 /* UART Acessible (8-bit) Registers */
 
-#define RBR		0	/**< @brief Receiver Buffer Register - Read */
-#define THR		0	/**< @brief Transmitter Holding Register - Write */
-#define IER		1	/**< @brief Interrupt Enable Register - Read/ Write */
-#define IIR		2	/**< @brief Interrupt Indentification Reg. - Read */
-#define FCR		2	/**< @brief FIFO Control Register - Write */
-#define LCR		3	/**< @brief Line Control Register - Read/ Write */
-#define MCR		4	/**< @brief Modem Control Register - Read/ Write */
-#define LSR		5	/**< @brief Line Status Register - Read */
-#define MSR		6	/**< @brief Modem Status Register - Read */
-#define SR		7	/**< @brief Scratchpad Register - Read/ Write */
+#define RBR		0x00	/**< @brief Receiver Buffer Register - Read */
+#define THR		0x00	/**< @brief Transmitter Holding Register - Write */
+#define IER		0x01	/**< @brief Interrupt Enable Register - Read/ Write */
+#define IIR		0x02	/**< @brief Interrupt Indentification Reg. - Read */
+#define FCR		0x02	/**< @brief FIFO Control Register - Write */
+#define LCR		0x03	/**< @brief Line Control Register - Read/ Write */
+#define MCR		0x04	/**< @brief Modem Control Register - Read/ Write */
+#define LSR		0x05	/**< @brief Line Status Register - Read */
+#define MSR		0x06	/**< @brief Modem Status Register - Read */
+#define SR		0x07	/**< @brief Scratchpad Register - Read/ Write */
 
 /* Adresses 0 and 1 are overloaded - access depends of bit DLAB of the LCR register */
-#define DLL		0	/**< @brief Divisor Latch LSB */
-#define DLM		1	/**< @brief Divisor Latch MSB */
+#define DLL		0x00	/**< @brief Divisor Latch LSB */
+#define DLM		0x01	/**< @brief Divisor Latch MSB */
 
 /* Line Control Register (LCR) */
 

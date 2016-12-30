@@ -28,7 +28,10 @@ typedef enum {
 	MENU, GAME_SINGLE, GAME_MULTI, HIGH_SCORES, END_GAME_ANIMATION
 } game_state_t;
 
-//TODO: Aqui so leva mesmo esta função ? Rever isto antes da documentação
+/**
+ * @brief Timer 0 interrupt handler. Regulates Frame-Rate.
+ * Uses a State-Machine to call the appropriate "draw state".
+ */
 int timer_handler();
 
-#endif
+#endif /* __PLANETARY_H */

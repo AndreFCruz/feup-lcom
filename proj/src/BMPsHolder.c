@@ -5,10 +5,10 @@
 static BMPsHolder_t * bmps_ptr = NULL;
 
 // Load sequence of bitmaps numbered [00, num)
-Bitmap ** load_bmps(const char * s1, unsigned num) {
+Bitmap ** load_bmps(const char * base, unsigned num) {
 	Bitmap ** array = malloc(sizeof(Bitmap *) * num);
-	char * path = (char*) malloc(strlen(s1) + 2 + strlen(".bmp"));
-	strcpy(path, s1);
+	char * path = (char*) malloc(strlen(base) + 2 + strlen(".bmp"));
+	strcpy(path, base);
 	strcat(path, "00.bmp");
 
 	printf("\t\tLoading Animation BMPs with Template String \"%s\"\n", path);
@@ -19,7 +19,7 @@ Bitmap ** load_bmps(const char * s1, unsigned num) {
 		snprintf(parsed_num, 3, "%02d", i);
 
 		for (j = 0; path[j] != 0 && parsed_num[j] != 0; ++j) {
-			path[strlen(s1) + j] = parsed_num[j];
+			path[strlen(base) + j] = parsed_num[j];
 		}
 
 		array[i] = loadBitmap(path);
@@ -28,18 +28,27 @@ Bitmap ** load_bmps(const char * s1, unsigned num) {
 	return array;
 }
 
+void delete_bmps(Bitmap ** arr, unsigned num) {
+	unsigned i;
+	for (i = 0; i < num; ++i)
+		deleteBitmap(arr[i]);
+	free(arr);
+}
+
 static BMPsHolder_t * new_bmps_holder() {
 	BMPsHolder_t * ptr = malloc(sizeof(BMPsHolder_t));
 
 	ptr->numbers = load_bmps("/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/",
-			10);
+	NUM_NUMBERS_BMPS);
 	ptr->big_numbers = load_bmps(
-			"/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big", 10);
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Numbers/big",
+			NUM_NUMBERS_BMPS);
 	ptr->explosion = load_bmps(
 			"/home/lcom/svn/lcom1617-t4g01/proj/res/Explosion/",
 			NUM_EXPLOSION_BMPS);
 	ptr->buildings = load_bmps(
-			"/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building", 3);
+			"/home/lcom/svn/lcom1617-t4g01/proj/res/Buildings/building",
+			NUM_BUILDINGS_BMPS);
 
 	ptr->game_background = loadBitmap(
 			"/home/lcom/svn/lcom1617-t4g01/proj/res/background.bmp");
@@ -66,7 +75,7 @@ static BMPsHolder_t * new_bmps_holder() {
 }
 
 void delete_bmps_holder() {
-	if (NULL != bmps_ptr) { // TODO Delete stuff
+	if (NULL != bmps_ptr) {
 		deleteBitmap(bmps_ptr->menu_background);
 		deleteBitmap(bmps_ptr->SP_button);
 		deleteBitmap(bmps_ptr->MP_button);
@@ -74,7 +83,12 @@ void delete_bmps_holder() {
 		deleteBitmap(bmps_ptr->HS_background);
 		deleteBitmap(bmps_ptr->heart);
 		deleteBitmap(bmps_ptr->highscore_text);
-		//TODO: Missing the delete of the arrays of bmps
+
+		delete_bmps(bmps_ptr->numbers, NUM_NUMBERS_BMPS);
+		delete_bmps(bmps_ptr->big_numbers, NUM_NUMBERS_BMPS);
+		delete_bmps(bmps_ptr->explosion, NUM_EXPLOSION_BMPS);
+		delete_bmps(bmps_ptr->buildings, NUM_BUILDINGS_BMPS);
+
 		bmps_ptr = NULL;
 	}
 }

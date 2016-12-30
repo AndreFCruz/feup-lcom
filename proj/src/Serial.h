@@ -100,4 +100,4 @@ int serial_unsubscribe_int(void);
 
 /**@}*/
 
-#endif
+#endif /* __SERIAL_H */

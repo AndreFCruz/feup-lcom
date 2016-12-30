@@ -9,6 +9,8 @@
 #include "Bitmap.h"
 
 #define NUM_EXPLOSION_BMPS	16
+#define NUM_BUILDINGS_BMPS	3
+#define NUM_NUMBERS_BMPS	10
 
 #define EXPLOSION_SIZE_X	64
 #define EXPLOSION_SIZE_Y	64
@@ -48,7 +50,7 @@ typedef struct {
 	Bitmap ** numbers;
 	Bitmap ** big_numbers;
 	Bitmap ** explosion;
-	//Bitmap ** ground_explosion; // TODO
+	//Bitmap ** ground_explosion; // TODO ?
 	Bitmap ** buildings;
 
 	Bitmap * game_background;
@@ -70,18 +72,28 @@ typedef struct {
 BMPsHolder_t * BMPsHolder();
 
 /*
- * @brief Destroys the BMPsHolder instance, freeing all the resources used by it
+ * @brief Destroys the BMPsHolder instance, freeing all the allocated memory
  */
 void delete_bmps_holder();
 
 /*
- * @brief Load sequence of bitmaps numbered [00, num];
+ * @brief Loads sequence of bitmaps numbered [00, num);
  *
- * @param s1 path of the location of the Bitmaps
- * @param num number of Bitmaps to be loaded
+ * @param base Base path of the location of the Bitmaps
+ * @param num Number of Bitmaps to be loaded
  *
  * @return Array of bitmaps, of size num, containing the loaded sequence
  */
-Bitmap ** load_bmps(const char * s1, unsigned num);
+Bitmap ** load_bmps(const char * base, unsigned num);
 
-#endif
+/*
+ * @brief Deletes num Bitmap* and frees the dynamically allocated array
+ *
+ * @param arr Array of Bitmap*, of size num
+ * @param num Size of the array
+ */
+void delete_bmps(Bitmap ** arr, unsigned num);
+
+/**@}*/
+
+#endif /* __BMPS_HOLDER_H */

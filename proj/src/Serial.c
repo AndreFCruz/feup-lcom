@@ -1,9 +1,10 @@
 #include <minix/syslib.h>
-//#include <minix/drivers.h>
+#include <minix/drivers.h>
+#include <minix/com.h>
+#include <minix/sysutil.h>
 //#include <minix/com.h>
 //#include <minix/sysutil.h>
 #include "Serial.h"
-#include <minix/syslib.h>
 
 static int serial_hook_id = SERIAL_INITIAL_HOOK_ID;
 
@@ -34,6 +35,36 @@ int serial_unsubscribe_int(void) {
 	return SERIAL_INITIAL_HOOK_ID;
 }
 
+// If BIT(0) - 1 esta pronto a correr
+// If BIT(1) - 1 acabou de correr
+
+void serial_write(unsigned char info) {
+	unsigned empty_flag = 0;
+	int flag = 0;
+
+	// Process will only start if THRE is empty (set to 1)
+	while (flag) {
+
+		if (sys_inb((long unsigned int *)(COM1_PORT + LSR, &empty_flag)) != OK)
+			printf(
+					" serial_wirte -> Failed sys_inb for Transmitter Register.\n");
+
+		if (empty_flag & LSR_THRE)
+			flag = 0; //Cycle will stop -> THRE is set to 1
+		else
+			flag = 1;
+	}
+
+	//Sendingo the information
+	if (sys_outb(COM1_PORT + THR, info) != OK) {
+		printf(" serial_write -> Failed sys_outb of information.\n");
+	}
+
+	//Wait for message to get his destination with timer
+	//TODO: timer.wait call
+
+}
+
 ///* LSR and Error Detection */
 //
 //if( sys_inb(ser_port + LSR, &st) != OK ) {
@@ -46,21 +77,7 @@ int serial_unsubscribe_int(void) {
 //}
 //
 ////::::::::::::::::::::::::::::::::
-//
-///* Polled Operation: Transimission */
-//
-///* no error checking */
-//...
-///* busy wait for transmitter ready */
-//while( !(lsr & LSR_THRE) {
-//	ticksdelay();
-//	sys_inb(ser_port + LSR, &lsr);
-//}
-///* send character */
-//sys_outb(ser_port + RBR, c);
-//
-//
-////::::::::::::::::::::::::::::::::
+
 //
 ///* Interrupt Handling - TODO: Check Transaltion made with macros*/
 //// Not finished because dont know wut case stuff means
@@ -97,13 +114,3 @@ int serial_unsubscribe_int(void) {
 //	... // "process" character read
 //	sys_inb(ser_port + LSR, &lsr);
 //	}
-//
-////Atençao usar char var ou usar uma queue para receber a info? Acho que da a char,
-////pois a informaçao passada e so o score
-//
-////Polled operation: Need to disable the interrupts in the UART
-////Interrupt operation: Need to subscribe the UART interrupts inexclusive mode
-//
-//To ensure that this device driver does not interfere with your code, you can disable all interrupts from the UART,
-//as long as your code does not use interrupts. If it does, you have to invoke sys_irqsetpolicy() not
-////only with IRQ_REENABLE policy, but also with the IRQ_EXCLUSIVE policy set, as done in previous labs.

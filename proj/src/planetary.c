@@ -595,6 +595,12 @@ static int end_game_timer_handler(int highscore_flag) {
 		break;
 	}
 
+	// Exit after 10 seconds
+	if (count / 60 == 10) {
+		count = 0;
+		return 1;
+	}
+
 	// Draw Background
 	drawBitmap(vg_getBufferPtr(), BMPsHolder()->game_background, 0, 0,
 			ALIGN_LEFT);
@@ -609,8 +615,7 @@ static int end_game_timer_handler(int highscore_flag) {
 	if (count % (FRAME_RATE / 2) == 0) {
 		int rand_pos[2] = { EXPLOSION_SIZE_X
 				+ rand() % (vg_getHorRes() - 2 * EXPLOSION_SIZE_X),
-				EXPLOSION_SIZE_Y
-						+ rand() % (vg_getVerRes() - 2 * EXPLOSION_SIZE_Y) };
+		EXPLOSION_SIZE_Y + rand() % (vg_getVerRes() - 2 * EXPLOSION_SIZE_Y) };
 		Explosion * new = new_explosion(rand_pos);
 		gvector_push_back(self->explosions, &new);
 	}

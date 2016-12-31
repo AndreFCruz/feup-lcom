@@ -39,6 +39,9 @@
 
 /* Line Control Register (LCR) */
 
+#define SERIAL_BIT_RATE		1920 //TODO: Good Value?
+#define SERIAL_BASE_BR		115200
+
 #define LCR_DLAB	BIT(7)	/**< @brief Divisor Latch Access */
 #define LCR_BC		BIT(6)	/**< @brief Break Control */
 #define LCR_PC2		BIT(5)	/**< @brief Parity Control */
@@ -57,7 +60,7 @@
 #define LSR_FE		BIT(3)	/**< @brief Framing Error */
 #define LSR_PE		BIT(2)	/**< @brief Parity Error */
 #define LSR_OE		BIT(1)	/**< @brief Overrun Error */
-#define LSR_RD		BIT(0)	/**< @brief Data for receiving */
+#define LSR_RD		BIT(0)	/**< @brief Receiver is Ready */
 
 /* Interrupt Enable Register (IER) - Enables certain Interrupts*/
 

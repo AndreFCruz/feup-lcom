@@ -8,7 +8,7 @@
 
 #define FRAME_RATE	60
 
-#define MAX_NUM_MISSILES	3
+#define MAX_NUM_MISSILES	5
 
 #define GROUND_Y					595
 

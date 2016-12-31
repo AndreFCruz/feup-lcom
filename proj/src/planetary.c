@@ -123,7 +123,7 @@ static Game_t * new_game() {
 	Game->buildings_size_y[2] = BUILDING2_SIZE_Y;
 
 	Game->highscores = loadScores(
-			SCORES_TXT_PATH	);
+	SCORES_TXT_PATH);
 
 	printf("Game Instance was successfully created\n");
 
@@ -338,13 +338,13 @@ static int game_timer_handler() {
 
 	// Mouse
 	//spawn missiles on mouse clicks
-	if ( get_mouseRMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES ) {
+	if (get_mouseRMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES) {
 		int tmp_pos[2] = { self->cannon_pos[0] + CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, &tmp);
 	}
-	if ( get_mouseLMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES ) {
+	if (get_mouseLMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES) {
 		int tmp_pos[2] = { self->cannon_pos[1] - CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
@@ -605,6 +605,16 @@ static int end_game_timer_handler(int highscore_flag) {
 				vg_getHorRes() / 2, 100, ALIGN_CENTER);
 	}
 
+	// Spawn Random Explosions every 0.5 seconds
+	if (count % (FRAME_RATE / 2) == 0) {
+		int rand_pos[2] = { EXPLOSION_SIZE_X
+				+ rand() % (vg_getHorRes() - 2 * EXPLOSION_SIZE_X),
+				EXPLOSION_SIZE_Y
+						+ rand() % (vg_getVerRes() - 2 * EXPLOSION_SIZE_Y) };
+		Explosion * new = new_explosion(rand_pos);
+		gvector_push_back(self->explosions, &new);
+	}
+
 	// Draw and Update Explosions
 	for (idx = 0; idx < gvector_get_size(self->explosions); ++idx) {
 		Explosion * current = *(Explosion **) gvector_at(self->explosions, idx);
@@ -620,7 +630,8 @@ static int end_game_timer_handler(int highscore_flag) {
 	++count;
 	// Draw Blinking Score -- Center of Screen
 	if ((count / FRAME_RATE) % 2)
-		draw_score(self->frames / FRAME_RATE, vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
+		draw_score(self->frames / FRAME_RATE,
+				vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
 				vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);
 
 	return OK;

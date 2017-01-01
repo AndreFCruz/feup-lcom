@@ -457,10 +457,6 @@ static int game_timer_handler() {
 	// Check Collisions missiles with bases, update bases
 	for (idx = 0; idx < NUM_BASES; ++idx) {
 
-		// Base already destroyed ?
-//		if (self->bases_hp[idx] == 0)
-//			continue;
-
 		// Enemy Missiles
 		for (j = 0; j < gvector_get_size(self->e_missiles); ++j) {
 			Missile * missile_ptr = *(Missile **) gvector_at(self->e_missiles,

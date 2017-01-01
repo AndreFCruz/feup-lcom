@@ -7,22 +7,18 @@
 
 .text
 
-_parserBCD:
+_parserBCD: # 10 * (val >> 4) + val & 0x0F
 	xor 	%eax, %eax
 	pushl	%ebp			# prologue
 	movl	%esp, %ebp		#
 	cmpl	$10, 8(%ebp)	# arg > 10 ?
 	jle		BCDready		# arg < 10 -> already in BCD
 	movl	8(%ebp), %eax
-	movl	%eax, %edx
-	sarl	$4, %edx
-	movl	%edx, %eax
-	sall	$2, %eax
-	addl	%edx, %eax
-	addl	%eax, %eax
+	sarl	$4, %eax
+    imull   $10, %eax, %eax
 	movl	8(%ebp), %edx
-	andl	$0x0F, %edx
-	addl	%edx, %eax
+    andl    $0x0F, %edx
+    addl    %edx, %eax
 	jmp		BCDend
 BCDready:
 	movl	8(%ebp), %eax
@@ -47,6 +43,7 @@ _rtc_read_register:
 	movl	$-1, %eax
 	jmp		read_end
 OK1:
+#	inb		$RTC_DATA_REG	# result in eax
 	movl	$0x10, 8(%esp)
 	leal	-12(%ebp), %eax	# load ptr to eax
 	movl	%eax, 4(%esp)

@@ -76,11 +76,11 @@ typedef struct {
 } Date_t;
 
 /*
- * @brief (From Assembly) function to parse a base 2 value to BCD
+ * @brief (From Assembly) function to parse BCD value to base 2
  *
- * @brief Value to be parsed
+ * @brief Value in BCD
  *
- * @return Value in BCD
+ * @return Value in binary
  */
 extern int parserBCD(int value);
 

@@ -1,7 +1,6 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <machine/int86.h>
-
 #include "vbe.h"
 #include "lmlib.h"
 

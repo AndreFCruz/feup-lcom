@@ -4,6 +4,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 
+#include "video_gr.h"
 #include "vbe.h"
 #include "Missile.h"
 #include "BMPsHolder.h"
@@ -220,7 +221,6 @@ int draw_mouse_cross(const int * pos, uint16_t color) {
 	return OK;
 }
 
-// TODO Melhorar? Bitmap?
 void draw_missile(Missile * ptr) {
 	unsigned thickness = 2, idx = 0;
 
@@ -229,7 +229,7 @@ void draw_missile(Missile * ptr) {
 				missile_getPosX(ptr) + idx, missile_getPosY(ptr),
 				missile_getColor(ptr));
 	}
-	draw_circle(missile_getPosX(ptr), missile_getPosY(ptr), 3, 0xF8CF);
+	draw_circle(missile_getPosX(ptr), missile_getPosY(ptr), 3, MAGENTA);
 }
 
 void draw_explosion(Explosion * ptr) {
@@ -239,8 +239,9 @@ void draw_explosion(Explosion * ptr) {
 
 void draw_number(unsigned num, Bitmap ** font, unsigned size_x, unsigned posX,
 		unsigned posY) {
-	unsigned i;
-	for (i = 0; num > 0; ++i, num = num / 10) {
+	unsigned i, zero_flag = (num == 0);
+	for (i = 0; num > 0 || zero_flag; ++i, num = num / 10) {
+		zero_flag = 0;
 		drawBitmap(buffer_ptr, font[num % 10], posX - i * (size_x + 2), posY,
 				ALIGN_RIGHT);
 	}
@@ -250,7 +251,6 @@ void draw_score(unsigned num, unsigned posX, unsigned posY) {
 	draw_number(num, BMPsHolder()->numbers, NUMBER_SIZE_X, posX, posY);
 }
 
-// TODO Check big_numbers' bmps
 void draw_score_big(unsigned num, unsigned posX, unsigned posY) {
 	draw_number(num, BMPsHolder()->big_numbers, BIG_NUMBER_SIZE_X, posX, posY);
 }

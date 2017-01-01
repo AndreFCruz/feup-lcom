@@ -32,10 +32,6 @@ GVector * new_gvector(unsigned el_size) {
 
     self->array = malloc(self->capacity * self->el_size);
 
-#if DEBUG
-	printf("\tNEW GVector finished\n");
-#endif
-
     return self;
 }
 
@@ -46,16 +42,12 @@ void delete_gvector(GVector * self) {
 
     free(self->array);
     free(self);
-
-#if DEBUG
-	printf("\tDELETE GVector finished\n");
-#endif
 }
 
 unsigned gvector_get_size(GVector * self) {
-// #if DEBUG
-// 	printf("\tGVector SIZE called/finished: %lu\n", self->size);
-// #endif
+ #if DEBUG
+ 	printf("\tGVector SIZE called: %lu\n", self->size);
+ #endif
 
     return self->size;
 }
@@ -67,29 +59,19 @@ static void gvector_check_capacity(GVector * self) {
 #endif
 
     if ( (self->capacity - self->size) > self->increments ) {
-#if DEBUG
-    	printf("\nGVector REALLOC --\n");
-#endif
         self->capacity -= self->increments;
         self->array = realloc(self->array, self->capacity * self->el_size);
     } else if ( self->capacity == self->size ) {
-#if DEBUG
-    	printf("\nGVector REALLOC --\n");
-#endif
         self->capacity += self->increments;
         self->array = realloc(self->array, self->capacity * self->el_size);
     }
-
-#if DEBUG
-    printf("\tGVector CHECK CAPACITY finished\n");
-#endif
 }
 
 
 // Returns void pointer, result must be cast to proper type
 void * gvector_at(GVector * self, unsigned index) {
 #if DEBUG
-	printf("\tGVector AT called/finished\n");
+	printf("\tGVector AT called\n");
 #endif
 
     return index < self->size ? self->array + index * self->el_size : NULL;
@@ -104,16 +86,12 @@ void * gvector_push_back(GVector * self, void * elem) {
     gvector_check_capacity(self);
     memcpy(self->array + self->el_size * self->size++, elem, self->el_size);
 
-#if DEBUG
-	printf("\tGVector PUSH BACK finished\n");
-#endif
-
     return gvector_at(self, self->size - 1);
 }
 
 void gvector_pop_back(GVector * self) {
 #if DEBUG
-	printf("GVector POP BACK CALLED\n");
+	printf("GVector POP BACK called\n");
 #endif
 
     if (0 == self->size) {
@@ -123,10 +101,6 @@ void gvector_pop_back(GVector * self) {
     	--(self->size);
     	gvector_check_capacity(self);
 	}
-
-#if DEBUG
-	printf("\tGVector POP BACK FINISHED\n");
-#endif
 }
 
 void gvector_erase(GVector * self, unsigned index) {
@@ -139,18 +113,10 @@ void gvector_erase(GVector * self, unsigned index) {
 		return;
 	}
 
-	// unsigned i;
-	// for (i = 0; i < self->size; ++i) {
-
-	// }
 	--(self->size);
 	memmove(self->array + index * self->el_size, self->array + (index + 1) * self->el_size, (self->size - index) * self->el_size);
 
 	gvector_check_capacity(self);
-
-#if DEBUG
-	printf("\tGVector ERASE finished\n");
-#endif
 }
 
 void gvector_clear(GVector * self) {
@@ -161,10 +127,6 @@ void gvector_clear(GVector * self) {
     self->size = 0;
 
     gvector_check_capacity(self);
-
-#if DEBUG
-	printf("\tGVector CLEAR finished\n");
-#endif
 }
 
 

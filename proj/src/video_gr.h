@@ -18,6 +18,7 @@
 #define NAVY			rgb(0,128,255)
 #define RED				rgb(255,0,0)
 #define YELLOW			rgb(255,255,0)
+#define MAGENTA			rgb(255, 24, 127)
 
 /**
  * @brief Gets the horizontal Resolution of the screen

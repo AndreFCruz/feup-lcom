@@ -563,7 +563,7 @@ static int game_timer_handler() {
 		free(date);
 
 		if (updateScores(self->highscores, endgame)) {
-			writeScores("/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt",
+			writeScores(SCORES_TXT_PATH,
 					self->highscores);
 			printf("END_OF_GAME->HIGHSCORE\n");
 			return 2; // return highscore flag

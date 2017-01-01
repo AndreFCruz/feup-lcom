@@ -18,7 +18,7 @@
 #define RIGHT_CANNON_POS_X			795
 #define CANNON_PROJECTILE_OFFSET	32
 
-#define SCORES_TXT_PATH				"/home/lcom/svn/lcom1617-t4g01/proj/res/Scores.txt"
+#define SCORES_TXT_PATH				"/home/planetary_defense/res/Scores.txt"
 
 #define SCORE_SCORE_X				169
 #define SCORE_HOUR_X				297

@@ -30,6 +30,8 @@ int serial_handler() {
 }
 
 void setComState(serial_state_t state) {
+	printf("SetComState called. State: %x.\n", (int) state);
+
 	switch (state) {
 	case WAITING_START:
 		serial_write(MP_WAITING);

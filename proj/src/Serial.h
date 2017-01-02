@@ -39,7 +39,7 @@
 
 /* Line Control Register (LCR) */
 
-#define SERIAL_BIT_RATE		1920 //TODO: Good Value?
+#define SERIAL_BIT_RATE		19200 //TODO: Good Value?
 #define SERIAL_BASE_BR		115200
 
 #define LCR_DLAB	BIT(7)	/**< @brief Divisor Latch Access */

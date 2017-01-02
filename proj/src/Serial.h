@@ -20,6 +20,10 @@
 
 #define SERIAL_INITIAL_HOOK_ID	4
 
+/* Game Codes For Serial Porto */
+#define GAME_INIT		0X01
+#define GAME_ENDED		0x02
+
 /* UART Acessible (8-bit) Registers */
 
 #define RBR		0x00	/**< @brief Receiver Buffer Register - Read */

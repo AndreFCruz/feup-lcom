@@ -218,6 +218,7 @@ int timer_handler() {
 			delete_game();
 			game_state = MENU;
 			winner_flag = 0;
+			setComState(NONE);
 		}
 	case END_GAME_ANIMATION:
 		if ( OK != end_game_timer_handler(highscore_flag)) {
@@ -251,6 +252,7 @@ static int multiplayer_timer_handler() {
 			setComState(ENDED);
 			return 1;
 		}
+		serial_write(MP_STARTED);
 		break;
 	case ENDED:
 		serial_write(MP_ENDED);

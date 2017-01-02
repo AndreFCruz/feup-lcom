@@ -16,6 +16,7 @@ static int menu_timer_handler();
 static int game_timer_handler();
 static int end_game_timer_handler(int highscore_flag);
 static int highscores_timer_handler();
+static int multiplayer_timer_handler();
 static int multiplayer_end_animation(int winner_flag);
 
 /**
@@ -203,13 +204,16 @@ int timer_handler() {
 		break;
 	case GAME_MULTI:
 		if (getComState() == ONGOING) {
-			ret = game_timer_handler();
+			ret = multiplayer_timer_handler();
 			if (OK != ret ) {
 				// Fetch winning status
 				printf("ENDED MULTIPLAYER!\n");
 
 				//multiplayer_end_animation(int lost);
 			}
+		}
+		if (getComState() == WAITING_START) {
+			serial_write(MP_WAITING);
 		}
 		break;
 	case END_GAME_ANIMATION:
@@ -223,6 +227,22 @@ int timer_handler() {
 		if ( OK != highscores_timer_handler()) {
 			game_state = MENU;
 		}
+		break;
+	}
+
+	return OK;
+}
+
+static int multiplayer_timer_handler() {
+	switch(getComState()) {
+	case WAITING_START:
+		break;
+	case ONGOING:
+		if (game_timer_handler() != OK)
+			setComState(ENDED);
+		break;
+	case ENDED:
+		return 1;
 		break;
 	}
 

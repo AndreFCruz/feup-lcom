@@ -11,8 +11,6 @@ Bitmap ** load_bmps(const char * base, unsigned num) {
 	strcpy(path, base);
 	strcat(path, "00.bmp");
 
-	printf("\t\tLoading Animation BMPs with Template String \"%s\"\n", path);
-
 	unsigned i, j;
 	for (i = 0; i < num; ++i) {
 		char parsed_num[2]; // Parse unsigned int to string
@@ -68,8 +66,6 @@ static BMPsHolder_t * new_bmps_holder() {
 			"/home/planetary_defense/res/InitialMenu/HsArea.bmp");
 	ptr->highscore_text = loadBitmap(
 			"/home/planetary_defense/res/highscore_text.bmp");
-
-	printf("New BMPsHolder Instance\n");
 
 	return ptr;
 }

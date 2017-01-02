@@ -10,11 +10,13 @@
 #include "RTC.h"
 #include "Highscores.h"
 #include "Serial.h"
+#include "Communication.h"
 
 static int menu_timer_handler();
 static int game_timer_handler();
 static int end_game_timer_handler(int highscore_flag);
 static int highscores_timer_handler();
+static int multiplayer_end_animation(int winner_flag);
 
 /**
  * Menu Struct and Methods
@@ -199,10 +201,16 @@ int timer_handler() {
 			}
 		}
 		break;
-	case GAME_MULTI: // TODO
-		printf("Sending test message...\n");
-		serial_write(GAME_ENDED);
-		game_state = MENU;
+	case GAME_MULTI:
+		if (getComState() == ONGOING) {
+			ret = game_timer_handler();
+			if (OK != ret ) {
+				// Fetch winning status
+				printf("ENDED MULTIPLAYER!\n");
+
+				//multiplayer_end_animation(int lost);
+			}
+		}
 		break;
 	case END_GAME_ANIMATION:
 		if ( OK != end_game_timer_handler(highscore_flag)) {
@@ -270,6 +278,7 @@ static int menu_timer_handler(game_state_t * game_state) {
 		selected = 2;
 
 		if (get_mouseRMB()) {
+			setComState(WAITING_START);
 			*game_state = GAME_MULTI;
 			selected = 0;
 		}
@@ -341,13 +350,15 @@ static int game_timer_handler() {
 
 	// Mouse
 	//spawn missiles on mouse clicks
-	if (get_mouseRMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES) {
+	if ( get_mouseRMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES
+			&& get_mouse_pos()[1] < CANNON_POS_Y ) {
 		int tmp_pos[2] = { self->cannon_pos[0] + CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
 		gvector_push_back(self->f_missiles, &tmp);
 	}
-	if (get_mouseLMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES) {
+	if ( get_mouseLMB() && gvector_get_size(self->f_missiles) < MAX_NUM_MISSILES
+			&& get_mouse_pos()[1] < CANNON_POS_Y ) {
 		int tmp_pos[2] = { self->cannon_pos[1] - CANNON_PROJECTILE_OFFSET,
 		CANNON_POS_Y };
 		Missile * tmp = new_fmissile(tmp_pos, get_mouse_pos());
@@ -482,25 +493,6 @@ static int game_timer_handler() {
 			}
 		}
 
-		//TODO: Limpar este código?
-
-		// Friendly Missiles -> friendly fire allowed ?
-//		for (j = 0; j < gvector_get_size(self->f_missiles); ++j) {
-//			Missile * missile_ptr = *(Missile **) gvector_at(self->f_missiles, j);
-//
-//			if ( missile_collidedWithRect(missile_ptr, self->bases_pos[idx] - BUILDING_SIZE_X / 2.0,
-//					GROUND_Y, BUILDING_SIZE_X, self->buildings_size_y[self->bases_hp[idx]]) ) {
-//				printf("Collision Detected! Friendly Missile with base %d!\n", idx);
-//
-//				gvector_erase(self->f_missiles, j);
-//				--j;
-//
-//				Explosion * tmp = delete_missile(missile_ptr);
-//				gvector_push_back(self->explosions, &tmp);
-//
-//				self->bases_hp[idx] = self->bases_hp[idx] > 0 ? self->bases_hp[idx] - 1 : 0;
-//			}
-//		}
 	}
 
 	/** **/
@@ -687,3 +679,6 @@ static int highscores_timer_handler() {
 	return OK;
 }
 
+static int multiplayer_end_animation(int winner_flag) {
+
+}

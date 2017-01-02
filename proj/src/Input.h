@@ -10,8 +10,6 @@
 #include "keyboard.h"
 #include "mouse.h"
 
-// TODO Update with actual make/break codes!!
-
 /**
  * Keyboard scan codes that should be recognized
  */
@@ -110,7 +108,7 @@ void mouse_packet_handler(unsigned char * packet);
  * @param x_final Final position of the rectangle in the horizontal axis
  * @param y_final Final position of the rectangle in the vertical axis
  *
- * @return Return 0 if Mouse is not inside the rectantgle, non-zero otherwise	TODO: nao devia ser ao contrario?
+ * @return Return 0 if Mouse is not inside the rectantgle, 1 otherwise
  */
 int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final);
 
@@ -121,8 +119,10 @@ int mouse_inside_rect(int x_initial, int y_initial, int x_final, int y_final);
  * @param y_center Position of the center of the circle in the vertical axis
  * @param radius Radius of the circle
  *
- * @return Return 0 if Mouse is not inside the circle, non-zero otherwise	TODO: nao devia ser ao contrario?
+ * @return Return 0 if Mouse is not inside the circle, 1 otherwise
  */
 int mouse_inside_circle(int x_center, int y_center, int radius);
+
+/**@}*/
 
 #endif

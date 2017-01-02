@@ -1,0 +1,30 @@
+\hypertarget{_highscores_8h}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Highscores.h File Reference}
+\label{_highscores_8h}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Highscores.\+h@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Highscores.\+h}}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_highscores_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_score__t}{Score\+\_\+t}
+\begin{DoxyCompactList}\small\item\em A structure that contains a score\textquotesingle{}s information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group___highscores_gaba51915c87d64af47fb1cc59348961c9}{OK}~0
+\item 
+\#define \hyperlink{group___highscores_ga1942001a3372417b1fa0106acef995b3}{H\+I\+G\+H\+S\+C\+O\+R\+E\+\_\+\+N\+U\+M\+B\+ER}~5
+\begin{DoxyCompactList}\small\item\em Number of high scores saved. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{struct_score__t}{Score\+\_\+t} $\ast$ \hyperlink{group___highscores_ga860a7be33a6a7a627d2fafb624c9631f}{load\+Scores} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Load the 5 Highest Scores from a file into an array. \end{DoxyCompactList}\item 
+int \hyperlink{group___highscores_gad0af57912ba7eaec7b5ed3c892b57c10}{write\+Scores} (const char $\ast$filename, \hyperlink{struct_score__t}{Score\+\_\+t} $\ast$scores)
+\begin{DoxyCompactList}\small\item\em Writes the 5 Highest Scores from an array into a file. \end{DoxyCompactList}\item 
+int \hyperlink{group___highscores_ga8a07ce6e6865afe87235689a394378cc}{update\+Scores} (\hyperlink{struct_score__t}{Score\+\_\+t} $\ast$scores, \hyperlink{struct_score__t}{Score\+\_\+t} newscore)
+\begin{DoxyCompactList}\small\item\em Updates the array containing the 5 Highest Scores, with a new Score. \end{DoxyCompactList}\end{DoxyCompactItemize}

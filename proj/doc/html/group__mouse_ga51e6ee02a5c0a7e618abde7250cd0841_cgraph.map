@@ -1,0 +1,4 @@
+<map id="mouse_subscribe_int" name="mouse_subscribe_int">
+<area shape="rect" id="node2" href="$group__mouse.html#gad26aa3828c4a6d900e654de8e4e68e83" title="Writes a command in the mouse input buffer. " alt="" coords="201,5,330,31"/>
+<area shape="rect" id="node3" href="$group__mouse.html#gaaff93ce65c5bddd94904122f0e336233" title="Reads data from the mouse output buffer. " alt="" coords="378,5,474,31"/>
+</map>

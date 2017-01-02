@@ -1,0 +1,4 @@
+<map id="keyboard_write_command" name="keyboard_write_command">
+<area shape="rect" id="node2" href="$group__keyboard.html#ga26c2eb6181cabae35aff87fc387de0e9" title="Writes data to the keyboard input buffer. " alt="" coords="231,5,343,31"/>
+<area shape="rect" id="node3" href="$group__keyboard.html#gacd2bc10465c70dbb99210f880bc18207" title="Reads data from the keyboard output buffer. " alt="" coords="232,55,342,80"/>
+</map>

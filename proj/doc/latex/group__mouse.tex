@@ -1,0 +1,165 @@
+\hypertarget{group__mouse}{}\section{mouse}
+\label{group__mouse}\index{mouse@{mouse}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__mouse_gaf67a039319066d9e7dcdcc90e3a48840}{int\+\_\+value} (unsigned char delta\+\_\+var, int sign)
+\begin{DoxyCompactList}\small\item\em Function to get the signed value of an unsigned value. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gad26aa3828c4a6d900e654de8e4e68e83}{mouse\+\_\+write\+\_\+cmd} (char cmd)
+\begin{DoxyCompactList}\small\item\em Writes a command in the mouse input buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_ga51e6ee02a5c0a7e618abde7250cd0841}{mouse\+\_\+subscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_ga7614d1f22092d37078f6a3da58f7c957}{mouse\+\_\+unsubscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gacf07c98dc574238b3da9388c3dd1042a}{mouse\+\_\+synchronize} (void)
+\begin{DoxyCompactList}\small\item\em Synchronizes the mouse. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gaaff93ce65c5bddd94904122f0e336233}{mouse\+\_\+read} (void)
+\begin{DoxyCompactList}\small\item\em Reads data from the mouse output buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gab5168a5f260c8e28f0f75db8a35cdb98}{mouse\+\_\+handler} (unsigned char $\ast$packet, unsigned short $\ast$counter)
+\begin{DoxyCompactList}\small\item\em Mouse Interrupt Handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions for using the i8042 K\+B\+C/\+K\+BD 
+
+\subsection{Function Documentation}
+\hypertarget{group__mouse_gaf67a039319066d9e7dcdcc90e3a48840}{}\label{group__mouse_gaf67a039319066d9e7dcdcc90e3a48840} 
+\index{mouse@{mouse}!int\+\_\+value@{int\+\_\+value}}
+\index{int\+\_\+value@{int\+\_\+value}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{int\+\_\+value()}{int\_value()}}
+{\footnotesize\ttfamily int int\+\_\+value (\begin{DoxyParamCaption}\item[{unsigned char}]{delta\+\_\+var,  }\item[{int}]{sign }\end{DoxyParamCaption})}
+
+
+
+Function to get the signed value of an unsigned value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta\+\_\+var} & Unsigned value that will be processed \\
+\hline
+{\em sign} & Sign of the unsigned value\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return the signed value 
+\end{DoxyReturn}
+\hypertarget{group__mouse_gab5168a5f260c8e28f0f75db8a35cdb98}{}\label{group__mouse_gab5168a5f260c8e28f0f75db8a35cdb98} 
+\index{mouse@{mouse}!mouse\+\_\+handler@{mouse\+\_\+handler}}
+\index{mouse\+\_\+handler@{mouse\+\_\+handler}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+handler()}{mouse\_handler()}}
+{\footnotesize\ttfamily int mouse\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned char $\ast$}]{packet,  }\item[{unsigned short $\ast$}]{counter }\end{DoxyParamCaption})}
+
+
+
+Mouse Interrupt Handler. 
+
+Fetches Mouse output and prints packets in a human friendly way
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & pointer to packet that shall be processed \\
+\hline
+{\em counter} & pointer to counter that controls the packet count of bytes\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__mouse_gab5168a5f260c8e28f0f75db8a35cdb98_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group__mouse_gaaff93ce65c5bddd94904122f0e336233}{}\label{group__mouse_gaaff93ce65c5bddd94904122f0e336233} 
+\index{mouse@{mouse}!mouse\+\_\+read@{mouse\+\_\+read}}
+\index{mouse\+\_\+read@{mouse\+\_\+read}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+read()}{mouse\_read()}}
+{\footnotesize\ttfamily int mouse\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads data from the mouse output buffer. 
+
+\begin{DoxyReturn}{Returns}
+Return value read upon sucess and -\/1 otherwise 
+\end{DoxyReturn}
+\hypertarget{group__mouse_ga51e6ee02a5c0a7e618abde7250cd0841}{}\label{group__mouse_ga51e6ee02a5c0a7e618abde7250cd0841} 
+\index{mouse@{mouse}!mouse\+\_\+subscribe\+\_\+int@{mouse\+\_\+subscribe\+\_\+int}}
+\index{mouse\+\_\+subscribe\+\_\+int@{mouse\+\_\+subscribe\+\_\+int}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+subscribe\+\_\+int()}{mouse\_subscribe\_int()}}
+{\footnotesize\ttfamily int mouse\+\_\+subscribe\+\_\+int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Mouse interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Returns bit order in interrupt mask; negative value on failure 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__mouse_ga51e6ee02a5c0a7e618abde7250cd0841_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group__mouse_gacf07c98dc574238b3da9388c3dd1042a}{}\label{group__mouse_gacf07c98dc574238b3da9388c3dd1042a} 
+\index{mouse@{mouse}!mouse\+\_\+synchronize@{mouse\+\_\+synchronize}}
+\index{mouse\+\_\+synchronize@{mouse\+\_\+synchronize}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+synchronize()}{mouse\_synchronize()}}
+{\footnotesize\ttfamily int mouse\+\_\+synchronize (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Synchronizes the mouse. 
+
+\begin{DoxyReturn}{Returns}
+Return byte1 upon sucess and -\/1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=293pt]{group__mouse_gacf07c98dc574238b3da9388c3dd1042a_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group__mouse_ga7614d1f22092d37078f6a3da58f7c957}{}\label{group__mouse_ga7614d1f22092d37078f6a3da58f7c957} 
+\index{mouse@{mouse}!mouse\+\_\+unsubscribe\+\_\+int@{mouse\+\_\+unsubscribe\+\_\+int}}
+\index{mouse\+\_\+unsubscribe\+\_\+int@{mouse\+\_\+unsubscribe\+\_\+int}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+unsubscribe\+\_\+int()}{mouse\_unsubscribe\_int()}}
+{\footnotesize\ttfamily int mouse\+\_\+unsubscribe\+\_\+int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Mouse interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{group__mouse_gad26aa3828c4a6d900e654de8e4e68e83}{}\label{group__mouse_gad26aa3828c4a6d900e654de8e4e68e83} 
+\index{mouse@{mouse}!mouse\+\_\+write\+\_\+cmd@{mouse\+\_\+write\+\_\+cmd}}
+\index{mouse\+\_\+write\+\_\+cmd@{mouse\+\_\+write\+\_\+cmd}!mouse@{mouse}}
+\subsubsection{\texorpdfstring{mouse\+\_\+write\+\_\+cmd()}{mouse\_write\_cmd()}}
+{\footnotesize\ttfamily int mouse\+\_\+write\+\_\+cmd (\begin{DoxyParamCaption}\item[{char}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Writes a command in the mouse input buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & Command that is written in the input buffer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{group__mouse_gad26aa3828c4a6d900e654de8e4e68e83_cgraph}
+\end{center}
+\end{figure}

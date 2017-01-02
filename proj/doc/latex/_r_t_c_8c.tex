@@ -1,0 +1,39 @@
+\hypertarget{_r_t_c_8c}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+R\+TC.c File Reference}
+\label{_r_t_c_8c}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+R\+T\+C.\+c@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+R\+T\+C.\+c}}
+{\ttfamily \#include $<$minix/syslib.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}R\+T\+C.\+h\char`\"{}}\newline
+Include dependency graph for R\+T\+C.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=284pt]{_r_t_c_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group___serial_ga6bd13bd1e0cd043f50abb97bcc138bfa}{rtc\+\_\+subscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables R\+TC interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_ga5b1cba4be2c15183b9f2c089fe6e946a}{rtc\+\_\+unsubscribe\+\_\+int} ()
+\begin{DoxyCompactList}\small\item\em Unsubscribes R\+TC interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_gab88c07eaefdae0ccbae9e7c2a1e04f71}{rtc\+\_\+write\+\_\+register} (unsigned long reg, unsigned long value)
+\begin{DoxyCompactList}\small\item\em Writes value to register reg. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_gacaae78073772a1f95560e42cef087a93}{rtc\+\_\+updating} (void)
+\item 
+\hyperlink{struct_date__t}{Date\+\_\+t} $\ast$ \hyperlink{group___serial_ga08a02c163edf9dc74b2d15dfb23a2624}{rtc\+\_\+read\+\_\+date} (void)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static int \hyperlink{_r_t_c_8c_a6c52a1d32571a429369253ce7c3a3d7a}{rtc\+\_\+hook\+\_\+id} = \hyperlink{group___serial_gaa03bb5fe5bddcdd5bf15801d73f2c9c2}{R\+T\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+ID}
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\hypertarget{_r_t_c_8c_a6c52a1d32571a429369253ce7c3a3d7a}{}\label{_r_t_c_8c_a6c52a1d32571a429369253ce7c3a3d7a} 
+\index{R\+T\+C.\+c@{R\+T\+C.\+c}!rtc\+\_\+hook\+\_\+id@{rtc\+\_\+hook\+\_\+id}}
+\index{rtc\+\_\+hook\+\_\+id@{rtc\+\_\+hook\+\_\+id}!R\+T\+C.\+c@{R\+T\+C.\+c}}
+\subsubsection{\texorpdfstring{rtc\+\_\+hook\+\_\+id}{rtc\_hook\_id}}
+{\footnotesize\ttfamily int rtc\+\_\+hook\+\_\+id = \hyperlink{group___serial_gaa03bb5fe5bddcdd5bf15801d73f2c9c2}{R\+T\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+ID}\hspace{0.3cm}{\ttfamily [static]}}
+

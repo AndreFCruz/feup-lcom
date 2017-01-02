@@ -1,0 +1,444 @@
+\hypertarget{group___input}{}\section{Input}
+\label{group___input}\index{Input@{Input}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_input__t}{Input\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Structure that keeps record of all the user input information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group___input_ga1d7797eb18d53b8e2b78e4255bee6050}{M\+P\+\_\+\+W\+A\+I\+T\+I\+NG}~0x01
+\item 
+\#define \hyperlink{group___input_ga67d21ae11c5f3ce5f1445b40f7455731}{M\+P\+\_\+\+S\+T\+A\+R\+T\+ED}~0x02
+\item 
+\#define \hyperlink{group___input_gabf5d93e2b77034df4441eb3e448bfb95}{M\+P\+\_\+\+E\+N\+D\+ED}~0x03
+\item 
+\#define \hyperlink{group___input_ga6f6489887e08bff4887d0bc5dcf214d8}{A\+CK}~0x\+FF
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t} \{ \hyperlink{group___input_ggad2eda33b1d20e895223c0ebbb339bde8acbf7d4decafc5be07eb03140ae4569ad}{W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT}, 
+\hyperlink{group___input_ggad2eda33b1d20e895223c0ebbb339bde8aea9e2a8ce4339ceb6af69f47c7610012}{O\+N\+G\+O\+I\+NG}, 
+\hyperlink{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ae793e9244aaa6de6060e251d5e0d2021}{E\+N\+D\+ED}, 
+\hyperlink{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ac157bdf0b85a40d2619cbc8bc1ae5fe2}{N\+O\+NE}
+ \}
+\item 
+enum \hyperlink{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52}{keycode\+\_\+t} \{ \newline
+\hyperlink{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a8366c23d0d25dbbfc1bb69112a1f95a8}{E\+S\+C\+\_\+\+B\+R\+E\+AK} = E\+S\+C\+\_\+\+B\+R\+E\+A\+K\+\_\+\+C\+O\+DE, 
+\hyperlink{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a01de7fd0ebd3f43151d9601a28425e24}{E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK} = E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+A\+K\+\_\+\+C\+O\+DE, 
+\hyperlink{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52ab53bdb8ad76cc94ac22158c433d55c4b}{U\+P\+\_\+\+M\+A\+KE} = U\+P\+\_\+\+M\+A\+K\+E\+\_\+\+C\+O\+DE, 
+\hyperlink{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a56933f61ec12c9ff7723f2ef936d6c97}{D\+O\+W\+N\+\_\+\+M\+A\+KE} = D\+O\+W\+N\+\_\+\+M\+A\+K\+E\+\_\+\+C\+O\+DE, 
+\newline
+\hyperlink{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52aec8a3617311ffdac328944fe1e482708}{N\+O\+\_\+\+K\+EY} = 0x0
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group___input_gad26ccb83dbd3f35a93e991343682b843}{serial\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em Serial Port interrupt handler. \end{DoxyCompactList}\item 
+void \hyperlink{group___input_gaaf4cb27460e9e5bfa6f46343518e89bf}{set\+Com\+State} (\hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t} state)
+\begin{DoxyCompactList}\small\item\em Sets the Communication State. Used for multiplayer state. \end{DoxyCompactList}\item 
+\hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t} \hyperlink{group___input_gadf520a08e359e983d9cfb73a8b714fc2}{get\+Com\+State} ()
+\begin{DoxyCompactList}\small\item\em Get method for the current Communication State. \end{DoxyCompactList}\item 
+\hyperlink{struct_input__t}{Input\+\_\+t} $\ast$ \hyperlink{group___input_ga8221771f8f04f39255e0b9f577c080e9}{input\+\_\+instance} ()
+\begin{DoxyCompactList}\small\item\em Creates a new input instance if there is none, otherwise returns the existing one (Singleton like behaviour). \end{DoxyCompactList}\item 
+void \hyperlink{group___input_ga35566b6193e5c1d1a515b309900efe82}{delete\+\_\+input} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Input instance, freeing all the resources used by it. \end{DoxyCompactList}\item 
+void \hyperlink{group___input_ga2f4098fc71cbd39422c1001d66970bf5}{keyboard\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em Keyboard Interrupt Handler. \end{DoxyCompactList}\item 
+\hyperlink{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52}{keycode\+\_\+t} \hyperlink{group___input_ga4abaa84a7ae0505c6acab391f82ab1ac}{input\+\_\+get\+\_\+key} ()
+\begin{DoxyCompactList}\small\item\em Remove\textquotesingle{}s the key code from the input buffer. \end{DoxyCompactList}\item 
+const int $\ast$ \hyperlink{group___input_ga6ee316c978397c6807556fb9298ce902}{get\+\_\+mouse\+\_\+pos} ()
+\begin{DoxyCompactList}\small\item\em Gets the current mouse position on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___input_ga5d6fc0beedad492333795ddff18c20b9}{get\+\_\+mouse\+R\+MB} ()
+\begin{DoxyCompactList}\small\item\em Gets the current state of the mouse right button. \end{DoxyCompactList}\item 
+int \hyperlink{group___input_gafff0cd01210126d49120f40045cafccc}{get\+\_\+mouse\+L\+MB} ()
+\begin{DoxyCompactList}\small\item\em Gets the current state of the mouse left button. \end{DoxyCompactList}\item 
+int \hyperlink{group___input_ga38c8f84d3704d46011eee4fd423abaa2}{get\+\_\+mouse\+M\+MB} ()
+\begin{DoxyCompactList}\small\item\em Gets the current state of the mouse middle button. \end{DoxyCompactList}\item 
+void \hyperlink{group___input_gaeeb5745202c4e6c62abee86ad62f36f6}{mouse\+\_\+packet\+\_\+handler} (unsigned char $\ast$packet)
+\begin{DoxyCompactList}\small\item\em Mouse Interrupt Handler. \end{DoxyCompactList}\item 
+int \hyperlink{group___input_gaa1aaa6e96c3e2c48378faaace6138b99}{mouse\+\_\+inside\+\_\+rect} (int x\+\_\+initial, int y\+\_\+initial, int x\+\_\+final, int y\+\_\+final)
+\begin{DoxyCompactList}\small\item\em Verifies if the Mouse is inside a certain rectangle. \end{DoxyCompactList}\item 
+int \hyperlink{group___input_ga287741f65ec2e6257111210ed16d3d05}{mouse\+\_\+inside\+\_\+circle} (int x\+\_\+center, int y\+\_\+center, int radius)
+\begin{DoxyCompactList}\small\item\em Verifies if the Mouse is inside a certain circle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions for manipulating all the Inputs from the user/ player 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{group___input_ga6f6489887e08bff4887d0bc5dcf214d8}{}\label{group___input_ga6f6489887e08bff4887d0bc5dcf214d8} 
+\index{Input@{Input}!A\+CK@{A\+CK}}
+\index{A\+CK@{A\+CK}!Input@{Input}}
+\subsubsection{\texorpdfstring{A\+CK}{ACK}}
+{\footnotesize\ttfamily \#define A\+CK~0x\+FF}
+
+\hypertarget{group___input_gabf5d93e2b77034df4441eb3e448bfb95}{}\label{group___input_gabf5d93e2b77034df4441eb3e448bfb95} 
+\index{Input@{Input}!M\+P\+\_\+\+E\+N\+D\+ED@{M\+P\+\_\+\+E\+N\+D\+ED}}
+\index{M\+P\+\_\+\+E\+N\+D\+ED@{M\+P\+\_\+\+E\+N\+D\+ED}!Input@{Input}}
+\subsubsection{\texorpdfstring{M\+P\+\_\+\+E\+N\+D\+ED}{MP\_ENDED}}
+{\footnotesize\ttfamily \#define M\+P\+\_\+\+E\+N\+D\+ED~0x03}
+
+\hypertarget{group___input_ga67d21ae11c5f3ce5f1445b40f7455731}{}\label{group___input_ga67d21ae11c5f3ce5f1445b40f7455731} 
+\index{Input@{Input}!M\+P\+\_\+\+S\+T\+A\+R\+T\+ED@{M\+P\+\_\+\+S\+T\+A\+R\+T\+ED}}
+\index{M\+P\+\_\+\+S\+T\+A\+R\+T\+ED@{M\+P\+\_\+\+S\+T\+A\+R\+T\+ED}!Input@{Input}}
+\subsubsection{\texorpdfstring{M\+P\+\_\+\+S\+T\+A\+R\+T\+ED}{MP\_STARTED}}
+{\footnotesize\ttfamily \#define M\+P\+\_\+\+S\+T\+A\+R\+T\+ED~0x02}
+
+\hypertarget{group___input_ga1d7797eb18d53b8e2b78e4255bee6050}{}\label{group___input_ga1d7797eb18d53b8e2b78e4255bee6050} 
+\index{Input@{Input}!M\+P\+\_\+\+W\+A\+I\+T\+I\+NG@{M\+P\+\_\+\+W\+A\+I\+T\+I\+NG}}
+\index{M\+P\+\_\+\+W\+A\+I\+T\+I\+NG@{M\+P\+\_\+\+W\+A\+I\+T\+I\+NG}!Input@{Input}}
+\subsubsection{\texorpdfstring{M\+P\+\_\+\+W\+A\+I\+T\+I\+NG}{MP\_WAITING}}
+{\footnotesize\ttfamily \#define M\+P\+\_\+\+W\+A\+I\+T\+I\+NG~0x01}
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52}{}\label{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52} 
+\index{Input@{Input}!keycode\+\_\+t@{keycode\+\_\+t}}
+\index{keycode\+\_\+t@{keycode\+\_\+t}!Input@{Input}}
+\subsubsection{\texorpdfstring{keycode\+\_\+t}{keycode\_t}}
+{\footnotesize\ttfamily enum \hyperlink{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52}{keycode\+\_\+t}}
+
+Keyboard scan codes that should be recognized \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+S\+C\+\_\+\+B\+R\+E\+AK@{E\+S\+C\+\_\+\+B\+R\+E\+AK}!Input@{Input}}\index{Input@{Input}!E\+S\+C\+\_\+\+B\+R\+E\+AK@{E\+S\+C\+\_\+\+B\+R\+E\+AK}}}\hypertarget{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a8366c23d0d25dbbfc1bb69112a1f95a8}{}\label{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a8366c23d0d25dbbfc1bb69112a1f95a8} 
+E\+S\+C\+\_\+\+B\+R\+E\+AK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK@{E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK}!Input@{Input}}\index{Input@{Input}!E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK@{E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK}}}\hypertarget{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a01de7fd0ebd3f43151d9601a28425e24}{}\label{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a01de7fd0ebd3f43151d9601a28425e24} 
+E\+N\+T\+E\+R\+\_\+\+B\+R\+E\+AK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{U\+P\+\_\+\+M\+A\+KE@{U\+P\+\_\+\+M\+A\+KE}!Input@{Input}}\index{Input@{Input}!U\+P\+\_\+\+M\+A\+KE@{U\+P\+\_\+\+M\+A\+KE}}}\hypertarget{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52ab53bdb8ad76cc94ac22158c433d55c4b}{}\label{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52ab53bdb8ad76cc94ac22158c433d55c4b} 
+U\+P\+\_\+\+M\+A\+KE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{D\+O\+W\+N\+\_\+\+M\+A\+KE@{D\+O\+W\+N\+\_\+\+M\+A\+KE}!Input@{Input}}\index{Input@{Input}!D\+O\+W\+N\+\_\+\+M\+A\+KE@{D\+O\+W\+N\+\_\+\+M\+A\+KE}}}\hypertarget{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a56933f61ec12c9ff7723f2ef936d6c97}{}\label{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52a56933f61ec12c9ff7723f2ef936d6c97} 
+D\+O\+W\+N\+\_\+\+M\+A\+KE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+\_\+\+K\+EY@{N\+O\+\_\+\+K\+EY}!Input@{Input}}\index{Input@{Input}!N\+O\+\_\+\+K\+EY@{N\+O\+\_\+\+K\+EY}}}\hypertarget{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52aec8a3617311ffdac328944fe1e482708}{}\label{group___input_gga6e68664bf6d0e0a4dac76a07ae630c52aec8a3617311ffdac328944fe1e482708} 
+N\+O\+\_\+\+K\+EY&\\
+\hline
+
+\end{DoxyEnumFields}
+\hypertarget{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{}\label{group___input_gad2eda33b1d20e895223c0ebbb339bde8} 
+\index{Input@{Input}!serial\+\_\+state\+\_\+t@{serial\+\_\+state\+\_\+t}}
+\index{serial\+\_\+state\+\_\+t@{serial\+\_\+state\+\_\+t}!Input@{Input}}
+\subsubsection{\texorpdfstring{serial\+\_\+state\+\_\+t}{serial\_state\_t}}
+{\footnotesize\ttfamily enum \hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT@{W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT}!Input@{Input}}\index{Input@{Input}!W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT@{W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT}}}\hypertarget{group___input_ggad2eda33b1d20e895223c0ebbb339bde8acbf7d4decafc5be07eb03140ae4569ad}{}\label{group___input_ggad2eda33b1d20e895223c0ebbb339bde8acbf7d4decafc5be07eb03140ae4569ad} 
+W\+A\+I\+T\+I\+N\+G\+\_\+\+S\+T\+A\+RT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{O\+N\+G\+O\+I\+NG@{O\+N\+G\+O\+I\+NG}!Input@{Input}}\index{Input@{Input}!O\+N\+G\+O\+I\+NG@{O\+N\+G\+O\+I\+NG}}}\hypertarget{group___input_ggad2eda33b1d20e895223c0ebbb339bde8aea9e2a8ce4339ceb6af69f47c7610012}{}\label{group___input_ggad2eda33b1d20e895223c0ebbb339bde8aea9e2a8ce4339ceb6af69f47c7610012} 
+O\+N\+G\+O\+I\+NG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+N\+D\+ED@{E\+N\+D\+ED}!Input@{Input}}\index{Input@{Input}!E\+N\+D\+ED@{E\+N\+D\+ED}}}\hypertarget{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ae793e9244aaa6de6060e251d5e0d2021}{}\label{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ae793e9244aaa6de6060e251d5e0d2021} 
+E\+N\+D\+ED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+NE@{N\+O\+NE}!Input@{Input}}\index{Input@{Input}!N\+O\+NE@{N\+O\+NE}}}\hypertarget{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ac157bdf0b85a40d2619cbc8bc1ae5fe2}{}\label{group___input_ggad2eda33b1d20e895223c0ebbb339bde8ac157bdf0b85a40d2619cbc8bc1ae5fe2} 
+N\+O\+NE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\hypertarget{group___input_ga35566b6193e5c1d1a515b309900efe82}{}\label{group___input_ga35566b6193e5c1d1a515b309900efe82} 
+\index{Input@{Input}!delete\+\_\+input@{delete\+\_\+input}}
+\index{delete\+\_\+input@{delete\+\_\+input}!Input@{Input}}
+\subsubsection{\texorpdfstring{delete\+\_\+input()}{delete\_input()}}
+{\footnotesize\ttfamily void delete\+\_\+input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destroy the Input instance, freeing all the resources used by it. 
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga35566b6193e5c1d1a515b309900efe82_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga6ee316c978397c6807556fb9298ce902}{}\label{group___input_ga6ee316c978397c6807556fb9298ce902} 
+\index{Input@{Input}!get\+\_\+mouse\+\_\+pos@{get\+\_\+mouse\+\_\+pos}}
+\index{get\+\_\+mouse\+\_\+pos@{get\+\_\+mouse\+\_\+pos}!Input@{Input}}
+\subsubsection{\texorpdfstring{get\+\_\+mouse\+\_\+pos()}{get\_mouse\_pos()}}
+{\footnotesize\ttfamily const int$\ast$ get\+\_\+mouse\+\_\+pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the current mouse position on the screen. 
+
+\begin{DoxyReturn}{Returns}
+Array containing the current mouse position on the screen (x,y) 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga6ee316c978397c6807556fb9298ce902_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gafff0cd01210126d49120f40045cafccc}{}\label{group___input_gafff0cd01210126d49120f40045cafccc} 
+\index{Input@{Input}!get\+\_\+mouse\+L\+MB@{get\+\_\+mouse\+L\+MB}}
+\index{get\+\_\+mouse\+L\+MB@{get\+\_\+mouse\+L\+MB}!Input@{Input}}
+\subsubsection{\texorpdfstring{get\+\_\+mouse\+L\+M\+B()}{get\_mouseLMB()}}
+{\footnotesize\ttfamily int get\+\_\+mouse\+L\+MB (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the current state of the mouse left button. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 if mouse left button is not pressed, non zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_gafff0cd01210126d49120f40045cafccc_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga38c8f84d3704d46011eee4fd423abaa2}{}\label{group___input_ga38c8f84d3704d46011eee4fd423abaa2} 
+\index{Input@{Input}!get\+\_\+mouse\+M\+MB@{get\+\_\+mouse\+M\+MB}}
+\index{get\+\_\+mouse\+M\+MB@{get\+\_\+mouse\+M\+MB}!Input@{Input}}
+\subsubsection{\texorpdfstring{get\+\_\+mouse\+M\+M\+B()}{get\_mouseMMB()}}
+{\footnotesize\ttfamily int get\+\_\+mouse\+M\+MB (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the current state of the mouse middle button. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 if mouse middle button is not pressed, non zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga38c8f84d3704d46011eee4fd423abaa2_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga5d6fc0beedad492333795ddff18c20b9}{}\label{group___input_ga5d6fc0beedad492333795ddff18c20b9} 
+\index{Input@{Input}!get\+\_\+mouse\+R\+MB@{get\+\_\+mouse\+R\+MB}}
+\index{get\+\_\+mouse\+R\+MB@{get\+\_\+mouse\+R\+MB}!Input@{Input}}
+\subsubsection{\texorpdfstring{get\+\_\+mouse\+R\+M\+B()}{get\_mouseRMB()}}
+{\footnotesize\ttfamily int get\+\_\+mouse\+R\+MB (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the current state of the mouse right button. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 if mouse right button is not pressed, non zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga5d6fc0beedad492333795ddff18c20b9_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gadf520a08e359e983d9cfb73a8b714fc2}{}\label{group___input_gadf520a08e359e983d9cfb73a8b714fc2} 
+\index{Input@{Input}!get\+Com\+State@{get\+Com\+State}}
+\index{get\+Com\+State@{get\+Com\+State}!Input@{Input}}
+\subsubsection{\texorpdfstring{get\+Com\+State()}{getComState()}}
+{\footnotesize\ttfamily \hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t} get\+Com\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get method for the current Communication State. 
+
+\begin{DoxyReturn}{Returns}
+The current serial\+\_\+state\+\_\+t 
+\end{DoxyReturn}
+\hypertarget{group___input_ga4abaa84a7ae0505c6acab391f82ab1ac}{}\label{group___input_ga4abaa84a7ae0505c6acab391f82ab1ac} 
+\index{Input@{Input}!input\+\_\+get\+\_\+key@{input\+\_\+get\+\_\+key}}
+\index{input\+\_\+get\+\_\+key@{input\+\_\+get\+\_\+key}!Input@{Input}}
+\subsubsection{\texorpdfstring{input\+\_\+get\+\_\+key()}{input\_get\_key()}}
+{\footnotesize\ttfamily \hyperlink{group___input_ga6e68664bf6d0e0a4dac76a07ae630c52}{keycode\+\_\+t} input\+\_\+get\+\_\+key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Remove\textquotesingle{}s the key code from the input buffer. 
+
+Compatible with double make/ brake codes
+
+\begin{DoxyReturn}{Returns}
+Key code type (E\+SC, E\+N\+T\+ER, UP, D\+O\+WN or N\+O\+NE) 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga4abaa84a7ae0505c6acab391f82ab1ac_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga8221771f8f04f39255e0b9f577c080e9}{}\label{group___input_ga8221771f8f04f39255e0b9f577c080e9} 
+\index{Input@{Input}!input\+\_\+instance@{input\+\_\+instance}}
+\index{input\+\_\+instance@{input\+\_\+instance}!Input@{Input}}
+\subsubsection{\texorpdfstring{input\+\_\+instance()}{input\_instance()}}
+{\footnotesize\ttfamily \hyperlink{struct_input__t}{Input\+\_\+t}$\ast$ input\+\_\+instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new input instance if there is none, otherwise returns the existing one (Singleton like behaviour). 
+
+\begin{DoxyReturn}{Returns}
+Pointer to a Input instance 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga8221771f8f04f39255e0b9f577c080e9_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga2f4098fc71cbd39422c1001d66970bf5}{}\label{group___input_ga2f4098fc71cbd39422c1001d66970bf5} 
+\index{Input@{Input}!keyboard\+\_\+handler@{keyboard\+\_\+handler}}
+\index{keyboard\+\_\+handler@{keyboard\+\_\+handler}!Input@{Input}}
+\subsubsection{\texorpdfstring{keyboard\+\_\+handler()}{keyboard\_handler()}}
+{\footnotesize\ttfamily void keyboard\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Keyboard Interrupt Handler. 
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga2f4098fc71cbd39422c1001d66970bf5_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_ga287741f65ec2e6257111210ed16d3d05}{}\label{group___input_ga287741f65ec2e6257111210ed16d3d05} 
+\index{Input@{Input}!mouse\+\_\+inside\+\_\+circle@{mouse\+\_\+inside\+\_\+circle}}
+\index{mouse\+\_\+inside\+\_\+circle@{mouse\+\_\+inside\+\_\+circle}!Input@{Input}}
+\subsubsection{\texorpdfstring{mouse\+\_\+inside\+\_\+circle()}{mouse\_inside\_circle()}}
+{\footnotesize\ttfamily int mouse\+\_\+inside\+\_\+circle (\begin{DoxyParamCaption}\item[{int}]{x\+\_\+center,  }\item[{int}]{y\+\_\+center,  }\item[{int}]{radius }\end{DoxyParamCaption})}
+
+
+
+Verifies if the Mouse is inside a certain circle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+center} & Position of the center of the circle in the horizontal axis \\
+\hline
+{\em y\+\_\+center} & Position of the center of the circle in the vertical axis \\
+\hline
+{\em radius} & Radius of the circle\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 if Mouse is not inside the circle, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_ga287741f65ec2e6257111210ed16d3d05_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gaa1aaa6e96c3e2c48378faaace6138b99}{}\label{group___input_gaa1aaa6e96c3e2c48378faaace6138b99} 
+\index{Input@{Input}!mouse\+\_\+inside\+\_\+rect@{mouse\+\_\+inside\+\_\+rect}}
+\index{mouse\+\_\+inside\+\_\+rect@{mouse\+\_\+inside\+\_\+rect}!Input@{Input}}
+\subsubsection{\texorpdfstring{mouse\+\_\+inside\+\_\+rect()}{mouse\_inside\_rect()}}
+{\footnotesize\ttfamily int mouse\+\_\+inside\+\_\+rect (\begin{DoxyParamCaption}\item[{int}]{x\+\_\+initial,  }\item[{int}]{y\+\_\+initial,  }\item[{int}]{x\+\_\+final,  }\item[{int}]{y\+\_\+final }\end{DoxyParamCaption})}
+
+
+
+Verifies if the Mouse is inside a certain rectangle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+inital} & Initial position of the rectangle in the horizontal axis \\
+\hline
+{\em y\+\_\+initial} & Initial position of the rectangle in the vertical axis \\
+\hline
+{\em x\+\_\+final} & Final position of the rectangle in the horizontal axis \\
+\hline
+{\em y\+\_\+final} & Final position of the rectangle in the vertical axis\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 if Mouse is not inside the rectantgle, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_gaa1aaa6e96c3e2c48378faaace6138b99_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gaeeb5745202c4e6c62abee86ad62f36f6}{}\label{group___input_gaeeb5745202c4e6c62abee86ad62f36f6} 
+\index{Input@{Input}!mouse\+\_\+packet\+\_\+handler@{mouse\+\_\+packet\+\_\+handler}}
+\index{mouse\+\_\+packet\+\_\+handler@{mouse\+\_\+packet\+\_\+handler}!Input@{Input}}
+\subsubsection{\texorpdfstring{mouse\+\_\+packet\+\_\+handler()}{mouse\_packet\_handler()}}
+{\footnotesize\ttfamily void mouse\+\_\+packet\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned char $\ast$}]{packet }\end{DoxyParamCaption})}
+
+
+
+Mouse Interrupt Handler. 
+
+Reads the packet received and updates the Input instance accordingly
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & mouse packet containing the mouse information \\
+\hline
+\end{DoxyParams}
+Update Buttons
+
+Update Position Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group___input_gaeeb5745202c4e6c62abee86ad62f36f6_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gad26ccb83dbd3f35a93e991343682b843}{}\label{group___input_gad26ccb83dbd3f35a93e991343682b843} 
+\index{Input@{Input}!serial\+\_\+handler@{serial\+\_\+handler}}
+\index{serial\+\_\+handler@{serial\+\_\+handler}!Input@{Input}}
+\subsubsection{\texorpdfstring{serial\+\_\+handler()}{serial\_handler()}}
+{\footnotesize\ttfamily void serial\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Serial Port interrupt handler. 
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=261pt]{group___input_gad26ccb83dbd3f35a93e991343682b843_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group___input_gaaf4cb27460e9e5bfa6f46343518e89bf}{}\label{group___input_gaaf4cb27460e9e5bfa6f46343518e89bf} 
+\index{Input@{Input}!set\+Com\+State@{set\+Com\+State}}
+\index{set\+Com\+State@{set\+Com\+State}!Input@{Input}}
+\subsubsection{\texorpdfstring{set\+Com\+State()}{setComState()}}
+{\footnotesize\ttfamily void set\+Com\+State (\begin{DoxyParamCaption}\item[{\hyperlink{group___input_gad2eda33b1d20e895223c0ebbb339bde8}{serial\+\_\+state\+\_\+t}}]{state }\end{DoxyParamCaption})}
+
+
+
+Sets the Communication State. Used for multiplayer state. 
+

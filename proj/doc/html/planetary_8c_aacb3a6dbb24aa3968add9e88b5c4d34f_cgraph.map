@@ -1,0 +1,31 @@
+<map id="end_game_timer_handler" name="end_game_timer_handler">
+<area shape="rect" id="node2" href="$planetary_8c.html#a877dc1b1eb1c178c89f31e76484d5790" title="game_instance" alt="" coords="239,81,351,107"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="802,183,908,208"/>
+<area shape="rect" id="node7" href="$group___input.html#ga4abaa84a7ae0505c6acab391f82ab1ac" title="Remove&#39;s the key code from the input buffer. " alt="" coords="243,208,347,233"/>
+<area shape="rect" id="node10" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="802,359,907,384"/>
+<area shape="rect" id="node11" href="$group___bitmap.html#ga82a8171067b55f72cc29c8c50d8330c6" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="642,359,734,384"/>
+<area shape="rect" id="node12" href="$group__video__gr.html#gabd51eef0a4ffcafb6a08fb40703f4383" title="Gets the pointer to the graphics Buffer used for double&#45;buffering. " alt="" coords="238,711,352,736"/>
+<area shape="rect" id="node13" href="$group___b_m_ps_holder.html#gafd662085ea52a83586cddd30b6423c01" title="BMPsHolder" alt="" coords="445,611,541,636"/>
+<area shape="rect" id="node17" href="$group___missile.html#ga26a5cb6dc4144b31bb2005e4b587ff4f" title="Creates an explosion at a given position. " alt="" coords="240,661,350,687"/>
+<area shape="rect" id="node18" href="$group___g_vector.html#ga638f666cc999e6b840302ca1de552b85" title="Pushes back a new element to the GVector. Memory reallocation may happen. " alt="" coords="227,809,364,835"/>
+<area shape="rect" id="node20" href="$group___g_vector.html#ga01efe5e5a35c4656de07aa3b1c937b0b" title="Access to an element at a given index. " alt="" coords="452,835,535,860"/>
+<area shape="rect" id="node21" href="$group___g_vector.html#ga3570990e6e22e8bd76cceec25869e117" title="Gets the size (number of elements) of a GVector. " alt="" coords="234,911,356,936"/>
+<area shape="rect" id="node22" href="$video__gr_8c.html#a60b5614b8ffbc8f42eac9677409dc7a6" title="draw_explosion" alt="" coords="238,408,352,433"/>
+<area shape="rect" id="node26" href="$group___missile.html#gabc0219cffe0a8c0060dabb7dfab4dbc3" title="Updates the Explosion, more specifically the radius of the explosion its animation. " alt="" coords="232,960,358,985"/>
+<area shape="rect" id="node27" href="$group___g_vector.html#ga7efdee3a454559bde23b23f31d40b4db" title="Erases an element at a given index. Memory reallocation may happen. " alt="" coords="242,760,348,785"/>
+<area shape="rect" id="node28" href="$group___missile.html#ga41c05f1f6d72a4c84b12d595b9ae8cbc" title="Destroys an Explosion, freeing all the resources used by it. " alt="" coords="234,1009,356,1035"/>
+<area shape="rect" id="node29" href="$group__video__gr.html#ga07c3ec445f5548c09a75b0aacf262830" title="Draws a score at certain position. " alt="" coords="250,509,340,535"/>
+<area shape="rect" id="node3" href="$planetary_8c.html#a434a66955d7d34b596bbaa46f6d1864a" title="new_game" alt="" coords="450,68,537,93"/>
+<area shape="rect" id="node4" href="$group___g_vector.html#gae4381c0ccdbebaa240e06595e59c5712" title="Constructs a new GVector. " alt="" coords="640,5,737,31"/>
+<area shape="rect" id="node6" href="$group___highscores.html#ga860a7be33a6a7a627d2fafb624c9631f" title="Load the 5 Highest Scores from a file into an array. " alt="" coords="644,107,732,132"/>
+<area shape="rect" id="node8" href="$group___input.html#ga8221771f8f04f39255e0b9f577c080e9" title="Creates a new input instance if there is none, otherwise returns the existing one (Singleton like beh..." alt="" coords="440,208,547,233"/>
+<area shape="rect" id="node9" href="$_input_8c.html#a2c7280ff6a19f56b0b8b5f4e5bacfbcf" title="new_input" alt="" coords="647,208,729,233"/>
+<area shape="rect" id="node14" href="$_b_m_ps_holder_8c.html#a8c4ac97b76736b66ed10b3c5d74a96e7" title="new_bmps_holder" alt="" coords="623,611,754,636"/>
+<area shape="rect" id="node15" href="$group___b_m_ps_holder.html#gab74a07b3201edddc82762946608675a5" title="load_bmps" alt="" coords="812,636,898,661"/>
+<area shape="rect" id="node16" href="$group___bitmap.html#ga3506880ffd407c36eb8aaddd2c1606d2" title="Loads a bmp image. " alt="" coords="956,611,1044,636"/>
+<area shape="rect" id="node19" href="$_g_vector_8c.html#adff5ccd112d1186895a0e01e46c0cbbc" title="gvector_check_capacity" alt="" coords="412,785,575,811"/>
+<area shape="rect" id="node23" href="$group___missile.html#ga1f8e365295b2facc195f17155bba6b71" title="Gets the current Bitmap of the Explosion. " alt="" coords="421,359,566,384"/>
+<area shape="rect" id="node24" href="$group___missile.html#gaaa4dd8460fa2eeb803f0e62b0b693589" title="Gets the position in the horizontal axis of the Explosion, on the screen. " alt="" coords="426,408,561,433"/>
+<area shape="rect" id="node25" href="$group___missile.html#gab7f446e98be5f55752942865f5e10be4" title="Gets the position in the vertical axis of the Explosion, on the screen. " alt="" coords="426,309,561,335"/>
+<area shape="rect" id="node30" href="$group__video__gr.html#ga8dca584eb65462cd691cb94a9ec92602" title="Draws a number at certain position. " alt="" coords="442,509,545,535"/>
+</map>

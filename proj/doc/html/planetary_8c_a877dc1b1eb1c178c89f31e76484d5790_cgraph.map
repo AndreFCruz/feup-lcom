@@ -1,0 +1,6 @@
+<map id="game_instance" name="game_instance">
+<area shape="rect" id="node2" href="$planetary_8c.html#a434a66955d7d34b596bbaa46f6d1864a" title="new_game" alt="" coords="165,55,252,80"/>
+<area shape="rect" id="node3" href="$group___g_vector.html#gae4381c0ccdbebaa240e06595e59c5712" title="Constructs a new GVector. " alt="" coords="304,5,401,31"/>
+<area shape="rect" id="node4" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="300,55,406,80"/>
+<area shape="rect" id="node5" href="$group___highscores.html#ga860a7be33a6a7a627d2fafb624c9631f" title="Load the 5 Highest Scores from a file into an array. " alt="" coords="309,104,397,129"/>
+</map>

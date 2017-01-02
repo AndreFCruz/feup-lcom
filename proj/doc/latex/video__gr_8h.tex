@@ -1,0 +1,72 @@
+\hypertarget{video__gr_8h}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/video\+\_\+gr.h File Reference}
+\label{video__gr_8h}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/video\+\_\+gr.\+h@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/video\+\_\+gr.\+h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Missile.\+h\char`\"{}}\newline
+Include dependency graph for video\+\_\+gr.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{video__gr_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{video__gr_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__video__gr_ga7b3b25cba33b07c303f3060fe41887f6}{B\+L\+A\+CK}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(0,0,0)
+\item 
+\#define \hyperlink{group__video__gr_ga87b537f5fa5c109d3c05c13d6b18f382}{W\+H\+I\+TE}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(255,255,255)
+\item 
+\#define \hyperlink{group__video__gr_gad2cbbe762a1a1175055cf68cd586adc1}{T\+R\+A\+N\+S\+P\+A\+R\+E\+N\+CY}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(0,255,0)
+\item 
+\#define \hyperlink{group__video__gr_ga1dd918deb1dda207fd2665e93b575e36}{S\+T\+R\+O\+N\+G\+\_\+\+P\+I\+NK}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(255,0,127)
+\item 
+\#define \hyperlink{group__video__gr_gab2ee9bdede8e3af96ff696c7b2ba7416}{N\+A\+VY}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(0,128,255)
+\item 
+\#define \hyperlink{group__video__gr_ga8d23feea868a983c8c2b661e1e16972f}{R\+ED}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(255,0,0)
+\item 
+\#define \hyperlink{group__video__gr_gabf681265909adf3d3e8116c93c0ba179}{Y\+E\+L\+L\+OW}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(255,255,0)
+\item 
+\#define \hyperlink{group__video__gr_ga6f699060902f800f12aaae150f3a708e}{M\+A\+G\+E\+N\+TA}~\hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb}(255, 24, 127)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned \hyperlink{group__video__gr_gab3938dd22c03335341584d5b8f6752f5}{vg\+\_\+get\+Hor\+Res} ()
+\begin{DoxyCompactList}\small\item\em Gets the horizontal Resolution of the screen. \end{DoxyCompactList}\item 
+unsigned \hyperlink{group__video__gr_gaab8200f7947926322b6dd6fa7c6da1e1}{vg\+\_\+get\+Ver\+Res} ()
+\begin{DoxyCompactList}\small\item\em Gets the vertical Resolution of the screen. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__video__gr_gabd51eef0a4ffcafb6a08fb40703f4383}{vg\+\_\+get\+Buffer\+Ptr} ()
+\begin{DoxyCompactList}\small\item\em Gets the pointer to the graphics Buffer used for double-\/buffering. \end{DoxyCompactList}\item 
+int \hyperlink{group__video__gr_ga7f93731e89220a67419a16b1a415e133}{is\+\_\+valid\+\_\+pos} (unsigned short x, unsigned short y)
+\begin{DoxyCompactList}\small\item\em Checks if position (x,y) is inside the screen. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_gafd0836c92e142e75c256799fb45032da}{paint\+\_\+pixel} (int x, int y, uint16\+\_\+t color)
+\item 
+int \hyperlink{group__video__gr_ga7d19c24f10ca7bfb2c7b8f9e12d4dc6f}{vg\+\_\+init} (unsigned short mode)
+\begin{DoxyCompactList}\small\item\em Initializes the video module in graphics mode. \end{DoxyCompactList}\item 
+int \hyperlink{group__video__gr_ga42f593e6656f1a978315aff02b1bcebf}{vg\+\_\+exit} (void)
+\begin{DoxyCompactList}\small\item\em Returns to default Minix 3 text mode (0x03\+: 25 x 80, 16 colors) \end{DoxyCompactList}\item 
+int \hyperlink{group__video__gr_ga0b618a385e591f8690388281fd79a351}{draw\+\_\+line} (unsigned short xi, unsigned short yi, unsigned short xf, unsigned short yf, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws a line on the screen, given a color, a initial position and a final position. \end{DoxyCompactList}\item 
+int \hyperlink{group__video__gr_ga6494f21641e972c58acdaedcf9c80520}{draw\+\_\+circle} (unsigned short center\+\_\+x, unsigned short center\+\_\+y, unsigned short radius, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws a circle on the screen, given a color, a center position and a radius. \end{DoxyCompactList}\item 
+int \hyperlink{group__video__gr_ga5cb0e000108ddc786148172ee56903c3}{draw\+\_\+mouse\+\_\+cross} (const int $\ast$mouse\+\_\+pos, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Draws the mouse cross at a certain position with a certain color. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_ga4270ae09ddc191cdc0e767e4412c386a}{draw\+\_\+missile} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$ptr)
+\begin{DoxyCompactList}\small\item\em Draws a missile. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_ga8dca584eb65462cd691cb94a9ec92602}{draw\+\_\+number} (unsigned num, \hyperlink{struct_bitmap}{Bitmap} $\ast$$\ast$font, unsigned size\+\_\+x, unsigned posX, unsigned posY)
+\begin{DoxyCompactList}\small\item\em Draws a number at certain position. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_ga07c3ec445f5548c09a75b0aacf262830}{draw\+\_\+score} (unsigned num, unsigned posX, unsigned posY)
+\begin{DoxyCompactList}\small\item\em Draws a score at certain position. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_ga975522708082967d9d107c340e6c01f5}{draw\+\_\+score\+\_\+big} (unsigned num, unsigned posX, unsigned posY)
+\begin{DoxyCompactList}\small\item\em Draws a big score at certain position. \end{DoxyCompactList}\item 
+uint16\+\_\+t \hyperlink{group__video__gr_gafcc897567998ed3a26974926501a4abd}{rgb} (unsigned char red\+\_\+value, unsigned char green\+\_\+value, unsigned char blue\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Converts a rgb color to a hexadecimal of 6 bytes. \end{DoxyCompactList}\item 
+void \hyperlink{group__video__gr_ga1cf21cb9ef69ad19a5de13ff77a8c798}{buffer\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em Copies the contents of the video buffer to video\+\_\+mem at once. (Implementation of double\+\_\+buffering) \end{DoxyCompactList}\end{DoxyCompactItemize}

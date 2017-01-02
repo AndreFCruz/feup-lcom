@@ -1,0 +1,105 @@
+\hypertarget{group__keyboard}{}\section{keyboard}
+\label{group__keyboard}\index{keyboard@{keyboard}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__keyboard_gafba3a35bd6a79305e84ab4f33a5ffa7f}{kbd\+\_\+subscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Keyboard interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__keyboard_ga162d7647d3af99ebea80b15778ce5b5d}{kbd\+\_\+unsubscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Keyboard interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__keyboard_gacd2bc10465c70dbb99210f880bc18207}{keyboard\+\_\+read} (void)
+\begin{DoxyCompactList}\small\item\em Reads data from the keyboard output buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__keyboard_ga26c2eb6181cabae35aff87fc387de0e9}{keyboard\+\_\+write} (char data)
+\begin{DoxyCompactList}\small\item\em Writes data to the keyboard input buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__keyboard_ga279ddeca4cafee5084a0eec40e28d223}{keyboard\+\_\+write\+\_\+command} (char command, unsigned char arg)
+\begin{DoxyCompactList}\small\item\em Writes command to kbd, followed by arg. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions for using the i8042 K\+B\+C/\+K\+BD 
+
+\subsection{Function Documentation}
+\hypertarget{group__keyboard_gafba3a35bd6a79305e84ab4f33a5ffa7f}{}\label{group__keyboard_gafba3a35bd6a79305e84ab4f33a5ffa7f} 
+\index{keyboard@{keyboard}!kbd\+\_\+subscribe\+\_\+int@{kbd\+\_\+subscribe\+\_\+int}}
+\index{kbd\+\_\+subscribe\+\_\+int@{kbd\+\_\+subscribe\+\_\+int}!keyboard@{keyboard}}
+\subsubsection{\texorpdfstring{kbd\+\_\+subscribe\+\_\+int()}{kbd\_subscribe\_int()}}
+{\footnotesize\ttfamily int kbd\+\_\+subscribe\+\_\+int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Keyboard interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Returns bit order in interrupt mask; negative value on failure 
+\end{DoxyReturn}
+\hypertarget{group__keyboard_ga162d7647d3af99ebea80b15778ce5b5d}{}\label{group__keyboard_ga162d7647d3af99ebea80b15778ce5b5d} 
+\index{keyboard@{keyboard}!kbd\+\_\+unsubscribe\+\_\+int@{kbd\+\_\+unsubscribe\+\_\+int}}
+\index{kbd\+\_\+unsubscribe\+\_\+int@{kbd\+\_\+unsubscribe\+\_\+int}!keyboard@{keyboard}}
+\subsubsection{\texorpdfstring{kbd\+\_\+unsubscribe\+\_\+int()}{kbd\_unsubscribe\_int()}}
+{\footnotesize\ttfamily int kbd\+\_\+unsubscribe\+\_\+int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Keyboard interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{group__keyboard_gacd2bc10465c70dbb99210f880bc18207}{}\label{group__keyboard_gacd2bc10465c70dbb99210f880bc18207} 
+\index{keyboard@{keyboard}!keyboard\+\_\+read@{keyboard\+\_\+read}}
+\index{keyboard\+\_\+read@{keyboard\+\_\+read}!keyboard@{keyboard}}
+\subsubsection{\texorpdfstring{keyboard\+\_\+read()}{keyboard\_read()}}
+{\footnotesize\ttfamily int keyboard\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads data from the keyboard output buffer. 
+
+\begin{DoxyReturn}{Returns}
+Return value read upon sucess and -\/1 otherwise 
+\end{DoxyReturn}
+\hypertarget{group__keyboard_ga26c2eb6181cabae35aff87fc387de0e9}{}\label{group__keyboard_ga26c2eb6181cabae35aff87fc387de0e9} 
+\index{keyboard@{keyboard}!keyboard\+\_\+write@{keyboard\+\_\+write}}
+\index{keyboard\+\_\+write@{keyboard\+\_\+write}!keyboard@{keyboard}}
+\subsubsection{\texorpdfstring{keyboard\+\_\+write()}{keyboard\_write()}}
+{\footnotesize\ttfamily int keyboard\+\_\+write (\begin{DoxyParamCaption}\item[{char}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes data to the keyboard input buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & parameter that is written in the input buffer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{group__keyboard_ga279ddeca4cafee5084a0eec40e28d223}{}\label{group__keyboard_ga279ddeca4cafee5084a0eec40e28d223} 
+\index{keyboard@{keyboard}!keyboard\+\_\+write\+\_\+command@{keyboard\+\_\+write\+\_\+command}}
+\index{keyboard\+\_\+write\+\_\+command@{keyboard\+\_\+write\+\_\+command}!keyboard@{keyboard}}
+\subsubsection{\texorpdfstring{keyboard\+\_\+write\+\_\+command()}{keyboard\_write\_command()}}
+{\footnotesize\ttfamily int keyboard\+\_\+write\+\_\+command (\begin{DoxyParamCaption}\item[{char}]{command,  }\item[{unsigned char}]{arg }\end{DoxyParamCaption})}
+
+
+
+Writes command to kbd, followed by arg. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command of the action we want to execute and the argument that will be used in that action \\
+\hline
+{\em arg} & argument of the command\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{group__keyboard_ga279ddeca4cafee5084a0eec40e28d223_cgraph}
+\end{center}
+\end{figure}

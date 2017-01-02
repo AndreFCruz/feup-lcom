@@ -1,0 +1,24 @@
+<map id="menu_timer_handler" name="menu_timer_handler">
+<area shape="rect" id="node2" href="$group___input.html#ga8221771f8f04f39255e0b9f577c080e9" title="Creates a new input instance if there is none, otherwise returns the existing one (Singleton like beh..." alt="" coords="399,139,506,165"/>
+<area shape="rect" id="node6" href="$planetary_8c.html#a7b307bb5f3c7c2f4da2d5b860b61eff9" title="menu_instance" alt="" coords="212,339,324,365"/>
+<area shape="rect" id="node8" href="$group___input.html#ga4abaa84a7ae0505c6acab391f82ab1ac" title="Remove&#39;s the key code from the input buffer. " alt="" coords="216,41,320,66"/>
+<area shape="rect" id="node9" href="$group___bitmap.html#ga82a8171067b55f72cc29c8c50d8330c6" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="567,239,659,265"/>
+<area shape="rect" id="node10" href="$group__video__gr.html#gabd51eef0a4ffcafb6a08fb40703f4383" title="Gets the pointer to the graphics Buffer used for double&#45;buffering. " alt="" coords="211,389,325,414"/>
+<area shape="rect" id="node11" href="$group___b_m_ps_holder.html#gafd662085ea52a83586cddd30b6423c01" title="BMPsHolder" alt="" coords="220,438,316,463"/>
+<area shape="rect" id="node15" href="$group___input.html#gaa1aaa6e96c3e2c48378faaace6138b99" title="Verifies if the Mouse is inside a certain rectangle. " alt="" coords="201,90,335,115"/>
+<area shape="rect" id="node16" href="$group___input.html#ga5d6fc0beedad492333795ddff18c20b9" title="Gets the current state of the mouse right button. " alt="" coords="210,139,326,165"/>
+<area shape="rect" id="node17" href="$group___input.html#gaaf4cb27460e9e5bfa6f46343518e89bf" title="Sets the Communication State. Used for multiplayer state. " alt="" coords="219,487,317,513"/>
+<area shape="rect" id="node18" href="$group___input.html#ga287741f65ec2e6257111210ed16d3d05" title="Verifies if the Mouse is inside a certain circle. " alt="" coords="197,189,339,214"/>
+<area shape="rect" id="node19" href="$group__video__gr.html#ga5cb0e000108ddc786148172ee56903c3" title="Draws the mouse cross at a certain position with a certain color. " alt="" coords="200,537,336,562"/>
+<area shape="rect" id="node23" href="$group___input.html#ga6ee316c978397c6807556fb9298ce902" title="Gets the current mouse position on the screen. " alt="" coords="210,238,326,263"/>
+<area shape="rect" id="node3" href="$_input_8c.html#a2c7280ff6a19f56b0b8b5f4e5bacfbcf" title="new_input" alt="" coords="572,190,654,215"/>
+<area shape="rect" id="node4" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="708,239,815,265"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="709,190,814,215"/>
+<area shape="rect" id="node7" href="$planetary_8c.html#a71321a9e16d680d21264c86249f47627" title="new_menu" alt="" coords="409,339,496,365"/>
+<area shape="rect" id="node12" href="$_b_m_ps_holder_8c.html#a8c4ac97b76736b66ed10b3c5d74a96e7" title="new_bmps_holder" alt="" coords="387,438,517,463"/>
+<area shape="rect" id="node13" href="$group___b_m_ps_holder.html#gab74a07b3201edddc82762946608675a5" title="load_bmps" alt="" coords="569,450,656,475"/>
+<area shape="rect" id="node14" href="$group___bitmap.html#ga3506880ffd407c36eb8aaddd2c1606d2" title="Loads a bmp image. " alt="" coords="717,425,805,450"/>
+<area shape="rect" id="node20" href="$group__video__gr.html#ga7f93731e89220a67419a16b1a415e133" title="Checks if position (x,y) is inside the screen. " alt="" coords="565,513,660,538"/>
+<area shape="rect" id="node21" href="$group__video__gr.html#ga0b618a385e591f8690388281fd79a351" title="Draws a line on the screen, given a color, a initial position and a final position. " alt="" coords="413,563,491,589"/>
+<area shape="rect" id="node22" href="$group__video__gr.html#gafd0836c92e142e75c256799fb45032da" title="paint_pixel" alt="" coords="570,563,655,589"/>
+</map>

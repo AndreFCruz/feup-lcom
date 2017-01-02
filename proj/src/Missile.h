@@ -173,14 +173,14 @@ int explosion_getPosX(Explosion * ptr);
 int explosion_getPosY(Explosion * ptr);
 
 /**
- * @brief Size of the space of memory occupied by a Explosion	TODO: Recheck
+ * @brief "get" method for retrieving sizeof(Explosion)
  *
- * @return Size of the space of memory occupied by a Explosion
+ * @return Size of the space of memory occupied by an object of type Explosion
  */
 size_t explosion_getSizeOf();
 
 /**
- * @brief Destroys a Explosion, freeing all the resources used by it
+ * @brief Destroys an Explosion, freeing all the resources used by it
  *
  * @param ptr Pointer to the Explosion in question
  */
@@ -211,5 +211,7 @@ int missile_collidedWithExplosion(Missile * ptr, Explosion * e_ptr);
  */
 int missile_collidedWithRect(Missile * ptr, unsigned posX, unsigned posY,
 		unsigned sizeX, unsigned sizeY);
+
+/**@}*/
 
 #endif

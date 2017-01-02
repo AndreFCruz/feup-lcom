@@ -12,6 +12,9 @@ int serial_handler() {
 		if ( MP_WAITING == received ) {
 			serial_write(MP_STARTED);
 			comState = ONGOING;
+		} else if ( MP_STARTED == received ) {
+			serial_write(ACK);
+			comState = ONGOING;
 		}
 		break;
 	case ONGOING:

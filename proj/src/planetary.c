@@ -177,7 +177,7 @@ unsigned long next_spawn_frame() {	// 500 / (1 + frames / 512)
 
 int timer_handler() {
 	static game_state_t game_state = MENU;
-	static int highscore_flag = 0;
+	static int highscore_flag = 0, winner_flag = 0;
 
 	int ret;
 
@@ -208,14 +208,22 @@ int timer_handler() {
 			if (OK != ret ) {
 				// Fetch winning status
 				printf("ENDED MULTIPLAYER!\n");
+				game_state = MP_END_ANIMATION;
 
-				//multiplayer_end_animation(int lost);
+				if (2 == ret)
+					winner_flag = 1;
 			}
 		}
 		if (getComState() == WAITING_START) {
 			serial_write(MP_WAITING);
 		}
 		break;
+	case MP_END_ANIMATION:
+		if ( OK != multiplayer_end_animation(winner_flag) ) {
+			delete_game();
+			game_state = MENU;
+			winner_flag = 0;
+		}
 	case END_GAME_ANIMATION:
 		if ( OK != end_game_timer_handler(highscore_flag)) {
 			delete_game();
@@ -236,13 +244,16 @@ int timer_handler() {
 static int multiplayer_timer_handler() {
 	switch(getComState()) {
 	case WAITING_START:
+		// draw bitmap waiting for connection
 		break;
 	case ONGOING:
-		if (game_timer_handler() != OK)
+		if (game_timer_handler() != OK) {
 			setComState(ENDED);
+			return 1;
+		}
 		break;
 	case ENDED:
-		return 1;
+		return 2;
 		break;
 	}
 
@@ -700,5 +711,7 @@ static int highscores_timer_handler() {
 }
 
 static int multiplayer_end_animation(int winner_flag) {
+	// Draw appropriate Bitmap
+//	if (winner_flag)
 
 }

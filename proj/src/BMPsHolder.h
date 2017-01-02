@@ -66,6 +66,8 @@ typedef struct {
 	Bitmap * HS_button; ///> Pointer to the bitmap of the highscores button
 	Bitmap * highscore_text; ///> Pointer to the bitmap of the highscore text showed in the end of a game
 	Bitmap * waiting_MP; ///> Pointer to the bitmap showed when waiting for other player (multiplayer mode)
+	Bitmap * win; ///> Pointer to the Bitmap showed when user won in Multiplayer mode
+	Bitmap * lost; ///> Pointer to the Bitmap showed when user lost in Multiplayer mode
 } BMPsHolder_t;
 
 /*

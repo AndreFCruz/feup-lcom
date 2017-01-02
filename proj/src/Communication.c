@@ -20,7 +20,7 @@ void serial_handler() {
 	case ONGOING:
 		if ( MP_ENDED == received ) {
 			//serial_write(ACK);
-			comState = NONE;
+			comState = ENDED;
 		}
 		break;
 	case ENDED:

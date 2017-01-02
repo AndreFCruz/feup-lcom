@@ -9,6 +9,7 @@
 #include "BMPsHolder.h"
 #include "RTC.h"
 #include "Highscores.h"
+#include "Serial.h"
 
 static int menu_timer_handler();
 static int game_timer_handler();
@@ -200,7 +201,7 @@ int timer_handler() {
 		break;
 	case GAME_MULTI: // TODO
 		printf("Sending test message...\n");
-		serial_write(0x01);
+		serial_write(GAME_ENDED);
 		game_state = MENU;
 		break;
 	case END_GAME_ANIMATION:

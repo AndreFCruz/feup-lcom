@@ -1,0 +1,111 @@
+\hypertarget{_missile_8c}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Missile.c File Reference}
+\label{_missile_8c}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Missile.\+c@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Missile.\+c}}
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Missile.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}video\+\_\+gr.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}B\+M\+Ps\+Holder.\+h\char`\"{}}\newline
+Include dependency graph for Missile.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_missile_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmissile__t}{missile\+\_\+t}
+\item 
+struct \hyperlink{structexplosion__t}{explosion\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{_missile_8c_af6a258d8f3ee5206d682d799316314b1}{bool} \{ \hyperlink{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa82764c3079aea4e60c80e45befbb839}{T\+R\+UE}, 
+\hyperlink{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa1e095cc966dbecf6a0d8aad75348d1a}{F\+A\+L\+SE}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{_missile_8c_a614e98685a7635543629730770fd0854}{round\+\_\+float} (float f)
+\item 
+static \hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$ \hyperlink{_missile_8c_a708bb653f8d5c8a42b0aee3df4de87bf}{new\+\_\+missile} (const int $\ast$init\+\_\+pos, const float $\ast$vel)
+\item 
+\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$ \hyperlink{group___missile_ga6a34d606d98bc4ce9643a20ba65fd472}{new\+\_\+emissile} (const unsigned $\ast$bases\+\_\+pos, const unsigned $\ast$bases\+\_\+hp)
+\begin{DoxyCompactList}\small\item\em Generates a new enemy missile. \end{DoxyCompactList}\item 
+\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$ \hyperlink{group___missile_ga163468dc0fdc7c61c009528ed5099753}{new\+\_\+fmissile} (const int $\ast$init\+\_\+pos, const int $\ast$mouse\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Generates a new friendly missile. \end{DoxyCompactList}\item 
+\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$ \hyperlink{group___missile_ga693cd51b6557695cb6593b56fbc89df8}{delete\+\_\+missile} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Destroys a missile, freeing all the resources used by it. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_ga6d0e1c431aa7534db74504a9505a7b60}{missile\+\_\+update} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Updates the Missile, more specifically its position on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gae9eff55a2ebd486cc44daf149176e771}{missile\+\_\+is\+Friendly} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Checks if a Missile is friendly. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gabfb8e910eca430d5538a6d5b3ec8cb6e}{missile\+\_\+get\+PosX} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the position in the horizontal axis of the Missile, on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gaef773d140afb584ac01d494d0f7c02e8}{missile\+\_\+get\+PosY} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the position in the vertical axis of the Missile, on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_ga6bcfcaf70f8810ab5f93275926fea9b8}{missile\+\_\+get\+InitX} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the initial position in the horizontal axis of the Missile, on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_ga6083be12aadde673a28d0a391391f96e}{missile\+\_\+get\+InitY} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the initial position in the vertical axis of the Missile, on the screen. \end{DoxyCompactList}\item 
+uint16\+\_\+t \hyperlink{group___missile_gafd665dec928dec0b42baf150444daa58}{missile\+\_\+get\+Color} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the color of the Missile. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group___missile_gad5e9a748d3bf909e91ceef47f63ee0d4}{missile\+\_\+get\+Size\+Of} ()
+\begin{DoxyCompactList}\small\item\em Size of the space of memory occupied by a Missile T\+O\+DO\+: Recheck. \end{DoxyCompactList}\item 
+\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$ \hyperlink{group___missile_ga26a5cb6dc4144b31bb2005e4b587ff4f}{new\+\_\+explosion} (const int $\ast$position)
+\begin{DoxyCompactList}\small\item\em Creates an explosion at a given position. \end{DoxyCompactList}\item 
+void \hyperlink{group___missile_ga41c05f1f6d72a4c84b12d595b9ae8cbc}{delete\+\_\+explosion} (\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Destroys an Explosion, freeing all the resources used by it. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gabc0219cffe0a8c0060dabb7dfab4dbc3}{explosion\+\_\+update} (\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Updates the Explosion, more specifically the radius of the explosion its animation. \end{DoxyCompactList}\item 
+\hyperlink{struct_bitmap}{Bitmap} $\ast$ \hyperlink{group___missile_ga1f8e365295b2facc195f17155bba6b71}{explosion\+\_\+get\+Bitmap} (\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the current \hyperlink{struct_bitmap}{Bitmap} of the Explosion. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gaaa4dd8460fa2eeb803f0e62b0b693589}{explosion\+\_\+get\+PosX} (\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the position in the horizontal axis of the Explosion, on the screen. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gab7f446e98be5f55752942865f5e10be4}{explosion\+\_\+get\+PosY} (\hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Gets the position in the vertical axis of the Explosion, on the screen. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group___missile_ga41c747ea318363b16bce9e8bb8ea19ec}{explosion\+\_\+get\+Size\+Of} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}get\char`\"{} method for retrieving sizeof(\+Explosion) \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gab2d6dfae85e8db5dd6444161120f2fc1}{missile\+\_\+collided\+With\+Explosion} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$m\+\_\+ptr, \hyperlink{group___missile_gab15157e0eccd9297f66644015d4966b1}{Explosion} $\ast$e\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em Check if a Missile collided with a certain Explosion. \end{DoxyCompactList}\item 
+int \hyperlink{group___missile_gacc30474e7e5f9cf52f0b41dcc27aa231}{missile\+\_\+collided\+With\+Rect} (\hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile} $\ast$ptr, unsigned posX, unsigned posY, unsigned sizeX, unsigned sizeY)
+\begin{DoxyCompactList}\small\item\em Check if a Missile collided with a Rectangle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{_missile_8c_af6a258d8f3ee5206d682d799316314b1}{}\label{_missile_8c_af6a258d8f3ee5206d682d799316314b1} 
+\index{Missile.\+c@{Missile.\+c}!bool@{bool}}
+\index{bool@{bool}!Missile.\+c@{Missile.\+c}}
+\subsubsection{\texorpdfstring{bool}{bool}}
+{\footnotesize\ttfamily enum \hyperlink{_missile_8c_af6a258d8f3ee5206d682d799316314b1}{bool}}
+
+Structs boolean type \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+R\+UE@{T\+R\+UE}!Missile.\+c@{Missile.\+c}}\index{Missile.\+c@{Missile.\+c}!T\+R\+UE@{T\+R\+UE}}}\hypertarget{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa82764c3079aea4e60c80e45befbb839}{}\label{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa82764c3079aea4e60c80e45befbb839} 
+T\+R\+UE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+A\+L\+SE@{F\+A\+L\+SE}!Missile.\+c@{Missile.\+c}}\index{Missile.\+c@{Missile.\+c}!F\+A\+L\+SE@{F\+A\+L\+SE}}}\hypertarget{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa1e095cc966dbecf6a0d8aad75348d1a}{}\label{_missile_8c_af6a258d8f3ee5206d682d799316314b1aa1e095cc966dbecf6a0d8aad75348d1a} 
+F\+A\+L\+SE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\hypertarget{_missile_8c_a708bb653f8d5c8a42b0aee3df4de87bf}{}\label{_missile_8c_a708bb653f8d5c8a42b0aee3df4de87bf} 
+\index{Missile.\+c@{Missile.\+c}!new\+\_\+missile@{new\+\_\+missile}}
+\index{new\+\_\+missile@{new\+\_\+missile}!Missile.\+c@{Missile.\+c}}
+\subsubsection{\texorpdfstring{new\+\_\+missile()}{new\_missile()}}
+{\footnotesize\ttfamily static \hyperlink{group___missile_ga7ea98f7c879356e5dfa41934529d86e1}{Missile}$\ast$ new\+\_\+missile (\begin{DoxyParamCaption}\item[{const int $\ast$}]{init\+\_\+pos,  }\item[{const float $\ast$}]{vel }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Methods for Missile Constructor for Generic Missile \hypertarget{_missile_8c_a614e98685a7635543629730770fd0854}{}\label{_missile_8c_a614e98685a7635543629730770fd0854} 
+\index{Missile.\+c@{Missile.\+c}!round\+\_\+float@{round\+\_\+float}}
+\index{round\+\_\+float@{round\+\_\+float}!Missile.\+c@{Missile.\+c}}
+\subsubsection{\texorpdfstring{round\+\_\+float()}{round\_float()}}
+{\footnotesize\ttfamily int round\+\_\+float (\begin{DoxyParamCaption}\item[{float}]{f }\end{DoxyParamCaption})}
+
+E\+ND of Structs Rounds float to nearest integer 

@@ -1,0 +1,68 @@
+\hypertarget{mouse_8c}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/mouse.c File Reference}
+\label{mouse_8c}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/mouse.\+c@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/mouse.\+c}}
+{\ttfamily \#include $<$minix/syslib.\+h$>$}\newline
+{\ttfamily \#include $<$minix/drivers.\+h$>$}\newline
+{\ttfamily \#include $<$minix/com.\+h$>$}\newline
+{\ttfamily \#include $<$minix/sysutil.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}mouse.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}i8042.\+h\char`\"{}}\newline
+Include dependency graph for mouse.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mouse_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mouse_8c_a09996d75ea35712c03bf1370ad6d93f3}{H\+E\+L\+P\+E\+R\+\_\+\+N\+EG}~0x\+F\+F\+F\+F\+F\+F00
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__mouse_gaf67a039319066d9e7dcdcc90e3a48840}{int\+\_\+value} (unsigned char delta\+\_\+var, int sign)
+\begin{DoxyCompactList}\small\item\em Function to get the signed value of an unsigned value. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gad26aa3828c4a6d900e654de8e4e68e83}{mouse\+\_\+write\+\_\+cmd} (char cmd)
+\begin{DoxyCompactList}\small\item\em Writes a command in the mouse input buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_ga51e6ee02a5c0a7e618abde7250cd0841}{mouse\+\_\+subscribe\+\_\+int} ()
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_ga7614d1f22092d37078f6a3da58f7c957}{mouse\+\_\+unsubscribe\+\_\+int} ()
+\begin{DoxyCompactList}\small\item\em Unsubscribes Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gacf07c98dc574238b3da9388c3dd1042a}{mouse\+\_\+synchronize} ()
+\begin{DoxyCompactList}\small\item\em Synchronizes the mouse. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gaaff93ce65c5bddd94904122f0e336233}{mouse\+\_\+read} ()
+\begin{DoxyCompactList}\small\item\em Reads data from the mouse output buffer. \end{DoxyCompactList}\item 
+int \hyperlink{group__mouse_gab5168a5f260c8e28f0f75db8a35cdb98}{mouse\+\_\+handler} (unsigned char $\ast$packet, unsigned short $\ast$counter)
+\begin{DoxyCompactList}\small\item\em Mouse Interrupt Handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static int \hyperlink{mouse_8c_a37cad7cad93664f8a1ed1b0258fe958b}{mouse\+\_\+hook\+\_\+id} = \hyperlink{mouse_8h_a3812571a4257866b974c8c9872c98e9e}{M\+O\+U\+S\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+ID}
+\item 
+static const unsigned \hyperlink{mouse_8c_a29f9575e5fede68fa07979f25943ac5b}{max\+Iter} = 50
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{mouse_8c_a09996d75ea35712c03bf1370ad6d93f3}{}\label{mouse_8c_a09996d75ea35712c03bf1370ad6d93f3} 
+\index{mouse.\+c@{mouse.\+c}!H\+E\+L\+P\+E\+R\+\_\+\+N\+EG@{H\+E\+L\+P\+E\+R\+\_\+\+N\+EG}}
+\index{H\+E\+L\+P\+E\+R\+\_\+\+N\+EG@{H\+E\+L\+P\+E\+R\+\_\+\+N\+EG}!mouse.\+c@{mouse.\+c}}
+\subsubsection{\texorpdfstring{H\+E\+L\+P\+E\+R\+\_\+\+N\+EG}{HELPER\_NEG}}
+{\footnotesize\ttfamily \#define H\+E\+L\+P\+E\+R\+\_\+\+N\+EG~0x\+F\+F\+F\+F\+F\+F00}
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{mouse_8c_a29f9575e5fede68fa07979f25943ac5b}{}\label{mouse_8c_a29f9575e5fede68fa07979f25943ac5b} 
+\index{mouse.\+c@{mouse.\+c}!max\+Iter@{max\+Iter}}
+\index{max\+Iter@{max\+Iter}!mouse.\+c@{mouse.\+c}}
+\subsubsection{\texorpdfstring{max\+Iter}{maxIter}}
+{\footnotesize\ttfamily const unsigned max\+Iter = 50\hspace{0.3cm}{\ttfamily [static]}}
+
+\hypertarget{mouse_8c_a37cad7cad93664f8a1ed1b0258fe958b}{}\label{mouse_8c_a37cad7cad93664f8a1ed1b0258fe958b} 
+\index{mouse.\+c@{mouse.\+c}!mouse\+\_\+hook\+\_\+id@{mouse\+\_\+hook\+\_\+id}}
+\index{mouse\+\_\+hook\+\_\+id@{mouse\+\_\+hook\+\_\+id}!mouse.\+c@{mouse.\+c}}
+\subsubsection{\texorpdfstring{mouse\+\_\+hook\+\_\+id}{mouse\_hook\_id}}
+{\footnotesize\ttfamily int mouse\+\_\+hook\+\_\+id = \hyperlink{mouse_8h_a3812571a4257866b974c8c9872c98e9e}{M\+O\+U\+S\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+ID}\hspace{0.3cm}{\ttfamily [static]}}
+

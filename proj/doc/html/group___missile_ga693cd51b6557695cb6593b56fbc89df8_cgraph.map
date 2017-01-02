@@ -1,0 +1,7 @@
+<map id="delete_missile" name="delete_missile">
+<area shape="rect" id="node2" href="$group___missile.html#ga26a5cb6dc4144b31bb2005e4b587ff4f" title="Creates an explosion at a given position. " alt="" coords="159,31,269,56"/>
+<area shape="rect" id="node3" href="$group___b_m_ps_holder.html#gafd662085ea52a83586cddd30b6423c01" title="BMPsHolder" alt="" coords="317,31,413,56"/>
+<area shape="rect" id="node4" href="$_b_m_ps_holder_8c.html#a8c4ac97b76736b66ed10b3c5d74a96e7" title="new_bmps_holder" alt="" coords="461,31,591,56"/>
+<area shape="rect" id="node5" href="$group___b_m_ps_holder.html#gab74a07b3201edddc82762946608675a5" title="load_bmps" alt="" coords="639,5,726,31"/>
+<area shape="rect" id="node6" href="$group___bitmap.html#ga3506880ffd407c36eb8aaddd2c1606d2" title="Loads a bmp image. " alt="" coords="774,31,862,56"/>
+</map>

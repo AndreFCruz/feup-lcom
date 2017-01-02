@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['score_5fday_5fx',['SCORE_DAY_X',['../planetary_8h.html#a2f53cc2c7c69bb7254f8a63d7c84f6e1',1,'planetary.h']]],
+  ['score_5fhour_5fx',['SCORE_HOUR_X',['../planetary_8h.html#a9e8121abb08db290575788f55403cf92',1,'planetary.h']]],
+  ['score_5fminute_5fx',['SCORE_MINUTE_X',['../planetary_8h.html#a52571658226a63b19331cc9417a65b5b',1,'planetary.h']]],
+  ['score_5fmonth_5fx',['SCORE_MONTH_X',['../planetary_8h.html#a3ce284cf60a7fa21c5c94673b157f62e',1,'planetary.h']]],
+  ['score_5fscore_5fx',['SCORE_SCORE_X',['../planetary_8h.html#a1886636e49716417d76ae24a9832666e',1,'planetary.h']]],
+  ['score_5fy',['SCORE_Y',['../planetary_8h.html#ab62349cb873424795abe940cef19bae0',1,'planetary.h']]],
+  ['score_5fy_5finc',['SCORE_Y_INC',['../planetary_8h.html#a0a4acfaa3cec0da273304642ea40cad8',1,'planetary.h']]],
+  ['score_5fyear_5fx',['SCORE_YEAR_X',['../planetary_8h.html#aa93e45b4b822446508a2ad4e40254492',1,'planetary.h']]],
+  ['scores_5ftxt_5fpath',['SCORES_TXT_PATH',['../planetary_8h.html#abfcc5c3e93894a1c56f279855ae7887a',1,'planetary.h']]],
+  ['set_5fdefaults',['SET_DEFAULTS',['../mouse_8h.html#a4c097326c3dae6e55fd7fe3b7ff516a8',1,'mouse.h']]],
+  ['set_5fremote_5fmode',['SET_REMOTE_MODE',['../mouse_8h.html#a19a57d9d2eafd32ee130c0f526906719',1,'mouse.h']]],
+  ['set_5fresolution',['SET_RESOLUTION',['../mouse_8h.html#a34d57709215034b82f6887fec2af1b02',1,'mouse.h']]],
+  ['set_5fsample_5frate',['SET_SAMPLE_RATE',['../mouse_8h.html#a7f57224ffb2b6d5adfc1e4cb0118c7f9',1,'mouse.h']]],
+  ['set_5fscaling_5f1_5f1',['SET_SCALING_1_1',['../mouse_8h.html#aba37db16055afbb2a7e06a58c61f00d4',1,'mouse.h']]],
+  ['set_5fscaling_5f2_5f1',['SET_SCALING_2_1',['../mouse_8h.html#a5418289b9d544a763af78ae0f7f8656b',1,'mouse.h']]],
+  ['set_5fstream_5fmode',['SET_STREAM_MODE',['../mouse_8h.html#aabf49b4a4d8ad72d202c8a7197058e35',1,'mouse.h']]],
+  ['status_5frequest',['STATUS_REQUEST',['../mouse_8h.html#ab74d8cf9ec50650fee5058cb33a9160e',1,'mouse.h']]]
+];

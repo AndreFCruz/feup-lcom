@@ -1,0 +1,4 @@
+<map id="mouse_handler" name="mouse_handler">
+<area shape="rect" id="node2" href="$group__mouse.html#gacf07c98dc574238b3da9388c3dd1042a" title="Synchronizes the mouse. " alt="" coords="167,5,306,31"/>
+<area shape="rect" id="node3" href="$group__mouse.html#gaaff93ce65c5bddd94904122f0e336233" title="Reads data from the mouse output buffer. " alt="" coords="354,31,450,56"/>
+</map>

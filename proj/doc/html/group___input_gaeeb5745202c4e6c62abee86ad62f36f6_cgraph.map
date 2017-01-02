@@ -1,0 +1,7 @@
+<map id="mouse_packet_handler" name="mouse_packet_handler">
+<area shape="rect" id="node2" href="$group___input.html#ga8221771f8f04f39255e0b9f577c080e9" title="Creates a new input instance if there is none, otherwise returns the existing one (Singleton like beh..." alt="" coords="213,31,321,56"/>
+<area shape="rect" id="node6" href="$group__mouse.html#gaf67a039319066d9e7dcdcc90e3a48840" title="Function to get the signed value of an unsigned value. " alt="" coords="230,80,304,105"/>
+<area shape="rect" id="node3" href="$_input_8c.html#a2c7280ff6a19f56b0b8b5f4e5bacfbcf" title="new_input" alt="" coords="369,31,451,56"/>
+<area shape="rect" id="node4" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="499,5,605,31"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="499,55,605,80"/>
+</map>

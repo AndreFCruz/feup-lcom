@@ -1,0 +1,51 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$group__keyboard.html#gafba3a35bd6a79305e84ab4f33a5ffa7f" title="Subscribes and enables Keyboard interrupts. " alt="" coords="121,5,250,31"/>
+<area shape="rect" id="node3" href="$group__mouse.html#ga51e6ee02a5c0a7e618abde7250cd0841" title="Subscribes and enables Mouse interrupts. " alt="" coords="112,400,259,425"/>
+<area shape="rect" id="node6" href="$group__timer.html#ga4c5d9f47323eda494cfd826f6d62eec9" title="Subscribes and enables Timer 0 interrupts. " alt="" coords="117,104,254,129"/>
+<area shape="rect" id="node7" href="$group__timer.html#gada4efbb5c88275795526fc45f0814aa3" title="Configures a timer to generate a square wave. " alt="" coords="123,153,248,179"/>
+<area shape="rect" id="node9" href="$group___serial.html#ga6bd13bd1e0cd043f50abb97bcc138bfa" title="Subscribes and enables RTC interrupts. " alt="" coords="124,203,246,228"/>
+<area shape="rect" id="node10" href="$group___serial.html#ga78786e639e5d536f1c65170e7396fde6" title="Sets the desired configuration of the UART registers. " alt="" coords="130,252,241,277"/>
+<area shape="rect" id="node11" href="$group___serial.html#ga31328528e82730ef05d9e6121447dd42" title="Subscribes and enables Serial Port interrupts. " alt="" coords="116,301,255,327"/>
+<area shape="rect" id="node12" href="$group___serial.html#ga06724a3064e96e445257aba1e4f3de46" title="Enables Interrupt Mode for the Serial Port. " alt="" coords="104,351,267,376"/>
+<area shape="rect" id="node13" href="$group__video__gr.html#ga7d19c24f10ca7bfb2c7b8f9e12d4dc6f" title="Initializes the video module in graphics mode. " alt="" coords="155,55,215,80"/>
+<area shape="rect" id="node19" href="$group__mouse.html#gab5168a5f260c8e28f0f75db8a35cdb98" title="Mouse Interrupt Handler. " alt="" coords="129,449,242,475"/>
+<area shape="rect" id="node21" href="$group___input.html#gaeeb5745202c4e6c62abee86ad62f36f6" title="Mouse Interrupt Handler. " alt="" coords="105,499,265,524"/>
+<area shape="rect" id="node25" href="$group___input.html#gad26ccb83dbd3f35a93e991343682b843" title="Serial Port interrupt handler. " alt="" coords="133,597,238,623"/>
+<area shape="rect" id="node28" href="$group___input.html#ga2f4098fc71cbd39422c1001d66970bf5" title="Keyboard Interrupt Handler. " alt="" coords="121,548,249,573"/>
+<area shape="rect" id="node30" href="$planetary_8c.html#a8759d40e96a35c89970bcd4c2e03c241" title="Timer 0 interrupt handler. Regulates Frame&#45;Rate. Uses a State&#45;Machine to call the appropriate &quot;draw s..." alt="" coords="134,677,237,703"/>
+<area shape="rect" id="node44" href="$group__video__gr.html#ga1cf21cb9ef69ad19a5de13ff77a8c798" title="Copies the contents of the video buffer to video_mem at once. (Implementation of double_buffering) ..." alt="" coords="132,727,239,752"/>
+<area shape="rect" id="node45" href="$group__keyboard.html#ga162d7647d3af99ebea80b15778ce5b5d" title="Unsubscribes Keyboard interrupts. " alt="" coords="114,776,257,801"/>
+<area shape="rect" id="node46" href="$group__mouse.html#ga7614d1f22092d37078f6a3da58f7c957" title="Unsubscribes Mouse interrupts. " alt="" coords="104,825,266,851"/>
+<area shape="rect" id="node47" href="$group__timer.html#gab9eea51549744bca5c5c923b388bb4ee" title="Unsubscribes Timer 0 interrupts. " alt="" coords="110,875,261,900"/>
+<area shape="rect" id="node48" href="$group___serial.html#ga5b1cba4be2c15183b9f2c089fe6e946a" title="Unsubscribes RTC interrupts. " alt="" coords="117,924,254,949"/>
+<area shape="rect" id="node49" href="$group___serial.html#ga56e227db9f0a79bfb5fd8a753d1be67a" title="Unsubscribes Serial Port interrupts. " alt="" coords="108,973,262,999"/>
+<area shape="rect" id="node50" href="$group__video__gr.html#ga42f593e6656f1a978315aff02b1bcebf" title="Returns to default Minix 3 text mode (0x03: 25 x 80, 16 colors) " alt="" coords="154,1023,217,1048"/>
+<area shape="rect" id="node4" href="$group__mouse.html#gad26aa3828c4a6d900e654de8e4e68e83" title="Writes a command in the mouse input buffer. " alt="" coords="341,199,470,224"/>
+<area shape="rect" id="node5" href="$group__mouse.html#gaaff93ce65c5bddd94904122f0e336233" title="Reads data from the mouse output buffer. " alt="" coords="583,248,678,273"/>
+<area shape="rect" id="node8" href="$group__timer.html#ga8eb3357bc05265afc4bea5bbbb480a53" title="Reads the input timer configuration via read&#45;back command. " alt="" coords="351,149,460,175"/>
+<area shape="rect" id="node14" href="$group__vbe.html#ga71fc62857544124047314f3142672cfc" title="Asserts whether the VBE byte response indicates an error, and prints accordingly. ..." alt="" coords="569,24,692,49"/>
+<area shape="rect" id="node15" href="$group__vbe.html#ga4ef3234e41f2050bc094a22049b69e45" title="Returns information on the input VBE mode, including screen dimensions, color depth and VRAM physical..." alt="" coords="336,75,475,100"/>
+<area shape="rect" id="node16" href="$group__lmlib.html#ga00a9c17c01e794a6bfc80fc5c6ab1ed1" title="Initializes the low memory area, the region up to the 1 MByte physical address, by mapping it on the ..." alt="" coords="601,172,660,197"/>
+<area shape="rect" id="node17" href="$group__lmlib.html#gae45d971ce2ffcf4dc2677eba033a92cd" title="Allocates a memory block in low memory area with the specified size. " alt="" coords="595,73,666,99"/>
+<area shape="rect" id="node18" href="$group__lmlib.html#ga73e89d9c297b7390021fb545513579c6" title="Frees a memory block in the low memory area, previously allocated using lm_alloc() ..." alt="" coords="598,123,663,148"/>
+<area shape="rect" id="node20" href="$group__mouse.html#gacf07c98dc574238b3da9388c3dd1042a" title="Synchronizes the mouse. " alt="" coords="336,248,476,273"/>
+<area shape="rect" id="node22" href="$group___input.html#ga8221771f8f04f39255e0b9f577c080e9" title="Creates a new input instance if there is none, otherwise returns the existing one (Singleton like beh..." alt="" coords="767,451,875,476"/>
+<area shape="rect" id="node24" href="$group__mouse.html#gaf67a039319066d9e7dcdcc90e3a48840" title="Function to get the signed value of an unsigned value. " alt="" coords="368,349,443,375"/>
+<area shape="rect" id="node23" href="$_input_8c.html#a2c7280ff6a19f56b0b8b5f4e5bacfbcf" title="new_input" alt="" coords="925,451,1007,476"/>
+<area shape="rect" id="node26" href="$group___serial.html#ga733df3cf88f5c81a1c4ae2822342dd2d" title="Reads information received using the serial port. " alt="" coords="362,551,449,576"/>
+<area shape="rect" id="node27" href="$group___serial.html#ga62f6ef11a701d503d1ed5f4a873a1d2b" title="Sends information using the serial port. " alt="" coords="586,727,675,752"/>
+<area shape="rect" id="node29" href="$group__keyboard.html#gacd2bc10465c70dbb99210f880bc18207" title="Reads data from the keyboard output buffer. " alt="" coords="350,501,461,527"/>
+<area shape="rect" id="node31" href="$planetary_8c.html#ae0715dc43d4ae561a68192169cb1202f" title="menu_timer_handler" alt="" coords="334,852,477,877"/>
+<area shape="rect" id="node32" href="$group___b_m_ps_holder.html#gaa0a362e75eb034aa78e675ecb1b9c6da" title="delete_bmps_holder" alt="" coords="334,1103,477,1128"/>
+<area shape="rect" id="node35" href="$planetary_8c.html#a80a06e4779abe6f1a7fcae41642b0342" title="delete_menu" alt="" coords="356,951,455,976"/>
+<area shape="rect" id="node36" href="$planetary_8c.html#ab11260014b179b718dbc1d2c192fae87" title="game_timer_handler" alt="" coords="559,873,702,899"/>
+<area shape="rect" id="node38" href="$planetary_8c.html#a26af6cf249aae5ffc1528032a43997aa" title="multiplayer_timer_handler" alt="" coords="318,901,493,927"/>
+<area shape="rect" id="node39" href="$group___input.html#gaaf4cb27460e9e5bfa6f46343518e89bf" title="Sets the Communication State. Used for multiplayer state. " alt="" coords="581,929,680,955"/>
+<area shape="rect" id="node40" href="$planetary_8c.html#a718b6fa27860db850da66961f589a6e3" title="multiplayer_end_animation" alt="" coords="315,652,496,677"/>
+<area shape="rect" id="node41" href="$planetary_8c.html#ae6df7b890b77d7420894d67356f1d5fa" title="delete_game" alt="" coords="356,701,455,727"/>
+<area shape="rect" id="node42" href="$planetary_8c.html#aacb3a6dbb24aa3968add9e88b5c4d34f" title="end_game_timer_handler" alt="" coords="544,992,717,1017"/>
+<area shape="rect" id="node43" href="$planetary_8c.html#a81a3846694d6eea52f371a9af649fe35" title="highscores_timer_handler" alt="" coords="318,803,493,828"/>
+<area shape="rect" id="node33" href="$group___bitmap.html#ga08c1d4f4fff81df260d979ea8fc1aa61" title="Destroys the given bitmap, freeing all resources used by it. " alt="" coords="771,1103,871,1128"/>
+<area shape="rect" id="node34" href="$group___b_m_ps_holder.html#ga72dfdb9916627f68651174c037680533" title="delete_bmps" alt="" coords="582,1128,679,1153"/>
+<area shape="rect" id="node37" href="$planetary_8c.html#a877dc1b1eb1c178c89f31e76484d5790" title="game_instance" alt="" coords="765,933,877,959"/>
+</map>

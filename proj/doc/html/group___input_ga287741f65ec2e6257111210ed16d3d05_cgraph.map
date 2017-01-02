@@ -1,0 +1,6 @@
+<map id="mouse_inside_circle" name="mouse_inside_circle">
+<area shape="rect" id="node2" href="$group___input.html#ga8221771f8f04f39255e0b9f577c080e9" title="Creates a new input instance if there is none, otherwise returns the existing one (Singleton like beh..." alt="" coords="195,31,303,56"/>
+<area shape="rect" id="node3" href="$_input_8c.html#a2c7280ff6a19f56b0b8b5f4e5bacfbcf" title="new_input" alt="" coords="351,31,433,56"/>
+<area shape="rect" id="node4" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="481,5,587,31"/>
+<area shape="rect" id="node5" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="482,55,587,80"/>
+</map>

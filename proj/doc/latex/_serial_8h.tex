@@ -1,0 +1,132 @@
+\hypertarget{_serial_8h}{}\section{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Serial.h File Reference}
+\label{_serial_8h}\index{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Serial.\+h@{/\+Users/andre/\+Documents/lcom1617-\/t4g01/proj/src/\+Serial.\+h}}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_serial_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(n)~(0x01$<$$<$(n))
+\item 
+\#define \hyperlink{group___serial_gaba51915c87d64af47fb1cc59348961c9}{OK}~0
+\item 
+\#define \hyperlink{group___serial_ga3685c78b9bd6dd0fa3861807e24a4e1b}{C\+O\+M1\+\_\+\+I\+RQ}~4
+\item 
+\#define \hyperlink{group___serial_gab02d84052a299a0c207a8ea4c1a5636d}{C\+O\+M2\+\_\+\+I\+RQ}~3
+\item 
+\#define \hyperlink{group___serial_ga8982f081d8608e775b0739cde65373d5}{C\+O\+M1\+\_\+\+P\+O\+RT}~0x3\+F8
+\item 
+\#define \hyperlink{group___serial_ga88373c3e34a242356333ec08389eae54}{C\+O\+M2\+\_\+\+P\+O\+RT}~0x2\+F8
+\item 
+\#define \hyperlink{group___serial_ga562471a291b13121258a12d45f1679ce}{S\+E\+R\+I\+A\+L\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+ID}~4
+\item 
+\#define \hyperlink{group___serial_gaa6f7e7a9f4551d6151f9d45362118a50}{R\+BR}~0x00
+\begin{DoxyCompactList}\small\item\em Receiver Buffer Register -\/ Read. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga5e9787adf3c9afcc4b781e85bb545b35}{T\+HR}~0x00
+\begin{DoxyCompactList}\small\item\em Transmitter Holding Register -\/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga3e27fa35f9febccdc4a0c28a5c8cffbb}{I\+ER}~0x01
+\begin{DoxyCompactList}\small\item\em Interrupt Enable Register -\/ Read/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga67004975983f9c99226d63db17ba74c4}{I\+IR}~0x02
+\begin{DoxyCompactList}\small\item\em Interrupt Indentification Reg. -\/ Read. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga264b36b13386e3f62fe69e04711bc006}{F\+CR}~0x02
+\begin{DoxyCompactList}\small\item\em F\+I\+FO Control Register -\/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga851cb396b6eaa97346364a772b439f37}{L\+CR}~0x03
+\begin{DoxyCompactList}\small\item\em Line Control Register -\/ Read/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga65364db1603cde6f6533cb61bcfcf553}{M\+CR}~0x04
+\begin{DoxyCompactList}\small\item\em Modem Control Register -\/ Read/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gad51d51aee21f6cc77d4955221aee3dcb}{L\+SR}~0x05
+\begin{DoxyCompactList}\small\item\em Line Status Register -\/ Read. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gad4806a0bfd996121bc27d2466393207e}{M\+SR}~0x06
+\begin{DoxyCompactList}\small\item\em Modem Status Register -\/ Read. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gabaed93a16a0cde13f32bc4dc48b96804}{SR}~0x07
+\begin{DoxyCompactList}\small\item\em Scratchpad Register -\/ Read/ Write. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga4466639cd64ebf372a621168c5e25964}{D\+LL}~0x00
+\begin{DoxyCompactList}\small\item\em Divisor Latch L\+SB. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga3b48b12dc65f62dd40ab1163fe7997fb}{D\+LM}~0x01
+\begin{DoxyCompactList}\small\item\em Divisor Latch M\+SB. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga16e7001a19bba69533659ff82cbead08}{S\+E\+R\+I\+A\+L\+\_\+\+B\+I\+T\+\_\+\+R\+A\+TE}~19200
+\item 
+\#define \hyperlink{group___serial_ga5a02cec014399767cbb673100ccfa3f8}{S\+E\+R\+I\+A\+L\+\_\+\+B\+A\+S\+E\+\_\+\+BR}~115200
+\item 
+\#define \hyperlink{group___serial_ga1cf80a668c79b3081803063178f40920}{L\+C\+R\+\_\+\+D\+L\+AB}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(7)
+\begin{DoxyCompactList}\small\item\em Divisor Latch Access. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga896faa6ed28b750f3a5b9927ea12aedb}{L\+C\+R\+\_\+\+BC}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(6)
+\begin{DoxyCompactList}\small\item\em Break Control. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga5e6060e38b2ad74954b34f6ac82b8a5b}{L\+C\+R\+\_\+\+P\+C2}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(5)
+\begin{DoxyCompactList}\small\item\em Parity Control. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga6ab1327cf213d22d2acc07b397c85f0f}{L\+C\+R\+\_\+\+P\+C1}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(4)
+\begin{DoxyCompactList}\small\item\em Parity Control. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga5b25ad27007f83425b63a30298743f01}{L\+C\+R\+\_\+\+P\+C0}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(3)
+\begin{DoxyCompactList}\small\item\em Parity Control. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga9d59a56595a0f0c5af42cab8a9d3a656}{L\+C\+R\+\_\+\+SB}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(2)
+\begin{DoxyCompactList}\small\item\em Stop Bit. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga4271f672ad1c921995a3868074747d19}{L\+C\+R\+\_\+\+B\+P\+C1}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(1)
+\begin{DoxyCompactList}\small\item\em Number of bits per char. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gae82a6d40fb6637ebdea0cf527594c3fc}{L\+C\+R\+\_\+\+B\+P\+C0}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(0)
+\begin{DoxyCompactList}\small\item\em Number of bits per char. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga17abffa14207797fba6c62875367d085}{L\+S\+R\+\_\+\+F\+I\+F\+O\+\_\+E}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(7)
+\begin{DoxyCompactList}\small\item\em F\+I\+FO with Errors. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga6b9fdb38c6b844ba25a7dba0f024e20c}{L\+S\+R\+\_\+\+T\+ER}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(6)
+\begin{DoxyCompactList}\small\item\em Transmitter Empty Register. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga8c1a828f5fe296a9c1668cf3e72c00c1}{L\+S\+R\+\_\+\+T\+H\+RE}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(5)
+\begin{DoxyCompactList}\small\item\em Transmitter Holding Register Empty. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga0fa2f414cac085b768774f2881321b60}{L\+S\+R\+\_\+\+BI}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(4)
+\begin{DoxyCompactList}\small\item\em Break Interrupt. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gae3f9ccc88c615d1257ad400cf27af7eb}{L\+S\+R\+\_\+\+FE}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(3)
+\begin{DoxyCompactList}\small\item\em Framing Error. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga0ee28cdbc0917173f06cc39527452a8f}{L\+S\+R\+\_\+\+PE}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(2)
+\begin{DoxyCompactList}\small\item\em Parity Error. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gae844dd49bb0e0770bcf46ad5bfe20973}{L\+S\+R\+\_\+\+OE}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(1)
+\begin{DoxyCompactList}\small\item\em Overrun Error. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gaef6b74ebb13843a65360fd9150bfe60f}{L\+S\+R\+\_\+\+RD}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(0)
+\begin{DoxyCompactList}\small\item\em Receiver is Ready. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gae06fe45719e515d431ec3b0e9356516d}{I\+E\+R\+\_\+\+M\+O\+D\+EM}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(3)
+\begin{DoxyCompactList}\small\item\em Enables the M\+O\+D\+EM Status Interrupt. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gaec947c63128590c8f615862ee9c2c953}{I\+E\+R\+\_\+\+R\+LS}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(2)
+\begin{DoxyCompactList}\small\item\em Enables the Receiver Line Status Interrupt. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga22682c3d4571d7a79ed0ca2bc88a15a6}{I\+E\+R\+\_\+\+T\+H\+RE}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(1)
+\begin{DoxyCompactList}\small\item\em Enables the Transmitter Holding Register Empty Interrupt. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gacc2bd3737c0687e576384afc1a37a0cc}{I\+E\+R\+\_\+\+R\+DA}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(0)
+\begin{DoxyCompactList}\small\item\em Enables the R\+Eceived Data Available Interrupt. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga62a27224c8cece6052419d605737fd1e}{I\+I\+R\+\_\+\+I\+P2}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(3)
+\begin{DoxyCompactList}\small\item\em Pending Interrupts Information. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga25fc1de85f4df9dc8249e52bdc25f73d}{I\+I\+R\+\_\+\+I\+P1}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(2)
+\begin{DoxyCompactList}\small\item\em Pending Interrupts Information. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga404030d0e2acaec8bd39b8a9b01daf83}{I\+I\+R\+\_\+\+I\+P0}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(1)
+\begin{DoxyCompactList}\small\item\em Pending Interrupts Information. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga801f50fdaed5e1d41cc8606b06a4f993}{I\+I\+R\+\_\+\+N\+PI}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(0)
+\begin{DoxyCompactList}\small\item\em Non Pending Interrupts. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gadd8802975b6d7cbf87ae7fcf8256baa2}{F\+I\+F\+O\+\_\+\+R\+C\+V\+R1}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(7)
+\begin{DoxyCompactList}\small\item\em R\+C\+VR F\+I\+FO Trigger Level (Bytes) (for 16 byte F\+I\+F\+Os) \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga10947413fec5094d1e649a4764ce752a}{F\+I\+F\+O\+\_\+\+R\+C\+V\+R2}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(6)
+\begin{DoxyCompactList}\small\item\em R\+C\+VR F\+I\+FO Trigger Level (Bytes) (for 16 byte F\+I\+F\+Os) \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga870d1e13c64ab331ab0ddabd53f8f6dc}{F\+I\+F\+O\+\_\+\+E\+N64}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(5)
+\begin{DoxyCompactList}\small\item\em Enable 64 byte F\+I\+FO. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga04cb242ce6c87c7e317544b69e213eeb}{F\+I\+F\+O\+\_\+\+CX}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(2)
+\begin{DoxyCompactList}\small\item\em Clear bytes in X\+M\+IT F\+I\+FO. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_gaf6a8e6e80294a60dfd5f39cf965c4a13}{F\+I\+F\+O\+\_\+\+CR}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(1)
+\begin{DoxyCompactList}\small\item\em Clear bytes in R\+C\+VR F\+I\+FO. \end{DoxyCompactList}\item 
+\#define \hyperlink{group___serial_ga53954ec7f9dc790f00548da08ccd5ed6}{F\+I\+F\+O\+\_\+\+EN}~\hyperlink{group___serial_ga3a8ea58898cb58fc96013383d39f482c}{B\+IT}(0)
+\begin{DoxyCompactList}\small\item\em Enable both F\+I\+FO\textquotesingle{}s. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group___serial_ga31328528e82730ef05d9e6121447dd42}{serial\+\_\+subscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Serial Port interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_ga56e227db9f0a79bfb5fd8a753d1be67a}{serial\+\_\+unsubscribe\+\_\+int} (void)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Serial Port interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_ga06724a3064e96e445257aba1e4f3de46}{serial\+\_\+enable\+\_\+interrupts} ()
+\begin{DoxyCompactList}\small\item\em Enables Interrupt Mode for the Serial Port. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_gab84b5f47451f228a5c574b77e5c7e9eb}{serial\+\_\+disable\+\_\+interrupts} ()
+\begin{DoxyCompactList}\small\item\em Disables Interruptions in the Serial Port. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_ga78786e639e5d536f1c65170e7396fde6}{serial\+\_\+set\+\_\+conf} ()
+\begin{DoxyCompactList}\small\item\em Sets the desired configuration of the U\+A\+RT registers. \end{DoxyCompactList}\item 
+unsigned char \hyperlink{group___serial_ga733df3cf88f5c81a1c4ae2822342dd2d}{serial\+\_\+read} ()
+\begin{DoxyCompactList}\small\item\em Reads information received using the serial port. \end{DoxyCompactList}\item 
+int \hyperlink{group___serial_ga62f6ef11a701d503d1ed5f4a873a1d2b}{serial\+\_\+write} (unsigned char info)
+\begin{DoxyCompactList}\small\item\em Sends information using the serial port. \end{DoxyCompactList}\end{DoxyCompactItemize}

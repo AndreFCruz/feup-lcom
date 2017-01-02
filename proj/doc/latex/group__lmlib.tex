@@ -1,0 +1,116 @@
+\hypertarget{group__lmlib}{}\section{lmlib}
+\label{group__lmlib}\index{lmlib@{lmlib}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmmap__t}{mmap\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{group__lmlib_ga00a9c17c01e794a6bfc80fc5c6ab1ed1}{lm\+\_\+init} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the low memory area, the region up to the 1 M\+Byte physical address, by mapping it on the process\textquotesingle{} physical memory address. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{lm\+\_\+alloc} (unsigned long size, \hyperlink{structmmap__t}{mmap\+\_\+t} $\ast$map)
+\begin{DoxyCompactList}\small\item\em Allocates a memory block in low memory area with the specified size. \end{DoxyCompactList}\item 
+void \hyperlink{group__lmlib_ga73e89d9c297b7390021fb545513579c6}{lm\+\_\+free} (\hyperlink{structmmap__t}{mmap\+\_\+t} $\ast$map)
+\begin{DoxyCompactList}\small\item\em Frees a memory block in the low memory area, previously allocated using \hyperlink{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{lm\+\_\+alloc()} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+phys\+\_\+bytes \hyperlink{group__lmlib_gaa6ac1ee0e0fadea4a4f85b48c8359ae4}{mmap\+\_\+t\+::phys}
+\begin{DoxyCompactList}\small\item\em physical address \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__lmlib_ga4de93144fb3ffbceb9bd1f3009d6d98c}{mmap\+\_\+t\+::virtual}
+\begin{DoxyCompactList}\small\item\em virtual address \end{DoxyCompactList}\item 
+unsigned long \hyperlink{group__lmlib_gaf1cdc5384a402fddf33f400a5e1e5e45}{mmap\+\_\+t\+::size}
+\begin{DoxyCompactList}\small\item\em size of memory region \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions related to low memory (first 1 MB of physical memory), required for B\+I\+OS 
+
+\subsection{Function Documentation}
+\hypertarget{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{}\label{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd} 
+\index{lmlib@{lmlib}!lm\+\_\+alloc@{lm\+\_\+alloc}}
+\index{lm\+\_\+alloc@{lm\+\_\+alloc}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{lm\+\_\+alloc()}{lm\_alloc()}}
+{\footnotesize\ttfamily void$\ast$ lm\+\_\+alloc (\begin{DoxyParamCaption}\item[{unsigned long}]{size,  }\item[{\hyperlink{structmmap__t}{mmap\+\_\+t} $\ast$}]{map }\end{DoxyParamCaption})}
+
+
+
+Allocates a memory block in low memory area with the specified size. 
+
+Allocates a memory block in the region up to the 1 M\+Byte physical address with the input size. Initializes the input \hyperlink{structmmap__t}{mmap\+\_\+t} struct with the maping information, which can be read but must not be modified.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & size of the memory block to allocate \\
+\hline
+{\em map} & pointer to \hyperlink{structmmap__t}{mmap\+\_\+t} data structure, which represents the memory map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the virtual address of the memory block on success, N\+U\+LL otherwise 
+\end{DoxyReturn}
+\hypertarget{group__lmlib_ga73e89d9c297b7390021fb545513579c6}{}\label{group__lmlib_ga73e89d9c297b7390021fb545513579c6} 
+\index{lmlib@{lmlib}!lm\+\_\+free@{lm\+\_\+free}}
+\index{lm\+\_\+free@{lm\+\_\+free}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{lm\+\_\+free()}{lm\_free()}}
+{\footnotesize\ttfamily void lm\+\_\+free (\begin{DoxyParamCaption}\item[{\hyperlink{structmmap__t}{mmap\+\_\+t} $\ast$}]{map }\end{DoxyParamCaption})}
+
+
+
+Frees a memory block in the low memory area, previously allocated using \hyperlink{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{lm\+\_\+alloc()} 
+
+Frees a memory block in the region up to the 1 M\+Byte physical addess, previously allocated using \hyperlink{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{lm\+\_\+alloc()}. Takes as input the address of the \hyperlink{structmmap__t}{mmap\+\_\+t} structure that was passed to \hyperlink{group__lmlib_gae45d971ce2ffcf4dc2677eba033a92cd}{lm\+\_\+alloc()}, and that must have not been modified since.
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & pointer to \hyperlink{structmmap__t}{mmap\+\_\+t} data structure of the block being freed \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__lmlib_ga00a9c17c01e794a6bfc80fc5c6ab1ed1}{}\label{group__lmlib_ga00a9c17c01e794a6bfc80fc5c6ab1ed1} 
+\index{lmlib@{lmlib}!lm\+\_\+init@{lm\+\_\+init}}
+\index{lm\+\_\+init@{lm\+\_\+init}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{lm\+\_\+init()}{lm\_init()}}
+{\footnotesize\ttfamily void$\ast$ lm\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the low memory area, the region up to the 1 M\+Byte physical address, by mapping it on the process\textquotesingle{} physical memory address. 
+
+\begin{DoxyReturn}{Returns}
+virtual address on which the first 1 MiB was mapped, N\+U\+LL upon failure 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\hypertarget{group__lmlib_gaa6ac1ee0e0fadea4a4f85b48c8359ae4}{}\label{group__lmlib_gaa6ac1ee0e0fadea4a4f85b48c8359ae4} 
+\index{lmlib@{lmlib}!phys@{phys}}
+\index{phys@{phys}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{phys}{phys}}
+{\footnotesize\ttfamily phys\+\_\+bytes mmap\+\_\+t\+::phys}
+
+
+
+physical address 
+
+\hypertarget{group__lmlib_gaf1cdc5384a402fddf33f400a5e1e5e45}{}\label{group__lmlib_gaf1cdc5384a402fddf33f400a5e1e5e45} 
+\index{lmlib@{lmlib}!size@{size}}
+\index{size@{size}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily unsigned long mmap\+\_\+t\+::size}
+
+
+
+size of memory region 
+
+\hypertarget{group__lmlib_ga4de93144fb3ffbceb9bd1f3009d6d98c}{}\label{group__lmlib_ga4de93144fb3ffbceb9bd1f3009d6d98c} 
+\index{lmlib@{lmlib}!virtual@{virtual}}
+\index{virtual@{virtual}!lmlib@{lmlib}}
+\subsubsection{\texorpdfstring{virtual}{virtual}}
+{\footnotesize\ttfamily void$\ast$ mmap\+\_\+t\+::virtual}
+
+
+
+virtual address 
+

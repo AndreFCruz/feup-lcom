@@ -101,6 +101,45 @@ int serial_subscribe_int(void);
  */
 int serial_unsubscribe_int(void);
 
+/**
+ * @brief Enables Interrupt Mode for the Serial Port
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int serial_enable_interrupts();
+
+/**
+ * @brief Disables Interruptions in the Serial Port
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int serial_disable_interrupts();
+
+/**
+ * @brief Sets the desired configuration of the UART registers
+ *
+ * This function should be called in both serial port ends, and any transmission of information
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int serial_set_conf();
+
+/**
+ * @brief Reads information received using the serial port
+ *
+ * @return unsigned char read from the Receiver Buffer
+ */
+unsigned char serial_read();
+
+/**
+ * @brief Sends information using the serial port
+ *
+ * @param info information going to be send
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int serial_write(unsigned char info);
+
 /**@}*/
 
 #endif /* __SERIAL_H */

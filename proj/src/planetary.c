@@ -203,19 +203,14 @@ int timer_handler() {
 		}
 		break;
 	case GAME_MULTI:
-		if (getComState() == ONGOING) {
-			ret = multiplayer_timer_handler();
-			if (OK != ret ) {
-				// Fetch winning status
-				printf("ENDED MULTIPLAYER!\n");
-				game_state = MP_END_ANIMATION;
+		ret = multiplayer_timer_handler();
+		if (OK != ret ) {
+			// Fetch winning status
+			printf("ENDED MULTIPLAYER!\n");
+			game_state = MP_END_ANIMATION;
 
-				if (2 == ret)
-					winner_flag = 1;
-			}
-		}
-		if (getComState() == WAITING_START) {
-			serial_write(MP_WAITING);
+			if (2 == ret)
+				winner_flag = 1;
 		}
 		break;
 	case MP_END_ANIMATION:
@@ -658,7 +653,7 @@ static int end_game_timer_handler(int highscore_flag) {
 
 	++count;
 	// Draw Blinking Score -- Center of Screen
-	if ((count / FRAME_RATE) % 2)
+	if ((count / (FRAME_RATE / 2)) % 2)
 		draw_score(self->frames / FRAME_RATE,
 				vg_getHorRes() / 2 + NUMBER_SIZE_X / 2,
 				vg_getVerRes() / 2 + NUMBER_SIZE_Y / 2);

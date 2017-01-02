@@ -240,6 +240,10 @@ static int multiplayer_timer_handler() {
 	switch(getComState()) {
 	case WAITING_START:
 		// draw bitmap waiting for connection
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->waiting_MP, 0, 0,
+				ALIGN_LEFT);
+		draw_mouse_cross(get_mouse_pos(), WHITE);
+
 		serial_write(MP_WAITING);
 		break;
 	case ONGOING:
@@ -708,7 +712,28 @@ static int highscores_timer_handler() {
 }
 
 static int multiplayer_end_animation(int winner_flag) {
-	// Draw appropriate Bitmap
-//	if (winner_flag)
 
+	/** Handle Keyboard Input **/
+	switch (input_get_key()) {
+	case ESC_BREAK:
+		printf("ESC BREAK_CODE DETECTED: 0x%X\n", ESC_BREAK);
+		return 1;
+		break;
+	default:
+		break;
+	}
+
+	// Draw Background
+	drawBitmap(vg_getBufferPtr(), BMPsHolder()->HS_background, 0, 0,
+			ALIGN_LEFT);
+
+	// Draw appropriate Bitmap
+	if (winner_flag)
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->win, vg_getHorRes() / 2, vg_getVerRes() / 2, ALIGN_CENTER);
+	else
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->win, vg_getHorRes() / 2, vg_getVerRes() / 2, ALIGN_CENTER);
+
+	draw_mouse_cross(get_mouse_pos(), BLACK);
+
+	return OK;
 }

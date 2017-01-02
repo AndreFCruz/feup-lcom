@@ -53,7 +53,6 @@ typedef struct {
 	Bitmap ** numbers; ///> Array containing the pointers to the numbers bitmaps
 	Bitmap ** big_numbers; ///> Array containing the pointers to the big numbers bitmaps
 	Bitmap ** explosion; ///> Array containing the pointers to the explosion bitmaps
-	//Bitmap ** ground_explosion; // TODO ?
 	Bitmap ** buildings; ///> Array containing the pointers to the building destruction bitmaps
 
 	Bitmap * game_background; ///> Pointer to the bitmap of the game background

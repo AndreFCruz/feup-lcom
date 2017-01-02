@@ -4,7 +4,7 @@
 // Current state of communication
 static serial_state_t comState = NONE;
 
-int serial_handler() {
+void serial_handler() {
 	unsigned char received = serial_read();
 
 	switch (comState) {
@@ -37,11 +37,9 @@ void setComState(serial_state_t state) {
 
 	switch (state) {
 	case WAITING_START:
-		serial_write(MP_WAITING);
 		comState = WAITING_START;
 		break;
 	case ENDED:
-		serial_write(MP_ENDED);
 		comState = NONE;
 		break;
 	}

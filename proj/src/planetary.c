@@ -245,6 +245,7 @@ static int multiplayer_timer_handler() {
 	switch(getComState()) {
 	case WAITING_START:
 		// draw bitmap waiting for connection
+		serial_write(MP_WAITING);
 		break;
 	case ONGOING:
 		if (game_timer_handler() != OK) {
@@ -253,6 +254,7 @@ static int multiplayer_timer_handler() {
 		}
 		break;
 	case ENDED:
+		serial_write(MP_ENDED);
 		return 2;
 		break;
 	}

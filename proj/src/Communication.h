@@ -20,10 +20,20 @@ typedef enum {
 	WAITING_START, ONGOING, ENDED, NONE
 } serial_state_t;
 
-int serial_handler();
+/**
+ * @brief Serial Port interrupt handler.
+ */
+void serial_handler();
 
+/**
+ * @brief Sets the Communication State. Used for multiplayer state.
+ */
 void setComState(serial_state_t state);
 
+/**
+ * @brief Get method for the current Communication State
+ * @return The current serial_state_t
+ */
 serial_state_t getComState();
 
 /**@}*/

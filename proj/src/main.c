@@ -45,6 +45,18 @@ int main() {
 		printf("FAILED rtc_subscribe_int()\n");
 		return 1;
 	}
+
+	//Setting Serial configuration
+	if (serial_set_conf() != OK) {
+		printf("FAILED serial_set_conf()\n");
+		return 1;
+	}
+
+	int serial_irq_set;
+	if ((serial_irq_set = BIT(serial_subscribe_int())) < 0) {
+		printf("FAILED serial_subscribe_int()\n");
+		return 1;
+	}
 	/* ** */
 
 	//Initiate Graphics Mode
@@ -75,6 +87,10 @@ int main() {
 						mouse_packet_handler(packet);
 						counter = 0;
 					}
+				}
+
+				if (msg.NOTIFY_ARG & serial_irq_set) { /* serial interrupt */
+					printf ("Message was: %x\n", serial_read());
 				}
 
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */
@@ -116,6 +132,10 @@ int main() {
 	}
 	if (rtc_unsubscribe_int() < 0) {
 		printf("FAILED rtc_unsubscribe_int()\n");
+		return 1;
+	}
+	if (serial_unsubscribe_int() < 0) {
+		printf("FAILED serial_unsubscribe_int()\n");
 		return 1;
 	}
 	/* ** */

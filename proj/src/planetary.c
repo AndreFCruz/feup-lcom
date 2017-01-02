@@ -199,7 +199,8 @@ int timer_handler() {
 		}
 		break;
 	case GAME_MULTI: // TODO
-		printf("FOR THE LONG HAUL...\n");
+		printf("Sending test message...\n");
+		serial_write(0x01);
 		game_state = MENU;
 		break;
 	case END_GAME_ANIMATION:

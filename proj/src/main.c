@@ -90,7 +90,9 @@ int main() {
 				}
 
 				if (msg.NOTIFY_ARG & serial_irq_set) { /* serial interrupt */
-					printf ("Message was: %x\n", serial_read());
+
+					serial_handler();
+
 				}
 
 				if (msg.NOTIFY_ARG & keyboard_irq_set) { /* keyboard interrupt */

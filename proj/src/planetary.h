@@ -36,6 +36,7 @@ typedef enum {
 /**
  * @brief Timer 0 interrupt handler. Regulates Frame-Rate.
  * Uses a State-Machine to call the appropriate "draw state".
+ * @return Returns non-zero when user event dictates end of application.
  */
 int timer_handler();
 

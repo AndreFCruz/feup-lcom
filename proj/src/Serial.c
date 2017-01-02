@@ -139,8 +139,8 @@ int serial_set_conf() {
 		return 1;
 	}
 
-	//Setting Word Length - 5 bits
-	configuration = configuration & (~LCR_BPC0) & (~LCR_BPC1);
+	//Setting Word Length - 8 bits
+	configuration = configuration & LCR_BPC0 & LCR_BPC1;
 
 	//Setting Number of Stop Bits - 1 bit
 	configuration = configuration & (~LCR_SB);
@@ -242,7 +242,6 @@ int serial_write(unsigned char info) {
 #define GAME_READY		BIT(0)
 #define GAME_OVER		BIT(1)
 //TODO : Isto nao necessita de estar aqui? E fora ver o que se recebe a que macro e igual.
-////::::::::::::::::::::::::::::::::
 
 //
 ///* Interrupt Handling - TODO: Check Transaltion made with macros*/

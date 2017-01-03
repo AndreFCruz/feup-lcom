@@ -56,8 +56,6 @@ int serial_enable_interrupts() {
 		return 1;
 	}
 
-	//TODO: Tickdelay no keyboard mas com timer
-
 	return OK;
 }
 
@@ -177,7 +175,7 @@ int serial_set_conf() {
 //			return 0;
 //		}
 //
-//		return received_char; //TODO: cast automatico e como ta unsigned n ha problema?
+//		return received_char;
 //	}
 //
 //	return 0;
@@ -193,7 +191,7 @@ unsigned char serial_read() {
 		return 0;
 	}
 
-	return received_char; //TODO: cast automatico e como ta unsigned n ha problema?
+	return received_char;
 }
 
 //Polled mode?
@@ -222,7 +220,6 @@ unsigned char serial_read() {
 //	}
 //
 ////Wait for message to get his destination with timer
-////TODO: timer.wait call
 //
 //}
 
@@ -232,21 +229,9 @@ int serial_write(unsigned char info) {
 		return 1;
 	}
 
-	//TODO: Tickdelay no keyboard mas com timer
-
 	return OK;
 }
 
-/* Passing information associated functions */
-
-#define GAME_READY		BIT(0)
-#define GAME_OVER		BIT(1)
-//TODO : Isto nao necessita de estar aqui? E fora ver o que se recebe a que macro e igual.
-
-//
-///* Interrupt Handling - TODO: Check Transaltion made with macros*/
-//// Not finished because dont know wut case stuff means
-//
 //void ser_ih() {
 //	sys_inb(ser_port + IIR, &iir);
 //if( iir & ~IIR_NPI) {

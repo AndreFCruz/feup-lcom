@@ -1,5 +1,0 @@
-<map id="rtc_read_date" name="rtc_read_date">
-<area shape="rect" id="node2" href="$group___serial.html#gacaae78073772a1f95560e42cef087a93" title="rtc_updating" alt="" coords="157,5,252,31"/>
-<area shape="rect" id="node3" href="$group___serial.html#ga50431f28993883d49a09ce054bd5c0ec" title="(From Assembly) Reads Value from register reg " alt="" coords="300,31,422,56"/>
-<area shape="rect" id="node4" href="$group___serial.html#gab77fc689b79cf1fa098f71a4ff5abdeb" title="parserBCD" alt="" coords="161,107,248,132"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="draw_mouse_cross" name="draw_mouse_cross">
-<area shape="rect" id="node2" href="$group__video__gr.html#ga7f93731e89220a67419a16b1a415e133" title="Checks if position (x,y) is inside the screen. " alt="" coords="317,5,411,31"/>
-<area shape="rect" id="node3" href="$group__video__gr.html#ga0b618a385e591f8690388281fd79a351" title="Draws a line on the screen, given a color, a initial position and a final position. " alt="" coords="190,55,269,80"/>
-<area shape="rect" id="node4" href="$group__video__gr.html#gafd0836c92e142e75c256799fb45032da" title="paint_pixel" alt="" coords="321,55,407,80"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="delete_game" name="delete_game">
-<area shape="rect" id="node2" href="$group___g_vector.html#ga3570990e6e22e8bd76cceec25869e117" title="Gets the size (number of elements) of a GVector. " alt="" coords="152,5,274,31"/>
-<area shape="rect" id="node3" href="$group___g_vector.html#ga01efe5e5a35c4656de07aa3b1c937b0b" title="Access to an element at a given index. " alt="" coords="171,55,255,80"/>
-<area shape="rect" id="node4" href="$group___g_vector.html#gab3513aa2ddf9e3016d4be27fff810b39" title="Deletes a GVector, freeing all the allocated memory. " alt="" coords="158,104,267,129"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="timer_delay" name="timer_delay">
-<area shape="rect" id="node2" href="$group__timer.html#ga4c5d9f47323eda494cfd826f6d62eec9" title="Subscribes and enables Timer 0 interrupts. " alt="" coords="151,5,288,31"/>
-<area shape="rect" id="node3" href="$group__timer.html#gada4efbb5c88275795526fc45f0814aa3" title="Configures a timer to generate a square wave. " alt="" coords="157,55,282,80"/>
-<area shape="rect" id="node5" href="$group__timer.html#gab9eea51549744bca5c5c923b388bb4ee" title="Unsubscribes Timer 0 interrupts. " alt="" coords="144,104,295,129"/>
-<area shape="rect" id="node4" href="$group__timer.html#ga8eb3357bc05265afc4bea5bbbb480a53" title="Reads the input timer configuration via read&#45;back command. " alt="" coords="343,55,453,80"/>
-</map>

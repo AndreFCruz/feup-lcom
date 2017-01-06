@@ -1,6 +1,0 @@
-<map id="new_explosion" name="new_explosion">
-<area shape="rect" id="node2" href="$group___b_m_ps_holder.html#gafd662085ea52a83586cddd30b6423c01" title="BMPsHolder" alt="" coords="163,31,259,56"/>
-<area shape="rect" id="node3" href="$_b_m_ps_holder_8c.html#a8c4ac97b76736b66ed10b3c5d74a96e7" title="new_bmps_holder" alt="" coords="307,31,437,56"/>
-<area shape="rect" id="node4" href="$group___b_m_ps_holder.html#gab74a07b3201edddc82762946608675a5" title="load_bmps" alt="" coords="485,5,572,31"/>
-<area shape="rect" id="node5" href="$group___bitmap.html#ga3506880ffd407c36eb8aaddd2c1606d2" title="Loads a bmp image. " alt="" coords="620,31,708,56"/>
-</map>

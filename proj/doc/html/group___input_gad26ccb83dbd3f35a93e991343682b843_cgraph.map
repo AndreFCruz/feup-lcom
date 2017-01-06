@@ -1,4 +1,0 @@
-<map id="serial_handler" name="serial_handler">
-<area shape="rect" id="node2" href="$group___serial.html#ga733df3cf88f5c81a1c4ae2822342dd2d" title="Reads information received using the serial port. " alt="" coords="159,5,246,31"/>
-<area shape="rect" id="node3" href="$group___serial.html#ga62f6ef11a701d503d1ed5f4a873a1d2b" title="Sends information using the serial port. " alt="" coords="158,55,247,80"/>
-</map>

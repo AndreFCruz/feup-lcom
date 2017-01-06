@@ -1,5 +1,0 @@
-<map id="draw_number" name="draw_number">
-<area shape="rect" id="node2" href="$group___bitmap.html#ga82a8171067b55f72cc29c8c50d8330c6" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="156,31,248,56"/>
-<area shape="rect" id="node3" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="296,5,402,31"/>
-<area shape="rect" id="node4" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="297,55,402,80"/>
-</map>

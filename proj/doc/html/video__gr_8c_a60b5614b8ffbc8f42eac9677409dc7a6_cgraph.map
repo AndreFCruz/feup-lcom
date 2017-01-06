@@ -1,8 +1,0 @@
-<map id="draw_explosion" name="draw_explosion">
-<area shape="rect" id="node2" href="$group___bitmap.html#ga82a8171067b55f72cc29c8c50d8330c6" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="194,29,286,55"/>
-<area shape="rect" id="node5" href="$group___missile.html#ga1f8e365295b2facc195f17155bba6b71" title="Gets the current Bitmap of the Explosion. " alt="" coords="167,79,312,104"/>
-<area shape="rect" id="node6" href="$group___missile.html#gaaa4dd8460fa2eeb803f0e62b0b693589" title="Gets the position in the horizontal axis of the Explosion, on the screen. " alt="" coords="172,128,308,153"/>
-<area shape="rect" id="node7" href="$group___missile.html#gab7f446e98be5f55752942865f5e10be4" title="Gets the position in the vertical axis of the Explosion, on the screen. " alt="" coords="172,177,308,203"/>
-<area shape="rect" id="node3" href="$group__video__gr.html#gab3938dd22c03335341584d5b8f6752f5" title="Gets the horizontal Resolution of the screen. " alt="" coords="360,5,467,31"/>
-<area shape="rect" id="node4" href="$group__video__gr.html#gaab8200f7947926322b6dd6fa7c6da1e1" title="Gets the vertical Resolution of the screen. " alt="" coords="361,55,466,80"/>
-</map>

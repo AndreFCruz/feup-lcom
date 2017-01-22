@@ -36,25 +36,27 @@ Input_t * input_instance() {
 
 // Keyboard Handler : to be called on keyboard interrupts
 void keyboard_handler() {
-	if ((input_instance()->keycode = keyboard_read()) < 0)
-		printf("keyboard_handler::keyboard_read() failed\n");
-}
-
-// Removes keycode from Input's buffer, compatible with double byte make/break codes
-keycode_t input_get_key() {
 	static int byteE0 = 0; // flag corresponding to whether first byte 0xE0 was received
-	keycode_t tmp = input_instance()->keycode;
-	input_instance()->keycode = NONE;	// Key handled
+
+	keycode_t tmp;
+	if ((tmp = keyboard_read()) < 0)
+		printf("keyboard_handler::keyboard_read() failed\n");
 
 	if (0xE0 == tmp) {
 		byteE0 = 1;
-		return NONE; // NONE == 0x0
 	} else if (byteE0) {
-		byteE0 = 0; // clear flag
-		return (0xE0 << 8) | tmp;
+		byteE0 = 0;
+		input_instance()->keycode = (0xE0 << 8) | tmp;
 	} else {
-		return tmp;
+		input_instance()->keycode = tmp;
 	}
+}
+
+// Removes keycode from Input's buffer
+keycode_t input_get_key() {
+	keycode_t tmp = input_instance()->keycode;
+	input_instance()->keycode = NONE;	// Key handled
+	return tmp;
 }
 
 //Destructor

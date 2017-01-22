@@ -51,15 +51,14 @@ void delete_input();
 
 /**
  * @brief Keyboard Interrupt Handler
+ * Compatible with single and double-byte keycodes
  */
 void keyboard_handler();
 
 /**
  * @brief Remove's the key code from the input buffer
  *
- * Compatible with double make/ brake codes
- *
- * @return Key code type (ESC, ENTER, UP, DOWN or NONE)
+ * @return Keycode to be handled
  */
 keycode_t input_get_key();
 

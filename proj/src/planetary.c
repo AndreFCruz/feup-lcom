@@ -239,23 +239,19 @@ int timer_handler() {
 
 static int multiplayer_timer_handler() {
 	switch(getComState()) {
-	case WAITING_START:
+	case MP_WAITING:
 		// draw bitmap waiting for connection
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->waiting_MP, 0, 0,
 				ALIGN_LEFT);
 		draw_mouse_cross(get_mouse_pos(), WHITE);
-
-		serial_write(MP_WAITING);
 		break;
-	case ONGOING:
+	case MP_ONGOING: // You Lost
 		if (game_timer_handler() != OK) {
-			setComState(ENDED);
+			setComState(MP_ENDED);
 			return 1;
 		}
-		serial_write(MP_STARTED);
 		break;
-	case ENDED:
-		serial_write(MP_ENDED);
+	case MP_ENDED: // You Won!
 		return 2;
 		break;
 	}
@@ -312,7 +308,7 @@ static int menu_timer_handler(game_state_t * game_state) {
 		selected = 2;
 
 		if (get_mouseRMB()) {
-			setComState(WAITING_START);
+			setComState(MP_WAITING);
 			*game_state = GAME_MULTI;
 			selected = 0;
 		}
@@ -713,6 +709,7 @@ static int highscores_timer_handler() {
 	return OK;
 }
 
+// TODO Improve animation ? explosions maybe
 static int multiplayer_end_animation(int winner_flag) {
 
 	/** Handle Keyboard Input **/

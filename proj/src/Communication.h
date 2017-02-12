@@ -9,15 +9,16 @@
  */
 
 /* Codes for communication between Computers */
+/*
 #define MP_WAITING		0x01
-#define MP_STARTED		0x02
+#define MP_ONGOING		0x02
 #define	MP_ENDED		0x03
-
-#define ACK				0xFF
+*/
+static const char MP_ACK	0xFF
 
 
 typedef enum {
-	WAITING_START, ONGOING, ENDED, NONE
+	MP_WAITING, MP_ONGOING, MP_ENDED, NONE
 } serial_state_t;
 
 /**

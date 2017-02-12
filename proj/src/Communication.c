@@ -16,7 +16,7 @@ void serial_handler() {
 			comState = MP_ONGOING;
 		} else if ( MP_ONGOING == received ) {
 			serial_write(MP_ACK);
-			comState = ONGOING;
+			comState = MP_ONGOING;
 		} else {
 			printf("*serial handler-NOT cool* ");
 		}
@@ -32,7 +32,7 @@ void serial_handler() {
 		}
 		break;
 	case MP_ENDED:
-		printf("** SH - is this fine? **\n);
+		printf("** SH - is this fine? **\n");
 		break;
 	case NONE:
 		printf("** SH - received com while out of MP **\n");

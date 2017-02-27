@@ -94,7 +94,7 @@ int main() {
 				}
 
 				if (msg.NOTIFY_ARG & serial_irq_set) { /* serial interrupt */
-
+					printf("Received serial!!!\n");
 					serial_handler();
 
 				}

@@ -18,7 +18,7 @@ static const char MP_ACK = 0xFF;
 
 
 typedef enum {
-	MP_WAITING, MP_ONGOING, MP_ENDED, NONE
+	EXCLUDE, MP_WAITING, MP_ONGOING, MP_ENDED, NONE
 } serial_state_t;
 
 /**
@@ -36,6 +36,9 @@ void setComState(serial_state_t state);
  * @return The current serial_state_t
  */
 serial_state_t getComState();
+
+int getflag();
+
 
 /**@}*/
 

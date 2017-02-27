@@ -194,7 +194,6 @@ int timer_handler() {
 		if (OK != ret) {
 			game_state = END_GAME_ANIMATION;
 			printf("\tEND OF GAME -- \n");
-
 			// highscore
 			if (2 == ret) {
 				highscore_flag = 1;

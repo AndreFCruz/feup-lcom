@@ -224,6 +224,8 @@ unsigned char serial_read() {
 //}
 
 int serial_write(unsigned char info) {
+	printf("SerialWrite: %x\n", info);
+
 	if (sys_outb((COM1_PORT + THR), info) != OK) {
 		printf(" serial_write -> Failed sys_outb of information.\n");
 		return 1;

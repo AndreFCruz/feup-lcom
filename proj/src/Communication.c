@@ -8,7 +8,7 @@ static int flag = 0;
 void serial_handler() {
 	unsigned char received = serial_read();
 
-	printf("MP_WAITING: %x\nMP_ONGOING: %x\nMP_ENDED: %x\nNONE: %x\n",(int)MP_WAITING,(int) MP_ONGOING,(int) MP_ENDED,(int) NONE);
+	//printf("MP_WAITING: %x. MP_ONGOING: %x. MP_ENDED: %x. NONE: %x\n",(int)MP_WAITING,(int) MP_ONGOING,(int) MP_ENDED,(int) NONE);
 
 	printf("-SH- State: %x. Received: %x.\n", (int) comState, received);
 

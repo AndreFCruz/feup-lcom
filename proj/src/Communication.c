@@ -6,9 +6,9 @@ static serial_state_t comState = NONE;
 static int flag = 0;
 
 void serial_handler() {
+	// verificar tipo de interrupcao
+	
 	unsigned char received = serial_read();
-
-	//printf("MP_WAITING: %x. MP_ONGOING: %x. MP_ENDED: %x. NONE: %x\n",(int)MP_WAITING,(int) MP_ONGOING,(int) MP_ENDED,(int) NONE);
 
 	printf("-SH- State: %x. Received: %x.\n", (int) comState, received);
 

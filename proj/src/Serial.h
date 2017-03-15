@@ -84,10 +84,10 @@
 
 /* Interrupt Identification Register (IIR) */
 
-#define IIR_IP2		BIT(3)	/**< @brief Pending Interrupts Information */
-#define IIR_IP1		BIT(2)	/**< @brief Pending Interrupts Information */
-#define IIR_IP0		BIT(1)	/**< @brief Pending Interrupts Information */
+#define IIR_THR_E	BIT(1)	/**< @brief IIR THR Empty */
+#define IIR_RX		BIT(2)	/**< @brief IIR received interrupt */
 #define IIR_NPI		BIT(0)	/**< @brief Non Pending Interrupts */
+#define IIR_ID		BIT(1) || BIT(2) || BIT(3)	/**< @brief Bits for pending interrupts information */
 
 /* UART FIFO Control Register */
 

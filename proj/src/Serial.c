@@ -42,14 +42,14 @@ int serial_unsubscribe_int(void) {
 int serial_enable_interrupts() {
 
 	unsigned long helper_IER = 0;
-
+/*
 	if (sys_inb((COM1_PORT + IER), &helper_IER) != OK) {
 		printf("serial_enable_interrupt -> Failed sys_inb.\n");
 		return 1;
 	}
-
+*/
 	//Setting Bit 0 and 1 of the IIR
-	helper_IER = helper_IER | IER_RDA | IER_THRE;
+	helper_IER = helper_IER | IER_RDA /*| IER_THRE*/;
 
 	if (sys_outb((COM1_PORT + IER), helper_IER) != OK) {
 		printf("serial_enable_interrupt -> Failed sys_outb.\n");
@@ -91,7 +91,7 @@ int serial_set_conf() {
 
 	unsigned long configuration = 0;
 
-	//Setting the bit-rate
+	//Setting the bit-rate frequency dividor
 	unsigned long bit_rate = SERIAL_BASE_BR / SERIAL_BIT_RATE;
 	char lsb = bit_rate & 0xFF;
 	char msb = (bit_rate << 8) & 0xFF;
@@ -184,7 +184,7 @@ int serial_set_conf() {
 //Interrupt mode?
 unsigned char serial_read() {
 	unsigned long received_char = 0;
-
+	// TODO verificar registo de estados
 	//Reading character put on the Receiver Buffer
 	if (sys_inb((COM1_PORT + RBR), &received_char) != OK) {
 		printf(" serial_read -> Failed sys_inb for Received character.\n");
@@ -225,6 +225,8 @@ unsigned char serial_read() {
 
 int serial_write(unsigned char info) {
 	printf("SerialWrite: %x\n", info);
+
+	// TODO verificar transmiter buffer empty 
 
 	if (sys_outb((COM1_PORT + THR), info) != OK) {
 		printf(" serial_write -> Failed sys_outb of information.\n");

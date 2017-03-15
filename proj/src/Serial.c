@@ -77,7 +77,7 @@ int serial_disable_interrupts() {
 		return 1;
 	}
 
-	//TODO: tickdelay como no keyboard mas com timer
+	//TODO: tickdelay ?
 
 	return OK;
 }
@@ -183,8 +183,19 @@ int serial_set_conf() {
 
 //Interrupt mode?
 unsigned char serial_read() {
-	unsigned long received_char = 0;
-	// TODO verificar registo de estados
+	unsigned long received = 0;
+	unsigned long status = 0;
+
+	sys_inb(COM1_PORT + LSR, &status);
+
+	if (status & SERIAL_RECEIVED_DATA) {
+		sys_inb(COM1_PORT + RBR, &received);
+		return (unsigned char)(received & 0xFF);
+	}
+
+	return 0;
+	// //
+/*
 	//Reading character put on the Receiver Buffer
 	if (sys_inb((COM1_PORT + RBR), &received_char) != OK) {
 		printf(" serial_read -> Failed sys_inb for Received character.\n");
@@ -192,6 +203,7 @@ unsigned char serial_read() {
 	}
 
 	return received_char;
+	*/
 }
 
 //Polled mode?

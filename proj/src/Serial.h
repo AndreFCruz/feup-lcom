@@ -34,6 +34,18 @@
 #define MSR		0x06	/**< @brief Modem Status Register - Read */
 #define SR		0x07	/**< @brief Scratchpad Register - Read/ Write */
 
+/* LSR Macros */
+#define SERIAL_RECEIVED_DATA	BIT(0)
+#define SERIAL_RX_RDY			BIT(0)
+#define SERIAL_ERROR_OVERRUN	BIT(1)
+#define SERIAL_ERROR_PARITY		BIT(2)
+#define SERIAL_ERROR_FRAME		BIT(3)
+#define SERIAL_ERROR_BREAK		BIT(4)
+#define SERIAL_THR_EMPTY		BIT(5)
+#define SERIAL_TX_RDY			BIT(5)
+#define SERIAL_TR_EMPTY			BIT(6)
+#define SERIAL_ERROR_FIFO		BIT(7)
+
 /* Adresses 0 and 1 are overloaded - access depends of bit DLAB of the LCR register */
 #define DLL		0x00	/**< @brief Divisor Latch LSB */
 #define DLM		0x01	/**< @brief Divisor Latch MSB */
@@ -68,7 +80,7 @@
 #define IER_MODEM	BIT(3)	/**< @brief Enables the MODEM Status Interrupt */
 #define IER_RLS		BIT(2)	/**< @brief Enables the Receiver Line Status Interrupt */
 #define IER_THRE	BIT(1)	/**< @brief Enables the Transmitter Holding Register Empty Interrupt */
-#define IER_RDA		BIT(0)	/**< @brief Enables the REceived Data Available Interrupt */
+#define IER_RDA		BIT(0)	/**< @brief Enables the Received Data Available Interrupt */
 
 /* Interrupt Identification Register (IIR) */
 

@@ -1,13 +1,28 @@
 #include "Serial.h"
 #include "Communication.h"
+#include <minix/syslib.h>
+
 
 // Current state of communication
 static serial_state_t comState = NONE;
 static int flag = 0;
 
 void serial_handler() {
-	// verificar tipo de interrupcao
 	
+	// Check type of interrupt
+	unsigned long iir = 0;
+	sys_inb(COM1_PORT + IIR, &iir);
+	if ( iir & ~IIR_NPI ) {
+		switch ( iir & IIR_ID ) {
+		case IIR_RX:
+			printf("Serial Interrupt: Received!!\n");
+			break;
+		default:
+			printf("** RECEIVED UNINTENDED INTERRUPT ?? **\n");
+			return;
+		}
+	}
+
 	unsigned char received = serial_read();
 
 	printf("-SH- State: %x. Received: %x.\n", (int) comState, received);
@@ -47,8 +62,6 @@ void serial_handler() {
 
 void setComState(serial_state_t state) {
 	printf("SetComState called. State: %x.\n", (char) state);
-
-	printf("MP_WAITING: %x\nMP_ONGOING: %x\nMP_ENDED: %x\nNONE: %x\n",(char)MP_WAITING,(char) MP_ONGOING,(char) MP_ENDED,(char) NONE);
 
 	// appropriately write to serial on state change
 	comState = state;

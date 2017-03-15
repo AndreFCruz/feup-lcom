@@ -246,8 +246,8 @@ int serial_write(unsigned char info) {
 
 //void ser_ih() {
 //	sys_inb(ser_port + IIR, &iir);
-//if( iir & ~IIR_NPI) {
-//	switch( iir & IIR_IP2 & IIR_IP1 & IIR_IP0) {
+//if( iir & ~IIR_NPI ) {
+//	switch( iir & IIR_IP2 & IIR_IP1 & IIR_IP0 ) {
 //		case SER_RX_INT:
 //			... /* read received character */
 //		case SER_TX_INT:

@@ -190,20 +190,10 @@ unsigned char serial_read() {
 
 	if (status & SERIAL_RECEIVED_DATA) {
 		sys_inb(COM1_PORT + RBR, &received);
-		return (unsigned char)(received & 0xFF);
+		return (unsigned char) (received & 0xFF);
 	}
 
 	return 0;
-	// //
-/*
-	//Reading character put on the Receiver Buffer
-	if (sys_inb((COM1_PORT + RBR), &received_char) != OK) {
-		printf(" serial_read -> Failed sys_inb for Received character.\n");
-		return 0;
-	}
-
-	return received_char;
-	*/
 }
 
 //Polled mode?
@@ -235,10 +225,16 @@ unsigned char serial_read() {
 //
 //}
 
+
 int serial_write(unsigned char info) {
 	printf("SerialWrite: %x\n", info);
 
-	// TODO verificar transmiter buffer empty 
+	// Transmitter Holding Register is empty ?
+	unsigned long received = 0;
+	do {
+		sys_inb(COM1_PORT + LSR, &received);
+		printf("_-_");
+	} while( ! (received & SERIAL_THR_EMPTY) );
 
 	if (sys_outb((COM1_PORT + THR), info) != OK) {
 		printf(" serial_write -> Failed sys_outb of information.\n");

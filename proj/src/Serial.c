@@ -49,7 +49,7 @@ int serial_enable_interrupts() {
 	}
 */
 	//Setting Bit 0 and 1 of the IIR
-	helper_IER = helper_IER | IER_RDA /*| IER_THRE*/;
+	helper_IER = helper_IER | IER_RDA | IER_RLS	/*| IER_THRE*/;
 
 	if (sys_outb((COM1_PORT + IER), helper_IER) != OK) {
 		printf("serial_enable_interrupt -> Failed sys_outb.\n");
@@ -70,7 +70,7 @@ int serial_disable_interrupts() {
 	}
 
 	//Changing Bit 0 and 1 of the IIR to 0.
-	helper_IER = helper_IER & (~IER_RDA) & (~IER_THRE);
+	helper_IER = helper_IER & (~IER_RDA) & (~IER_RLS)/*(~IER_THRE) */ ;
 
 	if (sys_outb((COM1_PORT + IER), helper_IER) != OK) {
 		printf("serial_disable_interrupt -> Failed sys_outb.\n");
@@ -93,8 +93,8 @@ int serial_set_conf() {
 
 	//Setting the bit-rate frequency dividor
 	unsigned long bit_rate = SERIAL_BASE_BR / SERIAL_BIT_RATE;
+	char msb = (bit_rate >> 8) & 0xFF;
 	char lsb = bit_rate & 0xFF;
-	char msb = (bit_rate << 8) & 0xFF;
 
 	//Setting DLAB to 1
 	unsigned long helper_DLAB = 0;
@@ -137,6 +137,10 @@ int serial_set_conf() {
 		return 1;
 	}
 
+	//Needed (?)
+	configuration &= 0x40;
+	configuration |= 0x80;
+
 	//Setting Word Length - 8 bits
 	configuration = configuration & LCR_BPC0 & LCR_BPC1;
 
@@ -155,33 +159,6 @@ int serial_set_conf() {
 	return OK;
 }
 
-//Polled mode
-//unsigned char serial_read() {
-//	unsigned long helper_LSR = 0;
-//
-//	if (sys_inb((COM1_PORT + LSR), &helper_LSR) != OK) {
-//		printf(" serial_read -> Failed sys_inb for Line Status Register.\n");
-//		return 0;
-//	}
-//
-//	//If a character was received and put on the Receiver Buffer, LSR_RD is set
-//	if (helper_LSR & LSR_RD) {
-//
-//		unsigned long received_char = 0;
-//
-//		//Reading character put on the Receiver Buffer
-//		if (sys_inb((COM1_PORT + RBR), &received_char) != OK) {
-//			printf(" serial_read -> Failed sys_inb for Received character.\n");
-//			return 0;
-//		}
-//
-//		return received_char;
-//	}
-//
-//	return 0;
-//}
-
-//Interrupt mode?
 unsigned char serial_read() {
 	unsigned long received = 0;
 	unsigned long status = 0;
@@ -195,36 +172,6 @@ unsigned char serial_read() {
 
 	return 0;
 }
-
-//Polled mode?
-//void serial_write(unsigned char info) {
-//	long unsigned empty_flag = 0;
-//	int flag = 0;
-//
-//// Process will only start if THRE is empty (set to 1)
-//	while (flag) {
-//
-//		if (sys_inb((COM1_PORT + LSR), &empty_flag) != OK)
-//			printf(
-//					" serial_write -> Failed sys_inb for Transmitter Register.\n");
-//
-//		if (empty_flag & LSR_THRE)
-//			flag = 0; //Cycle will stop -> THRE is set to 1
-//		else {
-//			flag = 1;
-//			empty_flag = 0;
-//		}
-//	}
-//
-////Sending the information
-//	if (sys_outb((COM1_PORT + THR), info) != OK) {
-//		printf(" serial_write -> Failed sys_outb of information.\n");
-//	}
-//
-////Wait for message to get his destination with timer
-//
-//}
-
 
 int serial_write(unsigned char info) {
 	printf("SerialWrite: %x\n", info);

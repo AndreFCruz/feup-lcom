@@ -6,10 +6,12 @@
 // Current state of communication
 static serial_state_t comState = NONE;
 static int flag = 0;
+static int first = 0;
 
 void serial_handler() {
 	
 	// Check type of interrupt
+	/*
 	unsigned long iir = 0;
 	sys_inb(COM1_PORT + IIR, &iir);
 	if ( iir & ~IIR_NPI ) {
@@ -18,6 +20,17 @@ void serial_handler() {
 			printf("Serial Interrupt: Received!!\n");
 			break;
 		default:
+			printf("** RECEIVED UNINTENDED INTERRUPT ?? **\n");
+			return;
+		}
+	}*/
+
+	unsigned long iir = 0;
+	sys_inb(COM1_PORT + IIR, &iir);
+	if ( iir & ~IIR_NPI ) {
+		if ( iir & IIR_RX == IIR_RX)
+			printf("Serial Interrupt: Received!!\n");
+		else {
 			printf("** RECEIVED UNINTENDED INTERRUPT ?? **\n");
 			return;
 		}

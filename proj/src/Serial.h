@@ -18,7 +18,7 @@
 #define COM1_PORT 0x3F8
 #define COM2_PORT 0x2F8
 
-#define SERIAL_INITIAL_HOOK_ID	4
+#define SERIAL_INITIAL_HOOK_ID	3
 
 
 /* UART Acessible (8-bit) Registers */

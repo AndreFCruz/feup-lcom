@@ -307,6 +307,7 @@ static int menu_timer_handler(game_state_t * game_state) {
 		selected = 2;
 
 		if (get_mouseRMB()) {
+			serial_write(0x55);
 			setComState(MP_WAITING);
 			*game_state = GAME_MULTI;
 			selected = 0;

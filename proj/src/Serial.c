@@ -56,6 +56,8 @@ int serial_enable_interrupts() {
 		return 1;
 	}
 
+	tickdelay(micros_to_ticks(10000));
+
 	return OK;
 }
 
@@ -77,7 +79,7 @@ int serial_disable_interrupts() {
 		return 1;
 	}
 
-	//TODO: tickdelay ?
+	tickdelay(micros_to_ticks(10000));
 
 	return OK;
 }
@@ -187,6 +189,8 @@ int serial_write(unsigned char info) {
 		printf(" serial_write -> Failed sys_outb of information.\n");
 		return 1;
 	}
+
+	tickdelay(micros_to_ticks(10000));
 
 	return OK;
 }

@@ -31,7 +31,7 @@ void serial_handler() {
 		if ( iir & IIR_RX == IIR_RX)
 			printf("Serial Interrupt: Received!!\n");
 		else {
-			printf("** RECEIVED UNINTENDED INTERRUPT ?? **\n");
+			printf("** RECEIVED UNINTENDED INTERRUPT. It was: %d **\n", iir);
 			return;
 		}
 	}

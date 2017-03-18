@@ -47,6 +47,11 @@ int main() {
 	}
 
 	//Setting Serial configuration
+	if (serial_disable_interrupts() != OK) {
+		printf("FAILED serial_enable_interrupts()\n");
+		return 1;
+	}
+
 	if (serial_set_conf() != OK) {
 		printf("FAILED serial_set_conf()\n");
 		return 1;
@@ -61,6 +66,7 @@ int main() {
 		printf("FAILED serial_enable_interrupts()\n");
 		return 1;
 	}
+
 	/* ** */
 
 	//Initiate Graphics Mode

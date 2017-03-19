@@ -5,6 +5,7 @@ service planetary_defense
                 INT86
                 PRIVCTL
                 READBIOS
+                IOPENABLE
                 DEVIO
                 IRQCTL
                 ;

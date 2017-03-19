@@ -1,7 +1,6 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
-#include <minix/com.h>
-#include <minix/sysutil.h>
+
 #include "Serial.h"
 
 static int serial_hook_id = SERIAL_INITIAL_HOOK_ID;
@@ -42,14 +41,14 @@ int serial_unsubscribe_int(void) {
 int serial_enable_interrupts() {
 
 	unsigned long helper_IER = 0;
-/*
+
 	if (sys_inb((COM1_PORT + IER), &helper_IER) != OK) {
 		printf("serial_enable_interrupt -> Failed sys_inb.\n");
 		return 1;
 	}
-*/
+
 	//Setting Bit 0 and 1 of the IIR
-	helper_IER = helper_IER | IER_RDA | IER_RLS	/*| IER_THRE*/;
+	helper_IER = helper_IER | (IER_RDA | IER_RLS);
 
 	if (sys_outb((COM1_PORT + IER), helper_IER) != OK) {
 		printf("serial_enable_interrupt -> Failed sys_outb.\n");
@@ -72,7 +71,8 @@ int serial_disable_interrupts() {
 	}
 
 	//Changing Bit 0 and 1 of the IIR to 0.
-	helper_IER = helper_IER & (~IER_RDA) & (~IER_RLS)/*(~IER_THRE) */ ;
+	helper_IER = helper_IER & (~IER_RDA) ;
+	helper_IER = helper_IER & (~IER_RLS) ;
 
 	if (sys_outb((COM1_PORT + IER), helper_IER) != OK) {
 		printf("serial_disable_interrupt -> Failed sys_outb.\n");
@@ -92,6 +92,36 @@ int serial_disable_interrupts() {
 int serial_set_conf() {
 
 	unsigned long configuration = 0;
+
+	/*if (serial_disable_interrupts() != OK) {
+		printf("FAILED serial_enable_interrupts()\n");
+		return 1;
+	}*/
+
+	//Fetching LCR
+	if (sys_inb((COM1_PORT + LCR), &configuration) != OK) {
+		printf(" serial_set_conf -> Failed sys_inb for configuration.\n");
+		return 1;
+	}
+
+	//Needed (?)
+	configuration &= 0x40;
+	configuration |= 0x80;
+
+	//Setting Word Length - 8 bits
+	configuration = configuration | (LCR_BPC0 | LCR_BPC1);
+
+	//Setting Number of Stop Bits - 1 bit
+	configuration = configuration & (~LCR_SB);
+
+	//Setting Partiy
+	configuration = configuration & (~LCR_PC0);
+
+	//Updating Configuration
+	if (sys_outb((COM1_PORT + LCR), configuration) != OK) {
+		printf(" serial_set_conf -> Failed sys_outb for configuration.\n");
+		return 1;
+	}
 
 	//Setting the bit-rate frequency dividor
 	unsigned long bit_rate = SERIAL_BASE_BR / SERIAL_BIT_RATE;
@@ -126,35 +156,10 @@ int serial_set_conf() {
 	}
 
 	//Re setting the DLAB register to 0
-	helper_DLAB = helper_DLAB & (~LCR_DLAB);
+	helper_DLAB ^= LCR_DLAB;
 
 	if (sys_outb((COM1_PORT + LCR), helper_DLAB) != OK) {
 		printf(" serial_set_conf -> Failed sys_outb for DLAB.\n");
-		return 1;
-	}
-
-	//Fetching LCR
-	if (sys_inb((COM1_PORT + LCR), &configuration) != OK) {
-		printf(" serial_set_conf -> Failed sys_inb for configuration.\n");
-		return 1;
-	}
-
-	//Needed (?)
-	configuration &= 0x40;
-	configuration |= 0x80;
-
-	//Setting Word Length - 8 bits
-	configuration = configuration & LCR_BPC0 & LCR_BPC1;
-
-	//Setting Number of Stop Bits - 1 bit
-	configuration = configuration & (~LCR_SB);
-
-	//Setting Partiy
-	configuration = configuration & (~LCR_PC0);
-
-	//Updating Configuration
-	if (sys_outb((COM1_PORT + LCR), configuration) != OK) {
-		printf(" serial_set_conf -> Failed sys_outb for configuration.\n");
 		return 1;
 	}
 
@@ -194,19 +199,3 @@ int serial_write(unsigned char info) {
 
 	return OK;
 }
-
-//void ser_ih() {
-//	sys_inb(ser_port + IIR, &iir);
-//if( iir & ~IIR_NPI ) {
-//	switch( iir & IIR_IP2 & IIR_IP1 & IIR_IP0 ) {
-//		case SER_RX_INT:
-//			... /* read received character */
-//		case SER_TX_INT:
-//			... /* put character to sent */
-//		case SER_RX_ERR:
-//			... /* notify upper level */
-//		case SER_XXXX:
-//			... /* depends on XXX */
-//		}
-//	}
-//}

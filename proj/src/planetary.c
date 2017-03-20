@@ -243,6 +243,7 @@ static int multiplayer_timer_handler() {
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->waiting_MP, 0, 0,
 				ALIGN_LEFT);
 		draw_mouse_cross(get_mouse_pos(), WHITE);
+		serial_write(MP_WAITING);
 		break;
 	case MP_ONGOING: // You Lost
 		if (game_timer_handler() != OK) {
@@ -307,7 +308,7 @@ static int menu_timer_handler(game_state_t * game_state) {
 		selected = 2;
 
 		if (get_mouseRMB()) {
-			serial_write(0x0);
+			serial_enable_interrupts();
 			setComState(MP_WAITING);
 			*game_state = GAME_MULTI;
 			selected = 0;

@@ -237,13 +237,18 @@ int timer_handler() {
 }
 
 static int multiplayer_timer_handler() {
+	static unsigned long count;
+
 	switch(getComState()) {
 	case MP_WAITING:
 		// draw bitmap waiting for connection
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->waiting_MP, 0, 0,
 				ALIGN_LEFT);
 		draw_mouse_cross(get_mouse_pos(), WHITE);
-		serial_write(MP_WAITING);
+
+		if (count % (FRAME_RATE / 2) == 0 ) {
+			serial_write(MP_WAITING);
+		}
 		break;
 	case MP_ONGOING: // You Lost
 		if (game_timer_handler() != OK) {

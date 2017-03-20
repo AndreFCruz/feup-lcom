@@ -16,6 +16,7 @@
 int main() {
 	printf("\t\t\tSTART OF PROJECT SERVICE\n");
 	sef_startup();
+	sys_enable_iop(SELF);
 
 	srand(time(NULL));
 

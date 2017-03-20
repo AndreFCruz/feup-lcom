@@ -24,17 +24,35 @@ void serial_handler() {
 			return;
 		}
 	}*/
+	//if (comState == NONE)
 
 	unsigned long iir = 0;
+	unsigned char proceed = 0;
+
 	sys_inb(COM1_PORT + IIR, &iir);
-	if ( iir & ~IIR_NPI ) {
-		if ( iir & IIR_RX == IIR_RX)
+
+	if ( iir & IIR_NPI ) {
+
+		//This should not happen
+		printf("Serial Handler Interrupt error: No pending interrupts!\n");
+		return;
+
+	} else {
+
+		if ( (iir & IIR_LSR) == IIR_LSR) {
+			unsigned long error;
+			sys_inb(COM1_PORT + LSR, &error);
+			printf("RECEIVED ERROR INTERRUPT. It was: 0x%x.\n", (unsigned char) error & 0xff);
+		}
+
+		if ( (iir & IIR_RX) == IIR_RX) {
+			proceed = 1;
 			printf("Serial Interrupt: Received!!\n");
-		else {
-			printf("** RECEIVED UNINTENDED INTERRUPT. It was: %d **\n", iir);
-			return;
 		}
 	}
+
+	if (!proceed)
+		return;
 
 	unsigned char received = serial_read();
 

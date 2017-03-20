@@ -14,7 +14,7 @@
 #define MP_ONGOING		0x02
 #define	MP_ENDED		0x03
 */
-static const char MP_ACK = 0xFF;
+static const char MP_ACK = 0x06; // 0xFF;
 
 
 typedef enum {

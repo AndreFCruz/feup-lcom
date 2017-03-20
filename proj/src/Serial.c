@@ -93,10 +93,10 @@ int serial_set_conf() {
 
 	unsigned long configuration = 0;
 
-	/*if (serial_disable_interrupts() != OK) {
+	if (serial_disable_interrupts() != OK) {
 		printf("FAILED serial_enable_interrupts()\n");
 		return 1;
-	}*/
+	}
 
 	//Fetching LCR
 	if (sys_inb((COM1_PORT + LCR), &configuration) != OK) {

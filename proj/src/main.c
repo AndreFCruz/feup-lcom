@@ -142,6 +142,10 @@ int main() {
 		printf("FAILED rtc_unsubscribe_int()\n");
 		return 1;
 	}
+	if (serial_enable_interrupts() < 0) {
+		printf("FAILED serial_enbale_interrupts and the end of the game\n");
+		return 1;
+	}
 	if (serial_unsubscribe_int() < 0) {
 		printf("FAILED serial_unsubscribe_int()\n");
 		return 1;

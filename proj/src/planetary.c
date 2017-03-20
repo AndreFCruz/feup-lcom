@@ -259,6 +259,7 @@ static int multiplayer_timer_handler() {
 		}
 		break;
 	case MP_ENDED: // You Won!
+		serial_disable_interrupts();
 		return 2;
 		break;
 	}

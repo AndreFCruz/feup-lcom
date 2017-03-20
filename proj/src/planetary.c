@@ -738,7 +738,7 @@ static int multiplayer_end_animation(int winner_flag) {
 	if (winner_flag)
 		drawBitmap(vg_getBufferPtr(), BMPsHolder()->win, vg_getHorRes() / 2, vg_getVerRes() / 2, ALIGN_CENTER);
 	else
-		drawBitmap(vg_getBufferPtr(), BMPsHolder()->win, vg_getHorRes() / 2, vg_getVerRes() / 2, ALIGN_CENTER);
+		drawBitmap(vg_getBufferPtr(), BMPsHolder()->lost, vg_getHorRes() / 2, vg_getVerRes() / 2, ALIGN_CENTER);
 
 	draw_mouse_cross(get_mouse_pos(), BLACK);
 

@@ -248,7 +248,9 @@ static int multiplayer_timer_handler() {
 
 		if (count % (FRAME_RATE / 2) == 0 ) {
 			serial_write(MP_WAITING);
+			count = 0;
 		}
+		++count;
 		break;
 	case MP_ONGOING: // You Lost
 		if (game_timer_handler() != OK) {

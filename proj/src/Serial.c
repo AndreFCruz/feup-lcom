@@ -112,12 +112,12 @@ int serial_set_conf() {
 	configuration = configuration | (LCR_BPC0 | LCR_BPC1);
 
 	//Setting Number of Stop Bits - 1 bit
-	//configuration = configuration & (~LCR_SB);
-	configuration |= 0;
+	configuration = configuration & (~LCR_SB);
+	//configuration |= 0;
 
 	//Setting Partiy
-	//configuration = configuration & (~LCR_PC0);
-	configuration |= 0;
+	configuration = configuration & (~LCR_PC0);
+	//configuration |= 0;
 
 	//Updating Configuration
 	if (sys_outb((COM1_PORT + LCR), configuration) != OK) {

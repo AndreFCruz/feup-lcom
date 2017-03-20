@@ -69,9 +69,9 @@ static BMPsHolder_t * new_bmps_holder() {
 	ptr->waiting_MP = loadBitmap(
 			"/home/planetary_defense/res/waitingMP.bmp");
 	ptr->win = loadBitmap(
-				"/home/planetary_defense/res/win.bmp");
+			"/home/planetary_defense/res/win.bmp");
 	ptr->lost = loadBitmap(
-				"/home/planetary_defense/res/lost.bmp");
+			"/home/planetary_defense/res/lost.bmp");
 
 	return ptr;
 }

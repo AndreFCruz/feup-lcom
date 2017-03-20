@@ -58,10 +58,6 @@ int main() {
 		printf("FAILED serial_subscribe_int()\n");
 		return 1;
 	}
-	if (serial_enable_interrupts() != OK) {
-		printf("FAILED serial_enable_interrupts()\n");
-		return 1;
-	}
 
 	/* ** */
 
